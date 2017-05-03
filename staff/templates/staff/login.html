@@ -1,0 +1,17 @@
+<html>
+    <head>
+        {% load staticfiles %}
+        <link type="text/css" rel="stylesheet" href="{% static 'lib/bootstrap-3.3.6/css/bootstrap.min.css' %}">
+        <script type="text/javascript" src="{% static 'lib/jquery-2.2.4.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'lib/bootstrap-3.3.6/js/bootstrap.min.js' %}"></script>
+        <link type="text/css" rel="stylesheet" href="{% static 'css/core.css' %}">
+    </head>
+    <body>
+        <form id="login" action="/staff/login/post" method="post">{% csrf_token %}
+            <label>Staff Login</label>
+            <input class="form-control" type="text" name="username" placeholder="Username">
+            <input class="form-control" type="password" name="password" placeholder="Password">
+            <input class="form-control" type="submit" value="">
+        </form>
+    </body>
+</html>

@@ -1,0 +1,30 @@
+<html>
+    <head>
+        {% load staticfiles %}
+        <link type="text/css" rel="stylesheet" href="{% static 'lib/bootstrap-3.3.6/css/bootstrap.min.css' %}">
+        <script type="text/javascript" src="{% static 'lib/jquery-2.2.4.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'lib/bootstrap-3.3.6/js/bootstrap.min.js' %}"></script>
+        <link type="text/css" rel="stylesheet" href="{% static 'css/core.css' %}">
+    </head>
+    <body>
+        <nav id="menu" class="navbar navbar-default navbar-static-top navbar-s">
+            <div class="container-fluid">
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="dropdown">
+                        <a data-toggle="dropdown">{{ user.first_name }} {{ user.last_name }} <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/staff/profile">Profile</a></li>
+                            <li><a href="/staff/test">Test</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="/staff/logout">Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div id="content" class="fluid-width">
+            {% block content %}
+            {% endblock %}        
+        </div>
+    </body>
+</html>

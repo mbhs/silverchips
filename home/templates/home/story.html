@@ -1,0 +1,26 @@
+{% extends "home/base.html" %}
+
+{% block content %}
+    <h1>{{ story.title }}</h1>
+    
+    <hr/>
+    
+    <h3><span class="greyed">by</span> {{ story.uploader.get_full_name }} <small>{{ story.created }}</small></h3>
+    
+    <p class="greyed">{{ story.lead|safe }}</p>
+    
+    <p>{{ story.content|safe|linebreaks }}</p>
+    
+    <hr/>
+    
+    {% if story.created != story.modified %}
+        Last updated: {{ story.modified }}
+        <br/><br/>
+    {% endif %}
+    
+    <p class="greyed">{{ story.uploader.biography }}</p>
+
+    {% if user.is_authenticated %}
+        <a type="button" class="btn btn-primary" href="{% url "edit_story" story.id %}">Edit</a>
+    {% endif %}
+{% endblock %}

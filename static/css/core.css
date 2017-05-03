@@ -1,0 +1,89 @@
+/* General tweaks. */
+span.left { float: left; }
+span.right { float: right; }
+span.block { display: block; }
+
+/* Shared width and margin. */
+#header, #content { margin: 0 auto; }
+
+/* Top of page menu bar. */
+#menu { font-size: 13px; vertical-align: middle !important; }
+
+.navbar-xs a, .navbar-xs p { 
+    margin: 0 0 !important;
+    padding: 2px 5px !important;
+}
+
+.navbar-s .navbar-nav > li > a, .navbar-s .navbar-nav > li > p {
+    margin: 0 0 !important;
+    padding: 7px 10px !important;
+}
+
+.navbar-xs, .navbar-s { min-height: 0 !important; line-height: 20px; }
+.navbar-s { min-height: 30px !important; line-height: 30px; }
+
+#menu .navbar-right { padding-right: 15px; }
+.navbar-collapse { padding-left: 0; padding-right: 0; }
+#header-navigation-container { padding-left: 5px; }
+
+#header ul.nav li.dropdown:hover ul.dropdown-menu { display: block; }
+.dropdown { cursor: pointer; }
+
+/* Content. */
+#content {
+    padding: 0px 10px;
+    padding-bottom: 2em;
+}
+
+/* Title and navigation bar. */
+#title {
+    clear: both;
+    padding-top: 0.25em;
+    width: 100%;
+    text-align: center;
+}
+#title a {
+    text-decoration: none;
+    color: inherit;
+}
+
+#updates {
+    width: 100%;
+    text-align: center;
+    padding-bottom: 0.5em;
+}
+
+/* Staff styles. */
+
+
+/* Login styles. */
+#login {
+    position: fixed;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#login input {
+    width: 250px;
+    margin-top: 10px;
+}
+
+#login input[type="submit"] {
+    width: auto;
+    border: none;
+    box-shadow: none;
+    font-size: 30px;
+    margin: 10 auto;
+}
+
+#login label {
+    width: 100%;
+    text-align: center;
+    font-weight: normal;
+    font-size: 30px;
+}
+
+.greyed {
+    color: #767676;
+}
