@@ -1,0 +1,5 @@
+{% for author in authors.all %}
+    {% if forloop.last and authors.count > 1 %} and {% endif %}
+    {{ author.get_full_name }}
+    {% if not forloop.last and authors.count > 2 %},{% endif %}
+{% endfor %}

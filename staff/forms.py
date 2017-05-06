@@ -16,13 +16,15 @@ class Login(forms.Form):
     username = forms.CharField(label="Username", max_length=30)
     password = forms.CharField(label="Password")
 
+
 class Story(forms.ModelForm):
     class Meta:
         model = models.Story
-        fields = ['title', 'author', 'description', 'lead', 'content']
+        fields = ['title', 'authors', 'description', 'lead', 'content']
         widgets = {'content': forms.HiddenInput()}
+
 
 class Image(forms.ModelForm):
     class Meta:
         model = models.Image
-        fields = ['title', 'author', 'description', 'source']
+        fields = ['title', 'authors', 'description', 'image']

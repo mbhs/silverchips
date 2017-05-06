@@ -1,13 +1,20 @@
 {% extends "home/base.html" %}
+{% load humanize %}
 
 {% block content %}
     <h1>{{ story.title }}</h1>
     
     <hr/>
+
+    <h5>
+        <span class="text-muted">By</span>
+        {% include "home/utils/authors.html" with authors=story.authors %}
+        <span class="text-muted">{{ story.created }} | {{ story.created|naturaltime }}</span>
+    </h5>
     
-    <h3><span class="greyed">by</span> {{ story.uploader.get_full_name }} <small>{{ story.created }}</small></h3>
-    
-    <p class="greyed">{{ story.lead|safe }}</p>
+    <p class="text-muted">{{ story.lead|safe }}</p>
+
+    <hr/>
     
     <p>{{ story.content|safe|linebreaks }}</p>
     
@@ -19,8 +26,4 @@
     {% endif %}
     
     <p class="greyed">{{ story.uploader.biography }}</p>
-
-    {% if user.is_authenticated %}
-        <a type="button" class="btn btn-primary" href="{% url "edit_story" story.id %}">Edit</a>
-    {% endif %}
 {% endblock %}

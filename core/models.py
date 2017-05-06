@@ -5,12 +5,14 @@ about models in the previous platform are located there as well.
 """
 
 from django.db import models
-from django.contrib.auth import models as amodels
+from django.contrib.auth.models import User
 from django.utils import timezone
+
+import os
 
 
 # Base classes
-class TimestampedModel(models.Model):
+class Content(models.Model):
     """A generic model that tracks creation and edit times.
 
     The corresponding times are updated when save is called. Whether
@@ -20,6 +22,12 @@ class TimestampedModel(models.Model):
     # Created and modified timestamps
     created = models.DateTimeField()
     modified = models.DateTimeField()
+
+    description = models.TextField()
+    title = models.TextField()
+    authors = models.ManyToManyField(User, related_name="%(class)s_content")
+
+    views = models.IntegerField()
 
     # Save overload
     def save(self, *args, **kwargs):
@@ -40,98 +48,29 @@ class TimestampedModel(models.Model):
         abstract = True
 
 
-# Base content model
-class Content(TimestampedModel):
-    """The core content class.
-
-    Maintains signature information, activity, and visibility. Also
-    provides framework for customized subclasses.
-    """
-
-    # Status
-    active = models.BooleanField(default=True)
-    visible = models.BooleanField(default=True)
-
-    # Make this model abstract: you can't actually instantiate it
-    class Meta:
-        abstract = True
-
 # Account models
-class User(amodels.User, TimestampedModel):
-    """The base user class. 
+class Profile(models.Model):
+    """The base user profile class.
 
     Represents a website writer, editor, or administrator. Has an auto
     index field use as a foreign key.
     """
+
+    # Link to an authenticated user
+    user = models.ForeignKey(User, related_name="profile")
 
     # Personal information
     biography = models.TextField()
     avatar = models.ForeignKey("Image", on_delete=models.CASCADE, null=True)
 
 
-# Raw media models
-class Media(Content):
-    """Generic media item.
-
-    This class is extended to images, audio clips, and videos, all of
-    which will be able to be integrated in more advanced media models.
-    """
-
-    # Name information
-    title = models.CharField(max_length=100)
-    author = models.CharField(max_length=300)
-    description = models.CharField(max_length=500)
-
-    # Tracking uploader
-    uploader = models.ForeignKey("User", on_delete=models.CASCADE)
-    
-    # Make this model abstract: you can't actually instantiate it
-    class Meta:
-        abstract = True
-
-
-
-# Multimedia or posted content
-class Multimedia(Media):
-    """The integrated multimedia model.
-
-    This is the base class for developed media structures, such as
-    stories and galleries.
-    """
-
-    def get_upload_to(self, filename):
-        return None
-    
-    # Source file
-    source = models.FileField(upload_to=lambda i,f: i.get_upload_to(f))
-    
-    # Make this model abstract: you can't actually instantiate it
-    class Meta:
-        abstract = True
-
-
-class Image(Multimedia):
+class Image(Content):
     """Image model."""
 
-    def get_upload_to(self, filename):
-        return "images/" + filename
+    image = models.ImageField()
 
 
-class Audio(Multimedia):
-    """Audio model."""
-
-    def get_upload_to(self, filename):
-        return "audio/" + filename
-
-
-class Video(Multimedia):
-    """Raw video model."""
-
-    def get_upload_to(self, filename):
-        return "video/" + filename
-
-
-class Story(Media):
+class Story(Content):
     """The integrated story model.
 
     Story models do not track the media types they contain. Instead,
@@ -141,4 +80,3 @@ class Story(Media):
     # Core story fields
     lead = models.TextField()
     content = models.TextField()
-

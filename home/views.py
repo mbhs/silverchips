@@ -11,21 +11,28 @@ from django.shortcuts import render
 # News imports
 from core.models import Story, Image
 
+
 # Create your views here
 def index(request):
     """Return the index page of the Silver Chips site."""
+
     return render(request, "home/index.html")
 
-def story(request, story_id):
-    """Render a specific newspaper story."""
-    
-    story_id = int(story_id)
-    
-    return render(request, "home/story.html", {"story": Story.objects.get(id=story_id)})
 
-def image(request, image_id):
+def read_story(request, story_id):
     """Render a specific newspaper story."""
 
-    story_id = int(image_id)
+    story = Story.objects.get(id=int(story_id))
+
+    story.views += 1
+    story.save()
+    
+    return render(request, "home/story.html", {
+        "story": story
+    })
+
+
+def view_image(request, image_id):
+    """Render a specific newspaper story."""
 
     return render(request, "home/image.html", {"image": Image.objects.get(id=image_id)})
