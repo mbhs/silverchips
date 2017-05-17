@@ -54,7 +54,10 @@ class Profile(models.Model):
 
     # Personal information
     biography = models.TextField()
-    avatar = models.ForeignKey("Image", on_delete=models.CASCADE, null=True)
+    avatar = models.ImageField()
+
+    def __str__(self):
+        return 'Profile[{}]'.format(self.user.get_username())
 
 
 class Image(Content):

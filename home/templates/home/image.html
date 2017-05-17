@@ -1,12 +1,15 @@
-{% extends "home/content.html" %}
+{% extends "home/base.html" %}
+
+{% block title %}
+    {{ image.title }}
+{% endblock %}
 
 {% block content %}
     {% include "home/content.html" with content=image %}
 
-    <img src="{{ image.source.url }}" style="display: block; margin: 0 auto;">
+    <img src="{{ image.source.url }}" class="img-fluid">
 
     <br/>
-    <p class="greyed">{{ image.description }}</p>
-
-    <hr/>
+    <br/>
+    <p>Photo: {{ image.description }}</p>
 {% endblock %}
