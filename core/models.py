@@ -8,17 +8,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 
-import os
 
-
-# Base classes
 class Content(models.Model):
-    """A generic model that tracks creation and edit times.
-
-    The corresponding times are updated when save is called. Whether
-    the object has been created is determined by if it has an ID.
-    """
-    
     # Created and modified timestamps
     created = models.DateTimeField()
     modified = models.DateTimeField()
@@ -27,37 +18,39 @@ class Content(models.Model):
     title = models.TextField()
     authors = models.ManyToManyField(User, related_name="%(class)s_content")
 
-    views = models.IntegerField()
+    views = models.IntegerField(default=0)
 
-    # Save overload
     def save(self, *args, **kwargs):
-        """Save the model and update timestamps.
-
-        If the model does not have an ID, it is assumed that it has not
-        been saved, and therefore that the created time should be set.
-        The edited time is always updated.
-        """
-
         if not self.id:
             self.created = timezone.now()
+
         self.modified = timezone.now()
+
         return super().save(*args, **kwargs)
-    
-    # Make this model abstract: you can't actually instantiate it
+
+    def __str__(self):
+        return 'Content[{}:{}]'.format(type(self).__name__, self.title)
+
     class Meta:
         abstract = True
+        order_with_respect_to = 'created'
 
 
-# Account models
+class Category(models.Model):
+    parent = models.ForeignKey("self", related_name="subcategories", null=True, blank=True)
+
+    name = models.CharField(max_length=32)
+    title = models.CharField(max_length=64)
+
+    display = models.BooleanField(default=True)
+
+    def __str__(self):
+        return 'Category[{}]'.format(self.title)
+
+
 class Profile(models.Model):
-    """The base user profile class.
-
-    Represents a website writer, editor, or administrator. Has an auto
-    index field use as a foreign key.
-    """
-
     # Link to an authenticated user
-    user = models.ForeignKey(User, related_name="profile")
+    user = models.OneToOneField(User, related_name="profile")
 
     # Personal information
     biography = models.TextField()
@@ -65,18 +58,12 @@ class Profile(models.Model):
 
 
 class Image(Content):
-    """Image model."""
-
-    image = models.ImageField()
+    source = models.ImageField()
 
 
 class Story(Content):
-    """The integrated story model.
-
-    Story models do not track the media types they contain. Instead,
-    this information is managed directly by the HTML of story text.
-    """
-
-    # Core story fields
     lead = models.TextField()
     content = models.TextField()
+
+    cover = models.ForeignKey(Image, null=True)
+    category = models.ForeignKey(Category, related_name="stories")

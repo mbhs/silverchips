@@ -27,4 +27,4 @@ class Story(forms.ModelForm):
 class Image(forms.ModelForm):
     class Meta:
         model = models.Image
-        fields = ['title', 'authors', 'description', 'image']
+        fields = ['title', 'authors', 'description', 'source']

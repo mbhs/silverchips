@@ -6,7 +6,9 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
         <link href="https://fonts.googleapis.com/css?family=Droid+Serif" rel="stylesheet">
         <link type="text/css" rel="stylesheet" href="{% static 'css/core.css' %}">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
     </head>
+
     <body>
         <nav class="navbar navbar-toggleable-md navbar-inverse bg-inverse mb-4">
           <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
@@ -33,104 +35,5 @@
             {% block content %}
             {% endblock %}
         </div>
-
-
-{#        <nav id="menu" class="navbar navbar-default navbar-static-top navbar-xs">#}
-{#            <div class="container">#}
-{#                <ul class="nav navbar-nav navbar-left">#}
-{#                    <li><p class="navbar-text">Montgomery Blair High School's Online Student Newspaper</p></li>#}
-{#                </ul>#}
-{#                <ul class="nav navbar-nav navbar-right">#}
-{#                    <li><a href="/about">About</a></li>#}
-{#                    <li><a href="/contact">Contact</a></li>#}
-{#                    <li><a href="/sitemap">Sitemap</a></li>#}
-{#                    <li>#}
-{#                        {% if user.is_authenticated %} <a href="/staff/dashboard">Dashboard</a>#}
-{#                        {% else %} <a href="/staff/login">Login</a>#}
-{#                        {% endif %}#}
-{#                    </li>#}
-{#                </ul>#}
-{#            </div>#}
-{#        </nav>#}
-{#        <div id="header" class="container">#}
-{#            <h1><a href="/">Silver Chips Online</a></h1>#}
-{#            <p id="updates"><span id="datetime"></span></p>#}
-{#            <nav class="navbar navbar-default">#}
-{#                <div id="header-navigation-container" class="container-fluid">#}
-{#                    <div class="collapse navbar-collapse navbar-left">#}
-{#                        <ul class="nav navbar-nav">#}
-{#                            <li class="dropdown">#}
-{#                                <a href="/news">News <span class="caret"></span></a>#}
-{#                                <ul class="dropdown-menu">#}
-{#                                    <li><a href="/news/local">Local News</a></li>#}
-{#                                    <li><a href="/news/national">National News</a></li>#}
-{#                                    <li><a href="/news/international">International News</a></li>#}
-{#                                    <li><a href="/print">Print Edition</a></li>#}
-{#                                </ul>#}
-{#                            </li>#}
-{#                            <li class="dropdown">#}
-{#                                <a href="/opinions">Opinions <span class="caret"></span></a>#}
-{#                                <ul class="dropdown-menu">#}
-{#                                    <li><a href="/opinions/oped">Editorials</a></li>#}
-{#                                    <li><a href="/opinions/humor">Humor</a></li>#}
-{#                                    <li><a href="/blogs/news">Blogs</a></li>#}
-{#                                    <li><a href="/blogs/lifestyle">Lifestyle</a></li>#}
-{#                                </ul>#}
-{#                            </li>#}
-{#                            <li class="dropdown">#}
-{#                                <a href="/sports">Sports <span class="caret"></span></a>#}
-{#                                <ul class="dropdown-menu">#}
-{#                                    <li><a href="/sports/blair">Blair</a></li>#}
-{#                                    <li><a href="/sports/college">College</a></li>#}
-{#                                    <li><a href="/sports/professional">Professional</a></li>#}
-{#                                    <li><a href="/blogs/sports">Blogs</a></li>#}
-{#                                </ul>#}
-{#                            </li>#}
-{#                            <li class="dropdown">#}
-{#                                <a href="/entertainment">Entertainment <span class="caret"></span></a>#}
-{#                                <ul class="dropdown-menu">#}
-{#                                    <li><a href="/lifestyle/entertainment/movies">Movies</a></li>#}
-{#                                    <li><a href="/lifestyle/entertainment/music">Music</a></li>#}
-{#                                    <li><a href="/lifestyle/entertainment/plays">Plays</a></li>#}
-{#                                    <li><a href="/lifestyle/entertainment/television">Television</a></li>#}
-{#                                    <li><a href="/lifestyle/entertainment/books">Books</a></li>#}
-{#                                    <li><a href="/lifestyle/entertainment/games">Games</a></li>#}
-{#                                </ul>#}
-{#                            </li>#}
-{#                            <li class="dropdown">#}
-{#                                <a href="/blair">Blazers <span class="caret"></span></a>#}
-{#                                <ul class="dropdown-menu">#}
-{#                                    <li><a href="/blair/humans">Movies</a></li>#}
-{#                                    <li><a href="/blair/clubs">Music</a></li>#}
-{#                                    <li><a href="/blair/lovescope">Lovescope</a></li>#}
-{#                                    <li><a href="/blair/features">Features</a></li>#}
-{#                                    <li><a href="/blair/teachers">Teachers</a></li>#}
-{#                                </ul>#}
-{#                            </li>#}
-{#                            <li class="dropdown">#}
-{#                                <a href="/blair">Media <span class="caret"></span></a>#}
-{#                                <ul class="dropdown-menu">#}
-{#                                    <li><a href="/media/podcasts">Podcasts</a></li>#}
-{#                                    <li><a href="/media/galleries">Galleries</a></li>#}
-{#                                    <li><a href="/media/videos">Videos</a></li>#}
-{#                                    <li><a href="/media/cartoons">Cartoons</a></li>#}
-{#                                </ul>#}
-{#                            </li>#}
-{#                        </ul>#}
-{#                    </div>#}
-{#                    <form class="nav navbar-form navbar-right" role="search">#}
-{#                        <div class="form-group"><input type="text" class="form-control" placeholder="Search"></div>#}
-{#                        <button type="submit" class="btn btn-default">Go</button>#}
-{#                    </form>#}
-{#                </div>#}
-{#            </nav>#}
-{#            <script type="text/javascript" src="{% static 'js/home.js' %}"></script>#}
-{#        </div>#}
-{#        <div class="container">#}
-{#            <div id="content" class="container-fluid">#}
-{#                {% block content %}#}
-{#                {% endblock %}#}
-{#            </div>#}
-{#        </div>#}
     </body>
 </html>

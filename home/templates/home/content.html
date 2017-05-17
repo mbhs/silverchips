@@ -1,0 +1,11 @@
+{% load humanize %}
+
+<h1>{{ content.title }}</h1>
+
+<hr/>
+
+<h5>
+    <span class="text-muted">By</span>
+    {% include "home/utils/authors.html" with authors=content.authors %}
+    <span class="text-muted">| {{ content.created }} | {{ content.created|naturaltime }}</span>
+</h5>

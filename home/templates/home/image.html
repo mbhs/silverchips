@@ -1,9 +1,7 @@
-{% extends "home/base.html" %}
+{% extends "home/content.html" %}
 
 {% block content %}
-    <h1>{{ image.title }}</h1>
-
-    <h3><span class="greyed">by</span> {{ image.uploader.get_full_name }} <small>{{ image.created }}</small></h3>
+    {% include "home/content.html" with content=image %}
 
     <img src="{{ image.source.url }}" style="display: block; margin: 0 auto;">
 
