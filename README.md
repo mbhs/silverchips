@@ -1,3 +1,4 @@
+[![CodeFactor](https://www.codefactor.io/repository/github/mbhs/silverchips/badge)](https://www.codefactor.io/repository/github/mbhs/silverchips)
 # Silver Chips Online
 
 Silver Chips Online is an award-winning school newspaper from Montgomery Blair
