@@ -47,6 +47,9 @@ class Category(models.Model):
     def __str__(self):
         return 'Category[{}]'.format(self.title)
 
+    class Meta:
+        verbose_name_plural = "categories"
+
 
 class Profile(models.Model):
     # Link to an authenticated user
@@ -70,3 +73,6 @@ class Story(Content):
 
     cover = models.ForeignKey(Image, null=True)
     category = models.ForeignKey(Category, related_name="stories")
+
+    class Meta:
+        verbose_name_plural = "stories"
