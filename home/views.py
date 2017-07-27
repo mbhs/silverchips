@@ -38,6 +38,11 @@ def read_story(request, story_id):
 
 
 def view_image(request, image_id):
-    """Render a specific newspaper story."""
+    """Render a specific newspaper image."""
 
-    return render(request, "home/image.html", {"image": Image.objects.get(id=image_id)})
+    image = get_object_or_404(Image, id=int(image_id))
+
+    return render(request, "home/story.html", {
+        "story": image,
+        "stories": Story.objects.all()
+    })

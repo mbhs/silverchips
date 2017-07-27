@@ -1,0 +1,7 @@
+{% with image=content %}
+    <img src="{{ image.source.url }}" class="img-fluid">
+
+    <br/><br/>
+
+    <p class="small text-muted">Photo: {{ image.description }}</p>
+{% endwith %}

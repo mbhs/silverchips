@@ -1,4 +1,4 @@
-"""Core models for the Django News platform.
+"""Core models for the Silverchips platform.
 
 The full model documentation is located in `/docs/models.md`. Details
 about models in the previous platform are located there as well.
@@ -63,6 +63,8 @@ class Profile(models.Model):
 class Image(Content):
     source = models.ImageField()
 
+    template = "content/image.html"
+
 
 class Story(Content):
     lead = models.TextField()
@@ -70,3 +72,5 @@ class Story(Content):
 
     cover = models.ForeignKey(Image, null=True)
     category = models.ForeignKey(Category, related_name="stories")
+
+    template = "content/story.html"

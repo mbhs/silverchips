@@ -6,10 +6,4 @@
 
 {% block content %}
     {% include "home/content.html" with content=image %}
-
-    <img src="{{ image.source.url }}" class="img-fluid">
-
-    <br/>
-    <br/>
-    <p>Photo: {{ image.description }}</p>
 {% endblock %}

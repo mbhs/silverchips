@@ -1,4 +1,5 @@
 {% load humanize %}
+{% load news %}
 
 <h1>{{ content.title }}</h1>
 
@@ -9,3 +10,42 @@
     {% include "home/utils/authors.html" with authors=content.authors %}
     <span class="text-muted">| {{ content.created }} | {{ content.created|naturaltime }}</span>
 </h5>
+
+<div class="row">
+    <div class="col-sm-9">
+        {% render_content content %}
+
+        <hr/>
+
+        {% if content.created != content.modified %}
+            Last updated: {{ content.modified }}
+            <br/><br/>
+        {% endif %}
+
+        {% for author in content.authors.all %}
+            <div class="row">
+                <div class="col-2"><img src="{{ author.profile.avatar.url }}" class="img-fluid rounded-circle"></div>
+                <div class="col-10"><p class="text-muted">{{ author.profile.biography }} <a href="" class="solid-link">More &raquo;</a></p></div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="col-sm-3">
+        <div class="card">
+            <div class="card-block">
+                <h4 class="card-title">Top Stories</h4>
+            </div>
+
+            <ul class="list-group list-group-flush">
+                {% for top_story in stories|slice:":5" %}
+                    <li class="list-group-item">
+                        <div class="row">
+                            <div class="col-2"><strong>{{ forloop.counter }}</strong></div>
+                            <div class="col-10"><a href="{% url 'read_story' top_story.id %}" class="solid-link">{{ top_story.title }}</a></div>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
