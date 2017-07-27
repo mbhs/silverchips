@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/mbhs/silverchips.svg?branch=master)](https://travis-ci.org/mbhs/silverchips)
+[![codecov](https://codecov.io/gh/mbhs/silverchips/branch/master/graph/badge.svg)](https://codecov.io/gh/mbhs/silverchips)
+[![CodeFactor](https://www.codefactor.io/repository/github/mbhs/silverchips/badge)](https://www.codefactor.io/repository/github/mbhs/silverchips)
 # Silver Chips Online
 
 Silver Chips Online is an award-winning school newspaper from Montgomery Blair
