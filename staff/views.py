@@ -18,6 +18,7 @@ from core import models
 # The main views
 def login(request):
     """Return the login page to the staff site."""
+
     if request.user.is_authenticated():
         return redirect("dashboard")
 
@@ -47,6 +48,7 @@ def login(request):
             # Login and redirect to staff
             auth.login(request, user)
             return redirect("/staff")
+
     else:
         form = forms.Login()
 
@@ -58,18 +60,21 @@ def login(request):
 @login_required
 def index(request):
     """Return the index page. Redirects to the dashboard."""
+
     return redirect("dashboard")
 
 
 @login_required
 def dashboard(request):
     """Return the dashboard to the staff site."""
+
     return render(request, "staff/dashboard.html")
 
 
 @login_required
 def logout(request):
     """Log out the user and go to logout page."""
+
     auth.logout(request)
     return redirect("/")
 

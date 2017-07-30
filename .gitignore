@@ -93,3 +93,7 @@ migrations/
 db.sqlite3
 .idea/
 uploads/
+
+# Sass
+.sass-cache/
+static/compiled/

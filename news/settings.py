@@ -31,9 +31,9 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'core.apps.CoreConfig',
-    'home.apps.HomeConfig',
-    'staff.apps.StaffConfig',
+    'core',
+    'home',
+    'staff',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
-    'django_forms_bootstrap'
+    'django_forms_bootstrap',
+    'static_precompiler',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -130,12 +131,25 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
+STATICFILES_FINDER = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'static_precompiler.finders.StaticPrecompilerFinder',
+)
+
+# Not the official staticfiles root because we're not using static file collection
+static_root = os.path.join(BASE_DIR, "static")
+
+STATICFILES_DIRS = (static_root,)
 STATIC_URL = '/static/'
 
-STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
-
-MEDIA_URL = '/uploads/'
+STATIC_PRECOMPILER_ROOT = static_root
+STATIC_PRECOMPILER_OUTPUT_DIR = "compiled"
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
+MEDIA_URL = '/uploads/'
+
+
+# Login
 
 LOGIN_URL = '/staff/login/'
