@@ -4,7 +4,6 @@ Contains the methods for normal news views. This app mainly consists
 of everything a normal user would see while visiting the website.
 """
 
-
 # Django imports
 from django.shortcuts import render, get_object_or_404
 

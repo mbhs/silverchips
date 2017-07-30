@@ -1,9 +1,12 @@
+@import url('https://fonts.googleapis.com/css?family=IM+Fell+English+SC|Droid+Serif');
+
 h1, h2, h3, h4, h5, h6 {
     font-family: "Droid Serif", serif;
     font-weight: 500;
 }
 
 h1#title {
+    font-family: "IM Fell English SC", serif;
     font-size: 8vw;
     margin-bottom: 4vw;
     text-align: center;
@@ -22,3 +25,4 @@ footer {
     margin-top: 3rem;
     padding: 1rem;
 }
+

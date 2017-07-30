@@ -1,5 +1,5 @@
 {% with image=content %}
-    <img src="{{ image.source.url }}" class="img-fluid">
+    <a href="{% url "view_image" image.id %}"><img src="{{ image.source.url }}" class="img-fluid"></a>
 
     <br/><br/>
 
