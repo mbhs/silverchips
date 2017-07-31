@@ -94,3 +94,7 @@ db.sqlite3
 .idea/
 uploads/
 db.sqlite3-journal
+
+# Sass
+.sass-cache/
+static/compiled/
