@@ -93,3 +93,4 @@ migrations/
 db.sqlite3
 .idea/
 uploads/
+db.sqlite3-journal

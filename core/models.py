@@ -14,14 +14,14 @@ class Content(models.Model):
     created = models.DateTimeField()
     modified = models.DateTimeField()
 
-    description = models.TextField()
     title = models.TextField()
+    description = models.TextField()
     authors = models.ManyToManyField(User, related_name="%(class)s_content")
 
     views = models.IntegerField(default=0)
 
     def save(self, *args, **kwargs):
-        if not self.id:
+        if not self.created:
             self.created = timezone.now()
 
         self.modified = timezone.now()
@@ -74,7 +74,7 @@ class Story(Content):
     content = models.TextField()
 
     cover = models.ForeignKey(Image, null=True)
-    category = models.ForeignKey(Category, related_name="stories")
+    category = models.ForeignKey(Category, related_name="stories", null=True)
 
     template = "content/story.html"
 
