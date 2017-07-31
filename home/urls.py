@@ -15,5 +15,6 @@ from . import views
 urlpatterns = [
     url(r"^$", views.index, name="index"),
     url(r"^story/([0-9]+)$", views.read_story, name="read_story"),
-    url(r"^image/([0-9]+)$", views.view_image, name="view_image")
+    url(r"^image/([0-9]+)$", views.view_image, name="view_image"),
+    url(r"^category/(.+)$", views.view_category, name="view_category")
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

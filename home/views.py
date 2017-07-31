@@ -22,6 +22,16 @@ def index(request):
     })
 
 
+def view_category(request, category_name):
+    """Render a specific newspaper story."""
+
+    category = get_object_or_404(Category, name=category_name)
+
+    return render(request, "home/category.html", {
+        "category": category
+    })
+
+
 def read_story(request, story_id):
     """Render a specific newspaper story."""
 
