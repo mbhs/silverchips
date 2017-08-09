@@ -14,7 +14,7 @@ from . import views
 # Custom URL patterns
 urlpatterns = [
     url(r"^$", views.index, name="index"),
-    url(r"^story/([0-9]+)$", views.read_story, name="read_story"),
-    url(r"^image/([0-9]+)$", views.view_image, name="view_image"),
-    url(r"^category/(.+)$", views.view_category, name="view_category")
+    url(r"^story/(?P<pk>[0-9]+)$", views.read_story, name="read_story"),
+    url(r"^image/(?P<pk>[0-9]+)$", views.view_image, name="view_image"),
+    url(r"^section/(?P<name>.+)$", views.view_section, name="view_section")
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

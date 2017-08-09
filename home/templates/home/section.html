@@ -1,0 +1,25 @@
+{% extends "home/base.html" %}
+
+{% block title %}
+    {{ section.title }}
+{% endblock %}
+
+{% block content %}
+    <h1>{{ section.title }}</h1>
+
+    <br/><br/>
+    {% for subsection in section.subsections.all %}
+        <div class="row">
+            <div class="col-md-2"><h5>{{ subsection.title }}</h5></div>
+            <div class="col-md-10">
+                {% for story in subsection.stories.all|slice:":5" %}
+                    <h4><a href="{% url 'read_story' story.id %}" class="solid-link">{{ story.title|safe }}</a></h4>
+
+                    {{ story.lead|safe }}
+                    <hr/>
+                {% endfor %}
+            </div>
+        </div>
+        <br/>
+    {% endfor %}
+{% endblock %}

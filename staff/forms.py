@@ -20,7 +20,7 @@ class Login(forms.Form):
 class Story(forms.ModelForm):
     class Meta:
         model = models.Story
-        fields = ['title', 'authors', 'description', 'lead', 'content']
+        fields = ['title', 'authors', 'description', 'lead', 'text']
         widgets = {'content': forms.HiddenInput()}
 
 

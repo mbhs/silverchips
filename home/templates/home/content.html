@@ -1,15 +1,23 @@
 {% load humanize %}
 {% load news %}
 
-<h1>{{ content.title }}</h1>
+<h1>{{ content.title|safe }}</h1>
 
 <hr/>
 
-<h5>
-    <span class="text-muted">By</span>
-    {% include "home/utils/authors.html" with authors=content.authors %}
-    <span class="text-muted">| {{ content.created }} | {{ content.created|naturaltime }}</span>
-</h5>
+<div class="row">
+    <div class="col-md-9">
+        <h5>
+            <span class="text-muted">By</span>
+            {% include "home/utils/authors.html" with authors=content.authors %}
+            <span class="text-muted">| {{ content.created }} | {{ content.created|naturaltime }}</span>
+        </h5>
+    </div>
+    <div class="col-md-3 text-right">
+        <i class="fa fa-twitter-square fa-2x" aria-hidden="true"></i>
+        <i class="fa fa-facebook-square fa-2x" aria-hidden="true"></i>
+    </div>
+</div>
 
 <br/>
 

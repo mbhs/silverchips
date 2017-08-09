@@ -9,21 +9,29 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{% block title %}{% endblock %} | SilverChips</title>
     </head>
+
     <body>
-        <nav class="navbar navbar-toggleable-md navbar-inverse bg-inverse mb-4">
-          <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <nav class="navbar navbar-toggleable-md navbar-inverse bg-inverse">
+          <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarDropdown" aria-controls="navbarDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
-          <div class="collapse navbar-collapse" id="navbarCollapse">
+          <a class="navbar-brand" href="{% url "index" %}">SilverChips</a>
+          <div class="collapse navbar-collapse" id="navbarDropdown">
             <ul class="navbar-nav mr-auto">
-              <li class="nav-item">
-                <a class="nav-link" href="{% url "index" %}">SilverChips</a>
-              </li>
+                {% for section in section_roots %}
+                  <li class="nav-item">
+                    <a class="nav-link" href="{% url 'view_section' section.name %}">{{ section.title }}</a>
+                  </li>
+                {% endfor %}
             </ul>
+            <form class="form-inline my-2 my-lg-0">
+              <input class="form-control mr-sm-2" type="text" placeholder="Search">
+              <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><i class="fa fa-search fa-lg" aria-hidden="true"></i></button>
+            </form>
           </div>
         </nav>
 
-        <h1 id="title">SilverChips.</h1>
+        <h1 id="title">silverchips.</h1>
 
         <div class="container">
             {% block content %}

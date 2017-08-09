@@ -8,34 +8,35 @@ of everything a normal user would see while visiting the website.
 from django.shortcuts import render, get_object_or_404
 
 # News imports
-from core.models import Story, Image, Category
+from core.models import Story, Image, Section
 
 
-# Create your views here
+def load_context(request):
+    return {
+        "section_roots": Section.objects.filter(parent=None)
+    }
+
+
 def index(request):
     """Return the index page of the Silver Chips site."""
 
-    roots = Category.objects.filter(parent=None)
+    return render(request, "home/index.html")
 
-    return render(request, "home/index.html", {
-        "roots": roots
+
+def view_section(request, name):
+    """Render a section of the newspaper."""
+
+    section = get_object_or_404(Section, name=name)
+
+    return render(request, "home/section.html", {
+        "section": section
     })
 
 
-def view_category(request, category_name):
+def read_story(request, pk):
     """Render a specific newspaper story."""
 
-    category = get_object_or_404(Category, name=category_name)
-
-    return render(request, "home/category.html", {
-        "category": category
-    })
-
-
-def read_story(request, story_id):
-    """Render a specific newspaper story."""
-
-    story = get_object_or_404(Story, id=int(story_id))
+    story = get_object_or_404(Story, id=int(pk))
 
     story.views += 1
     story.save()
@@ -46,10 +47,10 @@ def read_story(request, story_id):
     })
 
 
-def view_image(request, image_id):
+def view_image(request, pk):
     """Render a specific newspaper image."""
 
-    image = get_object_or_404(Image, id=int(image_id))
+    image = get_object_or_404(Image, id=int(pk))
 
     return render(request, "home/story.html", {
         "story": image,

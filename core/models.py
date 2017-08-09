@@ -36,19 +36,19 @@ class Content(models.Model):
         order_with_respect_to = 'created'
 
 
-class Category(models.Model):
-    parent = models.ForeignKey("self", related_name="subcategories", null=True, blank=True)
+class Section(models.Model):
+    parent = models.ForeignKey("self", related_name="subsections", null=True, blank=True)
 
     name = models.CharField(max_length=32)
     title = models.CharField(max_length=64)
 
-    display = models.BooleanField(default=True)
+    active = models.BooleanField(default=True)
 
     def __str__(self):
-        return 'Category[{}]'.format(self.title)
+        return 'Sections[{}]'.format(self.title)
 
     class Meta:
-        verbose_name_plural = "categories"
+        verbose_name_plural = "sections"
 
 
 class Profile(models.Model):
@@ -57,7 +57,7 @@ class Profile(models.Model):
 
     # Personal information
     biography = models.TextField()
-    avatar = models.ImageField()
+    avatar = models.ImageField(null=True)
 
     def __str__(self):
         return 'Profile[{}]'.format(self.user.get_username())
@@ -71,10 +71,10 @@ class Image(Content):
 
 class Story(Content):
     lead = models.TextField()
-    content = models.TextField()
+    text = models.TextField()
 
     cover = models.ForeignKey(Image, null=True)
-    category = models.ForeignKey(Category, related_name="stories", null=True)
+    section = models.ForeignKey(Section, related_name="stories", null=True)
 
     template = "content/story.html"
 

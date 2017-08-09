@@ -1,5 +1,7 @@
 from django import template
 
+from core.models import Story
+
 register = template.Library()
 
 
@@ -9,3 +11,8 @@ def render_content(content):
     context = {"content": content}
 
     return tmp.render(context)
+
+
+@register.filter
+def stories(section):
+    return
