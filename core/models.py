@@ -9,26 +9,42 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 
 
-class Content(models.Model):
-    # Created and modified timestamps
+class TimeTrackingModel(models.Model):
+    """Model mixin for recording creation and edit times."""
+
     created = models.DateTimeField()
     modified = models.DateTimeField()
 
+    def save(self, *args, **kwargs):
+        """Save the model and update the creation and edit times."""
+
+        if not self.created:
+            self.created = timezone.now()
+        self.modified = timezone.now()
+        return super().save(*args, **kwargs)
+
+    class Meta:
+        abstract = True
+
+
+class Content(TimeTrackingModel):
+    """A generic content model.
+
+    This container provides the metaclass for all types of media,
+    including stories, images, videos, galleries, and podcasts. Each
+    subclass should be capable of rendering itself to HTML so that it
+    can be generically displayed or embedded.
+    """
+
     title = models.TextField()
     description = models.TextField()
-    authors = models.ManyToManyField(User, related_name="%(class)s_content")
+    authors = models.ManyToManyField(User, related_name="%(class)s_content")  # user.photo_content
 
     views = models.IntegerField(default=0)
 
-    def save(self, *args, **kwargs):
-        if not self.created:
-            self.created = timezone.now()
-
-        self.modified = timezone.now()
-
-        return super().save(*args, **kwargs)
-
     def __str__(self):
+        """Represent the content as a string."""
+
         return 'Content[{}:{}]'.format(type(self).__name__, self.title)
 
     class Meta:
@@ -37,6 +53,8 @@ class Content(models.Model):
 
 
 class Section(models.Model):
+    """All stories are categorized by sections."""
+
     parent = models.ForeignKey("self", related_name="subsections", null=True, blank=True)
 
     name = models.CharField(max_length=32)
