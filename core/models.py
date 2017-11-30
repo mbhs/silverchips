@@ -9,6 +9,9 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from django.core.validators import RegexValidator
 
+from django.contrib.auth.models import Group, Permission
+from django.contrib.contenttypes.models import ContentType
+
 import posixpath
 
 
@@ -130,6 +133,34 @@ class Profile(models.Model):
         return 'Profile[{}]'.format(self.user.get_username())
 
 
+site = ContentType.objects.get_or_create(app_label="core", model="site")
+
+
+# Some publishing pipeline constants
+UNPUBLISHED = 0
+PENDING = 1
+PUBLISHED = 2
+HIDDEN = 3
+
+
+class PublishingPipelineMixin:
+    """Provides state variables for content that is published.
+
+    This mixin gives clarity to where content is in the publishing
+    process. It can be unpublished, pending, published, and hidden.
+    Pending is intended for authors to indicate that their content
+    is ready to be published, though may not be used. Hidden is for
+    authors to take down published work.
+    """
+
+    publishable = True
+    published = models.IntegerField(default=0, choices=(
+        (0, "unpublished"),
+        (1, "pending"),
+        (2, "published"),
+        (3, "hidden")))
+
+
 class Image(Content):
     source = models.ImageField(upload_to="uploads/images/")
 
@@ -137,7 +168,15 @@ class Image(Content):
     descriptor = "Photo"
 
 
-class Story(Content):
+class Story(Content, PublishingPipelineMixin):
+    """The main story model.
+
+    Stories are the backbone of a news site, and are one of the most
+    important models. In addition to storing information relating to
+    the written contents, states pertaining to editing and publishing
+    status are also stored.
+    """
+
     lead = models.TextField()
     text = models.TextField()
 
