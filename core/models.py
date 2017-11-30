@@ -107,7 +107,17 @@ class Section(models.Model):
 
 
 class Profile(models.Model):
-    # Link to an authenticated user
+    """The profile model provides more information about users.
+
+    When a new user object is instantiated, a profile object is
+    immediately created and assigned to them. Note that roles are
+    stored by Django groups instead of in members of the class.
+
+    Keep in mind that this profile will eventually be replaced by a
+    OpenID backend model which will allow for synchronization with
+    the main MBHS site.
+    """
+
     user = models.OneToOneField(User, related_name="profile")
 
     # Personal information
@@ -115,6 +125,8 @@ class Profile(models.Model):
     avatar = models.ImageField(null=True)
 
     def __str__(self):
+        """Represent the profile as a string."""
+
         return 'Profile[{}]'.format(self.user.get_username())
 
 
