@@ -7,6 +7,9 @@ about models in the previous platform are located there as well.
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+from django.core.validators import RegexValidator
+
+import posixpath
 
 
 class TimeTrackingModel(models.Model):
@@ -52,21 +55,55 @@ class Content(TimeTrackingModel):
         order_with_respect_to = 'created'
 
 
-class Section(models.Model):
-    """All stories are categorized by sections."""
+# Section names should be pretty
+alphanumeric = RegexValidator(r'^[a-zA-Z0-9_]*$', 'Only alphanumeric characters and underscore are allowed.')
 
-    parent = models.ForeignKey("self", related_name="subsections", null=True, blank=True)
+
+class Section(models.Model):
+    """All stories are categorized by sections.
+
+    To avoid using a recursive system, sections have an identifying
+    string and absolute path. The absolute path is set when the
+    """
+
+    id = models.CharField(max_length=16, validators=[alphanumeric])
+    _path = models.CharField(max_length=64, unique=True, primary_key=True)
 
     name = models.CharField(max_length=32)
     title = models.CharField(max_length=64)
-
     active = models.BooleanField(default=True)
 
-    def __str__(self):
-        return 'Sections[{}]'.format(self.title)
+    def assign(self, section: "Section"=None):
+        """Assign this section under another section."""
 
-    class Meta:
-        verbose_name_plural = "sections"
+        if not self.id:
+            raise RuntimeError("Section ID is not set.")
+        if section is None:
+            self._path = "/" + self.id
+        else:
+            self._path = posixpath.join(section.path, self.id)
+
+    def save(self, *args, **kwargs):
+        """Save the section model.
+
+        If the path is not set, the section is automatically assigned
+        to the root path.
+        """
+
+        if not self._path:
+            self.assign()
+        super().save(*args, **kwargs)
+
+    @property
+    def path(self):
+        """Get the path to the section."""
+
+        return self._path
+
+    def __str__(self):
+        """Represent the section as a string."""
+
+        return 'Sections[{}]'.format(self.title)
 
 
 class Profile(models.Model):
