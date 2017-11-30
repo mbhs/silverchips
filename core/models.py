@@ -64,9 +64,10 @@ class Profile(models.Model):
 
 
 class Image(Content):
-    source = models.ImageField()
+    source = models.ImageField(upload_to="uploads/images/")
 
     template = "content/image.html"
+    descriptor = "Photo"
 
 
 class Story(Content):
@@ -77,6 +78,7 @@ class Story(Content):
     section = models.ForeignKey(Section, related_name="stories", null=True)
 
     template = "content/story.html"
+    descriptor = "Story"
 
     class Meta:
         verbose_name_plural = "stories"

@@ -1,7 +1,3 @@
 {% with image=content %}
     <a href="{% url "view_image" image.id %}"><img src="{{ image.source.url }}" class="img-fluid"></a>
-
-    <br/><br/>
-
-    <p class="small text-muted">Photo: {{ image.description }}</p>
 {% endwith %}
