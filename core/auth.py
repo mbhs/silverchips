@@ -34,7 +34,7 @@ class Backend:
                 return user
 
         # Fail but return False instead of None
-        return None
+        return False
 
     def get_user(self, user_id):
         """Get a user by the User's ID."""

@@ -17,8 +17,10 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 
+
+# All site URL patterns
 urlpatterns = [
     url(r"^admin/", admin.site.urls),
-    url(r"^staff/", include("staff.urls")),
+    url(r"^staff/", include("staff.urls", namespace="staff")),  # Staff URLs follow staff:name i.e. staff:login
     url(r"", include("home.urls")),
 ]

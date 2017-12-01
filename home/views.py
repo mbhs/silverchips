@@ -12,9 +12,7 @@ from core.models import Story, Image, Section
 
 
 def load_context(request):
-    return {
-        "section_roots": Section.objects.filter(parent=None)
-    }
+    return {"section_roots": Section.objects.all()}
 
 
 def index(request):
