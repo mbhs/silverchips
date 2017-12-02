@@ -6,9 +6,10 @@ Also allows for some degree of customization.
 
 
 # Django imports
-from django.shortcuts import render, redirect, reverse
+from django.shortcuts import render, redirect
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
+from django.views.generic.edit import ModelFormMixin
 
 # Local imports
 from . import forms
@@ -84,7 +85,14 @@ def dummy(request):
 
 
 @login_required
-def create_story(request):
+def stories_view(request):
+    """View stories."""
+
+    return render(request, "staff/base.html")
+
+
+@login_required
+def stories_create(request):
     if request.method == 'POST':
         form = forms.Story(request.POST)
 
@@ -96,13 +104,13 @@ def create_story(request):
     else:
         form = forms.Story()
 
-    return render(request, "staff/story.html", {
+    return render(request, "staff/story_edit.html", {
         "form": form
     })
 
 
 @login_required
-def edit_story(request, story_id):
+def stories_edit(request, story_id):
     story_id = int(story_id)
     story = models.Story.objects.get(id=story_id)
 
@@ -115,7 +123,7 @@ def edit_story(request, story_id):
     else:
         form = forms.Story(instance=story)
 
-    return render(request, "staff/story.html", {
+    return render(request, "staff/story_edit.html", {
         "form": form
     })
 
@@ -135,6 +143,6 @@ def upload_image(request):
     else:
         form = forms.Image()
 
-    return render(request, "staff/upload.html", {
+    return render(request, "staff/media_upload.html", {
         "form": form
     })

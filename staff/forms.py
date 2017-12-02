@@ -18,6 +18,8 @@ class Login(forms.Form):
 
 
 class Story(forms.ModelForm):
+    """The story editor form."""
+
     class Meta:
         model = models.Story
         fields = ['title', 'authors', 'description', 'lead', 'text']

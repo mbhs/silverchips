@@ -5,7 +5,10 @@
 {% block content %}
 <form method="POST" onsubmit="update_hidden();">
     {% csrf_token %}
-    {{ form|as_bootstrap }}
+
+
+
+
     <div id="full-toolbar" class="toolbar">
 <span class="ql-format-group">
 <select title="Font" class="ql-font">

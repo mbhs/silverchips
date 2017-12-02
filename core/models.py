@@ -15,6 +15,75 @@ from django.contrib.contenttypes.models import ContentType
 import posixpath
 
 
+class Profile(models.Model):
+    """The profile model provides more information about users.
+
+    When a new user object is instantiated, a profile object is
+    immediately created and assigned to them. Note that roles are
+    stored by Django groups instead of in members of the class.
+
+    Keep in mind that this profile will eventually be replaced by a
+    OpenID backend model which will allow for synchronization with
+    the main MBHS site.
+    """
+
+    user = models.OneToOneField("User", related_name="profile")
+
+    # Personal information
+    biography = models.TextField()
+    avatar = models.ImageField(null=True)
+
+    def __str__(self):
+        """Represent the profile as a string."""
+
+        return "Profile[{}]".format(self.user.get_username())
+
+
+class ProfileUserManager(auth.UserManager):
+    """User manager that handles profile creation."""
+
+    def create_user(self, username, email=None, password=None, **extra_fields):
+        """Override user creation to instantiate a new profile."""
+
+        user = User(username=username, email=email, password=password, **extra_fields)
+        profile = Profile(user=user)
+        profile.save()
+        user.save()
+
+        return user
+
+
+class User(auth.User):
+    """User proxy to override the user manager."""
+
+    objects = ProfileUserManager()
+
+    def get_role(self):
+        """Get the user role.
+
+        For now, there are two main roles. These are editors and
+        writers. Writers are in the lower access tier, and can only
+        upload and publish their own stories. Editors can view all
+        stories and configure some parts of the site. There is a
+        higher tier of editors that can access the admin parts of
+        the site as well.
+        """
+
+        if self.groups.filter(name="Editors"):  # or self.is_superuser
+            return "editor"
+        elif self.groups.filter(name="Writers"):
+            return "writer"
+        return None
+
+    class Meta:
+        proxy = True
+
+
+site = ContentType.objects.get_or_create(app_label="core", model="site")
+writers = Group.objects.get_or_create(name="Writers")
+editors = Group.objects.get_or_create(name="Editors")
+
+
 class TimeTrackingModel(models.Model):
     """Model mixin for recording creation and edit times."""
 
@@ -109,79 +178,11 @@ class Section(models.Model):
         return "Sections[{}]".format(self.title)
 
 
-class Profile(models.Model):
-    """The profile model provides more information about users.
-
-    When a new user object is instantiated, a profile object is
-    immediately created and assigned to them. Note that roles are
-    stored by Django groups instead of in members of the class.
-
-    Keep in mind that this profile will eventually be replaced by a
-    OpenID backend model which will allow for synchronization with
-    the main MBHS site.
-    """
-
-    user = models.OneToOneField("User", related_name="profile")
-
-    # Personal information
-    biography = models.TextField()
-    avatar = models.ImageField(null=True)
-
-    def __str__(self):
-        """Represent the profile as a string."""
-
-        return "Profile[{}]".format(self.user.get_username())
-
-
-class ProfileUserManager(auth.UserManager):
-    """User manager that handles profile creation."""
-
-    def create_user(self, username, email=None, password=None, **extra_fields):
-        """Override user creation to instantiate a new profile."""
-
-        user = User(username=username, email=email, password=password, **extra_fields)
-        profile = Profile(user=user)
-        profile.save()
-        user.save()
-
-        return user
-
-
-class User(auth.User):
-    """User proxy to override the user manager."""
-
-    objects = ProfileUserManager()
-
-    def get_role(self):
-        """Get the user role.
-
-        For now, there are two main roles. These are editors and
-        writers. Writers are in the lower access tier, and can only
-        upload and publish their own stories. Editors can view all
-        stories and configure some parts of the site. There is a
-        higher tier of editors that can access the admin parts of
-        the site as well.
-        """
-
-        if self.groups.filter(name="Editors"):  # or self.is_superuser
-            return "editor"
-        elif self.groups.filter(name="Writers"):
-            return "writer"
-        return "user"
-
-    class Meta:
-        proxy = True
-
-
-site = ContentType.objects.get_or_create(app_label="core", model="site")
-writers = Group.objects.get_or_create(name="Writers")
-editors = Group.objects.get_or_create(name="Editors")
-
-
 # Some publishing pipeline constants
 UNPUBLISHED = 0
-PUBLISHED = 1
-HIDDEN = 2
+PENDING = 1
+PUBLISHED = 2
+HIDDEN = 3
 
 
 class PublishingPipelineMixin:
@@ -196,9 +197,10 @@ class PublishingPipelineMixin:
 
     publishable = models.BooleanField(default=True)
     published = models.IntegerField(default=0, choices=(
-        (0, "unpublished"),
-        (1, "published"),
-        (2, "hidden")))
+        (UNPUBLISHED, "unpublished"),
+        (PENDING, "pending"),
+        (PUBLISHED, "published"),
+        (HIDDEN, "hidden")))
 
 
 class Image(Content):
@@ -223,7 +225,7 @@ class Story(Content, PublishingPipelineMixin):
     cover = models.ForeignKey(Image, null=True)
     section = models.ForeignKey(Section, related_name="stories", null=True)
 
-    template = "content/story.html"
+    template = "content/story_edit.html"
     descriptor = "Story"
 
     class Meta:
