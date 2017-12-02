@@ -119,15 +119,14 @@ if ask_reimport("authors"):
 
 if ask_reimport("pictures"):
     Image.objects.all().delete()
-    for old_pic in read_table("pictures"):
+    for old_pic in read_table("picture"):
         try:
-            file = File(open("import/data/images/"))
-            pic = Image(id=get_field(old_pic, "id"))
-            pic.
-
-reopen = open(“/tmp/revsys-logo.png”, “rb”)
-django_file = File(reopen)
-
-revsys = Company()
-revsys.name = “Revolution Systems”
-revsys.logo.save(“revsys-logo.png”, django_file, save=True)
+            pic_id = get_field(old_pic, "id")
+            file = File(open("import/data/images/{}.jpg".format(pic_id), 'rb'))
+            pic = Image(id=get_field(old_pic, "id"),
+                        title=get_field(old_pic, "title", "(no title)"),
+                        description=get_field(old_pic, "caption", "(no caption)"))
+            pic.source.save("{}.jpg".format(pic_id), file, save=True)
+            pic.save()
+        except Exception as e:
+            print(e)

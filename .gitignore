@@ -98,3 +98,5 @@ db.sqlite3-journal
 # Sass
 .sass-cache/
 static/compiled/
+
+import/data/

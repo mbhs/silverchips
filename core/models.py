@@ -33,7 +33,7 @@ class Content(models.Model):
 
     class Meta:
         abstract = True
-        order_with_respect_to = 'created'
+        ordering = ['-created']
 
 
 class Section(models.Model):
@@ -82,3 +82,4 @@ class Story(Content):
 
     class Meta:
         verbose_name_plural = "stories"
+        ordering = ['-created']
