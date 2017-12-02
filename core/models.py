@@ -5,7 +5,7 @@ about models in the previous platform are located there as well.
 """
 
 from django.db import models
-from django.contrib.auth.models import User
+import django.contrib.auth.models as auth
 from django.utils import timezone
 from django.core.validators import RegexValidator
 
@@ -44,22 +44,22 @@ class Content(TimeTrackingModel):
 
     title = models.TextField()
     description = models.TextField()
-    authors = models.ManyToManyField(User, related_name="%(class)s_content")  # user.photo_content
+    authors = models.ManyToManyField("User", related_name="%(class)s_content")  # user.photo_content
 
     views = models.IntegerField(default=0)
 
     def __str__(self):
         """Represent the content as a string."""
 
-        return 'Content[{}:{}]'.format(type(self).__name__, self.title)
+        return "Content[{}:{}]".format(type(self).__name__, self.title)
 
     class Meta:
         abstract = True
-        order_with_respect_to = 'created'
+        order_with_respect_to = "created"
 
 
 # Section names should be pretty
-alphanumeric = RegexValidator(r'^[a-zA-Z0-9_]*$', 'Only alphanumeric characters and underscore are allowed.')
+alphanumeric = RegexValidator(r"^[a-zA-Z0-9_]*$", "Only alphanumeric characters and underscore are allowed.")
 
 
 class Section(models.Model):
@@ -106,7 +106,7 @@ class Section(models.Model):
     def __str__(self):
         """Represent the section as a string."""
 
-        return 'Sections[{}]'.format(self.title)
+        return "Sections[{}]".format(self.title)
 
 
 class Profile(models.Model):
@@ -121,7 +121,7 @@ class Profile(models.Model):
     the main MBHS site.
     """
 
-    user = models.OneToOneField(User, related_name="profile")
+    user = models.OneToOneField("User", related_name="profile")
 
     # Personal information
     biography = models.TextField()
@@ -130,7 +130,30 @@ class Profile(models.Model):
     def __str__(self):
         """Represent the profile as a string."""
 
-        return 'Profile[{}]'.format(self.user.get_username())
+        return "Profile[{}]".format(self.user.get_username())
+
+
+class ProfileUserManager(auth.UserManager):
+    """User manager that handles profile creation."""
+
+    def create_user(self, username, email=None, password=None, **extra_fields):
+        """Override user creation to instantiate a new profile."""
+
+        user = User(username=username, email=email, password=password, **extra_fields)
+        profile = Profile(user=user)
+        profile.save()
+        user.save()
+
+        return user
+
+
+class User(auth.User):
+    """User proxy to override the user manager."""
+
+    objects = ProfileUserManager()
+
+    class Meta:
+        proxy = True
 
 
 site = ContentType.objects.get_or_create(app_label="core", model="site")

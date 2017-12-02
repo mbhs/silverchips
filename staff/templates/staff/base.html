@@ -3,6 +3,8 @@
         {% include "shared/bootstrap.html" %}
         {% load staticfiles %}
         <link type="text/css" rel="stylesheet" href="{% static 'quill/core.css' %}">
+        <title>{% block title %}Staff Site{% endblock %}</title>
+        {% block head %}{% endblock %}
     </head>
     <body>
         <nav id="menu" class="navbar navbar-default navbar-static-top navbar-s">

@@ -12,9 +12,9 @@
         <div class="container-center">
             <div class="center">
                 <h1 class="serif">SCO</h1>
+                <p>Staff Login</p>
                 <form id="login-form" action="{% url "staff:login" %}" method="post">
                     {% csrf_token %}
-                    <label id="label">Staff Login</label>
                     <input class="form-control" type="text" name="username" placeholder="Username">
                     <input class="form-control" type="password" name="password" placeholder="Password">
                     <button class="btn btn-primary" value="Login" type="submit">Login</button>
