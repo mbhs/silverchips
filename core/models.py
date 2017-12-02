@@ -153,7 +153,15 @@ class User(auth.User):
     objects = ProfileUserManager()
 
     def get_role(self):
-        """Get the user role."""
+        """Get the user role.
+
+        For now, there are two main roles. These are editors and
+        writers. Writers are in the lower access tier, and can only
+        upload and publish their own stories. Editors can view all
+        stories and configure some parts of the site. There is a
+        higher tier of editors that can access the admin parts of
+        the site as well.
+        """
 
         if self.groups.filter(name="Editors"):  # or self.is_superuser
             return "editor"
@@ -186,7 +194,7 @@ class PublishingPipelineMixin:
     authors to take down published work.
     """
 
-    publishable = True
+    publishable = models.BooleanField(default=True)
     published = models.IntegerField(default=0, choices=(
         (0, "unpublished"),
         (1, "published"),
