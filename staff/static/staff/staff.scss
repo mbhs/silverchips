@@ -27,16 +27,16 @@
   display: flex;
   flex-direction: column;
 
-  .menu {
-
-    flex-grow: 1;
-
-    white-space: nowrap;
+  .sidebar-menu, .sidebar-footer {
     color: #ccc;
     background-color: #555;
-    margin-top: 0;
     box-sizing: border-box;
+  }
 
+  .sidebar-menu {
+    flex-grow: 1;
+    white-space: nowrap;
+    margin-top: 0;
     padding-bottom: 1em;
 
     a:first-child {
@@ -44,7 +44,7 @@
     }
 
     .item, .section {
-      padding: 0.25em 1em;
+      padding: 0.25rem 1rem;
       text-decoration: none;
       color: inherit;
       display: block;
@@ -68,6 +68,13 @@
       background-color: inherit;
     }
 
+  }
+
+  .sidebar-footer {
+    margin-top: auto;
+    padding: 0.8rem 1rem;
+    font-size: 14px;
+    font-style: italic;
   }
 
 }

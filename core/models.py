@@ -155,7 +155,7 @@ class User(auth.User):
     def get_role(self):
         """Get the user role."""
 
-        if self.is_superuser or self.groups.filter(name="Editors"):
+        if self.groups.filter(name="Editors"):  # or self.is_superuser
             return "editor"
         elif self.groups.filter(name="Writers"):
             return "writer"

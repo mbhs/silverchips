@@ -1,5 +1,5 @@
-<div id="sidebar" class="col-lg-2 col-md-4 col-sm-4 no-float">
-    <div class="menu">
+<div id="sidebar" class="col-lg-2 col-md-3 col-sm-4 no-float">
+    <div class="sidebar-menu">
         {% if user.get_role == "editor" %}
             {% include "staff/components/editor/sidebar.html" %}
         {% elif user.get_role == "writer" %}
@@ -7,4 +7,5 @@
         {% else %}
         {% endif %}
     </div>
+    <!--div class="sidebar-footer">v0.1 alpha</div-->
 </div>
