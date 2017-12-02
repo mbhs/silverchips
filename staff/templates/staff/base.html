@@ -1,19 +1,23 @@
+{% load compile_static %}
+{% load static %}
+
 <html>
     <head>
         {% include "shared/bootstrap.html" %}
-        {% load staticfiles %}
-        <link type="text/css" rel="stylesheet" href="{% static 'home/home.scss' %}">
-        <link type="text/css" rel="stylesheet" href="{% static 'staff/staff.scss' %}">
+        <link type="text/css" rel="stylesheet" href="{% static 'home/home.scss'|compile %}">
+        <link type="text/css" rel="stylesheet" href="{% static 'staff/staff.scss'|compile %}">
         <title>{% block title %}Staff Site{% endblock %}</title>
         {% block head %}{% endblock %}
     </head>
-    <body>
+    <body id="staff">
         {% include "staff/components/menubar.html" %}
-        <div class="column-wrapper">
+        <div id="column-wrapper">
             {% include "staff/components/writer/sidebar.html" %}
-            <div id="content" class="fluid-width">
-                {% block content %}
-                {% endblock %}
+            <div id="content-wrapper">
+                <div id="content">
+                    {% block content %}
+                    {% endblock %}
+                </div>
             </div>
         </div>
     </body>

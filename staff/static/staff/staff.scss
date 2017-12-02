@@ -1,19 +1,32 @@
 @import "login";
 
-.navbar .nav-link {
-  padding-top: 0;
-  padding-bottom: 0;
-  height: 25px;
-  line-height: 25px;
-}
 
-.column-wrapper {
+#column-wrapper {
   display: flex;
   align-items: stretch;
+  flex-grow: 1;
 }
 
 .sidebar {
   width: 250px;
   background-color: darkgray;
   min-width: 250px;
+}
+
+
+#content-wrapper {
+  flex-grow: 1;
+  overflow: hidden;
+
+  #content {
+    height: 100%;
+    padding: 2rem;
+    overflow: auto;
+  }
+}
+
+#staff {
+  display: flex;
+  flex-direction: column;
+  max-height: 100vh;
 }
