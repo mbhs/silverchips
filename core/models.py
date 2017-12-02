@@ -157,6 +157,8 @@ class User(auth.User):
 
 
 site = ContentType.objects.get_or_create(app_label="core", model="site")
+writers = Group.objects.get_or_create(name="Writers")
+editors = Group.objects.get_or_create(name="Editors")
 
 
 # Some publishing pipeline constants
