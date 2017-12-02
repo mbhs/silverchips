@@ -1,5 +1,13 @@
 @import "login";
 
+#staff {
+  display: flex;
+  flex-direction: column;
+  max-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
 #menu {
   flex-shrink: 0;
 }
@@ -79,11 +87,9 @@
   }
 }
 
-#staff {
-  display: flex;
-  flex-direction: column;
-  max-height: 100vh;
-  margin: 0;
-  padding: 0;
+@media (max-width: 575px) {
+  #column-wrapper { display: block; }
+  #column-wrapper #sidebar { height: auto; width: 100%; }
+  #column-wrapper #content-wrapper { overflow-y: visible; }
 }
 
