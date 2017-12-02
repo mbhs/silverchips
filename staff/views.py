@@ -77,6 +77,13 @@ def logout(request):
 
 
 @login_required
+def dummy(request):
+    """Dummy page generator."""
+
+    return render(request, "staff/base.html")
+
+
+@login_required
 def create_story(request):
     if request.method == 'POST':
         form = forms.Story(request.POST)

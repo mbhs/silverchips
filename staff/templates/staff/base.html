@@ -7,24 +7,37 @@
         {% block head %}{% endblock %}
     </head>
     <body>
-        <nav id="menu" class="navbar navbar-default navbar-static-top navbar-s">
-            <div class="container-fluid">
-                <ul class="nav navbar-nav navbar-right">
-                    <li class="dropdown">
-                        <a data-toggle="dropdown">{{ user.first_name }} {{ user.last_name }} <span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="/staff/profile">Profile</a></li>
-                            <li><a href="/staff/test">Test</a></li>
-                            <li role="separator" class="divider"></li>
-                            <li><a href="/staff/logout">Logout</a></li>
-                        </ul>
+        <nav id="menu" class="navbar navbar-dark bg-dark navbar-expand-sm">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#menu-items">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="menu-items">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Silver Chips Online</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            {{ user.get_full_name }}
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="{% url "staff:profile" %}">Profile</a>
+                            <a class="dropdown-item" href="#">Settings</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="{% url "staff:logout" %}">Logout</a>
+                        </div>
                     </li>
                 </ul>
             </div>
         </nav>
-        <div id="content" class="fluid-width">
-            {% block content %}
-            {% endblock %}        
+        <div class="column-wrapper">
+            {% include "staff/components/writer/sidebar.html" %}
+            <div id="content" class="fluid-width">
+                {% block content %}
+                {% endblock %}
+            </div>
         </div>
     </body>
 </html>

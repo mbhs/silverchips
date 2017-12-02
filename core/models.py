@@ -163,9 +163,8 @@ editors = Group.objects.get_or_create(name="Editors")
 
 # Some publishing pipeline constants
 UNPUBLISHED = 0
-PENDING = 1
-PUBLISHED = 2
-HIDDEN = 3
+PUBLISHED = 1
+HIDDEN = 2
 
 
 class PublishingPipelineMixin:
@@ -181,9 +180,8 @@ class PublishingPipelineMixin:
     publishable = True
     published = models.IntegerField(default=0, choices=(
         (0, "unpublished"),
-        (1, "pending"),
-        (2, "published"),
-        (3, "hidden")))
+        (1, "published"),
+        (2, "hidden")))
 
 
 class Image(Content):
