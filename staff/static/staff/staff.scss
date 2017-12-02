@@ -1,5 +1,12 @@
 @import "login";
 
+.navbar .nav-link {
+  padding-top: 0;
+  padding-bottom: 0;
+  height: 25px;
+  line-height: 25px;
+}
+
 .column-wrapper {
   display: flex;
   align-items: stretch;
