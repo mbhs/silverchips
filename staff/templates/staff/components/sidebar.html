@@ -1,0 +1,10 @@
+<div id="sidebar" class="col-lg-2 col-md-4 col-sm-4 no-float">
+    <div class="menu">
+        {% if user.get_role == "editor" %}
+            {% include "staff/components/editor/sidebar.html" %}
+        {% elif user.get_role == "writer" %}
+            {% include "staff/components/writer/sidebar.html" %}
+        {% else %}
+        {% endif %}
+    </div>
+</div>

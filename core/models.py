@@ -152,6 +152,15 @@ class User(auth.User):
 
     objects = ProfileUserManager()
 
+    def get_role(self):
+        """Get the user role."""
+
+        if self.is_superuser or self.groups.filter(name="Editors"):
+            return "editor"
+        elif self.groups.filter(name="Writers"):
+            return "writer"
+        return "user"
+
     class Meta:
         proxy = True
 
