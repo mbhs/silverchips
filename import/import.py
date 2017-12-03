@@ -88,6 +88,20 @@ if ask_reimport("categories"):
                             title=get_field(old_category, "name"))
         section.save()
 
+if ask_reimport("pictures"):
+    Image.objects.all().delete()
+    for old_pic in read_table("picture"):
+        try:
+            pic_id = get_field(old_pic, "id")
+            file = File(open("import/data/images/{}.jpg".format(pic_id), 'rb'))
+            pic = Image(id=get_field(old_pic, "id"),
+                        title=get_field(old_pic, "title", "(no title)"),
+                        description=get_field(old_pic, "caption", "(no caption)"))
+            pic.source.save("{}.jpg".format(pic_id), file, save=True)
+            pic.save()
+        except Exception as e:
+            print(e)
+
 if ask_reimport("stories"):
     Story.objects.all().delete()
     stories = read_table("story")
@@ -116,17 +130,3 @@ if ask_reimport("authors"):
             story.save()
         except:
             print("Failed to link story to author.")
-
-if ask_reimport("pictures"):
-    Image.objects.all().delete()
-    for old_pic in read_table("picture"):
-        try:
-            pic_id = get_field(old_pic, "id")
-            file = File(open("import/data/images/{}.jpg".format(pic_id), 'rb'))
-            pic = Image(id=get_field(old_pic, "id"),
-                        title=get_field(old_pic, "title", "(no title)"),
-                        description=get_field(old_pic, "caption", "(no caption)"))
-            pic.source.save("{}.jpg".format(pic_id), file, save=True)
-            pic.save()
-        except Exception as e:
-            print(e)

@@ -1,0 +1,7 @@
+{% include content.template %}
+
+{% if not content.hide_caption %}
+    <br/><br/>
+
+    <p class="text-muted text-small">{{ content.description }}</p>
+{% endif %}

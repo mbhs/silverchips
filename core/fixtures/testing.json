@@ -1,0 +1,23 @@
+[
+  {
+    "model": "core.User",
+    "pk": 1,
+    "fields": {
+      "username": "noahbkim",
+      "first_name": "Noah",
+      "last_name": "Kim",
+      "password": "pbkdf2_sha256$36000$iXLiQNoXVaha$LHyICn3HdNcC+JnjN1QF12yuQLHyoxsj5FcSkCWt0XM=",
+      "email": "email@email.com",
+      "is_staff": true,
+      "is_superuser": true,
+      "groups": [1, 2]
+    }
+  },
+  {
+    "model": "core.Profile",
+    "pk": 1,
+    "fields": {
+      "user": 1
+    }
+  }
+]

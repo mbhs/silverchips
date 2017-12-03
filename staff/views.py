@@ -6,7 +6,7 @@ Also allows for some degree of customization.
 
 
 # Django imports
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, reverse
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 
@@ -20,12 +20,11 @@ def login(request):
     """Return the login page to the staff site."""
 
     if request.user.is_authenticated():
-        return redirect("dashboard")
+        return redirect("staff:index")
 
     # Check if post and validate
     if request.method == "POST":
         form = forms.Login(request.POST)
-
         if form.is_valid():
 
             # Get username, password, and corresponding User
@@ -47,28 +46,26 @@ def login(request):
 
             # Login and redirect to staff
             auth.login(request, user)
-            return redirect("/staff")
+            return redirect("staff:index")
 
     else:
         form = forms.Login()
 
-    return render(request, "staff/login.html", {
-        "form": form
-    })
+    return render(request, "staff/login.html", {"form": form})
 
 
 @login_required
 def index(request):
     """Return the index page. Redirects to the dashboard."""
 
-    return redirect("dashboard")
+    return render(request, "staff/index.html")
 
 
 @login_required
 def dashboard(request):
     """Return the dashboard to the staff site."""
 
-    return render(request, "staff/dashboard.html")
+    return render(request, "staff/index.html")
 
 
 @login_required
@@ -77,6 +74,13 @@ def logout(request):
 
     auth.logout(request)
     return redirect("/")
+
+
+@login_required
+def dummy(request):
+    """Dummy page generator."""
+
+    return render(request, "staff/base.html")
 
 
 @login_required
