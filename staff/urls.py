@@ -10,6 +10,7 @@ from django.conf.urls import url, include
 
 # Local imports
 from . import views
+from . import autocomplete
 
 
 # Custom URL patterns
@@ -19,11 +20,16 @@ story_urlpatterns = [
     url("^edit/([0-9])+/$", views.stories_edit, name="edit"),
 ]
 
+autocomplete_urlpatterns = [
+    url("^users/$", autocomplete.UserAutoComplete.as_view(), name="users"),
+]
+
 urlpatterns = [
-    url(r"^$", views.index, name="index"),
-    url(r"^login/$", views.login, name="login"),
-    url(r"^logout/$", views.logout, name="logout"),
-    url(r"^profile/$", views.dummy, name="profile"),
-    url(r"^stories/", include(story_urlpatterns, namespace="stories")),
-    url(r"^media/upload/$", views.upload_image, name="image_upload")
+    url("^$", views.index, name="index"),
+    url("^login/$", views.login, name="login"),
+    url("^logout/$", views.logout, name="logout"),
+    url("^profile/$", views.dummy, name="profile"),
+    url("^stories/", include(story_urlpatterns, namespace="stories")),
+    url("^media/upload/$", views.upload_image, name="image_upload"),
+    url("^autocomplete/", include(autocomplete_urlpatterns, namespace="autocomplete"))
 ]

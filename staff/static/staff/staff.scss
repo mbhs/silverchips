@@ -87,11 +87,33 @@
   flex-direction: column;
 
   #content {
-    padding: 2rem;
+    padding: 1.75rem 2rem;
     overflow: auto;
     flex-grow: 1;
 
   }
+
+}
+
+
+form {
+
+  label {
+    font-weight: bold;
+    display: block;
+  }
+
+  span.error {
+    display: block;
+    margin-top: -0.35em;
+    margin-bottom: 0.5em;
+    color: red;
+  }
+
+  button + button {
+    margin-left: 1rem;
+  }
+
 }
 
 @media (max-width: 575px) {
@@ -99,4 +121,3 @@
   #column-wrapper #sidebar { height: auto; width: 100%; }
   #column-wrapper #content-wrapper { overflow-y: visible; }
 }
-

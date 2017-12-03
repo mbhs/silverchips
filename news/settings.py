@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'core',
     'home',
     'staff',
+    'dal_select2',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

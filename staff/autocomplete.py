@@ -1,8 +1,8 @@
 from dal import autocomplete
-from core.models import User, Group
+from core.models import User
 
 
-class AuthorAutoComplete(autocomplete.Select2QuerySetView):
+class UserAutoComplete(autocomplete.Select2QuerySetView):
     """Autocomplete for selecting other authors."""
 
     def get_queryset(self):
