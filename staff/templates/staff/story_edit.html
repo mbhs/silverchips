@@ -1,0 +1,52 @@
+{% extends "staff/base.html" %}
+{% load bootstrap_tags %}
+{% load staticfiles %}
+
+{% block head %}
+    {% include "shared/quill.html" %}
+{% endblock %}
+
+{% block content %}
+<h1>Story Editor</h1>
+<form method="POST" onsubmit="update_hidden();">
+    {% csrf_token %}
+
+    <div class="form-group">
+        <label for="title">{{ form.title.label }}</label>
+        {% for error in form.title.errors %}
+            <span class="error">{{ error }}</span>
+        {% endfor %}
+        <input id="title" name="{{ form.title.name }}" class="form-control" type="text" placeholder="Title">
+    </div>
+
+    <div class="form-group">
+        <label for="authors">{{ form.authors.label }}</label>
+        {% for error in form.authors.errors %}
+            <span class="error">{{ error }}</span>
+        {% endfor %}
+        {{ form.authors }}
+    </div>
+
+    <div class="form-group">
+        <label for="description">{{ form.description.label }}</label>
+        {% for error in form.description.errors %}
+            <span class="error">{{ error }}</span>
+        {% endfor %}
+        <textarea id="description" name="description" class="form-control" placeholder="Description" rows="3"></textarea>
+    </div>
+
+    <div class="form-group">
+        <label>Story</label>
+        <div id="editor"></div>
+        <script src="/static/js/quill.js"></script>
+    </div>
+
+    <div class="form-group">
+        <button class="btn btn-danger">Cancel</button>
+        <button type="submit" class="btn btn-primary">Save</button>
+    </div>
+</form>
+
+{{ form.media }}
+
+{% endblock %}

@@ -15,99 +15,6 @@ from django.contrib.contenttypes.models import ContentType
 import posixpath
 
 
-class TimeTrackingModel(models.Model):
-    """Model mixin for recording creation and edit times."""
-
-    created = models.DateTimeField()
-    modified = models.DateTimeField()
-
-    def save(self, *args, **kwargs):
-        """Save the model and update the creation and edit times."""
-
-        if not self.created:
-            self.created = timezone.now()
-        self.modified = timezone.now()
-        return super().save(*args, **kwargs)
-
-    class Meta:
-        abstract = True
-
-
-class Content(TimeTrackingModel):
-    """A generic content model.
-
-    This container provides the metaclass for all types of media,
-    including stories, images, videos, galleries, and podcasts. Each
-    subclass should be capable of rendering itself to HTML so that it
-    can be generically displayed or embedded.
-    """
-
-    title = models.TextField()
-    description = models.TextField()
-    authors = models.ManyToManyField("User", related_name="%(class)s_content")  # user.photo_content
-
-    views = models.IntegerField(default=0)
-
-    def __str__(self):
-        """Represent the content as a string."""
-
-        return "Content[{}:{}]".format(type(self).__name__, self.title)
-
-    class Meta:
-        abstract = True
-        ordering = ['-created']
-
-
-# Section names should be pretty
-alphanumeric = RegexValidator(r"^[a-zA-Z0-9_]*$", "Only alphanumeric characters and underscore are allowed.")
-
-class Section(models.Model):
-    """All stories are categorized by sections.
-
-    To avoid using a recursive system, sections have an identifying
-    string and absolute path. The absolute path is set when the
-    """
-
-    id = models.CharField(max_length=16, validators=[alphanumeric])
-    _path = models.CharField(max_length=64, unique=True, primary_key=True)
-
-    name = models.CharField(max_length=32)
-    title = models.CharField(max_length=64)
-    active = models.BooleanField(default=True)
-
-    def assign(self, section: "Section"=None):
-        """Assign this section under another section."""
-
-        if not self.id:
-            raise RuntimeError("Section ID is not set.")
-        if section is None:
-            self._path = "/" + self.id
-        else:
-            self._path = posixpath.join(section.path, self.id)
-
-    def save(self, *args, **kwargs):
-        """Save the section model.
-
-        If the path is not set, the section is automatically assigned
-        to the root path.
-        """
-
-        if not self._path:
-            self.assign()
-        super().save(*args, **kwargs)
-
-    @property
-    def path(self):
-        """Get the path to the section."""
-
-        return self._path
-
-    def __str__(self):
-        """Represent the section as a string."""
-
-        return "Sections[{}]".format(self.title)
-
-
 class Profile(models.Model):
     """The profile model provides more information about users.
 
@@ -166,7 +73,7 @@ class User(auth.User):
             return "editor"
         elif self.groups.filter(name="Writers"):
             return "writer"
-        return "user"
+        return None
 
     class Meta:
         proxy = True
@@ -177,10 +84,105 @@ writers = Group.objects.get_or_create(name="Writers")
 editors = Group.objects.get_or_create(name="Editors")
 
 
+class TimeTrackingModel(models.Model):
+    """Model mixin for recording creation and edit times."""
+
+    created = models.DateTimeField()
+    modified = models.DateTimeField()
+
+    def save(self, *args, **kwargs):
+        """Save the model and update the creation and edit times."""
+
+        if not self.created:
+            self.created = timezone.now()
+        self.modified = timezone.now()
+        return super().save(*args, **kwargs)
+
+    class Meta:
+        abstract = True
+
+
+class Content(TimeTrackingModel):
+    """A generic content model.
+
+    This container provides the metaclass for all types of media,
+    including stories, images, videos, galleries, and podcasts. Each
+    subclass should be capable of rendering itself to HTML so that it
+    can be generically displayed or embedded.
+    """
+
+    title = models.TextField()
+    description = models.TextField()
+    authors = models.ManyToManyField("User", related_name="%(class)s_content")  # user.photo_content
+
+    views = models.IntegerField(default=0)
+
+    def __str__(self):
+        """Represent the content as a string."""
+
+        return "Content[{}:{}]".format(type(self).__name__, self.title)
+
+    class Meta:
+        abstract = True
+        ordering = ['-created']
+
+
+# Section names should be pretty
+alphanumeric = RegexValidator(r"^[a-zA-Z0-9_]*$", "Only alphanumeric characters and underscore are allowed.")
+
+
+class Section(models.Model):
+    """All stories are categorized by sections.
+
+    To avoid using a recursive system, sections have an identifying
+    string and absolute path. The absolute path is set when the
+    """
+
+    id = models.CharField(max_length=16, validators=[alphanumeric])
+    _path = models.CharField(max_length=64, unique=True, primary_key=True)
+
+    name = models.CharField(max_length=32)
+    title = models.CharField(max_length=64)
+    active = models.BooleanField(default=True)
+
+    def assign(self, section: "Section"=None):
+        """Assign this section under another section."""
+
+        if not self.id:
+            raise RuntimeError("Section ID is not set.")
+        if section is None:
+            self._path = "/" + self.id
+        else:
+            self._path = posixpath.join(section.path, self.id)
+
+    def save(self, *args, **kwargs):
+        """Save the section model.
+
+        If the path is not set, the section is automatically assigned
+        to the root path.
+        """
+
+        if not self._path:
+            self.assign()
+        super().save(*args, **kwargs)
+
+    @property
+    def path(self):
+        """Get the path to the section."""
+
+        return self._path
+
+    def __str__(self):
+        """Represent the section as a string."""
+
+        return "Sections[{}]".format(self.title)
+
+
 # Some publishing pipeline constants
 UNPUBLISHED = 0
-PUBLISHED = 1
-HIDDEN = 2
+PENDING = 1
+PUBLISHED = 2
+HIDDEN = 3
 
 
 class PublishingPipelineMixin:
@@ -194,8 +196,9 @@ class PublishingPipelineMixin:
     """
 
     publishable = models.BooleanField(default=True)
-    published = models.IntegerField(default=0, choices=(
+    published = models.IntegerField(default=UNPUBLISHED, choices=(
         (UNPUBLISHED, "unpublished"),
+        (PENDING, "pending"),
         (PUBLISHED, "published"),
         (HIDDEN, "hidden")))
 
@@ -222,7 +225,7 @@ class Story(Content, PublishingPipelineMixin):
     cover = models.ForeignKey(Image, null=True, on_delete=models.SET_NULL)
     section = models.ForeignKey(Section, related_name="stories", null=True, on_delete=models.SET_NULL)
 
-    template = "content/story.html"
+    template = "content/story_edit.html"
     descriptor = "Story"
     hide_caption = True
 
