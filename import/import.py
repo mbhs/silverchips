@@ -6,6 +6,7 @@ from django import setup
 from django.core.files import File
 from xml.etree import ElementTree as et
 from datetime import datetime
+from django.utils import timezone
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "news.settings")
 setup()
@@ -47,7 +48,7 @@ def get_field(row, field, default=None):
 
 
 def read_date(date):
-    return datetime.strptime(date, "%Y-%m-%d %H:%M:%S")
+    return timezone.make_aware(datetime.strptime(date, "%Y-%m-%d %H:%M:%S"))
 
 
 def ask_reimport(obj):
@@ -92,12 +93,19 @@ if ask_reimport("pictures"):
     for old_pic in read_table("picture"):
         try:
             pic_id = get_field(old_pic, "id")
-            file = File(open("import/data/images/{}.{}".format(pic_id,
-                            {"image/jpeg": "jpg", "image/png": "png", "image/gif": "gif"}[get_field(old_pic, "mimeType")]), 'rb'))
+            extension = {"image/jpeg": "jpg", "image/png": "png", "image/gif": "gif"}[get_field(old_pic, "mimeType")]
+            file_name = "{}.{}".format(pic_id, extension)
+            file = File(open("import/data/images/{}".format(file_name), 'rb'))
             pic = Image(id=get_field(old_pic, "id"),
                         title=get_field(old_pic, "title", "(no title)"),
                         description=get_field(old_pic, "caption", "(no caption)"))
-            pic.source.save("{}.jpg".format(pic_id), file, save=True)
+            pic.source.save("{}".format(file_name), file, save=True)
+
+            author = int(get_field(old_pic, "authorId"))
+            if author is not 0:
+                print(author)
+                pic.authors.add(User.objects.get(id=author))
+
             pic.save()
         except Exception as e:
             print(e)
@@ -115,7 +123,7 @@ if ask_reimport("stories"):
             # Switch over old embedded content to new system
             # Replace the old picture ID with the new content ID corresponding to that picture
             text = re.sub("<sco:picture id=(\d+)>",
-                          lambda match: "<sco:image id={}/>".format(match.group(1)), text)
+                          lambda match: "<sco:embed type=\"image\" id={}/>".format(match.group(1)), text)
 
             story = Story(id=get_field(old_story, "sid"),
                           title=get_field(old_story, "headline", "(no title)"),
@@ -135,5 +143,6 @@ if ask_reimport("authors"):
             story = Story.objects.get(id=int(get_field(link, "sid")))
             story.authors.add(User.objects.get(id=int(get_field(link, "uid"))))
             story.save()
-        except:
+        except Exception as e:
+            print(e)
             print("Failed to link story to author.")
