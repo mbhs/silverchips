@@ -15,7 +15,7 @@ app_name = "home"
 # Custom URL patterns
 urlpatterns = [
     path("", views.index, name="index"),
-    path("story/<int:pk>/", views.read_story, name="read_story"),
-    path("image/<int:pk>/", views.view_image, name="view_image"),
-    path("section/<str:name>/", views.view_section, name="view_section")
+    path("story/<int:pk>", views.read_story, name="read_story"),
+    path("image/<int:pk>", views.view_image, name="view_image"),
+    path("section/<path:name>", views.view_section, name="view_section")
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

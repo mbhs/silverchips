@@ -13,7 +13,7 @@
             <div class="col-md-2"><h5>{{ subsection.title }}</h5></div>
             <div class="col-md-10">
                 {% for story in subsection.stories.all|slice:":5" %}
-                    <h4><a href="{% url 'read_story' story.id %}" class="solid-link">{{ story.title|safe }}</a></h4>
+                    <h4><a href="{% url "home:read_story" story.id %}" class="solid-link">{{ story.title|safe }}</a></h4>
 
                     {{ story.lead|safe }}
                     <hr/>

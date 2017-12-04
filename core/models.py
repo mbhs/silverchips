@@ -8,6 +8,8 @@ from django.db import models
 import django.contrib.auth.models as auth
 from django.utils import timezone
 from django.core.validators import RegexValidator
+from django.dispatch import receiver
+from django.db.models.signals import post_migrate
 
 from django.contrib.auth.models import Group, Permission
 from django.contrib.contenttypes.models import ContentType
@@ -79,9 +81,11 @@ class User(auth.User):
         proxy = True
 
 
-site = ContentType.objects.get_or_create(app_label="core", model="site")
-writers = Group.objects.get_or_create(name="Writers")
-editors = Group.objects.get_or_create(name="Editors")
+@receiver(post_migrate)
+def create_groups(sender, **kwargs):
+    site = ContentType.objects.get_or_create(app_label="core", model="site")
+    writers = Group.objects.get_or_create(name="Writers")
+    editors = Group.objects.get_or_create(name="Editors")
 
 
 class TimeTrackingModel(models.Model):
@@ -132,50 +136,64 @@ alphanumeric = RegexValidator(r"^[a-zA-Z0-9_]*$", "Only alphanumeric characters 
 
 
 class Section(models.Model):
-    """All stories are categorized by sections.
-
-    To avoid using a recursive system, sections have an identifying
-    string and absolute path. The absolute path is set when the
-    """
-
-    id = models.CharField(max_length=16, validators=[alphanumeric])
-    _path = models.CharField(max_length=64, unique=True, primary_key=True)
+    parent = models.ForeignKey("self", related_name="subsections", null=True, blank=True, on_delete=models.SET_NULL)
 
     name = models.CharField(max_length=32)
     title = models.CharField(max_length=64)
+
     active = models.BooleanField(default=True)
 
-    def assign(self, section: "Section"=None):
-        """Assign this section under another section."""
-
-        if not self.id:
-            raise RuntimeError("Section ID is not set.")
-        if section is None:
-            self._path = "/" + self.id
-        else:
-            self._path = posixpath.join(section.path, self.id)
-
-    def save(self, *args, **kwargs):
-        """Save the section model.
-
-        If the path is not set, the section is automatically assigned
-        to the root path.
-        """
-
-        if not self._path:
-            self.assign()
-        super().save(*args, **kwargs)
-
-    @property
-    def path(self):
-        """Get the path to the section."""
-
-        return self._path
-
     def __str__(self):
-        """Represent the section as a string."""
+        return 'Sections[{}]'.format(self.title)
 
-        return "Sections[{}]".format(self.title)
+    class Meta:
+        verbose_name_plural = "sections"
+
+# class Section(models.Model):
+#     """All stories are categorized by sections.
+#
+#     To avoid using a recursive system, sections have an identifying
+#     string and absolute path. The absolute path is set when the
+#     """
+#
+#     id = models.CharField(max_length=16, validators=[alphanumeric])
+#     _path = models.CharField(max_length=64, unique=True, primary_key=True)
+#
+#     name = models.CharField(max_length=32)
+#     title = models.CharField(max_length=64)
+#     active = models.BooleanField(default=True)
+#
+#     def assign(self, section: "Section"=None):
+#         """Assign this section under another section."""
+#
+#         if not self.id:
+#             raise RuntimeError("Section ID is not set.")
+#         if section is None:
+#             self._path = "/" + self.id
+#         else:
+#             self._path = posixpath.join(section.path, self.id)
+#
+#     def save(self, *args, **kwargs):
+#         """Save the section model.
+#
+#         If the path is not set, the section is automatically assigned
+#         to the root path.
+#         """
+#
+#         if not self._path:
+#             self.assign()
+#         super().save(*args, **kwargs)
+#
+#     @property
+#     def path(self):
+#         """Get the path to the section."""
+#
+#         return self._path
+#
+#     def __str__(self):
+#         """Represent the section as a string."""
+#
+#         return "Sections[{}]".format(self.title)
 
 
 # Some publishing pipeline constants
@@ -204,7 +222,7 @@ class PublishingPipelineMixin:
 
 
 class Image(Content):
-    source = models.ImageField(upload_to="uploads/images/")
+    source = models.ImageField(upload_to="images/")
 
     template = "content/image.html"
     descriptor = "Photo"
@@ -225,7 +243,7 @@ class Story(Content, PublishingPipelineMixin):
     cover = models.ForeignKey(Image, null=True, on_delete=models.SET_NULL)
     section = models.ForeignKey(Section, related_name="stories", null=True, on_delete=models.SET_NULL)
 
-    template = "content/story_edit.html"
+    template = "content/story.html"
     descriptor = "Story"
     hide_caption = True
 

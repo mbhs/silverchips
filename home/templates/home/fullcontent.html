@@ -53,7 +53,7 @@
                     <li class="list-group-item">
                         <div class="row">
                             <div class="col-2"><strong>{{ forloop.counter }}</strong></div>
-                            <div class="col-10"><a href="{% url 'read_story' top_story.id %}" class="solid-link">{{ top_story.title }}</a></div>
+                            <div class="col-10"><a href="{% url "home:read_story" top_story.id %}" class="solid-link">{{ top_story.title }}</a></div>
                         </div>
                     </li>
                 {% endfor %}

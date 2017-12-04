@@ -1,14 +1,13 @@
 # Generate the database dump with the following command:
 #   > mysqldump silverchips --xml -u root -p > /tmp/silverchips.xml
 
-import os
+import os, re
 from django import setup
 from django.core.files import File
 from xml.etree import ElementTree as et
 from datetime import datetime
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "news.settings")
-
 setup()
 
 from core.models import Section, Story, User, Profile, Image
@@ -110,11 +109,18 @@ if ask_reimport("stories"):
         try:
             category_id = int(get_field(old_story, "cid"))
             date = read_date(get_field(old_story, "date"))
+            text = get_field(old_story, "text", "(no text")
+
+            # Switch over old embedded content to new system
+            # Replace the old picture ID with the new content ID corresponding to that picture
+            text = re.sub("<sco:picture id=(\d+)>",
+                          lambda match: "<sco:image id={}/>".format(match.group(1)), text)
+
             story = Story(id=get_field(old_story, "sid"),
                           title=get_field(old_story, "headline", "(no title)"),
                           description=get_field(old_story, "secdeck", "(no description)"),
                           lead=get_field(old_story, "lead", "(no lead)"),
-                          text=get_field(old_story, "text", "(no text)"),
+                          text=text,
                           section=(Section.objects.get(id=category_id) if category_id > 0 else None),
                           created=date,
                           modified=date)

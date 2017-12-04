@@ -21,6 +21,6 @@ from django.contrib import admin
 # All site URL patterns
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("staff/", include("staff.urls", namespace="staff")),  # Staff URLs follow staff:name i.e. staff:login
-    path("/", include("home.urls")),
+    path("staff/", include("staff.urls")),
+    path("", include("home.urls")),
 ]

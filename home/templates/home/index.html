@@ -12,7 +12,7 @@
             <ul class="list-group list-group-flush">
                 {% for story in section.stories.all|slice:":5" %}
                     <li class="list-group-item">
-                        <h4><a href="{% url 'read_story' story.id %}" class="solid-link">{{ story.title }}</a></h4>
+                        <h4><a href="{% url "home:read_story" story.id %}" class="solid-link">{{ story.title }}</a></h4>
 
                         {{ story.lead|safe }}
                     </li>

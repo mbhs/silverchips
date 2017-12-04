@@ -9,5 +9,5 @@
 
     <hr/>
 
-    <p>{{ story.text|safe|linebreaks|expand_embeds }}</p>
+    <p>{{ story.text|expand_embeds|safe|linebreaks }}</p>
 {% endwith %}
