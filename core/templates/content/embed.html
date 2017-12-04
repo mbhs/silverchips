@@ -1,3 +1,1 @@
-{% include content.template %}
-
-{% if not content.hide_caption %}<p class="text-muted text-center"><small>{{ content.descriptor }}: {{ content.description }}</small></p>{% endif %}
+{% include content.template %}{% if not content.hide_caption %}<br/><p class="text-muted text-center"><small>{{ content.descriptor }}: {{ content.description }}</small></p>{% endif %}

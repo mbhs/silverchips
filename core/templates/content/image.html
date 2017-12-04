@@ -1,3 +1,1 @@
-{% with image=content %}
-    <a href="{% url "home:view_image" image.id %}"><img src="{{ image.source.url }}" class="img-fluid mx-auto d-block"></a>
-{% endwith %}
+{% with image=content %}<a href="{% url "home:view_image" image.id %}"><img src="{{ image.source.url }}" class="img-fluid mx-auto d-block"></a>{% endwith %}

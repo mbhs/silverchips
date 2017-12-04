@@ -92,7 +92,8 @@ if ask_reimport("pictures"):
     for old_pic in read_table("picture"):
         try:
             pic_id = get_field(old_pic, "id")
-            file = File(open("import/data/images/{}.jpg".format(pic_id), 'rb'))
+            file = File(open("import/data/images/{}.{}".format(pic_id,
+                            {"image/jpeg": "jpg", "image/png": "png", "image/gif": "gif"}[get_field(old_pic, "mimeType")]), 'rb'))
             pic = Image(id=get_field(old_pic, "id"),
                         title=get_field(old_pic, "title", "(no title)"),
                         description=get_field(old_pic, "caption", "(no caption)"))
