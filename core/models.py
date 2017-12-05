@@ -73,9 +73,9 @@ class User(auth.User):
         the site as well.
         """
 
-        if self.groups.filter(name="Editors"):  # or self.is_superuser
+        if self.groups.filter(name="editors"):  # or self.is_superuser
             return "editor"
-        elif self.groups.filter(name="Writers"):
+        elif self.groups.filter(name="writers"):
             return "writer"
         return None
 
@@ -85,9 +85,9 @@ class User(auth.User):
 
 @receiver(post_migrate)
 def create_groups(sender, **kwargs):
-    site = ContentType.objects.get_or_create(app_label="core", model="site")
-    writers = Group.objects.get_or_create(name="Writers")
-    editors = Group.objects.get_or_create(name="Editors")
+    ContentType.objects.get_or_create(app_label="core", model="site")
+    Group.objects.get_or_create(name="writers")
+    Group.objects.get_or_create(name="editors")
 
 
 class TimeTrackingModel(models.Model):

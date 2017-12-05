@@ -5,3 +5,4 @@ django-inspect
 Pillow>=4.1.1
 codecov>=2.0.9
 django-autocomplete-light
+six

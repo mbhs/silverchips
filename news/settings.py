@@ -59,6 +59,8 @@ MIDDLEWARE_CLASSES = [
 
 ROOT_URLCONF = 'news.urls'
 
+APPEND_SLASH = True
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
