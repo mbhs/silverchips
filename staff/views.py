@@ -20,7 +20,7 @@ from core import models
 def login(request):
     """Return the login page to the staff site."""
 
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         return redirect("staff:index")
 
     # Check if post and validate
