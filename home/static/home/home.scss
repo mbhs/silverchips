@@ -17,6 +17,12 @@ h1#title {
     text-align: center;
 }
 
+.square {
+  width: 150px;
+  height: 150px;
+  overflow: hidden;
+}
+
 img#story-cover {
     width: 100%;
     margin-bottom: .5rem;
