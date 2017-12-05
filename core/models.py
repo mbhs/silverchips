@@ -33,7 +33,7 @@ class Profile(models.Model):
 
     # Personal information
     biography = models.TextField()
-    avatar = models.ForeignKey("Image", null=True, on_delete=models.SET_NULL)
+    avatar = models.ForeignKey("Image", blank=True, null=True, on_delete=models.SET_NULL)
     position = models.TextField()
     graduation_year = models.IntegerField()
 

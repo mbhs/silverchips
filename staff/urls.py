@@ -32,6 +32,6 @@ urlpatterns = [
     path("profile/", views.dummy, name="profile"),
     path("upload/image/", views.upload_image, name="image_upload"),
     path("media/upload/", views.upload_image, name="image_upload"),
-    path("stories/", include((story_urlpatterns, 'story'))),
-    path("autocomplete/", include((autocomplete_urlpatterns, 'autocomplete')))
+    path("stories/", include((story_urlpatterns, "story"))),
+    path("autocomplete/", include((autocomplete_urlpatterns, "autocomplete")))
 ]

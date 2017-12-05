@@ -12,7 +12,6 @@ from django.conf.urls.static import static
 from . import views
 
 app_name = "home"
-# Custom URL patterns
 urlpatterns = [
     path("", views.index, name="index"),
     path("story/<int:pk>", views.read_story, name="read_story"),
