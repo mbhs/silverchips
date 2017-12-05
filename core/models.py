@@ -33,7 +33,9 @@ class Profile(models.Model):
 
     # Personal information
     biography = models.TextField()
-    avatar = models.ImageField(null=True)
+    avatar = models.ForeignKey("Image", null=True, on_delete=models.SET_NULL)
+    position = models.TextField()
+    graduation_year = models.IntegerField()
 
     def __str__(self):
         """Represent the profile as a string."""

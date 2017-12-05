@@ -15,7 +15,7 @@
                 {% for story in subsection.stories.all|slice:":5" %}
                     <h4><a href="{% url "home:read_story" story.id %}" class="solid-link">{{ story.title|safe }}</a></h4>
 
-                    {{ story.lead|safe }}
+                    <p class="text-muted">{{ story.lead|safe }}</p>
                     <hr/>
                 {% endfor %}
             </div>

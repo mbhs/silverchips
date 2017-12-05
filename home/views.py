@@ -8,7 +8,7 @@ of everything a normal user would see while visiting the website.
 from django.shortcuts import render, get_object_or_404
 
 # News imports
-from core.models import Story, Image, Section
+from core.models import Story, Image, Section, User
 
 
 def load_context(request):
@@ -53,4 +53,18 @@ def view_image(request, pk):
     return render(request, "home/story.html", {
         "story": image,
         "stories": Story.objects.all()
+    })
+
+
+def view_profile(request, pk):
+    """Render the profile of a given staff member."""
+
+    user = get_object_or_404(User, id=int(pk))
+    stories = Story.objects.filter(authors__in=[user])
+    photos = Image.objects.filter(authors__in=[user])
+
+    return render(request, "home/profile.html", {
+        "user": user,
+        "stories": stories,
+        "photos": photos
     })

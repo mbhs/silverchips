@@ -8,9 +8,9 @@
 <div class="row">
     <div class="col-md-9">
         <h5>
-            <span class="text-muted">By</span>
+            <span class="text-muted">{% if content.authors.count > 0 %}By</span>
             {% include "home/utils/authors.html" with authors=content.authors %}
-            <span class="text-muted">| {{ content.created }} | {{ content.created|naturaltime }}</span>
+            <span class="text-muted">| {% endif %}{{ content.created }} | {{ content.created|naturaltime }}</span>
         </h5>
     </div>
     <div class="col-md-3 text-right">
@@ -37,7 +37,9 @@
         {% for author in content.authors.all %}
             <div class="row">
                 <div class="col-2">{% if author.profile.avatar %}<img src="{{ author.profile.avatar.url }}" class="img-fluid rounded-circle">{% endif %}</div>
-                <div class="col-10"><p class="text-muted">{{ author.profile.biography|truncatewords:45 }} <a href="" class="solid-link">More &raquo;</a></p></div>
+                <div class="col-10">
+                    <p class="text-muted">{{ author.profile.biography|truncatewords:45 }} <a href="{% url "home:view_profile" author.pk %}" class="solid-link">More &raquo;</a>
+                    </p></div>
             </div>
         {% endfor %}
     </div>

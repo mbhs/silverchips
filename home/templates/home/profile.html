@@ -1,0 +1,50 @@
+{% extends "home/base.html" %}
+
+{% block title %}
+    {{ user.get_full_name }}
+{% endblock %}
+
+{% block content %}
+    <h1>{{ user.get_full_name }}</h1>
+    <hr/>
+
+    <div class="row">
+        <div class="col-md-3">
+            {% if user.profile.avatar %}
+                <img class="img-fluid mx-auto d-block rounded-circle" src="{{ user.profile.avatar.source.url }}">
+                <br/><br/>
+            {% endif %}
+
+            <strong>Name</strong>: {{ user.get_full_name }} <br/>
+            <strong>Position</strong>: {{ user.profile.position }} <br/>
+            <strong>Graduation Year</strong>: {{ user.profile.graduation_year }}
+        </div>
+        <div class="col-md-9">
+            {{ user.profile.biography|safe }}
+        </div>
+    </div>
+
+    {% if stories.count > 0 %}
+        <br/><br/>
+        <h2>Stories ({{ stories.count }})</h2>
+        <hr/>
+
+        {% for story in stories %}
+            <h4><a href="{% url "home:read_story" story.pk %}" class="solid-link">{{ story.title|safe }}</a></h4>
+            {{ story.created }} in <a href="{% url "home:view_section" story.section.pk %}" class="solid-link">{{ story.section.title }} &raquo;</a>
+            <p class="text-muted">{{ story.lead|safe }}</p>
+        {% endfor %}
+    {% endif %}
+
+    {% if photos.count > 0 %}
+        <br/><br/>
+        <h2>Photos ({{ photos.count }})</h2>
+        <hr/>
+
+        {% for photo in photos %}
+            <h4><a href="{% url "home:view_image" photo.pk %}" class="solid-link">{{ photo.title|safe }}</a></h4>
+            {{ photo.created }}
+            <p class="text-muted">{{ photo.description|safe }}</p>
+        {% endfor %}
+    {% endif %}
+{% endblock %}

@@ -73,7 +73,9 @@ if ask_reimport("users"):
 
         profile = Profile(id=user_id,
                           user=user,
-                          biography=get_field(old_user, "bio", "(no biography)"))
+                          biography=get_field(old_user, "bio", "(no biography)"),
+                          position=get_field(old_user, "position", "(no position)"),
+                          graduation_year=2000 + int(get_field(old_user, "gradyear", -2001)))
         profile.save()
 
 if ask_reimport("categories"):
@@ -103,12 +105,21 @@ if ask_reimport("pictures"):
 
             author = int(get_field(old_pic, "authorId"))
             if author is not 0:
-                print(author)
                 pic.authors.add(User.objects.get(id=author))
 
             pic.save()
         except Exception as e:
             print(e)
+
+if ask_reimport("user avatars"):
+    users = read_table("user")
+    for i, old_user in enumerate(users):
+        try:
+            profile = User.objects.get(pk=int(get_field(old_user, "id"))).profile
+            profile.avatar = Image.objects.get(pk=int(get_field(old_user, "pid")))
+            profile.save()
+        except:
+            pass
 
 if ask_reimport("stories"):
     Story.objects.all().delete()
