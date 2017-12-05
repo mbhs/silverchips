@@ -74,7 +74,7 @@ def logout(request):
     """Log out the user and go to logout page."""
 
     auth.logout(request)
-    return redirect("/")
+    return redirect("/staff")
 
 
 @login_required
