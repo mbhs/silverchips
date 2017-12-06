@@ -205,6 +205,11 @@ PENDING = 1
 PUBLISHED = 2
 HIDDEN = 3
 
+# Media ids
+FILE = 0
+IMAGE = 1
+VIDEO = 2
+AUDIO = 3
 
 class PublishingPipelineMixin:
     """Provides state variables for content that is published.
@@ -223,14 +228,30 @@ class PublishingPipelineMixin:
         (PUBLISHED, "published"),
         (HIDDEN, "hidden")))
 
-class Image(Content):
+class MediaMixin:
+    """Mixin for identifying media content
+    """
+
+    MEDIA_TYPES = (
+        (FILE, "file"),
+        (IMAGE, "image"),
+        (VIDEO, "video"),
+        (AUDIO, "audio"),
+    )
+    media_type = models.IntegerField(default=IMAGE, choices=MEDIA_TYPES)
+
+class Image(Content, MediaMixin):
+    media_type = IMAGE
     source = models.ImageField(upload_to="images/")
 
     template = "content/image.html"
     descriptor = "Photo"
 
-class Video(Content):
+class Video(Content, MediaMixin):
+    media_type = VIDEO
     source = models.FileField(upload_to="videos/")
+
+    #story = models.ForeignKey(Story, on_delete=models.CASCADE)
 
     template = "content/video.html"
     descriptor = "Video"
@@ -248,7 +269,7 @@ class Story(Content, PublishingPipelineMixin):
     text = models.TextField()
 
     section = models.ForeignKey(Section, related_name="stories", null=True, on_delete=models.SET_NULL)
-    cover = models.ForeignKey(Video, null=True, on_delete=models.SET_NULL)
+    cover = models.ForeignKey(Image, null=True, on_delete=models.SET_NULL)
 
     template = "content/story.html"
     descriptor = "Story"
