@@ -13,8 +13,16 @@
             <div class="center">
                 <h1 class="serif">SCO</h1>
                 <p>Staff Login</p>
+
                 <form id="login-form" action="{% url "staff:login" %}" method="post">
                     {% csrf_token %}
+
+                    {% for error in form.non_field_errors %}
+                      <div class="alert alert-danger">
+                          <strong>Error:</strong> {{ error }}
+                      </div>
+                    {% endfor %}
+                    
                     <input class="form-control" type="text" name="username" placeholder="Username">
                     <input class="form-control" type="password" name="password" placeholder="Password">
                     <button class="btn btn-primary" value="Login" type="submit">Login</button>
