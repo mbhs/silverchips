@@ -1,7 +1,7 @@
 from django import template
 import re
 
-from core.models import Image, Video
+from core.models import Image, Video, Audio
 
 register = template.Library()
 
@@ -22,6 +22,8 @@ def expand_embeds(text):
                 content_type = Image
             elif match.group(1) == "video":
                 content_type = Video
+            elif match.group(1) == "audio":
+                content_type = Audio
 
             return render_content(content_type.objects.get(pk=int(match.group(2))))
         except Exception as e:

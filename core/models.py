@@ -251,10 +251,18 @@ class Video(Content, MediaMixin):
     media_type = VIDEO
     source = models.FileField(upload_to="videos/")
 
-    #story = models.ForeignKey(Story, on_delete=models.CASCADE)
-
     template = "content/video.html"
     descriptor = "Video"
+
+class Audio(Content, MediaMixin):
+    media_type = AUDIO
+    source = models.FileField(upload_to="audio/")
+
+    template = "content/audio.html"
+    descriptor = "Audio"
+
+    class Meta:
+        verbose_name_plural = "audio"
 
 class Story(Content, PublishingPipelineMixin):
     """The main story model.
