@@ -13,6 +13,7 @@ from django.db.models.signals import post_migrate
 
 from django.contrib.auth.models import Group, Permission
 from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes.fields import GenericForeignKey
 
 # import posixpath
 
@@ -222,13 +223,17 @@ class PublishingPipelineMixin:
         (PUBLISHED, "published"),
         (HIDDEN, "hidden")))
 
-
 class Image(Content):
     source = models.ImageField(upload_to="images/")
 
     template = "content/image.html"
     descriptor = "Photo"
 
+class Video(Content):
+    source = models.FileField(upload_to="videos/")
+
+    template = "content/video.html"
+    descriptor = "Video"
 
 class Story(Content, PublishingPipelineMixin):
     """The main story model.
@@ -242,8 +247,8 @@ class Story(Content, PublishingPipelineMixin):
     lead = models.TextField()
     text = models.TextField()
 
-    cover = models.ForeignKey(Image, null=True, on_delete=models.SET_NULL)
     section = models.ForeignKey(Section, related_name="stories", null=True, on_delete=models.SET_NULL)
+    cover = models.ForeignKey(Video, null=True, on_delete=models.SET_NULL)
 
     template = "content/story.html"
     descriptor = "Story"

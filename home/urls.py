@@ -16,6 +16,7 @@ urlpatterns = [
     path("", views.index, name="index"),
     path("story/<int:pk>", views.read_story, name="read_story"),
     path("image/<int:pk>", views.view_image, name="view_image"),
+    path("video/<int:pk>", views.view_video, name="view_video"),
     path("profile/<int:pk>", views.view_profile, name="view_profile"),
     path("section/<path:name>", views.view_section, name="view_section")
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
