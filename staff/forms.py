@@ -40,8 +40,4 @@ class ImageForm(forms.ModelForm):
 
     class Meta:
         model = models.Image
-<<<<<<< HEAD
-        fields = ['title', 'authors', 'description', 'source']
-=======
         fields = ['title', 'description', 'source']
->>>>>>> 71f6893ed0678a927d266bb96cef649bceda093d
