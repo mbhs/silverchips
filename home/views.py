@@ -60,6 +60,8 @@ def view_profile(request, pk):
     """Render the profile of a given staff member."""
 
     user = get_object_or_404(User, id=int(pk))
+
+    # Find all the content that this user authored
     stories = Story.objects.filter(authors__in=[user])
     photos = Image.objects.filter(authors__in=[user])
 

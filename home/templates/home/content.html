@@ -36,10 +36,12 @@
 
         {% for author in content.authors.all %}
             <div class="row">
-                <div class="col-2">{% if author.profile.avatar %}<img src="{{ author.profile.avatar.url }}" class="img-fluid rounded-circle">{% endif %}</div>
+                <div class="col-2">{% if author.profile.avatar %}<img src="{{ author.profile.avatar.source.url }}" class="img-fluid rounded-circle">{% endif %}</div>
                 <div class="col-10">
-                    <p class="text-muted">{{ author.profile.biography|truncatewords:45 }} <a href="{% url "home:view_profile" author.pk %}" class="solid-link">More &raquo;</a>
-                    </p></div>
+                    <p class="text-muted">
+                        {{ author.profile.biography|truncatewords:45 }} <a href="{% url "home:view_profile" author.pk %}" class="solid-link">More &raquo;</a>
+                    </p>
+                </div>
             </div>
         {% endfor %}
     </div>
