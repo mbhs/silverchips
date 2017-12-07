@@ -11,7 +11,8 @@
     <div class="row">
         <div class="col-md-3">
             {% if user.profile.avatar %}
-                <img class="img-fluid mx-auto d-block rounded-circle" src="{{ user.profile.avatar.source.url }}">
+                <img class="square mx-auto d-block rounded-circle" src="{{ user.profile.avatar.source.url }}">
+
                 <br/><br/>
             {% endif %}
 

@@ -20,7 +20,7 @@ from core import models
 def login(request):
     """Return the login page to the staff site."""
 
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         return redirect("staff:index")
 
     # Check if post and validate
@@ -74,7 +74,7 @@ def logout(request):
     """Log out the user and go to logout page."""
 
     auth.logout(request)
-    return redirect("/")
+    return redirect("/staff")
 
 
 @login_required

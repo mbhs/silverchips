@@ -5,7 +5,7 @@
     <div class="collapse navbar-collapse" id="menu-items">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-                <a class="navbar-brand nav-link" href="{% url "index" %}">Silver Chips Online</a>
+                <a class="navbar-brand nav-link" href="{% url "home:index" %}">Silver Chips Online</a>
             </li>
         </ul>
         <ul class="navbar-nav ml-auto">
@@ -18,7 +18,7 @@
             </li>
             {% endif %}
             <li class="nav-item">
-                <a class="nav-link" href="{% url "staff:index" %}">Logout</a>
+                <a class="nav-link" href="{% url "staff:logout" %}">Logout</a>
             </li>
         </ul>
     </div>
