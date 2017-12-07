@@ -104,7 +104,7 @@ def stories_create(request):
     else:
         form = forms.Story()
 
-    return render(request, "staff/story_edit.html", {
+    return render(request, "staff/story/edit.html", {
         "form": form
     })
 
@@ -123,7 +123,7 @@ def stories_edit(request, story_id):
     else:
         form = forms.Story(instance=story)
 
-    return render(request, "staff/story_edit.html", {
+    return render(request, "staff/story/edit.html", {
         "form": form
     })
 

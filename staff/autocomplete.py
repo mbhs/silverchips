@@ -11,7 +11,3 @@ class UserAutoComplete(autocomplete.Select2QuerySetView):
         if not self.request.user.is_authenticated():
             return User.objects.none()
         return User.objects.filter(first_name__istartswith=self.q)
-
-
-
-
