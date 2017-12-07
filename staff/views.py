@@ -9,7 +9,7 @@ Also allows for some degree of customization.
 from django.shortcuts import render, redirect
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
-from django.views.generic.edit import ModelFormMixin
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 # Local imports
 from . import forms
@@ -25,7 +25,7 @@ def login(request):
 
     # Check if post and validate
     if request.method == "POST":
-        form = forms.Login(request.POST)
+        form = forms.LoginForm(request.POST)
         if form.is_valid():
 
             # Get username, password, and corresponding User
@@ -50,23 +50,9 @@ def login(request):
             return redirect("staff:index")
 
     else:
-        form = forms.Login()
+        form = forms.LoginForm()
 
     return render(request, "staff/login.html", {"form": form})
-
-
-@login_required
-def index(request):
-    """Return the index page. Redirects to the dashboard."""
-
-    return render(request, "staff/index.html")
-
-
-@login_required
-def dashboard(request):
-    """Return the dashboard to the staff site."""
-
-    return render(request, "staff/index.html")
 
 
 @login_required
@@ -75,6 +61,13 @@ def logout(request):
 
     auth.logout(request)
     return redirect("/staff")
+
+
+@login_required
+def index(request):
+    """Return the index page. Redirects to the dashboard."""
+
+    return render(request, "staff/index.html")
 
 
 @login_required
@@ -94,7 +87,7 @@ def stories_view(request):
 @login_required
 def stories_create(request):
     if request.method == 'POST':
-        form = forms.Story(request.POST)
+        form = forms.StoryForm(request.POST)
 
         if form.is_valid():
             story = form.save(commit=False)
@@ -102,7 +95,7 @@ def stories_create(request):
             story.save()
             return redirect("story", story.id)
     else:
-        form = forms.Story()
+        form = forms.StoryForm()
 
     return render(request, "staff/story/edit.html", {
         "form": form
@@ -115,34 +108,23 @@ def stories_edit(request, story_id):
     story = models.Story.objects.get(id=story_id)
 
     if request.method == 'POST':
-        form = forms.Story(request.POST, instance=story)
+        form = forms.StoryForm(request.POST, instance=story)
 
         if form.is_valid():
             form.save()
             return redirect("story", story_id)
     else:
-        form = forms.Story(instance=story)
+        form = forms.StoryForm(instance=story)
 
-    return render(request, "staff/story/edit.html", {
-        "form": form
-    })
+    return render(request, "staff/story/edit.html", {"form": form})
 
 
-@login_required
-def upload_image(request):
-    if request.method == 'POST':
-        form = forms.Image(request.POST, request.FILES)
+class ImageCreateView(CreateView):
+    """View for uploading images to the staff site."""
 
-        if form.is_valid():
-            image = form.save(commit=False)
-            image.uploader = request.user
-            image.save()
-            print(image.get_upload_to("cooler"))
+    model = models.Image
 
-            return redirect("image", image.id)
-    else:
-        form = forms.Image()
+    form_class = forms.ImageForm
+    # TODO: set active user as uploader
 
-    return render(request, "staff/media_upload.html", {
-        "form": form
-    })
+    template_name = "staff/media/edit.html"

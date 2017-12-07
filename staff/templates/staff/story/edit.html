@@ -8,7 +8,7 @@
 
 {% block content %}
 <h1>Story Editor</h1>
-<form method="POST" onsubmit="update_hidden();">
+<form method="POST" onsubmit="write()">
     {% csrf_token %}
 
     <div class="form-group">
@@ -37,6 +37,7 @@
 
     <div class="form-group">
         <label>Story</label>
+        <input name="story" type="hidden">
         <div id="editor"></div>
         <script src="/static/js/quill.js"></script>
     </div>
@@ -48,5 +49,11 @@
 </form>
 
 {{ form.media }}
+
+<script type="text/javascript">
+    function write() {
+      document.forms[0].story = quill.root.innerHTML;
+    }
+</script>
 
 {% endblock %}
