@@ -22,13 +22,14 @@ for x in range(32):
         xml_data = xml_data.replace(chr(x), "")
 
 # TODO: expand/check this
-xml_data = xml_data.replace("\x85", "!")
+xml_data = xml_data.replace("\x85", "...")
 xml_data = xml_data.replace("\x91", "'")
 xml_data = xml_data.replace("\x92", "'")
 xml_data = xml_data.replace("\x93", "\"")
 xml_data = xml_data.replace("\x94", "\"")
 xml_data = xml_data.replace("&amp;#39;", "'")
 xml_data = xml_data.replace("&amp;#34;", "\"")
+xml_data = xml_data.replace("\x96", "–")
 xml_data = xml_data.replace("\x97", "—")
 
 print("Sanitized control characters.")
@@ -92,16 +93,25 @@ if ask_reimport("categories"):
 
 if ask_reimport("pictures"):
     Image.objects.all().delete()
+
+    reimport_files = ask_reimport("image files")
+
     for old_pic in read_table("picture"):
         try:
             pic_id = get_field(old_pic, "id")
-            extension = {"image/jpeg": "jpg", "image/png": "png", "image/gif": "gif"}[get_field(old_pic, "mimeType")]
-            file_name = "{}.{}".format(pic_id, extension)
-            file = File(open("import/data/images/{}".format(file_name), 'rb'))
             pic = Image(id=get_field(old_pic, "id"),
                         title=get_field(old_pic, "title", "(no title)"),
                         description=get_field(old_pic, "caption", "(no caption)"))
-            pic.source.save("{}".format(file_name), file, save=True)
+
+            extension = {"image/jpeg": "jpg", "image/png": "png", "image/gif": "gif"}[get_field(old_pic, "mimeType")]
+            file_name = "{}.{}".format(pic_id, extension)
+
+            if reimport_files:
+                file = File(open("import/data/images/{}".format(file_name), 'rb'))
+                pic.source.save(file_name, file, save=True)
+            else:
+                pic.source.name = "images/{}".format(file_name)
+                pic.save()
 
             author = int(get_field(old_pic, "authorId"))
             if author is not 0:
@@ -129,7 +139,7 @@ if ask_reimport("stories"):
         try:
             category_id = int(get_field(old_story, "cid"))
             date = read_date(get_field(old_story, "date"))
-            text = get_field(old_story, "text", "(no text")
+            text = get_field(old_story, "text", "(no text").strip("\n")
 
             # Switch over old embedded content to new system
             # Replace the old picture ID with the new content ID corresponding to that picture
