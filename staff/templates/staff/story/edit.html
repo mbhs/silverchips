@@ -11,12 +11,14 @@
 <form method="POST" onsubmit="write()">
     {% csrf_token %}
 
+    <!-- body onload = "quill.setText('{{ form.text.value|slugify }}');" -->
+
     <div class="form-group">
         <label for="title">{{ form.title.label }}</label>
         {% for error in form.title.errors %}
             <span class="error">{{ error }}</span>
         {% endfor %}
-        <input id="title" name="{{ form.title.name }}" class="form-control" type="text" placeholder="Title">
+        <input id="title" name="{{ form.title.name }}" class="form-control" type="text" placeholder="Title" value="{{ form.title.value }}">
     </div>
 
     <div class="form-group">
@@ -32,7 +34,7 @@
         {% for error in form.description.errors %}
             <span class="error">{{ error }}</span>
         {% endfor %}
-        <textarea id="description" name="description" class="form-control" placeholder="Description" rows="3"></textarea>
+        <textarea id="description" name="description" class="form-control" placeholder="Description" rows="3">{{ form.description.value }}</textarea>
     </div>
 
     <div class="form-group">

@@ -13,7 +13,6 @@ from django.db.models.signals import post_migrate
 
 from django.contrib.auth.models import Group, Permission
 from django.contrib.contenttypes.models import ContentType
-from django.contrib.contenttypes.fields import GenericForeignKey
 
 # import posixpath
 
@@ -212,12 +211,6 @@ PENDING = 1
 PUBLISHED = 2
 HIDDEN = 3
 
-# Media ids
-FILE = 0
-IMAGE = 1
-VIDEO = 2
-AUDIO = 3
-
 class PublishingMixin:
     """Provides state variables for content that is published.
 
@@ -234,18 +227,6 @@ class PublishingMixin:
         (PENDING, "pending"),
         (PUBLISHED, "published"),
         (HIDDEN, "hidden")))
-
-class MediaMixin:
-    """Mixin for identifying media content
-    """
-
-    MEDIA_TYPES = (
-        (FILE, "file"),
-        (IMAGE, "image"),
-        (VIDEO, "video"),
-        (AUDIO, "audio"),
-    )
-    media_type = models.IntegerField(default=IMAGE, choices=MEDIA_TYPES)
 
 class Tag(models.Model):
     """Basic tag model for content."""
@@ -264,23 +245,22 @@ class TaggedMixin:
         return self.tags.filter(name=name).exists()
 
 
-class Image(Content, PublishingMixin, TaggedMixin, MediaMixin):
+class Image(Content, PublishingMixin, TaggedMixin):
     """Image subclass for the content model."""
-
     source = models.ImageField(upload_to="images/%Y/%m/%d/")
 
     template = "content/image.html"
     descriptor = "Photo"
 
-class Video(Content, PublishingMixin, TaggedMixin, MediaMixin):
-    media_type = VIDEO
+class Video(Content, PublishingMixin, TaggedMixin):
+    """Video subclass for the content model."""
     source = models.FileField(upload_to="videos/%Y/%m/%d/")
 
     template = "content/video.html"
     descriptor = "Video"
 
-class Audio(Content, PublishingMixin, TaggedMixin, MediaMixin):
-    media_type = AUDIO
+class Audio(Content, PublishingMixin, TaggedMixin):
+    """Audio subclass for the content model."""
     source = models.FileField(upload_to="audio/%Y/%m/%d/")
 
     template = "content/audio.html"
