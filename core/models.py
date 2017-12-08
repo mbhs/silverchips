@@ -90,8 +90,12 @@ def create_groups(sender, **kwargs):
     Group.objects.get_or_create(name="editors")
 
 
-class TimeTrackingModel(models.Model):
-    """Model mixin for recording creation and edit times."""
+class TimestampMixin(models.Model):
+    """Model mixin for recording creation and edit times.
+
+    Note that this mixin has to have model as a parent because it
+    does not have a super to override save on otherwise.
+    """
 
     created = models.DateTimeField()
     modified = models.DateTimeField()
@@ -108,7 +112,7 @@ class TimeTrackingModel(models.Model):
         abstract = True
 
 
-class Content(TimeTrackingModel):
+class Content(TimestampMixin):
     """A generic content model.
 
     This container provides the metaclass for all types of media,
@@ -119,7 +123,9 @@ class Content(TimeTrackingModel):
 
     title = models.TextField()
     description = models.TextField()
-    authors = models.ManyToManyField("User", related_name="%(class)s_content")  # user.photo_content
+
+    creator = models.ForeignKey(User, related_name="%(class)s_created", on_delete=models.CASCADE)
+    authors = models.ManyToManyField(User, related_name="%(class)s_authored")  # user.photo_authored
 
     views = models.IntegerField(default=0)
 
@@ -150,6 +156,7 @@ class Section(models.Model):
 
     class Meta:
         verbose_name_plural = "sections"
+
 
 # class Section(models.Model):
 #     """All stories are categorized by sections.
@@ -205,7 +212,7 @@ PUBLISHED = 2
 HIDDEN = 3
 
 
-class PublishingPipelineMixin:
+class PublishingMixin:
     """Provides state variables for content that is published.
 
     This mixin gives clarity to where content is in the publishing
@@ -223,14 +230,33 @@ class PublishingPipelineMixin:
         (HIDDEN, "hidden")))
 
 
-class Image(Content):
-    source = models.ImageField(upload_to="images/")
+class Tag(models.Model):
+    """Basic tag model for content."""
+
+    name = models.CharField(max_length=32)
+
+
+class TaggedMixin:
+    """This class provides a system for tagging content."""
+
+    tags = models.ManyToManyField(Tag)
+
+    def has_tag(self, name):
+        """Check if a model has a tag."""
+
+        return self.tags.filter(name=name).exists()
+
+
+class Image(Content, PublishingMixin, TaggedMixin):
+    """Image subclass for the content model."""
+
+    source = models.ImageField(upload_to="images/%Y/%m/%d/")
 
     template = "content/image.html"
     descriptor = "Photo"
 
 
-class Story(Content, PublishingPipelineMixin):
+class Story(Content, PublishingMixin):
     """The main story model.
 
     Stories are the backbone of a news site, and are one of the most

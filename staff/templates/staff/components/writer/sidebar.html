@@ -1,8 +1,9 @@
-<a class="item" href="{% url "staff:index" %}">Dashboard</a>
+<!-- Sidebar seen by users in the writers group -->
+<a class="item" href="{% url 'staff:index' %}">Dashboard</a>
 <div class="section">Stories</div>
-<a class="item">Published</a>
+<a class="item" href="{% url 'staff:story:create' %}">Upload</a>
 <a class="item">Drafts</a>
-<a class="item" href="{% url "staff:story:create" %}">Upload</a>
+<a class="item">Published</a>
 <div class="section">Content</div>
+<a class="item" href="{% url 'staff:create_image' %}">Upload</a>
 <a class="item">Media</a>
-<a class="item">Upload</a>

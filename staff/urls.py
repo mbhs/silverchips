@@ -30,8 +30,10 @@ urlpatterns = [
     path("login/", views.login, name="login"),
     path("logout/", views.logout, name="logout"),
     path("profile/", views.dummy, name="profile"),
-    path("upload/image/", views.upload_image, name="image_upload"),
-    path("media/upload/", views.upload_image, name="image_upload"),
     path("stories/", include((story_urlpatterns, "story"))),
+    path("media/create/", views.dummy),
+    path("media/create/image/", views.ImageCreateView.as_view(), name="create_image"),
+    path("media/edit/<int:pk>/", views.ImageCreateView.as_view(), name="edit_media"),
+    path("media/delete/<int:pk>/", views.ImageCreateView.as_view(), name="delete_media"),
     path("autocomplete/", include((autocomplete_urlpatterns, "autocomplete")))
 ]
