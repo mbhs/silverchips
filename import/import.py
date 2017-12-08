@@ -99,9 +99,12 @@ if ask_reimport("pictures"):
     for old_pic in read_table("picture"):
         try:
             pic_id = get_field(old_pic, "id")
+            date = read_date(get_field(old_pic, "date"))
             pic = Image(id=get_field(old_pic, "id"),
                         title=get_field(old_pic, "title", "(no title)"),
-                        description=get_field(old_pic, "caption", "(no caption)"))
+                        description=get_field(old_pic, "caption", "(no caption)"),
+                        created=date,
+                        modified=date)
 
             extension = {"image/jpeg": "jpg", "image/png": "png", "image/gif": "gif"}[get_field(old_pic, "mimeType")]
             file_name = "{}.{}".format(pic_id, extension)
@@ -139,7 +142,7 @@ if ask_reimport("stories"):
         try:
             category_id = int(get_field(old_story, "cid"))
             date = read_date(get_field(old_story, "date"))
-            text = get_field(old_story, "text", "(no text").strip("\n")
+            text = get_field(old_story, "text", "(no text").strip()
 
             # Switch over old embedded content to new system
             # Replace the old picture ID with the new content ID corresponding to that picture
@@ -148,8 +151,8 @@ if ask_reimport("stories"):
 
             story = Story(id=get_field(old_story, "sid"),
                           title=get_field(old_story, "headline", "(no title)"),
-                          description=get_field(old_story, "secdeck", "(no description)"),
-                          lead=get_field(old_story, "lead", "(no lead)"),
+                          description=get_field(old_story, "secdeck", "(no description)").strip(),
+                          lead=get_field(old_story, "lead", "(no lead)").strip(),
                           text=text,
                           section=(Section.objects.get(id=category_id) if category_id > 0 else None),
                           created=date,

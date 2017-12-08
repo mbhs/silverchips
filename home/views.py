@@ -12,7 +12,10 @@ from core.models import Story, Image, Section, User
 
 
 def load_context(request):
-    return {"section_roots": Section.objects.all()}
+    return {
+        "section_roots": Section.objects.all(),
+        "stories": Story.objects.all()
+    }
 
 
 def index(request):
@@ -40,8 +43,7 @@ def read_story(request, pk):
     story.save()
     
     return render(request, "home/story.html", {
-        "story": story,
-        "stories": Story.objects.all()
+        "story": story
     })
 
 
@@ -51,8 +53,7 @@ def view_image(request, pk):
     image = get_object_or_404(Image, id=int(pk))
 
     return render(request, "home/story.html", {
-        "story": image,
-        "stories": Story.objects.all()
+        "story": image
     })
 
 
