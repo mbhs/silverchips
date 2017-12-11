@@ -1,7 +1,7 @@
 from django import template
 import re
 
-from core.models import Image
+from core.models import Image, Video, Audio
 
 register = template.Library()
 
@@ -13,13 +13,17 @@ def render_content(content):
 
 
 # A filter that expands embedding tags in story HTML
-# For example, <sco:image id=3734/> will be replaced with the rendered HTML template of Image #3734
+# For example, <sco:embed type="image" id=3734/> will be replaced with the rendered HTML template of Image #3734
 @register.filter
 def expand_embeds(text):
     def replace(match):
         try:
             if match.group(1) == "image":
                 content_type = Image
+            elif match.group(1) == "video":
+                content_type = Video
+            elif match.group(1) == "audio":
+                content_type = Audio
 
             return render_content(content_type.objects.get(pk=int(match.group(2))))
         except Exception as e:

@@ -8,7 +8,7 @@ of everything a normal user would see while visiting the website.
 from django.shortcuts import render, get_object_or_404
 
 # News imports
-from core.models import Story, Image, Section, User
+from core.models import Story, Image, Video, Audio, Section, User
 
 
 def load_context(request):
@@ -41,11 +41,10 @@ def read_story(request, pk):
 
     story.views += 1
     story.save()
-    
+
     return render(request, "home/story.html", {
         "story": story
     })
-
 
 def view_image(request, pk):
     """Render a specific newspaper image."""
@@ -54,6 +53,26 @@ def view_image(request, pk):
 
     return render(request, "home/story.html", {
         "story": image
+    })
+
+def view_video(request, pk):
+    """Render video."""
+
+    video = get_object_or_404(Video, id=int(pk))
+
+    return render(request, "home/story.html", {
+        "story": video,
+        "stories": Story.objects.all()
+    })
+
+def view_audio(request, pk):
+    """Render audio."""
+
+    audio = get_object_or_404(Audio, id=int(pk))
+
+    return render(request, "home/story.html", {
+        "story": audio,
+        "stories": Story.objects.all()
     })
 
 

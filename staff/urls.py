@@ -18,7 +18,7 @@ app_name = "staff"
 story_urlpatterns = [
     path("", views.stories_view, name="view"),
     path("edit/", views.stories_create, name="create"),
-    path("edit/<int:pk>/", views.stories_edit, name="edit"),
+    path("edit/<int:story_id>/", views.stories_edit, name="edit"),
 ]
 
 autocomplete_urlpatterns = [

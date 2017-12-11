@@ -35,19 +35,23 @@ def login(request):
 
             # Check if password wrong
             if user is False:
-                return redirect("/staff/login?error=1")
+                form.add_error(None, "Password is wrong")
+                #return redirect("/staff/login?error=1")
 
             # Check if no user
-            if user is None:
-                return redirect("/staff/login?error=2")
+            elif user is None:
+                form.add_error(None, "User does not exist")
+                #return redirect("/staff/login?error=2")
 
             # Check if user is inactive
-            if not user.is_active:
-                return redirect("/staff/login?error=3")
+            elif not user.is_active:
+                form.add_error(None, "User is inactive")
+                #return redirect("/staff/login?error=3")
 
             # Login and redirect to staff
-            auth.login(request, user)
-            return redirect("staff:index")
+            else:
+                auth.login(request, user)
+                return redirect("staff:index")
 
     else:
         form = forms.LoginForm()
