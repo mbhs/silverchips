@@ -1,5 +1,21 @@
 [
   {
+    "model": "auth.group",
+    "pk": 1,
+    "fields": {
+      "name": "writers",
+      "permissions": []
+    }
+  },
+  {
+    "model": "auth.group",
+    "pk": 2,
+    "fields": {
+      "name": "editors",
+      "permissions": []
+    }
+  },
+  {
     "model": "core.User",
     "pk": 1,
     "fields": {
@@ -10,14 +26,43 @@
       "email": "email@email.com",
       "is_staff": true,
       "is_superuser": true,
-      "groups": [1, 2]
+      "groups": []
     }
   },
   {
     "model": "core.Profile",
     "pk": 1,
     "fields": {
-      "user": 1
+      "user": 1,
+      "biography": "Hey, I'm Noah Kim and I'm one of the core developers of the Silver Chips Online website!",
+      "avatar": null,
+      "position": "Developer",
+      "graduation_year": 2018
+    }
+  },
+    {
+    "model": "core.User",
+    "pk": 2,
+    "fields": {
+      "username": "singerng",
+      "first_name": "Noah",
+      "last_name": "Kim",
+      "password": "pbkdf2_sha256$36000$iXLiQNoXVaha$LHyICn3HdNcC+JnjN1QF12yuQLHyoxsj5FcSkCWt0XM=",
+      "email": "email@email.com",
+      "is_staff": true,
+      "is_superuser": true,
+      "groups": []
+    }
+  },
+  {
+    "model": "core.Profile",
+    "pk": 1,
+    "fields": {
+      "user": 1,
+      "biography": "Hey, I'm Noah Singer and I'm one of the core developers of the Silver Chips Online website!",
+      "avatar": null,
+      "position": "Developer",
+      "graduation_year": 2018
     }
   }
 ]
