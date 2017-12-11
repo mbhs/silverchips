@@ -954,7 +954,7 @@
     "model": "auth.group",
     "pk": 1,
     "fields": {
-      "name": "Writers",
+      "name": "writers",
       "permissions": []
     }
   },
@@ -962,7 +962,7 @@
     "model": "auth.group",
     "pk": 2,
     "fields": {
-      "name": "Editors",
+      "name": "editors",
       "permissions": []
     }
   },
@@ -977,10 +977,10 @@
       "first_name": "Randima",
       "last_name": "Herath",
       "email": "",
-      "is_staff": false,
+      "is_staff": true,
       "is_active": true,
       "date_joined": "2017-12-07T15:21:06.603Z",
-      "groups": [],
+      "groups": [1],
       "user_permissions": []
     }
   },
@@ -995,10 +995,10 @@
       "first_name": "Maniza",
       "last_name": "Habib",
       "email": "",
-      "is_staff": false,
+      "is_staff": true,
       "is_active": true,
       "date_joined": "2017-12-07T15:21:06.623Z",
-      "groups": [],
+      "groups": [1],
       "user_permissions": []
     }
   },
@@ -1013,10 +1013,10 @@
       "first_name": "Eleanor",
       "last_name": "Cook",
       "email": "",
-      "is_staff": false,
+      "is_staff": true,
       "is_active": true,
       "date_joined": "2017-12-07T15:21:06.582Z",
-      "groups": [],
+      "groups": [1],
       "user_permissions": []
     }
   },
@@ -1031,10 +1031,10 @@
       "first_name": "Lauren",
       "last_name": "Frost",
       "email": "",
-      "is_staff": false,
+      "is_staff": true,
       "is_active": true,
       "date_joined": "2017-12-07T15:21:06.398Z",
-      "groups": [],
+      "groups": [1],
       "user_permissions": []
     }
   },
@@ -1049,10 +1049,10 @@
       "first_name": "Benjamin",
       "last_name": "Yokoyama",
       "email": "",
-      "is_staff": false,
+      "is_staff": true,
       "is_active": true,
       "date_joined": "2017-12-07T15:21:06.422Z",
-      "groups": [],
+      "groups": [1],
       "user_permissions": []
     }
   },
@@ -1067,10 +1067,10 @@
       "first_name": "Charles",
       "last_name": "Lott",
       "email": "",
-      "is_staff": false,
+      "is_staff": true,
       "is_active": true,
       "date_joined": "2017-12-07T15:21:06.443Z",
-      "groups": [],
+      "groups": [1],
       "user_permissions": []
     }
   },
@@ -1085,10 +1085,10 @@
       "first_name": "Sandeep",
       "last_name": "David",
       "email": "",
-      "is_staff": false,
+      "is_staff": true,
       "is_active": true,
       "date_joined": "2017-12-07T15:21:06.464Z",
-      "groups": [],
+      "groups": [1],
       "user_permissions": []
     }
   },
@@ -1103,10 +1103,10 @@
       "first_name": "Nicholas",
       "last_name": "Fechner-Mills",
       "email": "",
-      "is_staff": false,
+      "is_staff": true,
       "is_active": true,
       "date_joined": "2017-12-07T15:21:07.084Z",
-      "groups": [],
+      "groups": [1],
       "user_permissions": []
     }
   },
@@ -1121,10 +1121,10 @@
       "first_name": "Gisell",
       "last_name": "Ramirez",
       "email": "",
-      "is_staff": false,
+      "is_staff": true,
       "is_active": true,
       "date_joined": "2017-12-07T15:21:07.273Z",
-      "groups": [],
+      "groups": [1],
       "user_permissions": []
     }
   },
@@ -1139,10 +1139,10 @@
       "first_name": "Morgan",
       "last_name": "Casey",
       "email": "",
-      "is_staff": false,
+      "is_staff": true,
       "is_active": true,
       "date_joined": "2017-12-07T15:21:07.334Z",
-      "groups": [],
+      "groups": [1],
       "user_permissions": []
     }
   },
@@ -1157,10 +1157,10 @@
       "first_name": "Ryan",
       "last_name": "Handel",
       "email": "",
-      "is_staff": false,
+      "is_staff": true,
       "is_active": true,
       "date_joined": "2017-12-07T15:21:07.456Z",
-      "groups": [],
+      "groups": [1],
       "user_permissions": []
     }
   },
@@ -1175,10 +1175,10 @@
       "first_name": "Ellie",
       "last_name": "Williams",
       "email": "",
-      "is_staff": false,
+      "is_staff": true,
       "is_active": true,
       "date_joined": "2017-12-07T15:21:07.489Z",
-      "groups": [],
+      "groups": [1],
       "user_permissions": []
     }
   },
@@ -1193,10 +1193,10 @@
       "first_name": "Pedraam",
       "last_name": "Faridjoo",
       "email": "",
-      "is_staff": false,
+      "is_staff": true,
       "is_active": true,
       "date_joined": "2017-12-07T15:21:07.520Z",
-      "groups": [],
+      "groups": [1],
       "user_permissions": []
     }
   },
@@ -1211,10 +1211,10 @@
       "first_name": "Zoe",
       "last_name": "Friedman",
       "email": "",
-      "is_staff": false,
+      "is_staff": true,
       "is_active": true,
       "date_joined": "2017-12-07T15:21:07.541Z",
-      "groups": [],
+      "groups": [1],
       "user_permissions": []
     }
   },
@@ -1229,10 +1229,10 @@
       "first_name": "Alyssa",
       "last_name": "Berrios",
       "email": "",
-      "is_staff": false,
+      "is_staff": true,
       "is_active": true,
       "date_joined": "2017-12-07T15:21:07.561Z",
-      "groups": [],
+      "groups": [1],
       "user_permissions": []
     }
   },
@@ -1247,10 +1247,10 @@
       "first_name": "Nate",
       "last_name": "Bodner",
       "email": "",
-      "is_staff": false,
+      "is_staff": true,
       "is_active": true,
       "date_joined": "2017-12-07T15:21:07.606Z",
-      "groups": [],
+      "groups": [1],
       "user_permissions": []
     }
   },
@@ -1265,10 +1265,10 @@
       "first_name": "Neva",
       "last_name": "Taylor",
       "email": "",
-      "is_staff": false,
+      "is_staff": true,
       "is_active": true,
       "date_joined": "2017-12-07T15:21:07.638Z",
-      "groups": [],
+      "groups": [1],
       "user_permissions": []
     }
   },
@@ -1283,10 +1283,10 @@
       "first_name": "Amy",
       "last_name": "Forsbacka",
       "email": "",
-      "is_staff": false,
+      "is_staff": true,
       "is_active": true,
       "date_joined": "2017-12-07T15:21:07.701Z",
-      "groups": [],
+      "groups": [1, 2],
       "user_permissions": []
     }
   },
@@ -1301,10 +1301,10 @@
       "first_name": "Mehana",
       "last_name": "Daftary",
       "email": "",
-      "is_staff": false,
+      "is_staff": true,
       "is_active": true,
       "date_joined": "2017-12-07T15:21:07.720Z",
-      "groups": [],
+      "groups": [1, 2],
       "user_permissions": []
     }
   },
@@ -1319,10 +1319,10 @@
       "first_name": "Abigail",
       "last_name": "Landesman",
       "email": "",
-      "is_staff": false,
+      "is_staff": true,
       "is_active": true,
       "date_joined": "2017-12-07T15:21:07.759Z",
-      "groups": [],
+      "groups": [1],
       "user_permissions": []
     }
   },
@@ -1337,10 +1337,10 @@
       "first_name": "Catherine",
       "last_name": "Horowitz",
       "email": "",
-      "is_staff": false,
+      "is_staff": true,
       "is_active": true,
       "date_joined": "2017-12-07T15:21:07.789Z",
-      "groups": [],
+      "groups": [1],
       "user_permissions": []
     }
   },
@@ -1355,10 +1355,10 @@
       "first_name": "Leah",
       "last_name": "Phillips",
       "email": "",
-      "is_staff": false,
+      "is_staff": true,
       "is_active": true,
       "date_joined": "2017-12-07T15:21:07.872Z",
-      "groups": [],
+      "groups": [1],
       "user_permissions": []
     }
   },
