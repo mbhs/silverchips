@@ -79,6 +79,15 @@ class User(auth.User):
             return "writer"
         return None
 
+    def __str__(self):
+        """Represent the user as a string.
+
+        This is the value Django Autocomplete Light displays in the
+        form element when a user is selected.
+        """
+
+        return self.get_full_name()
+
     class Meta:
         proxy = True
 
