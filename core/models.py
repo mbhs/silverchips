@@ -14,8 +14,6 @@ from django.db.models.signals import post_migrate
 from django.contrib.auth.models import Group, Permission
 from django.contrib.contenttypes.models import ContentType
 
-# import posixpath
-
 
 class Profile(models.Model):
     """The profile model provides more information about users.

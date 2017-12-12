@@ -6,40 +6,19 @@ Instead of Django authenticated Users, it uses core Users.
 
 
 # Local models
+from django.contrib.auth import backends
 from . import models
 
+backends.UserModel = models.User
 
-# Authentication backend
-class Backend:
-    """A custom authentication for website staff.
 
-    Uses the core User model rather than the provided Django
-    authentication one.
+class CustomModelBackend(backends.ModelBackend):
+    """Create a model backend for the user proxy.
+
+    This is kind of a hack but is also reasonably clean. It basically
+    allows us to maintain features from the user proxy in the core
+    models, such as the `get_role` and `__str__` methods, while not
+    altering the settings `AUTH_USER_MODEL` property.
     """
 
-    def authenticate(self, username=None, password=None):
-        """Authenticate a custom user."""
-
-        # Get the user
-        try:
-            user = models.User.objects.get(username=username)
-
-        # Except failure
-        except models.User.DoesNotExist:
-            return None
-
-        # Check the password
-        else:
-            if user.check_password(password):
-                return user
-
-        # Fail but return False instead of None
-        return False
-
-    def get_user(self, user_id):
-        """Get a user by the User's ID."""
-
-        try:
-            return models.User.objects.get(pk=user_id)
-        except models.User.DoesNotExist:
-            return None
+    pass
