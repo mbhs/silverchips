@@ -10,6 +10,7 @@ from django.shortcuts import render, redirect
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.generic import ListView
 
 # Local imports
 from . import forms
@@ -78,11 +79,13 @@ def dummy(request):
     return render(request, "staff/base.html")
 
 
-@login_required
-def stories_view(request):
-    """View stories."""
+class StoryListView(ListView):
+    """The story list view that supports pagination."""
 
-    return render(request, "staff/base.html")
+    model = models.Story
+    template_name = "staff/story/list.html"
+    context_object_name = "stories"
+    paginate_by = 20
 
 
 @login_required
