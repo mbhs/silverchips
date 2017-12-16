@@ -34,14 +34,25 @@
         {% for error in form.description.errors %}
             <span class="error">{{ error }}</span>
         {% endfor %}
-        <textarea id="description" name="description" class="form-control" placeholder="Description" rows="3">{{ form.description.value }}</textarea>
+        <div id="description-editor" style="height: 100px;">  <!-- TODO: put style in a file -->
+            {% if form.description.value %}
+                {{ form.description.value }}
+            {% endif %}
+        </div>
+        <input id="description" name="description" type="hidden">
     </div>
 
     <div class="form-group">
-        <label>Story</label>
-        <input name="story" type="hidden">
-        <div id="editor"></div>
-        <script src="/static/js/quill.js"></script>
+        <label for="text">Story</label>
+        {% for error in form.text.errors %}
+            <span class="error">{{ error }}</span>
+        {% endfor %}
+        <div id="text-editor">
+            {% if form.text.value %}
+                {{ form.text.value }}
+            {% endif %}
+        </div>
+        <input id="text" name="text" type="hidden">
     </div>
 
     <div class="form-group">
@@ -52,8 +63,14 @@
 
 {{ form.media }}
 
+<script src="/static/js/quill.js"></script>
 <script type="text/javascript">
-    function write() { document.forms[0].story = quill.root.innerHTML; }
+    var descriptionEditor = quill("#description-editor");
+    var textEditor = quill("#text-editor");
+    function write() {
+      document.forms[0].description = descriptionEditor.root.innerHTML;
+      document.forms[0].text = textEditor.root.innerHTML;
+    }
 </script>
 
 {% endblock %}
