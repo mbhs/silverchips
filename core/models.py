@@ -119,6 +119,18 @@ class TimestampMixin(models.Model):
         abstract = True
 
 
+class Tag(models.Model):
+    """Basic tag model for content."""
+
+    name = models.CharField(max_length=32)
+
+
+UNPUBLISHED = 0
+PENDING = 1
+PUBLISHED = 2
+HIDDEN = 3
+
+
 class Content(TimestampMixin):
     """A generic content model.
 
@@ -130,9 +142,17 @@ class Content(TimestampMixin):
 
     title = models.TextField()
     description = models.TextField()
-
     # creator = models.ForeignKey(User, related_name="%(class)s_created", on_delete=models.CASCADE)
     authors = models.ManyToManyField(User, related_name="%(class)s_authored")  # user.photo_authored
+
+    publishable = models.BooleanField(default=True)
+    published = models.IntegerField(default=UNPUBLISHED, choices=(
+        (UNPUBLISHED, "unpublished"),
+        (PENDING, "pending"),
+        (PUBLISHED, "published"),
+        (HIDDEN, "hidden")))
+
+    tags = models.ManyToManyField(Tag)
 
     views = models.IntegerField(default=0)
 
@@ -140,6 +160,11 @@ class Content(TimestampMixin):
         """Represent the content as a string."""
 
         return "Content[{}:{}]".format(type(self).__name__, self.title)
+
+    def has_tag(self, name):
+        """Check if a model has a tag."""
+
+        return self.tags.filter(name=name).exists()
 
     class Meta:
         abstract = True
@@ -212,49 +237,7 @@ class Section(models.Model):
 #         return "Sections[{}]".format(self.title)
 
 
-# Some publishing pipeline constants
-UNPUBLISHED = 0
-PENDING = 1
-PUBLISHED = 2
-HIDDEN = 3
-
-
-class PublishingMixin:
-    """Provides state variables for content that is published.
-
-    This mixin gives clarity to where content is in the publishing
-    process. It can be unpublished, pending, published, and hidden.
-    Pending is intended for authors to indicate that their content
-    is ready to be published, though may not be used. Hidden is for
-    authors to take down published work.
-    """
-
-    publishable = models.BooleanField(default=True)
-    published = models.IntegerField(default=UNPUBLISHED, choices=(
-        (UNPUBLISHED, "unpublished"),
-        (PENDING, "pending"),
-        (PUBLISHED, "published"),
-        (HIDDEN, "hidden")))
-
-
-class Tag(models.Model):
-    """Basic tag model for content."""
-
-    name = models.CharField(max_length=32)
-
-
-class TaggedMixin:
-    """This class provides a system for tagging content."""
-
-    tags = models.ManyToManyField(Tag)
-
-    def has_tag(self, name):
-        """Check if a model has a tag."""
-
-        return self.tags.filter(name=name).exists()
-
-
-class Image(Content, PublishingMixin, TaggedMixin):
+class Image(Content):
     """Image subclass for the content model."""
 
     source = models.ImageField(upload_to="images/%Y/%m/%d/")
@@ -263,7 +246,7 @@ class Image(Content, PublishingMixin, TaggedMixin):
     descriptor = "Photo"
 
 
-class Video(Content, PublishingMixin, TaggedMixin):
+class Video(Content):
     """Video subclass for the content model."""
 
     source = models.FileField(upload_to="videos/%Y/%m/%d/")
@@ -272,7 +255,7 @@ class Video(Content, PublishingMixin, TaggedMixin):
     descriptor = "Video"
 
 
-class Audio(Content, PublishingMixin, TaggedMixin):
+class Audio(Content):
     """Audio subclass for the content model."""
 
     source = models.FileField(upload_to="audio/%Y/%m/%d/")
@@ -284,7 +267,7 @@ class Audio(Content, PublishingMixin, TaggedMixin):
         verbose_name_plural = "audio"
 
 
-class Story(Content, PublishingMixin, TaggedMixin):
+class Story(Content):
     """The main story model.
 
     Stories are the backbone of a news site, and are one of the most

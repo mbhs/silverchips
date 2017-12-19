@@ -83,6 +83,7 @@ class StoryListView(ListView):
     """The story list view that supports pagination."""
 
     model = models.Story
+    queryset = models.Story.objects.filter(published__gte=models.PUBLISHED)
     template_name = "staff/story/list.html"
     context_object_name = "stories"
     paginate_by = 20
