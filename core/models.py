@@ -133,7 +133,7 @@ class Content(TimestampMixin):
     title = models.TextField()
     description = models.TextField()
 
-    creator = models.ForeignKey(User, related_name="%(class)s_created", on_delete=models.CASCADE)
+    # creator = models.ForeignKey(User, related_name="%(class)s_created", on_delete=models.CASCADE)
     authors = models.ManyToManyField(User, related_name="%(class)s_authored")  # user.photo_authored
 
     views = models.IntegerField(default=0)
