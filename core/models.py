@@ -14,8 +14,6 @@ from django.db.models.signals import post_migrate
 from django.contrib.auth.models import Group, Permission
 from django.contrib.contenttypes.models import ContentType
 
-# import posixpath
-
 
 class Profile(models.Model):
     """The profile model provides more information about users.
@@ -220,6 +218,7 @@ PENDING = 1
 PUBLISHED = 2
 HIDDEN = 3
 
+
 class PublishingMixin:
     """Provides state variables for content that is published.
 
@@ -236,6 +235,7 @@ class PublishingMixin:
         (PENDING, "pending"),
         (PUBLISHED, "published"),
         (HIDDEN, "hidden")))
+
 
 class Tag(models.Model):
     """Basic tag model for content."""
@@ -256,20 +256,25 @@ class TaggedMixin:
 
 class Image(Content, PublishingMixin, TaggedMixin):
     """Image subclass for the content model."""
+
     source = models.ImageField(upload_to="images/%Y/%m/%d/")
 
     template = "content/image.html"
     descriptor = "Photo"
 
+
 class Video(Content, PublishingMixin, TaggedMixin):
     """Video subclass for the content model."""
+
     source = models.FileField(upload_to="videos/%Y/%m/%d/")
 
     template = "content/video.html"
     descriptor = "Video"
 
+
 class Audio(Content, PublishingMixin, TaggedMixin):
     """Audio subclass for the content model."""
+
     source = models.FileField(upload_to="audio/%Y/%m/%d/")
 
     template = "content/audio.html"
@@ -277,6 +282,7 @@ class Audio(Content, PublishingMixin, TaggedMixin):
 
     class Meta:
         verbose_name_plural = "audio"
+
 
 class Story(Content, PublishingMixin, TaggedMixin):
     """The main story model.

@@ -16,7 +16,7 @@ from . import autocomplete
 app_name = "staff"
 # Custom URL patterns
 story_urlpatterns = [
-    path("", views.stories_view, name="view"),
+    path("", views.StoryListView.as_view(), name="view"),
     path("edit/", views.stories_create, name="create"),
     path("edit/<int:story_id>/", views.stories_edit, name="edit"),
 ]

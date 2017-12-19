@@ -10,6 +10,7 @@ from django.shortcuts import render, redirect
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.generic import ListView
 
 # Local imports
 from . import forms
@@ -36,17 +37,14 @@ def login(request):
             # Check if password wrong
             if user is False:
                 form.add_error(None, "Password is wrong")
-                #return redirect("/staff/login?error=1")
 
             # Check if no user
             elif user is None:
                 form.add_error(None, "User does not exist")
-                #return redirect("/staff/login?error=2")
 
             # Check if user is inactive
             elif not user.is_active:
                 form.add_error(None, "User is inactive")
-                #return redirect("/staff/login?error=3")
 
             # Login and redirect to staff
             else:
@@ -81,11 +79,13 @@ def dummy(request):
     return render(request, "staff/base.html")
 
 
-@login_required
-def stories_view(request):
-    """View stories."""
+class StoryListView(ListView):
+    """The story list view that supports pagination."""
 
-    return render(request, "staff/base.html")
+    model = models.Story
+    template_name = "staff/story/list.html"
+    context_object_name = "stories"
+    paginate_by = 20
 
 
 @login_required
