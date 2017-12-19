@@ -24,15 +24,19 @@ h1#title {
 }
 
 img#story-cover {
-    width: 100%;
-    margin-bottom: .5rem;
+  width: 100%;
+  margin-bottom: .5rem;
 }
 
 a.solid-link {
-    color: black;
+  color: black;
 }
 
 footer {
-    margin-top: 3rem;
-    padding: 1rem;
+  margin-top: 3rem;
+  padding: 1rem;
+}
+
+div#content {
+  max-width: 80%;
 }
