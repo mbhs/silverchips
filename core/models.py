@@ -152,7 +152,7 @@ class Content(TimestampMixin):
         (PUBLISHED, "published"),
         (HIDDEN, "hidden")))
 
-    tags = models.ManyToManyField(Tag)
+    tags = models.ManyToManyField(Tag, blank=True)
 
     views = models.IntegerField(default=0)
 
@@ -266,6 +266,13 @@ class Audio(Content):
     class Meta:
         verbose_name_plural = "audio"
 
+class Comment(TimestampMixin):
+    """Comment model
+    """
+
+    name = models.CharField(max_length=30)
+    text = models.TextField()
+    replies = models.ManyToManyField("self", blank=True)
 
 class Story(Content):
     """The main story model.
@@ -281,6 +288,8 @@ class Story(Content):
 
     section = models.ForeignKey(Section, related_name="stories", null=True, on_delete=models.SET_NULL)
     cover = models.ForeignKey(Image, null=True, on_delete=models.SET_NULL)
+
+    comments = models.ManyToManyField(Comment, blank=True)
 
     template = "content/story.html"
     descriptor = "Story"
