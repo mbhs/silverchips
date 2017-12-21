@@ -61,7 +61,7 @@
             <h5 class="card-title">{{ comment.name }}</h5>
             <div class="card-block">
               {{ comment.text }} <br/>
-              <a href="#">Like</a>
+              <a href="{% url "home:updoot" comment.pk content.pk%}">Like ({{ comment.rating }})</a>
               <a href="#">Reply</a>
             </div>
           </div>

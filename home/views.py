@@ -8,7 +8,7 @@ of everything a normal user would see while visiting the website.
 from django.shortcuts import render, get_object_or_404
 
 # News imports
-from core.models import Story, Image, Video, Audio, Section, User
+from core.models import Story, Image, Video, Audio, Section, User, Comment
 
 
 def load_context(request):
@@ -75,8 +75,15 @@ def view_audio(request, pk):
         "stories": Story.objects.all()
     })
 
+def updoot(request, comment_pk, story_pk):
+    """Updoots a post"""
+    comment = get_object_or_404(Comment, id=int(comment_pk))
+    comment.rating += 1
+    comment.save()
+    return read_story(request, story_pk)
+
 def post_comment(request, pk):
-    
+    print()
 
 def view_profile(request, pk):
     """Render the profile of a given staff member."""
