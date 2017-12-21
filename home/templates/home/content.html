@@ -51,6 +51,22 @@
                 </div>
             </div>
         {% endfor %}
+        <hr/>
+
+        <!-- comment testing, cannot display replies rn -->
+        <h4>All Comments ({{ content.comments.count }})</h4>
+        <hr/>
+        {% for comment in content.comments.all %}
+          <div class="card">
+            <h5 class="card-title">{{ comment.name }}</h5>
+            <div class="card-block">
+              {{ comment.text }} <br/>
+              <a href="#">Like</a>
+              <a href="#">Reply</a>
+            </div>
+          </div>
+        {% endfor %}
+
     </div>
 
     <div class="col-sm-3">

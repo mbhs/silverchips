@@ -75,6 +75,8 @@ def view_audio(request, pk):
         "stories": Story.objects.all()
     })
 
+def post_comment(request, pk):
+    
 
 def view_profile(request, pk):
     """Render the profile of a given staff member."""
