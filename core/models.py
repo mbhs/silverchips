@@ -296,6 +296,7 @@ class Story(Content):
     template = "content/story.html"
     descriptor = "Story"
     hide_caption = True
+    comments_on = models.BooleanField(default=True)
 
     class Meta:
         verbose_name_plural = "stories"

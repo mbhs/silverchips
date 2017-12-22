@@ -1,0 +1,27 @@
+<!-- todo: staggered comment and reply loading, display replies -->
+
+{% if content.comments_on %}
+  <h4>All Comments ({{ content.comments.count }})</h4>
+  <hr/>
+
+  <form action="{% url "home:post_comment" content.pk %}" method="post">
+    {% csrf_token %}
+    Name: <input class="form-control" type="text" name="name"><br/>
+    <textarea class="form-control" name="text" cols="100" rows="5"></textarea><br/>
+    <button class="btn btn-secondary" value="Post" type="submit">Post</button>
+  </form>
+
+  <!-- Fix to reverse ordering -->
+  {% for comment in content.comments.all %}
+    <div class="card">
+      <h5 class="card-title">{{ comment.name }}</h5>
+      <div class="card-block">
+        {{ comment.text }} <br/>
+        <a href="{% url "home:updoot" comment.pk content.pk%}">Like ({{ comment.rating }})</a>
+        <a href="#">Reply</a>
+      </div>
+    </div>
+  {% endfor %}
+{% else %}
+  <i>Comments have been disabled.</i>
+{% endif %}

@@ -1,4 +1,4 @@
-"""Custom forms.
+"""Custom forms for home
 """
 
 from django import forms
