@@ -90,7 +90,7 @@ def post_comment(request, story_pk):
         form = forms.CommentForm(request.POST)
         if form.is_valid():
 
-            # Get username, password, and corresponding User
+            # Get name and text
             name = form.cleaned_data["name"]
             text = form.cleaned_data["text"]
 
@@ -99,7 +99,7 @@ def post_comment(request, story_pk):
             comment.save()
 
             story = get_object_or_404(Story, id=int(story_pk))
-            story.comment = comment
+            story.comments.add(comment)
             story.save()
 
         else:
@@ -108,7 +108,7 @@ def post_comment(request, story_pk):
     else:
         form = forms.CommentForm()
 
-    return index(request)
+    return read_story(request, story_pk)
 
 def view_profile(request, pk):
     """Render the profile of a given staff member."""

@@ -59,11 +59,12 @@
 
         <form action="{% url "home:post_comment" content.pk %}" method="post">
           {% csrf_token %}
-          Name: <input type="text" name="name"><br/>
-          <textarea name="text" cols="100" rows="5"></textarea><br/>
-          <input type="submit" value="Post">
+          Name: <input class="form-control" type="text" name="name"><br/>
+          <textarea class="form-control" name="text" cols="100" rows="5"></textarea><br/>
+          <button class="btn btn-secondary" value="Post" type="submit">Post</button>
         </form>
 
+        <!-- Fix to reverse ordering -->
         {% for comment in content.comments.all %}
           <div class="card">
             <h5 class="card-title">{{ comment.name }}</h5>
