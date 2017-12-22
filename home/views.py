@@ -9,7 +9,7 @@ from django.shortcuts import render, get_object_or_404
 
 # News imports
 from core.models import Story, Image, Video, Audio, Section, User, Comment
-
+from . import forms
 
 def load_context(request):
     return {
@@ -82,8 +82,33 @@ def updoot(request, comment_pk, story_pk):
     comment.save()
     return read_story(request, story_pk)
 
-def post_comment(request, pk):
-    print()
+def post_comment(request, story_pk):
+    """Posts a comment"""
+
+    # Check if post and validate
+    if request.method == "POST":
+        form = forms.CommentForm(request.POST)
+        if form.is_valid():
+
+            # Get username, password, and corresponding User
+            name = form.cleaned_data["name"]
+            text = form.cleaned_data["text"]
+
+            # save comment
+            comment = Comment(name=name, text=text)
+            comment.save()
+
+            story = get_object_or_404(Story, id=int(story_pk))
+            story.comment = comment
+            story.save()
+
+        else:
+            form = forms.CommentForm()
+
+    else:
+        form = forms.CommentForm()
+
+    return index(request)
 
 def view_profile(request, pk):
     """Render the profile of a given staff member."""

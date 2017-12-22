@@ -56,6 +56,14 @@
         <!-- comment testing, cannot display replies rn -->
         <h4>All Comments ({{ content.comments.count }})</h4>
         <hr/>
+
+        <form action="{% url "home:post_comment" content.pk %}" method="post">
+          {% csrf_token %}
+          Name: <input type="text" name="name"><br/>
+          <textarea name="text" cols="100" rows="5"></textarea><br/>
+          <input type="submit" value="Post">
+        </form>
+
         {% for comment in content.comments.all %}
           <div class="card">
             <h5 class="card-title">{{ comment.name }}</h5>
@@ -66,7 +74,7 @@
             </div>
           </div>
         {% endfor %}
-
+        <!-- end comments -->
     </div>
 
     <div class="col-sm-3">
