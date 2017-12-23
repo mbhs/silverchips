@@ -13,15 +13,23 @@
 
   <!-- Fix to reverse ordering -->
   {% for comment in content.comments.all %}
-    <div class="card">
+    <div class="card" style="padding: 10px;">
       <h5 class="card-title">{{ comment.name }}</h5>
       <div class="card-block">
         {{ comment.text }} <br/>
         <a href="{% url "home:updoot" comment.pk content.pk%}">Like ({{ comment.rating }})</a>
         <a href="#">Reply</a>
+
+        <!-- render replies -->
+        <br/><br/>
+        {% for reply in comment.replies.all %}
+          {% include "home/replies.html" %}
+        {% endfor %}
       </div>
     </div>
   {% endfor %}
 {% else %}
   <i>Comments have been disabled.</i>
 {% endif %}
+
+<br/><hr/>

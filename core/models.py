@@ -272,9 +272,12 @@ class Comment(TimestampMixin):
 
     name = models.CharField(max_length=30)
     text = models.TextField()
-    replies = models.ManyToManyField("self", blank=True)
+    replies = models.ManyToManyField("Comment", blank=True)
     rating = models.IntegerField(default=0)
     authorized = models.BooleanField(default=False)
+
+    def __str__(self):
+        return 'Comment[{}:{}]'.format(self.name, self.text)
 
 class Story(Content):
     """The main story model.
