@@ -294,12 +294,15 @@ class Story(Content):
     section = models.ForeignKey(Section, related_name="stories", null=True, on_delete=models.SET_NULL)
     cover = models.ForeignKey(Image, null=True, on_delete=models.SET_NULL)
 
+    comments_on = models.BooleanField(default=True)
     comments = models.ManyToManyField(Comment, blank=True)
+
+    def get_authorized_comments(self):
+        return self.comments.all().filter(authorized=True)
 
     template = "content/story.html"
     descriptor = "Story"
     hide_caption = True
-    comments_on = models.BooleanField(default=True)
 
     class Meta:
         verbose_name_plural = "stories"

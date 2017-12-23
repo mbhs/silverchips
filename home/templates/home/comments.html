@@ -1,7 +1,7 @@
 <!-- todo: staggered comment and reply loading, display replies -->
 
 {% if content.comments_on %}
-  <h4>All Comments ({{ content.comments.count }})</h4>
+  <h4>All Comments ({{ authorized_comments.all.count }})</h4>
   <hr/>
 
   <form action="{% url "home:post_comment" content.pk %}" method="post">
@@ -12,7 +12,7 @@
   </form>
 
   <!-- Fix to reverse ordering -->
-  {% for comment in content.comments.all %}
+  {% for comment in authorized_comments %}
     <div class="card" style="padding: 10px;">
       <h5 class="card-title">{{ comment.name }}</h5>
       <div class="card-block">
@@ -23,7 +23,9 @@
         <!-- render replies -->
         <br/><br/>
         {% for reply in comment.replies.all %}
-          {% include "home/replies.html" %}
+          {% if reply.authorized %}
+            {% include "home/replies.html" %}
+          {% endif %}
         {% endfor %}
       </div>
     </div>

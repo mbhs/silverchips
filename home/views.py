@@ -43,7 +43,8 @@ def read_story(request, pk):
     story.save()
 
     return render(request, "home/story.html", {
-        "story": story
+        "story": story,
+        "authorized_comments": story.get_authorized_comments(),
     })
 
 def view_image(request, pk):
@@ -75,6 +76,7 @@ def view_audio(request, pk):
         "stories": Story.objects.all()
     })
 
+# voting url routing broken, probably add captcha
 def updoot(request, comment_pk, story_pk):
     """Updoots a post"""
     comment = get_object_or_404(Comment, id=int(comment_pk))
