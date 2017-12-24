@@ -10,13 +10,23 @@
 <h1>{{ content.title|safe }}</h1>
 {% endif %}
 
+{% if content.section %}
+    <nav aria-label="breadcrumb" role="navigation">
+    <ol class="breadcrumb">
+        {% for ancestor in content.section.get_ancestors %}
+            <li class="breadcrumb-item"><a href="{% url "home:view_section" ancestor.name %}" class="solid-link">{{ ancestor.title }}</a></li>
+        {% endfor %}
+    </ol>
+    </nav>
+{% endif %}
+
 <hr/>
 
 <div class="row">
     <div class="col-md-9">
         <h5>
             <span class="text-muted">{% if content.authors.count > 0 %}By</span>
-            {% include "home/utils/authors.html" with authors=content.authors %}
+            {% include "shared/authors.html" with authors=content.authors %}
             <span class="text-muted">| {% endif %}{{ content.created }} | {{ content.created|naturaltime }}</span>
         </h5>
     </div>
@@ -55,7 +65,7 @@
 
     <div class="col-sm-3">
         <div class="card">
-            <div class="card-block">
+            <div class="card-header">
                 <h4 class="card-title">Latest Stories</h4>
             </div>
 

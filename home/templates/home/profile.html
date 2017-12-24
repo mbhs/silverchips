@@ -31,10 +31,7 @@
         <hr/>
 
         {% for story in stories %}
-            <h4><a href="{% url "home:read_story" story.pk %}" class="solid-link">{{ story.title|safe }}</a></h4>
-
-            {{ story.created }} {% if story.section %}in <a href="{% url "home:view_section" story.section.name %}" class="solid-link">{{ story.section.title }} &raquo;</a>{% endif %}
-            <p class="text-muted">{{ story.lead|safe }}</p>
+            {% include "shared/story_summary.html" with story=story %}
         {% endfor %}
     {% endif %}
 
