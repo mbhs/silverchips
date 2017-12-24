@@ -8,14 +8,13 @@
     <h1>{{ section.title }}</h1>
 
     <br/><br/>
+
     {% for subsection in section.subsections.all %}
         <div class="row">
-            <div class="col-md-2"><h5>{{ subsection.title }}</h5></div>
+            <div class="col-md-2"><h5><a class="solid-link" href="{% url "home:view_section" subsection.name %}">{{ subsection.title }}</a></h5></div>
             <div class="col-md-10">
-                {% for story in subsection.stories.all|slice:":5" %}
-                    <h4><a href="{% url "home:read_story" story.id %}" class="solid-link">{{ story.title|safe }}</a></h4>
-
-                    <p class="text-muted">{{ story.lead|safe }}</p>
+                {% for story in subsection.all_stories.all|slice:":5" %}
+                    {% include "shared/story_summary.html" with story=story %}
                     <hr/>
                 {% endfor %}
             </div>

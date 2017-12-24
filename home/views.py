@@ -13,7 +13,7 @@ from . import forms
 
 def load_context(request):
     return {
-        "section_roots": Section.objects.all(),
+        "section_roots": Section.objects.filter(parent=None),
         "stories": Story.objects.all()
     }
 

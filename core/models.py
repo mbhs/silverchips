@@ -186,6 +186,22 @@ class Section(models.Model):
     def __str__(self):
         return 'Sections[{}]'.format(self.title)
 
+    def get_ancestors(self):
+        ancestors = [self]
+        while ancestors[-1].parent:
+            ancestors.append(ancestors[-1].parent)
+        return ancestors[::-1]
+
+    def get_descendants(self):
+        descendants = set([self])
+        if self.subsections.count():
+            for subsection in self.subsections.all():
+                descendants |= subsection.get_descendants()
+        return descendants
+
+    def all_stories(self):
+        return Story.objects.filter(section__in=self.get_descendants())
+
     class Meta:
         verbose_name_plural = "sections"
 
