@@ -96,6 +96,7 @@ def post_comment(request, story_pk):
             name = form.cleaned_data["name"]
             text = form.cleaned_data["text"]
 
+
             # save comment
             comment = Comment(name=name, text=text)
             comment.save()
@@ -111,6 +112,36 @@ def post_comment(request, story_pk):
         form = forms.CommentForm()
 
     return read_story(request, story_pk)
+
+def post_reply(request, story_pk, parent_pk):
+    """Posts a reply"""
+
+    # Check if post and validate
+    if request.method == "POST":
+        form = forms.CommentForm(request.POST)
+        if form.is_valid():
+
+            # Get name and text
+            name = form.cleaned_data["name"]
+            text = form.cleaned_data["text"]
+
+
+            # save comment
+            comment = Comment(name=name, text=text)
+            comment.save()
+
+            parent = get_object_or_404(Comment, id=int(parent_pk))
+            parent.replies.add(comment)
+            parent.save()
+
+        else:
+            form = forms.CommentForm()
+
+    else:
+        form = forms.CommentForm()
+
+    return read_story(request, story_pk)
+
 
 def view_profile(request, pk):
     """Render the profile of a given staff member."""

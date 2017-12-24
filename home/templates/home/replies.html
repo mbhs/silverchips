@@ -1,14 +1,23 @@
 <div class="card" style="margin: 10px; padding: 10px;">
   <h5 class="card-title">{{ reply.name }}</h5>
   <div class="card-block">
-    {{ reply.text }} <br/>
-    <a href="{% url "home:updoot" reply.pk content.pk%}">Like ({{ reply.rating }})</a>
-    <a href="#">Reply</a>
+    {{ reply.text }} <br/><br/>
+    <a class="btn btn-secondary" href="{% url "home:updoot" reply.pk content.pk%}">
+      <i class="fa fa-thumbs-up" aria-hidden="true"></i> {{ reply.rating }}
+    </a>
+    <button class="btn btn-secondary" onclick=on_reply({{ reply.pk }})>
+      <i class="fa fa-reply" aria-hidden="true"></i>  {{ reply.replies.count }}
+    </button>
+
+    <!-- Reply area -->
+    <div id={{ reply.pk }}>
+    </div>
 
     <!-- render replies -->
-    {{ reply.replies.all.count }}
     {% for reply in reply.replies.all %}
-      {% include "home/replies.html" %}
+      {% if reply.authorized %}
+        {% include "home/replies.html" %}
+      {% endif %}
     {% endfor %}
 
   </div>

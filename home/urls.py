@@ -22,4 +22,5 @@ urlpatterns = [
     path("section/<path:name>", views.view_section, name="view_section"),
     path("vote/<int:comment_pk>/<int:story_pk>", views.updoot, name="updoot"),
     path("comment/<int:story_pk>", views.post_comment, name="post_comment"),
+    path("comment/<int:story_pk>/<int:parent_pk>", views.post_reply, name="post_reply"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
