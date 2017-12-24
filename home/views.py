@@ -5,7 +5,7 @@ of everything a normal user would see while visiting the website.
 """
 
 # Django imports
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 
 # News imports
 from core.models import Story, Image, Video, Audio, Section, User, Comment
@@ -79,10 +79,14 @@ def view_audio(request, pk):
 # voting url routing broken, probably add captcha
 def updoot(request, comment_pk, story_pk):
     """Updoots a post"""
-    comment = get_object_or_404(Comment, id=int(comment_pk))
-    comment.rating += 1
-    comment.save()
-    return read_story(request, story_pk)
+
+    story = get_object_or_404(Story, id=int(story_pk))
+
+    if story.comments_on:
+        comment = get_object_or_404(Comment, id=int(comment_pk))
+        comment.rating += 1
+        comment.save()
+    return redirect('/story/' + str(story_pk))
 
 def post_comment(request, story_pk):
     """Posts a comment"""
@@ -92,18 +96,19 @@ def post_comment(request, story_pk):
         form = forms.CommentForm(request.POST)
         if form.is_valid():
 
-            # Get name and text
-            name = form.cleaned_data["name"]
-            text = form.cleaned_data["text"]
-
-
-            # save comment
-            comment = Comment(name=name, text=text)
-            comment.save()
-
             story = get_object_or_404(Story, id=int(story_pk))
-            story.comments.add(comment)
-            story.save()
+
+            if story.comments_on:
+                # Get name and text
+                name = form.cleaned_data["name"]
+                text = form.cleaned_data["text"]
+
+                # save comment
+                comment = Comment(name=name, text=text)
+                comment.save()
+
+                story.comments.add(comment)
+                story.save()
 
         else:
             form = forms.CommentForm()
@@ -111,7 +116,7 @@ def post_comment(request, story_pk):
     else:
         form = forms.CommentForm()
 
-    return read_story(request, story_pk)
+    return redirect('/story/' + str(story_pk))
 
 def post_reply(request, story_pk, parent_pk):
     """Posts a reply"""
@@ -121,18 +126,20 @@ def post_reply(request, story_pk, parent_pk):
         form = forms.CommentForm(request.POST)
         if form.is_valid():
 
-            # Get name and text
-            name = form.cleaned_data["name"]
-            text = form.cleaned_data["text"]
+            story = get_object_or_404(Story, id=int(story_pk))
 
+            if story.comments_on:
+                # Get name and text
+                name = form.cleaned_data["name"]
+                text = form.cleaned_data["text"]
 
-            # save comment
-            comment = Comment(name=name, text=text)
-            comment.save()
+                # save comment
+                comment = Comment(name=name, text=text)
+                comment.save()
 
-            parent = get_object_or_404(Comment, id=int(parent_pk))
-            parent.replies.add(comment)
-            parent.save()
+                parent = get_object_or_404(Comment, id=int(parent_pk))
+                parent.replies.add(comment)
+                parent.save()
 
         else:
             form = forms.CommentForm()
@@ -140,8 +147,7 @@ def post_reply(request, story_pk, parent_pk):
     else:
         form = forms.CommentForm()
 
-    return read_story(request, story_pk)
-
+    return redirect('/story/' + str(story_pk))
 
 def view_profile(request, pk):
     """Render the profile of a given staff member."""

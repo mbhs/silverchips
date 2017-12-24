@@ -45,20 +45,21 @@
       </div>
     </div>
   {% endfor %}
+
+  <script>
+    var story_pk = {{ content.pk }}
+    function on_reply(comment_pk){
+      $("#reply_form").prop("hidden", false);
+      $("#reply_form").prop("action", "/comment/" + story_pk + "/" + comment_pk);
+      $("#"+comment_pk).append($("#reply_form"));
+    }
+    function remove_reply(){
+      $("#reply_form").prop("hidden", true);
+    }
+  </script>
+
 {% else %}
   <i>Comments have been disabled.</i>
 {% endif %}
 
 <br/><hr/>
-
-<script>
-  var story_pk = {{ content.pk }}
-  function on_reply(comment_pk){
-    $("#reply_form").prop("hidden", false);
-    $("#reply_form").prop("action", "/comment/" + story_pk + "/" + comment_pk);
-    $("#"+comment_pk).append($("#reply_form"));
-  }
-  function remove_reply(){
-    $("#reply_form").prop("hidden", true);
-  }
-</script>
