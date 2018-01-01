@@ -9,16 +9,26 @@
 
     <br/><br/>
 
-    {% for subsection in section.subsections.all %}
-        <div class="row">
-            <div class="col-md-2"><h5><a class="solid-link" href="{% url "home:view_section" subsection.name %}">{{ subsection.title }}</a></h5></div>
-            <div class="col-md-10">
-                {% for story in subsection.all_stories.all|slice:":5" %}
-                    {% include "shared/story_summary.html" with story=story %}
-                    <hr/>
-                {% endfor %}
+    {% for subsection, stories in subsections %}
+        {% if stories.count > 0 %}
+            <div class="row">
+                <div class="col-md-2">
+                    <h5>
+                    {% if subsection %}
+                        <a class="solid-link" href="{% url "home:view_section" subsection.name %}">{{ subsection.title }}</a>
+                    {% else %}
+                        Top Stories
+                    {% endif %}
+                    </h5>
+                </div>
+                <div class="col-md-10">
+                    {% for story in stories.all|slice:":5" %}
+                        {% include "shared/story_summary.html" with story=story %}
+                        <hr/>
+                    {% endfor %}
+                </div>
             </div>
-        </div>
-        <br/>
+            <br/>
+        {% endif %}
     {% endfor %}
 {% endblock %}
