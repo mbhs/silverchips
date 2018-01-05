@@ -8,8 +8,10 @@
 
 {% block content %}
 <h1>Story Editor</h1>
-<form method="POST" onsubmit="write()">
+<form name="editor" action="{% url "staff:stories:create" %}" method="POST">
     {% csrf_token %}
+
+    {{ form.errors }}
 
     <!-- body onload = "quill.setText('{{ form.text.value|slugify }}');" -->
 
@@ -34,12 +36,17 @@
         {% for error in form.description.errors %}
             <span class="error">{{ error }}</span>
         {% endfor %}
-        <div id="description-editor" style="height: 100px;">  <!-- TODO: put style in a file -->
-            {% if form.description.value %}
-                {{ form.description.value }}
-            {% endif %}
-        </div>
+        <div id="description-editor" style="height: 100px;"></div>
         <input id="description" name="description" type="hidden">
+    </div>
+
+    <div class="form-group">
+        <label for="lead">{{ form.lead.label }}</label>
+        {% for error in form.lead.errors %}
+            <span class="error">{{ error }}</span>
+        {% endfor %}
+        <div id="lead-editor" style="height: 100px;"></div>
+        <input id="lead" name="lead" type="hidden">
     </div>
 
     <div class="form-group">
@@ -47,11 +54,7 @@
         {% for error in form.text.errors %}
             <span class="error">{{ error }}</span>
         {% endfor %}
-        <div id="text-editor">
-            {% if form.text.value %}
-                {{ form.text.value }}
-            {% endif %}
-        </div>
+        <div id="text-editor"></div>
         <input id="text" name="text" type="hidden">
     </div>
 
@@ -66,11 +69,17 @@
 <script src="/static/js/quill.js"></script>
 <script type="text/javascript">
     var descriptionEditor = quill("#description-editor");
+    descriptionEditor.root.innerHTML = "{{ form.description.value|default_if_none:""|safe }}";
+    var leadEditor = quill("#lead-editor");
+    leadEditor.root.innerHTML = "{{ form.lead.value|default_if_none:""|safe }}";
     var textEditor = quill("#text-editor");
-    function write() {
-      document.forms[0].description = descriptionEditor.root.innerHTML;
-      document.forms[0].text = textEditor.root.innerHTML;
-    }
+    textEditor.root.innerHTML = "{{ form.text.value|default_if_none:""|safe }}";
+    var form = document.editor;
+    form.addEventListener("submit", function() {
+      form.description.value = descriptionEditor.root.innerHTML;
+      form.lead.value = leadEditor.root.innerHTML;
+      form.text.value = textEditor.root.innerHTML;
+    });
 </script>
 
 {% endblock %}

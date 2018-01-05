@@ -11,6 +11,8 @@ from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import ListView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse
 
 # Local imports
 from . import forms
@@ -35,12 +37,8 @@ def login(request):
             user = auth.authenticate(username=username, password=password)
 
             # Check if password wrong
-            if user is False:
-                form.add_error(None, "Password is wrong")
-
-            # Check if no user
-            elif user is None:
-                form.add_error(None, "User does not exist")
+            if not user:
+                form.add_error(None, "Invalid credentials")
 
             # Check if user is inactive
             elif not user.is_active:
@@ -73,6 +71,13 @@ def index(request):
 
 
 @login_required
+def profile(request):
+    """Get the user profile page."""
+
+    return render(request, "staff/profile.html")
+
+
+@login_required
 def dummy(request):
     """Dummy page generator."""
 
@@ -83,28 +88,25 @@ class StoryListView(ListView):
     """The story list view that supports pagination."""
 
     model = models.Story
-    queryset = models.Story.objects.filter(published__gte=models.PUBLISHED)
     template_name = "staff/story/list.html"
     context_object_name = "stories"
-    paginate_by = 20
+    paginate_by = 25
+
+    def get_queryset(self):
+        """Get all stories by the request user."""
+
+        return models.Story.objects.filter(authors=self.request.user)
 
 
-@login_required
-def stories_create(request):
-    if request.method == 'POST':
-        form = forms.StoryForm(request.POST)
+class StoryCreateView(LoginRequiredMixin, CreateView):
+    """View for uploading a new story."""
 
-        if form.is_valid():
-            story = form.save(commit=False)
-            story.uploader = request.user
-            story.save()
-            return redirect("story", story.id)
-    else:
-        form = forms.StoryForm()
+    model = models.Story
+    form_class = forms.StoryForm
+    template_name = "staff/story/edit.html"
 
-    return render(request, "staff/story/edit.html", {
-        "form": form
-    })
+    def get_success_url(self):
+        return reverse("staff:stories:view")
 
 
 @login_required

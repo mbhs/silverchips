@@ -6,7 +6,7 @@
     {% for section in section_roots %}
         <div class="card">
             <div class="card-header">
-                <h4 class="card-title">{{ section.title }}</h4>
+                <a class="solid-link" href="{% url "home:view_section" section.name %}"><h4 class="card-title">{{ section.title }}</h4></a>
             </div>
             <ul class="list-group list-group-flush">
                 {% for story in section.all_stories.all|slice:":5" %}

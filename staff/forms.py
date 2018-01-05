@@ -27,7 +27,7 @@ class StoryForm(forms.ModelForm):
 
     class Meta:
         model = models.Story
-        fields = ['title', 'description', 'lead', 'text']
+        fields = ['title', 'authors', 'description', 'lead', 'text']
         widgets = {'content': forms.HiddenInput()}
 
 
@@ -40,4 +40,4 @@ class ImageForm(forms.ModelForm):
 
     class Meta:
         model = models.Image
-        fields = ['title', 'description', 'source']
+        fields = ['title', 'authors', 'description', 'source']
