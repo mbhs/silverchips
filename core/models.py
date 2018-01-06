@@ -292,6 +292,9 @@ class Comment(TimestampMixin):
     rating = models.IntegerField(default=0)
     authorized = models.BooleanField(default=False)
 
+    def get_authorized_replies(self):
+        return self.replies.all().filter(authorized=True).order_by("created").reverse()
+
     def __str__(self):
         return 'Comment[{}:{}]'.format(self.name, self.text)
 
@@ -314,7 +317,7 @@ class Story(Content):
     comments = models.ManyToManyField(Comment, blank=True)
 
     def get_authorized_comments(self):
-        return self.comments.all().filter(authorized=True)
+        return self.comments.all().filter(authorized=True).order_by("created").reverse()
 
     template = "content/story.html"
     descriptor = "Story"
