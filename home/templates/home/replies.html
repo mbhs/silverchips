@@ -1,6 +1,9 @@
-<div class="card" style="margin: 10px; padding: 10px;">
-  <h5 class="card-title">{{ reply.name }}</h5>
-  <div class="card-block">
+<div class="card" style="margin: 10px; padding: 10px;" id="comment-{{ reply.pk }}">
+  <h5 class="card-title">
+    {{ reply.name }}
+    <button class="btn btn-warning btn-sm" id="toggle-button-{{ reply.pk }}" onclick=hide_comment_content({{ reply.pk }})>[-]</button>
+  </h5>
+  <div class="card-block" id="comment-content-{{ reply.pk }}">
     {{ reply.text }} <br/><br/>
     <a class="btn btn-secondary" href="{% url "home:updoot" reply.pk content.pk%}">
       <i class="fa fa-thumbs-up" aria-hidden="true"></i> {{ reply.rating }}

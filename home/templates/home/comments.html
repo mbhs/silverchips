@@ -20,31 +20,34 @@
   </form>
 
   <!-- Fix to reverse ordering -->
-  {% for comment in authorized_comments %}
-    <div class="card" style="padding: 10px;">
-      <h5 class="card-title">{{ comment.name }}</h5>
-      <div class="card-block">
-        {{ comment.text }} <br/><br/>
-        <a class="btn btn-secondary" href="{% url "home:updoot" comment.pk content.pk%}">
-          <i class="fa fa-thumbs-up" aria-hidden="true"></i> {{ comment.rating }}
-        </a>
-        <button class="btn btn-secondary" onclick=on_reply({{ comment.pk }})>
-          <i class="fa fa-reply" aria-hidden="true"></i> {{ comment.replies.count }}
-        </button>
+    {% for comment in authorized_comments %}
+      <div class="card" style="padding: 10px;" id="comment-{{ comment.pk }}">
+        <h5 class="card-title">
+          {{ comment.name }}
+          <button class="btn btn-warning btn-sm" id="toggle-button-{{ comment.pk }}" onclick=hide_comment_content({{ comment.pk }})>[-]</button>
+        </h5>
+        <div class="card-block" id="comment-content-{{ comment.pk }}">
+          {{ comment.text }} <br/><br/>
+          <a class="btn btn-secondary" href="{% url "home:updoot" comment.pk content.pk%}">
+            <i class="fa fa-thumbs-up" aria-hidden="true"></i> {{ comment.rating }}
+          </a>
+          <button class="btn btn-secondary" onclick=on_reply({{ comment.pk }})>
+            <i class="fa fa-reply" aria-hidden="true"></i> {{ comment.replies.count }}
+          </button>
 
-        <!-- Reply area -->
-        <div id={{ comment.pk }}>
+          <!-- Reply area -->
+          <div id={{ comment.pk }}>
+          </div>
+
+          <!-- render replies -->
+          {% for reply in comment.replies.all %}
+            {% if reply.authorized %}
+              {% include "home/replies.html" %}
+            {% endif %}
+          {% endfor %}
         </div>
-
-        <!-- render replies -->
-        {% for reply in comment.replies.all %}
-          {% if reply.authorized %}
-            {% include "home/replies.html" %}
-          {% endif %}
-        {% endfor %}
       </div>
-    </div>
-  {% endfor %}
+    {% endfor %}
 
   <script>
     var story_pk = {{ content.pk }}
@@ -55,6 +58,16 @@
     }
     function remove_reply(){
       $("#reply_form").prop("hidden", true);
+    }
+    function hide_comment_content(comment_pk){
+      $("#comment-content-"+comment_pk).prop("hidden", true);
+      $("#toggle-button-"+comment_pk).html("[+]");
+      $("#toggle-button-"+comment_pk).attr("onclick", "show_comment_content("+comment_pk+")");
+    }
+    function show_comment_content(comment_pk){
+      $("#comment-content-"+comment_pk).prop("hidden", false);
+      $("#toggle-button-"+comment_pk).html("[-]");
+      $("#toggle-button-"+comment_pk).attr("onclick", "hide_comment_content("+comment_pk+")");
     }
   </script>
 
