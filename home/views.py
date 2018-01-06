@@ -89,7 +89,7 @@ def view_audio(request, pk):
     })
 
 # voting url routing broken, probably add captcha
-def updoot(request, comment_pk, story_pk):
+def updoot(request, story_pk, comment_pk):
     """Updoots a post"""
 
     story = get_object_or_404(Story, id=int(story_pk))

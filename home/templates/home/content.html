@@ -60,11 +60,8 @@
                     </p>
                 </div>
             </div>
+            <hr/>
         {% endfor %}
-        <hr/>
-
-        {% include "home/comments.html" %}
-
     </div>
 
     <div class="col-sm-3">
@@ -84,5 +81,10 @@
                 {% endfor %}
             </ul>
         </div>
+    </div>
+
+    <div class="col-sm-9">
+      <hr/>
+      {% include "home/comment_control.html" %}
     </div>
 </div>
