@@ -152,7 +152,7 @@ class Content(TimestampMixin):
         (PUBLISHED, "published"),
         (HIDDEN, "hidden")))
 
-    tags = models.ManyToManyField(Tag)
+    tags = models.ManyToManyField(Tag, blank=True)
 
     views = models.IntegerField(default=0)
 
@@ -282,6 +282,21 @@ class Audio(Content):
     class Meta:
         verbose_name_plural = "audio"
 
+class Comment(TimestampMixin):
+    """Comment model
+    """
+
+    name = models.CharField(max_length=30)
+    text = models.TextField()
+    replies = models.ManyToManyField("Comment", blank=True)
+    rating = models.IntegerField(default=0)
+    authorized = models.BooleanField(default=False)
+
+    def get_authorized_replies(self):
+        return self.replies.all().filter(authorized=True).order_by("created").reverse()
+
+    def __str__(self):
+        return 'Comment[{}:{}]'.format(self.name, self.text)
 
 class Story(Content):
     """The main story model.
@@ -297,6 +312,12 @@ class Story(Content):
 
     section = models.ForeignKey(Section, related_name="stories", null=True, on_delete=models.SET_NULL)
     cover = models.ForeignKey(Image, null=True, on_delete=models.SET_NULL)
+
+    comments_on = models.BooleanField(default=True)
+    comments = models.ManyToManyField(Comment, blank=True)
+
+    def get_authorized_comments(self):
+        return self.comments.all().filter(authorized=True).order_by("created").reverse()
 
     template = "content/story.html"
     descriptor = "Story"

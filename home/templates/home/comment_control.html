@@ -1,0 +1,53 @@
+{% if content.comments_on %}
+  <h4>All Comments ({{ authorized_comments.all.count }})</h4>
+  <hr/>
+
+  <!-- post reply -->
+  <form method="post" id="reply_form" hidden>
+    {% csrf_token %}
+    Name: <input class="form-control" type="text" name="name"><br/>
+    <textarea class="form-control" name="text" cols="100" rows="5"></textarea><br/>
+    <button class="btn btn-primary form-control" value="Post" type="submit">Post</button>
+    <br/><br/>
+    <input class="btn btn-primary form-control" type="button" value="Cancel" onclick=remove_reply()>
+  </form>
+
+  <form action="{% url "home:post_comment" content.pk %}" method="post">
+    {% csrf_token %}
+    Name: <input class="form-control" type="text" name="name"><br/>
+    <textarea class="form-control" name="text" cols="100" rows="5"></textarea><br/>
+    <button class="btn btn-secondary form-control" value="Post" type="submit">Post</button>
+  </form>
+
+  <!-- Fix to reverse ordering -->
+  {% for reply in authorized_comments %}
+   {% include "home/comments.html" %}
+  {% endfor %}
+
+  <script>
+    var story_pk = {{ content.pk }}
+    function on_reply(comment_pk){
+      $("#reply_form").prop("hidden", false);
+      $("#reply_form").prop("action", "/comment/" + story_pk + "/" + comment_pk);
+      $("#"+comment_pk).append($("#reply_form"));
+    }
+    function remove_reply(){
+      $("#reply_form").prop("hidden", true);
+    }
+    function hide_comment_content(comment_pk){
+      $("#comment-content-"+comment_pk).prop("hidden", true);
+      $("#toggle-button-"+comment_pk).html("[+]");
+      $("#toggle-button-"+comment_pk).attr("onclick", "show_comment_content("+comment_pk+")");
+    }
+    function show_comment_content(comment_pk){
+      $("#comment-content-"+comment_pk).prop("hidden", false);
+      $("#toggle-button-"+comment_pk).html("[-]");
+      $("#toggle-button-"+comment_pk).attr("onclick", "hide_comment_content("+comment_pk+")");
+    }
+  </script>
+
+{% else %}
+  <i>Comments have been disabled.</i>
+{% endif %}
+
+<br/><hr/>
