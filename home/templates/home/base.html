@@ -5,49 +5,29 @@
     <head>
         {% load staticfiles %}
         {% include "shared/bootstrap.html" %}
-        <link type="text/css" rel="stylesheet" href="{% static "home/home.scss"|compile %}">
+        <link type="text/css" rel="stylesheet" href="{% static "home/styles/home.scss"|compile %}">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{% block title %}{% endblock %} | SilverChips</title>
     </head>
 
     <body>
-        <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-          <a class="navbar-brand" href="{% url "home:index" %}">SilverChips</a>
-          <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarDropdown" aria-controls="navbarDropdown" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarDropdown">
-            <ul class="navbar-nav mr-auto">
-                {% for section in section_roots %}
-                  <li class="nav-item">
-                    <a class="nav-link" href="{% url "home:view_section" section.name %}">{{ section.title }}</a>
-                  </li>
-                {% endfor %}
-            </ul>
-            <form class="form-inline my-2 my-lg-0">
-              <input class="form-control mr-sm-2" type="text" placeholder="Search">
-              <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><i class="fas fa-search fa-lg" aria-hidden="true"></i></button>
-            </form>
-          </div>
-        </nav>
+        {% include "home/includes/_site-navbar-wrapper.html" %}
 
-        <h1 id="title">silverchips.</h1>
+        {# <h1 id="title">silverchips.</h1> #}
 
-        <div class="container">
+        <div style="margin-top:5em;" class="container">
             {% block content %}
             {% endblock %}
         </div>
 
-        <footer class="footer bg-dark text-white">
-            <div class="container">
-                <h4>Silver Chips Online</h4>
-                &copy; 2017 Silver Chips Online / Montgomery Blair High School | 51 University Blvd. E., Silver Spring, MD 20901
-            </div>
-        </footer>
+        {# <footer class="footer bg-dark text-white"> #}
+            {# <div class="container"> #}
+                {# <h4>Silver Chips Online</h4> #}
+                {# &copy; 2017 Silver Chips Online / Montgomery Blair High School | 51 University Blvd. E., Silver Spring, MD 20901 #}
+            {# </div> #}
+        {# </footer> #}
 
-{#        <footer class="footer bg-inverse text-white">#}
-{#            <div class="container">#}
-{#            </div>#}
-{#        </footer>#}
+        {% include "home/includes/_site-footer-wrapper.html" %}
+        {% include "shared/scripts.html" %}
     </body>
 </html>
