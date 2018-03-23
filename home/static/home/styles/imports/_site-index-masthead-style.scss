@@ -1,0 +1,36 @@
+.site-index-masthead-wrapper {
+    position: relative;
+    width: 100%;
+    padding-top: 8em;
+    background: url("../images/footer_lodyas.png");
+    background-attachment: fixed;
+    .masthead {
+        position: relative;
+        top: 0;
+        text-align: center;
+        margin: auto;
+        color: $undertone-secondary;
+    }
+    .welcome {
+        text-transform: uppercase;
+        font-size: 2em;
+        padding-bottom: 20px;
+    }
+    .subhead {
+        font-size: 1.2em;
+        letter-spacing: 0.20em;
+        padding-bottom: 20px;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+    .logo-container {
+        margin: auto;
+        width: 90%;
+        @include mq("tablet") {
+            width: 75%;
+        } @include mq("desktop") {
+            width: 55%;
+        }
+        padding-bottom: 20px;
+    }
+}

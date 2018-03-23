@@ -12,20 +12,12 @@
 
     <body>
         {% include "home/includes/_site-navbar-wrapper.html" %}
-
-        {# <h1 id="title">silverchips.</h1> #}
-
+        {% include "home/includes/_site-index-masthead.html" %}
+        
         <div style="margin-top:5em;" class="container">
             {% block content %}
             {% endblock %}
         </div>
-
-        {# <footer class="footer bg-dark text-white"> #}
-            {# <div class="container"> #}
-                {# <h4>Silver Chips Online</h4> #}
-                {# &copy; 2017 Silver Chips Online / Montgomery Blair High School | 51 University Blvd. E., Silver Spring, MD 20901 #}
-            {# </div> #}
-        {# </footer> #}
 
         {% include "home/includes/_site-footer-wrapper.html" %}
         {% include "shared/scripts.html" %}

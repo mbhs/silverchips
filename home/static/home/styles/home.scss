@@ -1,7 +1,7 @@
 @import "imports/custom-settings";
 
 /* GLOBAL */
-h1, h2, h3, h4, h5, h6 {
+html {
     font-size: 16px;
     body {
         font-family: 'Open Sans', sans-serif;
@@ -15,5 +15,6 @@ h1, h2, h3, h4, h5, h6 {
     }
 }
 
-@import "imports/_site-footer-style";
 @import "imports/_site-navbar-style";
+@import "imports/_site-footer-style";
+@import "imports/_site-index-masthead-style";
