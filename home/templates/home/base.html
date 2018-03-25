@@ -5,6 +5,7 @@
     <head>
         {% load staticfiles %}
         {% include "shared/bootstrap.html" %}
+        <link rel="shortcut icon" href="{% static "favicon.ico" %}">
         <link type="text/css" rel="stylesheet" href="{% static "home/styles/home.scss"|compile %}">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{% block title %}{% endblock %} | SilverChips</title>
@@ -12,8 +13,10 @@
 
     <body>
         {% include "home/includes/_site-navbar-wrapper.html" %}
-        {% include "home/includes/_site-index-masthead.html" %}
-        
+        {% if request.get_full_path == "/" %}
+            {% include "home/includes/_site-index-masthead.html" %}
+        {% endif %}
+
         <div style="margin-top:5em;" class="container">
             {% block content %}
             {% endblock %}

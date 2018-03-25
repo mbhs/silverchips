@@ -14,7 +14,7 @@ from core.models import Story, Image, Video, Audio, Section, User
 def load_context(request):
     return {
         "section_roots": Section.objects.filter(parent=None),
-        "stories": Story.objects.all()
+        "stories": Story.objects.all(),
     }
 
 
@@ -24,7 +24,7 @@ def index(request):
     return render(request, "home/index.html")
 
 
-SECTION_COUNT = 5
+SECTION_COUNT = 3
 
 def view_section(request, name):
     """Render a section of the newspaper."""
@@ -42,7 +42,8 @@ def view_section(request, name):
 
     return render(request, "home/section.html", {
         "section": section,
-        "subsections": subsections
+        "subsections": subsections,
+        "navbar": section.name,
     })
 
 

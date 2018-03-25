@@ -1,3 +1,4 @@
+{% load static %}
 <div class="site-index-masthead-wrapper">
     <div class="masthead">
         <h3 class="welcome">welcome to</h3>
@@ -7,4 +8,8 @@
         <p class="subhead">Montgomery Blair High School's <br> Online
             Student Newspaper</p>
     </div>
+    <div id="scroll">
+        <a id="scroll-btn" href="#scroll"><i class="fas fa-chevron-down"></i>Scroll</a>
+    </div>
+    <script src="{% static 'home/scripts/index_scroll.js' %}"></script>
 </div>

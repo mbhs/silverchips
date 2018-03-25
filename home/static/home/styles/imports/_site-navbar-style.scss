@@ -4,11 +4,13 @@
         background: $background;
         padding-top: 1em;
         width: 100%;
-        @include mq("desktop") {
+        @include mq("desktop-wide") {
             background: rgba(55,55,55,0.85);
             .navbar-brand {color: $background;}
             .nav-item {.nav-link {color: $undertone-secondary;}}
-            .active { .nav-link {color: $background;}}
+            .active .nav-link {
+                color: $background;
+            }
         };
     }
     .navbar-brand {
@@ -17,16 +19,21 @@
             font-weight: bold;
             letter-spacing: 0.2em;
             color: $base;
-            font-size: 1em;
+            font-size: 1.2em;
     }
     .navbar-nav {
             margin-left: auto;
     }
     .nav-item {
-            margin-left: 4px;
-            margin-right: 4px;
+            margin-left: 0;
+            margin-right: 0;
+            font-size: 0.9em;
+            @include mq("desktop") {
+                margin-left: 5px;
+                margin-right: 5px;
+                font-size: 1em;
+            };
             text-transform: uppercase;
-            font-size: 1em;
             border-bottom: 2px solid transparent;
             .nav-link {
                 color: $undertone;

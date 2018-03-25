@@ -1,12 +1,13 @@
 .site-index-masthead-wrapper {
     position: relative;
     width: 100%;
+    height: 100%;
     padding-top: 8em;
-    background: url("../images/footer_lodyas.png");
+    background: $background-image;
     background-attachment: fixed;
     .masthead {
         position: relative;
-        top: 0;
+        top: 22%;
         text-align: center;
         margin: auto;
         color: $undertone-secondary;
@@ -14,12 +15,13 @@
     .welcome {
         text-transform: uppercase;
         font-size: 2em;
-        padding-bottom: 20px;
+        padding-bottom: 30px;
+        letter-spacing: 0.2em;
     }
     .subhead {
         font-size: 1.2em;
-        letter-spacing: 0.20em;
-        padding-bottom: 20px;
+        letter-spacing: 0.2em;
+        padding-bottom: 30px;
         padding-left: 10px;
         padding-right: 10px;
     }
@@ -27,10 +29,31 @@
         margin: auto;
         width: 90%;
         @include mq("tablet") {
-            width: 75%;
+            width: 65%;
         } @include mq("desktop") {
-            width: 55%;
+            width: 45%;
         }
         padding-bottom: 20px;
+    }
+    //Scroll button styling
+    #scroll {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        margin-bottom: 2em;
+        text-align: center;
+    }
+    #scroll #scroll-btn {
+        text-decoration: none;
+        background: none;
+        border: 0;
+        padding: 0;
+        cursor: pointer;
+        color: $background;
+        font-size: 1em;
+    }
+    #scroll i {
+        display: block;
+        font-size: 2em;
     }
 }
