@@ -10,19 +10,29 @@ while the intent is to keep this framework generic as to support news sites for
 different organizations, parts may be hardocoded until a full fork and release.
 
 ## Getting Started
-Prequisites: Python 3+, `pip`, `virtualenv`, `mkvirtualenv`
-`pip` should come shipped with Python 3 (make sure it's on PATH); to install the others, run:
+Prequisites: Python 3+, `pip`, `virtualenv`, `mkvirtualenv`.
+`pip` should come shipped with Python 3 when you install it (just make sure it's on PATH); to install the others, run (on the command line):
   - `pip install virtualenv`
   - `pip install mkvirtualenv`
 ### Quick Start
 1. Clone this repository: `git clone https://github.com/markojungo/silverchips.git`.
 2. `cd` into `silverchips`: `cd silverchips`.
-3. Make a virtual environment: `mkvirtualenv sco`.
+3. Make a virtual environment: `mkvirtualenv sco`. (sco) should now appear at the beginning of your command line.
    - NOTE: Make sure to run `workon sco` every time you reopen the command line, or else you'll get an error
-4. Install requirements: `pip install -r requirements.txt`.
+4. Install requirements: `pip install -r requirements.txt`. Run `pip freeze`; you should see **at least**:
+   - django>=2.0
+   - django_forms_bootstrap>=3.1.0
+   - django-static-precompiler
+   - django-inspect
+   - Pillow>=4.1.1
+   - codecov>=2.0.9
+   - django-autocomplete-light
+   - six
 5. Make migrations and apply:
    - `python manage.py makemigrations core`
    - `python manage.py migrate`
 6. Load test data: `manage.py loaddata core/fixtures/recent.json`.
 7. Run server: `python manage.py runserver`.
 8. Go to: `localhost:8000`
+
+And voila!
