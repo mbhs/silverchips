@@ -10,10 +10,10 @@ while the intent is to keep this framework generic as to support news sites for
 different organizations, parts may be hardocoded until a full fork and release.
 
 ## Getting Started
-Prequisites: Python 3+, `pip`, `virtualenv`, `mkvirtualenv`.
-`pip` should come shipped with Python 3 when you install it (just make sure it's on PATH); to install the others, run (on the command line):
+Prequisites: Python 3+, `pip`, `virtualenv`, `virtualenvwrapper-win`, and Ruby `sass`.
+`pip` should come shipped with Python 3 when you install it (just make sure it's on PATH); to install `virtualenv` and `virtualenvwrapper-win`, run (on the command line):
   - `pip install virtualenv`
-  - `pip install mkvirtualenv`
+  - `pip install virtualenvwrapper-win`
 ### Quick Start
 1. Clone this repository: `git clone https://github.com/markojungo/silverchips.git`.
 2. `cd` into `silverchips`: `cd silverchips`.
