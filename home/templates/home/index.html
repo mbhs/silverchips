@@ -3,19 +3,21 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-    {% for section in section_roots %}
-        <div class="card">
-            <div class="card-header">
-                <a class="solid-link" href="{% url "home:view_section" section.name %}"><h4 class="card-title">{{ section.title }}</h4></a>
+    <div class="container">
+        {% for section in section_roots %}
+            <div class="card">
+                <div class="card-header">
+                    <a class="solid-link" href="{% url "home:view_section" section.name %}"><h4 class="card-title">{{ section.title }}</h4></a>
+                </div>
+                <ul class="list-group list-group-flush">
+                    {% for story in section.all_stories.all|slice:":3" %}
+                        <li class="list-group-item">
+                            {% include "shared/story_summary.html" with story=story %}
+                        </li>
+                    {% endfor %}
+                </ul>
             </div>
-            <ul class="list-group list-group-flush">
-                {% for story in section.all_stories.all|slice:":5" %}
-                    <li class="list-group-item">
-                        {% include "shared/story_summary.html" with story=story %}
-                    </li>
-                {% endfor %}
-            </ul>
-        </div>
-        <br>
-    {% endfor %}
+            <br>
+        {% endfor %}
+    </div>
 {% endblock %}

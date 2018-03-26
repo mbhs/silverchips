@@ -1,0 +1,12 @@
+.section-header {
+    padding-left: 3em;
+    padding-right: 3em;
+    padding-top: 5em;
+    padding-bottom: 4em;
+    background: $background-image;
+    background-attachment: fixed;
+    .section-title {
+        font-size: 4em;
+        color: $background;
+    }
+}

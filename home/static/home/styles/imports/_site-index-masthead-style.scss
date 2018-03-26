@@ -34,14 +34,19 @@
             width: 45%;
         }
         padding-bottom: 20px;
+        svg g {fill: none} //Starting fill for animation
     }
     //Scroll button styling
     #scroll {
+        display: none;
         position: absolute;
         bottom: 0;
         width: 100%;
         margin-bottom: 2em;
         text-align: center;
+        @include mq("desktop") {
+            display: block;
+        };
     }
     #scroll #scroll-btn {
         text-decoration: none;

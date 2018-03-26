@@ -1,5 +1,5 @@
-<div class="site-navbar-wrapper">
-    <nav class="navbar navbar-expand-xl fixed-top">
+<div class="site-navbar-wrapper {% if section %}sticky-top{% endif %}">
+    <nav class="navbar navbar-expand-xl">
         <a class="navbar-brand" href="{% url "home:index" %}">SilverChips</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <i class="fas fa-bars"></i>

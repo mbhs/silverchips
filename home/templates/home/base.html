@@ -12,17 +12,14 @@
     </head>
 
     <body>
-        {% include "home/includes/_site-navbar-wrapper.html" %}
         {% if request.get_full_path == "/" %}
+            {% include "home/includes/_site-navbar-wrapper.html" %}
             {% include "home/includes/_site-index-masthead.html" %}
         {% endif %}
 
-        <div style="margin-top:5em;" class="container">
-            {% block content %}
-            {% endblock %}
-        </div>
+        {% block content %}
+        {% endblock %}
 
         {% include "home/includes/_site-footer-wrapper.html" %}
-        {% include "shared/scripts.html" %}
     </body>
 </html>
