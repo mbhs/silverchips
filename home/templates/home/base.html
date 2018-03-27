@@ -3,12 +3,13 @@
 
 <html>
     <head>
-        {% load staticfiles %}
-        {% include "shared/bootstrap.html" %}
-        <link rel="shortcut icon" href="{% static "favicon.ico" %}">
-        <link type="text/css" rel="stylesheet" href="{% static "home/styles/home.scss"|compile %}">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{% block title %}{% endblock %} | SilverChips</title>
+        
+        {% load staticfiles %}
+        <link rel="shortcut icon" href="{% static "favicon.ico" %}">
+        <link type="text/css" rel="stylesheet" href="{% static "home/styles/home.scss"|compile %}">
+        {% include "shared/scripts.html" %}
     </head>
 
     <body>
