@@ -14,14 +14,22 @@ $(document).ready(function() {
     var resizeOrScroll = function() {
         var scroll = $(window).scrollTop();
         if ($(window).width() >= 1200) {
-            if (scroll > $(".site-index-masthead-wrapper").height()) {
-                $('.navbar').css({"background-color": 'rgba(55,55,55,0.85)'});
+            if (scroll > $(".site-index-masthead-wrapper").height() + $(".site-navbar-wrapper").height()) {
+                console.log($(".site-navbar-wrapper").height());
                 $('.navbar').removeClass("absolute-top");
-                $('.navbar').addClass("fixed-top");
+                $(".navbar-header").css("height", "auto");
+                $(".site-navbar-wrapper").addClass("fixed-top");
+                $(".navbar-brand").css("display", "none");
+                $(".navbar-nav").addClass("mx-auto");
             } else {
                 $('.navbar').css({"background-color": 'transparent'});
                 $('.navbar').removeClass("fixed-top");
+                $('.navbar-header').removeClass("fixed-top");
                 $('.navbar').addClass("absolute-top");
+                $(".navbar-header").css("height", "0px");
+                $(".site-navbar-wrapper").removeClass("fixed-top");
+                $(".navbar-brand").css("display", "block");
+                $(".navbar-nav").removeClass("mx-auto");
             }
         } else {
             $('.navbar').css({"background-color": '#f4f4f4'});
