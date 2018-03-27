@@ -285,6 +285,11 @@ class Section(models.Model):
             if section.count(path.sep) == depth:
                 yield section
 
+    def stories(self):
+        """Get all stories under the section."""
+
+        return Story.objects.filter(section__path__startswith=self.path)
+
     def __str__(self):
         """Represent the section as a string."""
 

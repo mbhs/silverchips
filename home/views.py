@@ -26,17 +26,14 @@ def index(request):
 
 SECTION_COUNT = 5
 
+
 def view_section(request, name):
     """Render a section of the newspaper."""
 
     section = get_object_or_404(Section, name=name)
 
-    top_stories = section.all_stories().all()[:SECTION_COUNT]
+    top_stories = section.stories().all()[:SECTION_COUNT]
     subsections = [(None, top_stories)]
-
-    for subsection in section.subsections.all():
-        subsections.append((subsection,
-                            subsection.all_stories().exclude(id__in=top_stories.values_list('id', flat=True))))
 
     print(subsections)
 
