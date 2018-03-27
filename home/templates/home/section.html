@@ -5,10 +5,10 @@
 {% endblock %}
 
 {% block content %}
+    {% include "home/includes/_site-navbar-wrapper.html" %}
     <section class="section-header">
         <h1 class="section-title">{{section.title}}</h1>
     </section>
-    {% include "home/includes/_site-navbar-wrapper.html" %}
     <div style="margin-top: 4em;" class="container">
         {% for subsection, stories in subsections %}
             {% if stories.count > 0 %}

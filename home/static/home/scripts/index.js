@@ -5,7 +5,7 @@ $(document).ready(function() {
     //Masthead text+logo Animation
     var tl = new TimelineMax();
     tl.from($(".welcome"), 2, {top: 0, opacity: 0});
-    tl.staggerTo($(".logo-container path"), 0.2, {fill: "#ffffff"},
+    tl.staggerTo($(".masthead .logo-container path"), 0.2, {fill: "#ffffff"},
         0.1, "-=2");
     tl.from($(".subhead"), 1, {top: 0, opacity: 0});
     tl.from($("#scroll"), 2, {top: 0, opacity: 0}, "-=2");
@@ -13,26 +13,49 @@ $(document).ready(function() {
     //Change navbar color when scrolling past index masthead
     var resizeOrScroll = function() {
         var scroll = $(window).scrollTop();
+        var logo_height = $(".logo-container").height();
         if ($(window).width() >= 1200) {
-            if (scroll > $(".site-index-masthead-wrapper").height() + $(".site-navbar-wrapper").height()) {
-                console.log($(".site-navbar-wrapper").height());
-                $('.navbar').removeClass("absolute-top");
-                $(".navbar-header").css("height", "auto");
+            if (scroll > $(".site-index-masthead-wrapper").height()) {
                 $(".site-navbar-wrapper").addClass("fixed-top");
-                $(".navbar-brand").css("display", "none");
+                $(".navbar").removeClass("absolute-top");
+                $(".navbar").css({
+                    "background-color": "#a52714",
+                    "margin-top": "1em",
+                    "padding-top": 0,
+                    "padding-bottom": 0
+                });
+                $(".navbar-header").css({
+                    "max-height": logo_height + 100,
+                    "background-color": "#f4f4f4"
+                });
+                $(".navbar-brand").css({
+                    "display": "none",
+                    "color": "#373737",
+                });
                 $(".navbar-nav").addClass("mx-auto");
+                $(".site-index-masthead-wrapper").css({
+                    "marginBottom": logo_height + $(".navbar").outerHeight()
+                });
             } else {
-                $('.navbar').css({"background-color": 'transparent'});
-                $('.navbar').removeClass("fixed-top");
-                $('.navbar-header').removeClass("fixed-top");
-                $('.navbar').addClass("absolute-top");
-                $(".navbar-header").css("height", "0px");
                 $(".site-navbar-wrapper").removeClass("fixed-top");
-                $(".navbar-brand").css("display", "block");
+                $(".navbar").addClass("absolute-top");
+                $(".navbar").css("background-color", "transparent");
+                $(".navbar-header").css({
+                    "max-height": "0px",
+                    "background-color": "transparent"
+                });
+                $(".navbar-brand").css({
+                    "display": "block",
+                    "color": "#f4f4f4",
+                });
                 $(".navbar-nav").removeClass("mx-auto");
+                $(".site-index-masthead-wrapper").css({
+                    "marginBottom": 0
+                });
             }
         } else {
-            $('.navbar').css({"background-color": '#f4f4f4'});
+            $('.site-navbar-wrapper').css("background-color", '#f4f4f4');
+            $(".site-navbar-wrapper").addClass("fixed-top");
         }
     };
     resizeOrScroll();
@@ -47,7 +70,6 @@ $(document).ready(function() {
                     + $($(this).attr("href")).height()
                     + parseInt($($(this).attr("href")).css("marginBottom"))},
                 600,"linear");
-            console.log($($(this).attr("href")).offset().top);
         });
     });
 });
