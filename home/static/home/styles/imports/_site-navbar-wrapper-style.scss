@@ -1,12 +1,15 @@
 .site-navbar-wrapper {
-    background: $base;
+    background: $background;
     .navbar-header {
-        transition: height 1s ease-in;
+        overflow: hidden;
+        transition: max-height 0.35s;
         width: 100%;
         .logo-container {
-            width: 90%;
-            @include mq("tablet") {width: 70%;};
-            @include mq("desktop") {width: 35%;};
+            width: 55%;
+            svg g {fill: $base;}
+            @include mq("desktop") {
+                width: 35%;
+            };
             padding-top: 2em;
             margin-left: auto;
             margin-right: auto;
@@ -14,7 +17,10 @@
     }
     .navbar {
         width: 100%;
-        padding-top: 1em;
+        margin-top: 1em;
+        padding-top: 0;
+        padding-bottom: 0;
+        background-color: #a52714;
         @include mq("desktop-wide") {
             .navbar-brand {color: $background;}
             .nav-item {.nav-link {color: $undertone-secondary;}}
@@ -29,12 +35,12 @@
         top: 0;
     }
     .navbar-brand {
-            text-transform: uppercase;
-            font-family: 'Playfair Display', serif;
-            font-weight: bold;
-            letter-spacing: 0.2em;
-            color: $base;
-            font-size: 1.2em;
+        text-transform: uppercase;
+        font-family: 'Playfair Display', serif;
+        font-weight: bold;
+        letter-spacing: 0.2em;
+        color: $base;
+        font-size: 1.2em;
     }
     .navbar-nav {
             margin-left: auto;
