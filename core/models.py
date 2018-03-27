@@ -5,13 +5,15 @@ about models in the previous platform are located there as well.
 """
 
 from django.db import models
-import django.contrib.auth.models as auth
+from django.contrib.auth import models as auth
 from django.utils import timezone
 from django.core.validators import RegexValidator
 from django.dispatch import receiver
 from django.db.models.signals import post_migrate
 from django.contrib.auth.models import Group, Permission
 from django.contrib.contenttypes.models import ContentType
+
+import posixpath as path
 
 
 class Profile(models.Model):
@@ -34,7 +36,7 @@ class Profile(models.Model):
     position = models.TextField()
     graduation_year = models.IntegerField()
 
-    def __str__(self):
+    def __str__(self) -> str:
         """Represent the profile as a string."""
 
         return "Profile[{}]".format(self.user.get_username())
@@ -43,14 +45,13 @@ class Profile(models.Model):
 class ProfileUserManager(auth.UserManager):
     """User manager that handles profile creation."""
 
-    def create_user(self, username, email=None, password=None, **extra_fields):
+    def create_user(self, username, email=None, password=None, **extra_fields) -> User:
         """Override user creation to instantiate a new profile."""
 
         user = User(username=username, email=email, password=password, **extra_fields)
         profile = Profile(user=user)
         profile.save()
         user.save()
-
         return user
 
 
@@ -59,7 +60,7 @@ class User(auth.User):
 
     objects = ProfileUserManager()
 
-    def __str__(self):
+    def __str__(self) -> str:
         """Represent the user as a string.
 
         This is the value Django Autocomplete Light displays in the
@@ -68,12 +69,12 @@ class User(auth.User):
 
         return self.get_full_name()
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         """Represent the user as a string."""
 
         return "User[{}]".format(self.get_full_name())
 
-    def get_role(self):
+    def get_role(self) -> str or None:
         """Get the user role.
 
         For now, there are two roles. These are editor and writer.
@@ -117,7 +118,7 @@ class TimestampMixin(models.Model):
         if not self.created:
             self.created = timezone.now()
         self.modified = timezone.now()
-        return super().save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     class Meta:
         abstract = True
@@ -177,12 +178,12 @@ class Content(TimestampMixin):
     tags = models.ManyToManyField(Tag)
     views = models.IntegerField(default=0)
 
-    def __str__(self):
+    def __str__(self) -> str:
         """Represent the content as a string."""
 
         return "Content[{}:{}]".format(type(self).__name__, self.title)
 
-    def has_tag(self, name):
+    def has_tag(self, name) -> bool:
         """Check if a model has a tag."""
 
         return self.tags.filter(name=name).exists()
@@ -196,82 +197,98 @@ class Content(TimestampMixin):
 alphanumeric = RegexValidator(r"^[a-zA-Z0-9_]*$", "Only alphanumeric characters and underscore are allowed.")
 
 
-class Section(models.Model):
-    """A broad category under which content can be organized."""
-
-    parent = models.ForeignKey("self", related_name="subsections", null=True, blank=True, on_delete=models.SET_NULL)
-    name = models.CharField(max_length=32, unique=True)
-    title = models.CharField(max_length=64)
-    active = models.BooleanField(default=True)
-
-    def __str__(self):
-        return 'Sections[{}]'.format(self.title)
-
-    def get_ancestors(self):
-        ancestors = [self]
-        while ancestors[-1].parent:
-            ancestors.append(ancestors[-1].parent)
-        return ancestors[::-1]
-
-    def get_descendants(self):
-        descendants = set([self])
-        if self.subsections.count():
-            for subsection in self.subsections.all():
-                descendants |= subsection.get_descendants()
-        return descendants
-
-    def all_stories(self):
-        return Story.objects.filter(section__in=self.get_descendants())
-
-    class Meta:
-        verbose_name_plural = "sections"
-
+# For the time being, we are going to move from nested sections to
+# path sections. Since the most frequent use case for querying the
+# section object is to grab stories for a section, it makes sense to
+# use the most efficient database configuration. For a section with
+# multiple descendants, a recursive strategy would first have to find
+# all descendant sections and then all related stories for each. On
+# the other hand, a path configuration would simply filter all stories
+# with section paths starting with the given section path.
 
 # class Section(models.Model):
-#     """All stories are categorized by sections.
+#     """A broad category under which content can be organized."""
 #
-#     To avoid using a recursive system, sections have an identifying
-#     string and absolute path. The absolute path is set when the
-#     """
-#
-#     id = models.CharField(max_length=16, validators=[alphanumeric])
-#     _path = models.CharField(max_length=64, unique=True, primary_key=True)
-#
-#     name = models.CharField(max_length=32)
+#     parent = models.ForeignKey("Section", related_name="subsections", null=True, blank=True,
+#         on_delete=models.SET_NULL)
+#     name = models.CharField(max_length=32, unique=True)
 #     title = models.CharField(max_length=64)
 #     active = models.BooleanField(default=True)
 #
-#     def assign(self, section: "Section"=None):
-#         """Assign this section under another section."""
-#
-#         if not self.id:
-#             raise RuntimeError("Section ID is not set.")
-#         if section is None:
-#             self._path = "/" + self.id
-#         else:
-#             self._path = posixpath.join(section.path, self.id)
-#
-#     def save(self, *args, **kwargs):
-#         """Save the section model.
-#
-#         If the path is not set, the section is automatically assigned
-#         to the root path.
-#         """
-#
-#         if not self._path:
-#             self.assign()
-#         super().save(*args, **kwargs)
-#
-#     @property
-#     def path(self):
-#         """Get the path to the section."""
-#
-#         return self._path
-#
-#     def __str__(self):
+#     def __str__(self) -> str:
 #         """Represent the section as a string."""
 #
 #         return "Sections[{}]".format(self.title)
+#
+#     def get_ancestors(self) -> ["Section"]:
+#         """Get the parent sections of section."""
+#
+#         ancestors = [self]
+#         while ancestors[-1].parent:
+#             ancestors.append(ancestors[-1].parent)
+#         return ancestors[::-1]
+#
+#     def get_children(self) -> {"Section"}:
+#         """Get the immediate children of the section."""
+#
+#         return
+#
+#     def get_descendants(self) -> {"Section"}:
+#         """Get all levels of descendants of the section."""
+#
+#         descendants = {self}
+#         if self.subsections.count():
+#             for subsection in self.subsections.all():
+#                 descendants |= subsection.get_descendants()
+#         return descendants
+#
+#     def all_stories(self):
+#         return Story.objects.filter(section__in=self.get_descendants())
+
+
+class Section(models.Model):
+    """All stories are categorized by sections.
+
+    To avoid using a recursive system, sections have an identifying
+    string and absolute path. The absolute path is set when the
+    """
+
+    name = models.CharField(max_length=32)
+    path = models.CharField(max_length=64, unique=True, primary_key=True)
+    title = models.CharField(max_length=64)
+    active = models.BooleanField(default=True)
+
+    def assign(self, section: "Section"=None):
+        """Assign this section under another section, default to root."""
+
+        if not self.id:
+            raise RuntimeError("Section ID is not set.")
+        self.path = path.join(path.sep if section is None else section.path, self.name)
+
+    def save(self, *args, **kwargs):
+        """Save the section model."""
+
+        if not self.path:
+            self.assign()
+        super().save(*args, **kwargs)
+
+    def descendants(self):
+        """Get all paths under this section."""
+
+        return Section.objects.filter(path__startswith=self.path)
+
+    def children(self):
+        """Get paths immediately under this section."""
+
+        depth = self.path.count(path.sep)
+        for section in self.descendants():
+            if section.count(path.sep) == depth:
+                yield section
+
+    def __str__(self):
+        """Represent the section as a string."""
+
+        return "Sections[{}]".format(self.title)
 
 
 class Image(Content):
