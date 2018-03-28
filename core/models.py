@@ -45,10 +45,10 @@ class Profile(models.Model):
 class ProfileUserManager(auth.UserManager):
     """User manager that handles profile creation."""
 
-    def create_user(self, username, email=None, password=None, **extra_fields) -> User:
+    def create_user(self, username, email=None, password=None, **extra_fields) -> auth.User:
         """Override user creation to instantiate a new profile."""
 
-        user = User(username=username, email=email, password=password, **extra_fields)
+        user = auth.User(username=username, email=email, password=password, **extra_fields)
         profile = Profile(user=user)
         profile.save()
         user.save()
