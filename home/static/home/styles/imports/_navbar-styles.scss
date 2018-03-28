@@ -1,0 +1,36 @@
+.navbar-wrapper {
+    background: $background;
+    &-header .logo {
+        transition: 0.5s ease;
+        width: 90%;
+        @include mq("tablet") {width: 45%;};
+        svg g {fill:$base;}
+    }
+    .lead {
+        transition: 0.1s linear;
+        margin-bottom: 0.75em;
+    }
+}
+
+.navbar {
+    background: $blair;
+    @include mq("desktop") {
+        padding: 0 0 !important; //Desktop does not need extra padding
+    };
+ }
+.navbar-nav .nav-link {
+    text-decoration: none;
+    font-size: 0.9em;
+    color: $undertone-secondary;
+
+    transition: padding 1s ease;
+    transition: border 0.3s ease;
+    padding: 14 10;
+    border-top: 3px solid $blair ;
+    border-bottom: 3px solid $blair;
+    &:hover {
+        border-top: 3px solid white;
+        border-bottom: 3px solid white;
+    }
+}
+.navbar-nav .active {.nav-link{color: white}}

@@ -1,6 +1,7 @@
+/* Themes, fonts, backgrounds, responsive breakpoints, etc */
 @import "custom-settings";
 
-/* GLOBAL */
+/* Global */
 html {
     font-size: 16px;
     body {
@@ -15,7 +16,15 @@ html {
     }
 }
 
-@import "imports/_site-navbar-wrapper-style";
-@import "imports/_site-footer-style";
-@import "imports/_site-index-masthead-style";
-@import "imports/_section-header-style";
+/* Separate, pseudoprenon-bootstrapian styles */
+@import "imports/_navbar-styles";
+@import "imports/_footer-styles";
+
+/* Custom card styles */
+.card {
+    margin-top: 4em;
+    border:none;
+    .card-header:first-child {
+        
+    }
+}
