@@ -20,7 +20,7 @@ html {
 @import "imports/_navbar-styles";
 @import "imports/_footer-styles";
 
-/* Story styles */
+/* Story */
 .title {
     padding-bottom: 1rem;
     a {
@@ -36,23 +36,12 @@ html {
         font-weight: bold;
     }
 }
-/* Custom card styles */
-.card {
-    border:none;
-    .card-img-top {
-        border-radius: none;
-    }
-    .card-header {
-        padding: 0.5rem 0 1.25rem 0;
-        background-color: $background;
-        .card-title {
-            margin-bottom: 0;
-            font-size: 1em;
-            color: $blair;
-        }
-    }
-    .card-body {
-        padding: 0 0 1.25em 0;
-        background-color: $background;
-    }
+/* Home Featurette */
+.section-separator {
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+.story-separator {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
 }

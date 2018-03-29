@@ -8,26 +8,26 @@
         <h1 class="display-4 text-center">The Latest</h1>
         <hr class="my-4">
         <div class="row mb-4">
+            {% load static %} <!-- FOR TESTING -->
             {% for section in section_roots %}
-                <div class="col-lg">
-                    <div class="card">
-                        {% load static %}
-                        {# for testing #}
-                        <img class="card-img-top" src="{% static "home/images/img_5.jpg" %}" alt="card-img">
-                        <div class="card-header border-0">
-                            <a class="" href="{% url "home:view_section" section.name %}"><h4 class="card-title">{{ section.title }}</h4></a>
+                <div class="container section-featurette">
+                    <h2 class="mb-3">{{section.title}}</h2>
+                    {% for story in section.all_stories.all|slice:"5" %}
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <img class="img-fluid mx-auto" src="{% static "home/images/work_5.jpg" %}" alt="featurette-img">
+                            </div>
+                            <div class="col-md-8">
+                                {% include "shared/story_summary.html" %}
+                            </div>
                         </div>
-                        <div class="card-body">
-                            {% for story in section.all_stories.all|slice:":1" %}
-                                {% include "shared/story_summary.html" with story=story %}
-                            {% endfor %}
-                        </div>
-                    </div>
+                        {% if forloop.last %}
+                            <hr class="section-separator">
+                        {% else %}
+                            <hr class="story-separator">
+                        {% endif %}
+                    {% endfor %}
                 </div>
-                <!-- if last column in row, make new row -->
-                {% if forloop.counter|divisibleby:"3" and not forloop.last %}
-            </div><div class="row mb-4">
-                {% endif %}
             {% endfor %}
         </div>
     </div>
