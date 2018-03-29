@@ -1,17 +1,13 @@
 .navbar-wrapper {
     background: $background;
-    &-header .logo {
-        transition: 0.5s ease;
-        width: 90%;
-        @include mq("tablet") {width: 45%;};
-        svg g {fill:$base;}
-    }
     .lead {
         transition: 0.1s linear;
         margin-bottom: 0.75em;
     }
 }
-
+.logo {width: 50%;}
+.navbar-wrapper-header .logo svg g {fill:$base;}
+.navbar .logo svg g {fill: $undertone-secondary;}
 .navbar {
     background: $blair;
     @include mq("desktop") {
@@ -21,6 +17,7 @@
 .navbar-nav .nav-link {
     text-decoration: none;
     font-size: 0.9em;
+    font-weight: bold;
     color: $undertone-secondary;
 
     transition: padding 1s ease;

@@ -8,8 +8,8 @@
 
         {% load staticfiles %}
         <link rel="shortcut icon" href="{% static "favicon.ico" %}">
+        {% include "shared/head.html" %}
         <link type="text/css" rel="stylesheet" href="{% static "home/styles/home.scss"|compile %}">
-        {% include "shared/scripts.html" %}
     </head>
 
     <body>

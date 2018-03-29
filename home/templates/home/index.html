@@ -7,23 +7,26 @@
         <hr class="my-4">
         <h1 class="display-2 text-center">Home</h1>
         <hr class="my-4">
-        <div class="row">
+        <div class="row mb-4">
             {% for section in section_roots %}
-                <div class="card col-lg mx-1 my-3">
-                    <div class="card-header">
-                        <a class="" href="{% url "home:view_section" section.name %}"><h4 class="card-title">{{ section.title }}</h4></a>
-                    </div>
-                    <div class="card-body">
-                        <p class="card-text">
+                <div class="col-lg">
+                    <div class="card">
+                        {% load static %}
+                        {# for testing #}
+                        <img class="card-img-top" src="{% static "home/images/img_5.jpg" %}" alt="card-img">
+                        <div class="card-header border-0">
+                            <a class="" href="{% url "home:view_section" section.name %}"><h4 class="card-title">{{ section.title }}</h4></a>
+                        </div>
+                        <div class="card-body">
                             {% for story in section.all_stories.all|slice:":1" %}
                                 {% include "shared/story_summary.html" with story=story %}
                             {% endfor %}
-                        </p>
+                        </div>
                     </div>
                 </div>
                 <!-- if last column in row, make new row -->
                 {% if forloop.counter|divisibleby:"3" and not forloop.last %}
-                </div><div class="row">
+            </div><div class="row mb-4">
                 {% endif %}
             {% endfor %}
         </div>

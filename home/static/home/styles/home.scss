@@ -20,11 +20,38 @@ html {
 @import "imports/_navbar-styles";
 @import "imports/_footer-styles";
 
+/* Story styles */
+.title {
+    padding-bottom: 1rem;
+    a {
+        color: $base;
+    }
+}
+.authors {
+    padding-bottom: 0.5rem;
+    line-height: 1.5rem;
+    a {
+        text-decoration: none;
+        color: $undertone;
+    }
+}
 /* Custom card styles */
 .card {
-    margin-top: 4em;
     border:none;
-    .card-header:first-child {
-        
+    .card-img-top {
+        border-radius: none;
+    }
+    .card-header {
+        padding: 0.5rem 0 1.25rem 0;
+        background-color: $background;
+        .card-title {
+            margin-bottom: 0;
+            font-size: 1em;
+            color: $blair;
+        }
+    }
+    .card-body {
+        padding: 0 0 1.25em 0;
+        background-color: $background;
     }
 }

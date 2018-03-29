@@ -1,23 +1,32 @@
 $(document).ready(function() {
-    var logo = $(".navbar-wrapper-header .logo").width();
-    var lead = $(".navbar-wrapper-header .lead").css(["height", "padding", "margin"]);
-    var nav = $(".navbar .nav-link").css(["padding"]);
-    $(window).on("resize scroll", function() {
-        var scroll = $(this).scrollTop();
-        if (scroll > 50) {
-            // $(".navbar-wrapper").removeClass("static-top");
-            // $(".navbar-wrapper").addClass("fixed-top");
-            $(".navbar-wrapper-header .logo").width(logo * 0.7);
-            $(".navbar-wrapper-header .lead").css({"height":0, "padding":0, "margin":0});
-            $(".navbar .nav-link").css({"padding":"8 8"});
-        } else if (scroll < 1) {
-            // $(".navbar-wrapper").removeClass("fixed-top");
-            // $(".navbar-wrapper").addClass("static-top");
-            $(".navbar-wrapper-header .logo").width(logo);
-            $(".navbar-wrapper-header .lead").css({"height":lead["height"],
-                "padding":lead["padding"],"margin":lead["margin"]
-            });
-            $(".navbar .nav-link").css({"padding":nav["padding"]});
+    var onResize, onScroll, window_width;
+    var logo = $(".logo").width(),
+        lead = $(".navbar-wrapper-header .lead").css(["height", "padding", "margin"]),
+        navlink = $(".navbar .nav-link").css(["padding"]);
+    onResize = function() {
+        window_width = $(window).width();
+        $(".logo").width(window_width * 0.5);
+        logo = $(".logo").width();
+    };
+    onScroll = _.debounce(function() {
+        var scroll = $(window).scrollTop();
+        if (scroll > 85 && window_width > 992) {
+            $(".logo").animate({
+                "width": logo * 0.75
+            }, 250, "easeOutExpo");
+            $(".navbar .nav-link").animate({
+                "padding": "4px 8px"
+            }, 250, "easeOutExpo");
+        } else if (scroll < 10) {
+            $(".logo").animate({
+                "width": logo
+            }, 250, "easeOutExpo");
+            $(".navbar .nav-link").animate({
+                "padding": navlink["padding"]
+            }, 250, "easeOutExpo");
         }
-    });
+    }, 100);
+    onResize(); onScroll();
+    $(window).on("resize", onResize);
+    $(window).on("scroll", onScroll);
 });
