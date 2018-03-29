@@ -1,33 +1,43 @@
 .navbar-wrapper {
     background: $background;
-    .lead {
-        transition: 0.1s linear;
-        margin-bottom: 0.75em;
-    }
 }
-.logo {width: 50%;}
-.navbar-wrapper-header .logo svg g {fill:$base;}
-.navbar .logo svg g {fill: $undertone-secondary;}
 .navbar {
     background: $blair;
     @include mq("desktop") {
         padding: 0 0 !important; //Desktop does not need extra padding
     };
  }
-.navbar-nav .nav-link {
-    text-decoration: none;
-    font-size: 0.9em;
-    font-weight: bold;
-    color: $undertone-secondary;
+ .navbar-nav .nav-link {
+     text-decoration: none;
+     font-size: 0.9em;
+     font-weight: bold;
+     color: $undertone-secondary;
 
-    transition: padding 1s ease;
-    transition: border 0.3s ease;
-    padding: 14 10;
-    border-top: 3px solid $blair ;
-    border-bottom: 3px solid $blair;
-    &:hover {
-        border-top: 3px solid white;
-        border-bottom: 3px solid white;
-    }
+     transition: padding 1s ease;
+
+     transition: border 0.3s ease;
+     border-top: 3px solid $blair ;
+     border-bottom: 3px solid $blair;
+     &:hover {
+         border-top: 3px solid white;
+         border-bottom: 3px solid white;
+     }
+ }
+ .navbar-nav .active {.nav-link{color: white}}
+.navbar-wrapper-header .logo svg g {fill:$base;} //Dark on light logo
+.navbar .logo svg g {fill: $undertone-secondary;} //Light on dark logo
+
+/* Navbar Animation */
+.not-scrolled {
+    .logo {width: 50%;}
+    .lead {height: auto; margin-bottom: 0.75rem;}
+    .navbar .nav-link {padding: 14px 10px;}
 }
-.navbar-nav .active {.nav-link{color: white}}
+.scrolled {
+    .logo {width: 35%;}
+    .lead {height: 0px; margin-bottom: 0;}
+    .navbar .nav-link {padding: 4px 8px;}
+}
+.logo, .lead, .navbar .nav-link {
+    transition: all 0.7s ease;
+}
