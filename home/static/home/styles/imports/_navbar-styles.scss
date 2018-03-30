@@ -9,6 +9,7 @@
  }
  .navbar-nav .nav-link {
      text-decoration: none;
+     text-transform: uppercase;
      font-size: 0.9em;
      font-weight: bold;
      color: $navbar-unactive;
@@ -23,7 +24,7 @@
          border-bottom: 3px solid white;
      }
  }
- .navbar-nav .active {.nav-link{color: $navbar-active;}}
+.navbar-nav .active {.nav-link{color: $navbar-active;}}
 .navbar-wrapper-header .logo svg g {fill:$font;} //Dark on light logo
 .navbar .logo svg g {fill: white;} //Light on dark logo
 
