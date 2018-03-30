@@ -2,7 +2,7 @@
     background: $background;
 }
 .navbar {
-    background: $blair;
+    background: $navbar;
     @include mq("desktop") {
         padding: 0 0 !important; //Desktop does not need extra padding
     };
@@ -16,8 +16,8 @@
      transition: padding 1s ease;
 
      transition: border 0.3s ease;
-     border-top: 3px solid $blair ;
-     border-bottom: 3px solid $blair;
+     border-top: 3px solid $navbar ;
+     border-bottom: 3px solid $navbar;
      &:hover {
          border-top: 3px solid white;
          border-bottom: 3px solid white;
@@ -31,12 +31,12 @@
 .not-scrolled {
     .logo {width: 50%;}
     .lead {height: auto; margin-bottom: 0.75rem;}
-    .navbar .nav-link {padding: 14px 10px;}
+    .navbar .nav-link {padding: 10px 10px;}
 }
 .scrolled {
     .logo {width: 35%;}
     .lead {height: 0px; margin-bottom: 0;}
-    .navbar .nav-link {padding: 4px 8px;}
+    .navbar .nav-link {padding: 4px 10px;}
 }
 .logo, .lead, .navbar .nav-link {
     transition: all 0.7s ease;

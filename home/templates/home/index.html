@@ -11,7 +11,9 @@
             {% load static %} <!-- FOR TESTING -->
             {% for section in section_roots %}
                 <div class="container section-featurette">
-                    <h2 class="mb-3">{{section.title}}</h2>
+                    <h1 class="section-header mb-4 text-center">
+                        <a href="{% url "home:view_section" section.name %}">{{section.title}}</a>
+                    </h1>
                     {% for story in section.all_stories.all|slice:"5" %}
                         <div class="row mb-3">
                             <div class="col-md-4">
