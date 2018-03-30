@@ -1,5 +1,5 @@
 .navbar-wrapper {
-    background: $background;
+    background: $navbar-header-background;
 }
 .navbar {
     background: $navbar;
@@ -9,9 +9,10 @@
  }
  .navbar-nav .nav-link {
      text-decoration: none;
+     text-transform: uppercase;
      font-size: 0.9em;
      font-weight: bold;
-     color: $undertone-secondary;
+     color: $navbar-unactive;
 
      transition: padding 1s ease;
 
@@ -23,9 +24,9 @@
          border-bottom: 3px solid white;
      }
  }
- .navbar-nav .active {.nav-link{color: white}}
-.navbar-wrapper-header .logo svg g {fill:$base;} //Dark on light logo
-.navbar .logo svg g {fill: $undertone-secondary;} //Light on dark logo
+.navbar-nav .active {.nav-link{color: $navbar-active;}}
+.navbar-wrapper-header .logo svg g {fill:$font;} //Dark on light logo
+.navbar .logo svg g {fill: white;} //Light on dark logo
 
 /* Navbar Animation */
 .not-scrolled {
@@ -39,5 +40,5 @@
     .navbar .nav-link {padding: 4px 10px;}
 }
 .logo, .lead, .navbar .nav-link {
-    transition: all 0.7s ease;
+    transition: all 0.3s ease;
 }

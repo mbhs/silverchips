@@ -7,7 +7,7 @@ html {
     body {
         font-family: 'Open Sans', sans-serif;
         background-color: $background;
-        color: $base;
+        color: $font;
         h1,h2,h3,h4,h5,h6, {
             font-family: 'Playfair Display', serif;
             margin: 0;
@@ -24,7 +24,7 @@ html {
 .title {
     padding-bottom: 1rem;
     a {
-        color: $base;
+        color: $story-title;
     }
 }
 .authors {
@@ -39,8 +39,34 @@ html {
 /* Home Featurette */
 .section-featurette {
     .section-header a {
-        color: $undertone;
+        position: relative;
+        color: $section-header;
         text-decoration: none;
+    }
+    .section-header a:before {
+        position: absolute;
+        left: 50%;
+        transform: translate(-50%);
+        content:"";
+        display: block;
+        width: 0;
+        height: 2px;
+        background: $section-header;
+        transition: width 0.3s;
+    }
+    .section-header a:after {
+        position: absolute;
+        left: 50%;
+        transform: translate(-50%);
+        content:"";
+        display: block;
+        width: 0;
+        height: 2px;
+        background: $section-header;
+        transition: width 0.3s;
+    }
+    .section-header a:hover:after, .section-header a:hover:before {
+        width: 100%;
     }
 }
 .section-separator {
