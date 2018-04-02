@@ -20,6 +20,41 @@ html {
 @import "imports/_navbar-styles";
 @import "imports/_footer-styles";
 
+.solid-link {
+    color: $solid-link;
+    text-decoration: none;
+}
+
+/* Custom Card */
+.card {
+    border: none;
+    border-radius: 0;
+    .card-header {
+        background-color: $card-header-bg;
+        .card-title {color: $card-title-color;}
+    }
+    .card-header:first-child {border-radius: 0;}
+}
+/* Latest Stories Card */
+.latest-stories {
+    border-left: 2px solid $card-header-bg;
+    .card-header .card-title {
+        text-transform: uppercase;
+        font-family: "Oswald", sans-serif;
+    }
+    .list-group-item {
+        border: none;
+        background-color: $card-header-bg;
+        * {
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 0.125rem;
+            font-size: 0.875rem;
+            font-family: "Oswald", sans-serif;
+            font-weight: bold;
+        }
+    }
+}
 /* Story */
 .title {
     padding-bottom: 1rem;
@@ -36,14 +71,21 @@ html {
         font-weight: bold;
     }
 }
-/* Home Featurette */
-.section-featurette {
-    .section-header a {
+/* Section */
+.section-header {
+    /* no link */
+    h1 {
+        color: $section-header;
+        font-size: 3rem;
+    }
+    /* link */
+    a {
         position: relative;
         color: $section-header;
         text-decoration: none;
     }
-    .section-header a:before {
+    a:before {
+        margin-bottom: 0.25rem;
         position: absolute;
         left: 50%;
         transform: translate(-50%);
@@ -54,7 +96,8 @@ html {
         background: $section-header;
         transition: width 0.3s;
     }
-    .section-header a:after {
+    a:after {
+        margin-top: 0.25rem;
         position: absolute;
         left: 50%;
         transform: translate(-50%);
@@ -65,7 +108,7 @@ html {
         background: $section-header;
         transition: width 0.3s;
     }
-    .section-header a:hover:after, .section-header a:hover:before {
+    a:hover:after, a:hover:before {
         width: 100%;
     }
 }

@@ -1,5 +1,5 @@
 /* FONTS */
-@import url('https://fonts.googleapis.com/css?family=Open+Sans|Raleway|Playfair+Display');
+@import url('https://fonts.googleapis.com/css?family=Oswald|Open+Sans|Playfair+Display');
 
 /* COLORS */
 $background: #ffffff; //WHITE
@@ -11,8 +11,13 @@ $navbar-active: #ffffff;
 $navbar-unactive: #DCD0C0;
 
 $section-header: #373737;
+$solid-link: #373737;
+
 $story-title: #373737;
 $author: #373737;
+
+$card-header-bg: #373737;
+$card-title-color: #ffffff;
 
 /* MASTHEAD/FOOTER BACKGROUND IMAGE */
 $background-image: url("../images/footer_lodyas.png");

@@ -7,7 +7,7 @@
 {#    <a class="btn btn-secondary float-sm-right" role="button" href="{% url "staff:story:edit" %}">Edit <i class="fas fa-edit"></i></a>#}
 </div>
 {% else %}
-<h1>{{ content.title|safe }}</h1>
+<h1 class="mb-3">{{ content.title|safe }}</h1>
 {% endif %}
 
 {% if content.section %}
@@ -32,16 +32,16 @@
     </div>
     <div class="col-md-3 text-right">
         <a href="https://www.facebook.com/dialog/share?display=popup&href=https://silverchips.mbhs.edu{{ request.path|urlencode }}"
-           target="_blank"><i class="fab fa-facebook-square fa-2x" aria-hidden="true"></i></a>
+           target="_blank"><i class="fab fa-facebook-square fa-2x mx-1" aria-hidden="true"></i></a>
         <a href="https://twitter.com/intent/tweet?text=Check%20out%20this%20{{ content.descriptor }}%21&hashtags=SilverChipsOnline&url=https%3A%2F%2Fsilverchips.mbhs.edu{{ request.path|urlencode }}&via=mbhsSCO"
-           target="_blank"><i class="fab fa-twitter-square fa-2x" aria-hidden="true"></i></a>
+           target="_blank"><i class="fab fa-twitter-square fa-2x mx-1" aria-hidden="true"></i></a>
     </div>
 </div>
 
 <br/>
 
 <div class="row">
-    <div class="col-sm-9">
+    <div class="col-lg-8 col-xl-9">
         {% render_content content %}
 
         <hr/>
@@ -63,15 +63,15 @@
         {% endfor %}
     </div>
 
-    <div class="col-sm-3">
-        <div class="card">
-            <div class="card-header">
-                <h4 class="card-title">Latest Stories</h4>
+    <div class="col-lg-4 col-xl-3">
+        <div class="card latest-stories">
+            <div class="card-header mb-4">
+                <h4 class="card-title mb-0">Latest Stories</h4>
             </div>
 
             <ul class="list-group list-group-flush">
                 {% for top_story in stories|slice:":8" %}
-                    <li class="list-group-item">
+                    <li class="list-group-item mb-1 ml-3">
                         <div class="row">
                             <div class="col-2"><strong>{{ forloop.counter }}</strong></div>
                             <div class="col-10"><a href="{% url "home:read_story" top_story.id %}" class="solid-link">{{ top_story.title|safe }}</a></div>
