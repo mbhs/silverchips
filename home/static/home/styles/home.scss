@@ -9,7 +9,7 @@ html {
         background-color: $background;
         color: $font;
         h1,h2,h3,h4,h5,h6, {
-            font-family: 'Playfair Display', serif;
+            font-family: 'Oswald', serif;
             margin: 0;
             font-weight: 500;
         }
@@ -23,9 +23,6 @@ html {
 .solid-link {
     color: $solid-link;
     text-decoration: none;
-    &:hover {
-        text-decoration: none;
-    }
 }
 
 /* Custom Card */
@@ -75,6 +72,7 @@ html {
         text-decoration: none;
         color: $author;
         font-weight: bold;
+        &:hover {text-decoration: underline;}
     }
 }
 
@@ -83,16 +81,16 @@ html {
     /* no link */
     h1 {
         color: $section-header;
-        font-size: 3rem;
     }
     /* link */
     a {
         position: relative;
+        font-size: 3rem;
         color: $section-header;
+        text-transform: uppercase;
         text-decoration: none;
     }
     a:before {
-        margin-bottom: 0.25rem;
         position: absolute;
         left: 50%;
         transform: translate(-50%);
@@ -104,7 +102,6 @@ html {
         transition: width 0.3s;
     }
     a:after {
-        margin-top: 0.25rem;
         position: absolute;
         left: 50%;
         transform: translate(-50%);

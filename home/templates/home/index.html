@@ -15,7 +15,15 @@
                     {% for story in section.all_stories.all|slice:"5" %}
                         <div class="row mb-3">
                             <div class="col-md-4">
-                                <img class="img-fluid mx-auto" src="{% static "home/images/work_5.jpg" %}" alt="featurette-img">
+                                <img class="img-fluid mx-auto"
+                                src="{% if forloop.counter|divisibleby:"3" %}
+                                        {% static "home/images/img_2.jpg" %}
+                                    {% elif forloop.counter|divisibleby:"2"  %}
+                                        {% static "home/images/work_5.jpg" %}
+                                    {% else %}
+                                        {% static "home/images/img_4.jpg" %}
+                                    {% endif %}"
+                                alt="featurette-img">
                             </div>
                             <div class="col-md-8">
                                 {% include "shared/story_summary.html" %}
