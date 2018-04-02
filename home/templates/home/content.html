@@ -71,7 +71,7 @@
 
             <ul class="list-group list-group-flush">
                 {% for top_story in stories|slice:":8" %}
-                    <li class="list-group-item mb-1 ml-3">
+                    <li class="list-group-item {% if not forloop.last %}mb-1{% else %}mb-3{% endif %} ml-3">
                         <div class="row">
                             <div class="col-2"><strong>{{ forloop.counter }}</strong></div>
                             <div class="col-10"><a href="{% url "home:read_story" top_story.id %}" class="solid-link">{{ top_story.title|safe }}</a></div>

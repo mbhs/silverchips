@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    $(window).on("load resize", _.debounce(function() {
+    $(window).on("resize", _.debounce(function() {
         $(".navbar-wrapper").removeClass("static-top").addClass("fixed-top");
         $("body").css("marginTop", $(".navbar-wrapper").outerHeight(true));
     }, 300));

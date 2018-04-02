@@ -1,8 +1,10 @@
 .navbar-wrapper {
     background: $navbar-header-background;
+    margin-bottom: 2rem;
 }
 .navbar {
     background: $navbar;
+    border-bottom: 3px solid black;
     @include mq("desktop") {
         padding: 0 0 !important; //Desktop does not need extra padding
     };
@@ -10,34 +12,33 @@
  .navbar-nav .nav-link {
      text-decoration: none;
      text-transform: uppercase;
+     font-family: "Oswald", sans-serif;
      font-size: 0.9em;
      font-weight: bold;
+     letter-spacing: 0.125rem;
      color: $navbar-unactive;
 
      transition: padding 1s ease;
+     transition: background-color, color 0.3s ease;
 
-     transition: border 0.3s ease;
-     border-top: 3px solid $navbar ;
-     border-bottom: 3px solid $navbar;
      &:hover {
-         border-top: 3px solid white;
-         border-bottom: 3px solid white;
+         background-color: $navbar-active;
+         color: white !important;
      }
  }
 .navbar-nav .active {.nav-link{color: $navbar-active;}}
 .navbar-wrapper-header .logo svg g {fill:$font;} //Dark on light logo
-.navbar .logo svg g {fill: white;} //Light on dark logo
-
+.navbar .logo svg g {fill: $font;} //Light on dark logo
 /* Navbar Animation */
 .not-scrolled {
     .logo {width: 50%;}
     .lead {height: auto; margin-bottom: 0.75rem;}
-    .navbar .nav-link {padding: 10px 10px;}
+    .navbar .nav-link {padding: 10px 15px;}
 }
 .scrolled {
     .logo {width: 30%;}
     .lead {height: 0px; margin-bottom: 0;}
-    .navbar .nav-link {padding: 4px 10px;}
+    .navbar .nav-link {padding: 4px 15px;}
 }
 .logo, .lead, .navbar .nav-link {
     transition: all 0.3s ease;
