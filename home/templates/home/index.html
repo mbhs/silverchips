@@ -3,11 +3,11 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-    <div class="container index-featured">
+    <div class="container">
             {% load static %} <!-- FOR TESTING -->
             <hr class="my-4">
             {% for section in section_roots %}
-                <div class="container section-featurette">
+                <div id="{{section.title}}" class="container index-featurette">
                     <h1 class="section-header display-4 text-center">
                         <a href="{% url "home:view_section" section.name %}">{{section.title}}</a>
                     </h1>

@@ -5,10 +5,11 @@
 {% endblock %}
 
 {% block content %}
-    <section class="section-header">
-        <h1 class="section-title">{{section.title}}</h1>
-    </section>
-    <div style="margin-top: 4em;" class="container">
+    <div class="container">
+        <section class="section-header">
+            <h1 class="section-title">{{section.title}}</h1>
+        </section>
+        <hr class="section-separator">
         {% for subsection, stories in subsections %}
             {% if stories.count > 0 %}
                 <div class="row">
