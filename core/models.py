@@ -10,7 +10,6 @@ from django.utils import timezone
 from django.core.validators import RegexValidator
 from django.dispatch import receiver
 from django.db.models.signals import post_migrate
-
 from django.contrib.auth.models import Group, Permission
 from django.contrib.contenttypes.models import ContentType
 
@@ -60,23 +59,6 @@ class User(auth.User):
 
     objects = ProfileUserManager()
 
-    def get_role(self):
-        """Get the user role.
-
-        For now, there are two main roles. These are editors and
-        writers. Writers are in the lower access tier, and can only
-        upload and publish their own stories. Editors can view all
-        stories and configure some parts of the site. There is a
-        higher tier of editors that can access the admin parts of
-        the site as well.
-        """
-
-        if self.groups.filter(name="editors"):  # or self.is_superuser
-            return "editor"
-        elif self.groups.filter(name="writers"):
-            return "writer"
-        return None
-
     def __str__(self):
         """Represent the user as a string.
 
@@ -86,12 +68,34 @@ class User(auth.User):
 
         return self.get_full_name()
 
+    def __repr__(self):
+        """Represent the user as a string."""
+
+        return "User[{}]".format(self.get_full_name())
+
+    def get_role(self):
+        """Get the user role.
+
+        For now, there are two roles. These are editor and writer.
+        Writers are in the lower access tier, and can only upload and
+        publish their own stories. Editors can view all stories and
+        configure some parts of the site.
+        """
+
+        if self.groups.filter(name="editors"):  # or self.is_superuser
+            return "editor"
+        elif self.groups.filter(name="writers"):
+            return "writer"
+        return None
+
     class Meta:
         proxy = True
 
 
 @receiver(post_migrate)
 def create_groups(sender, **kwargs):
+    """Create the writer and editor roles on database initialization."""
+
     ContentType.objects.get_or_create(app_label="core", model="site")
     Group.objects.get_or_create(name="writers")
     Group.objects.get_or_create(name="editors")
@@ -142,10 +146,28 @@ class Content(TimestampMixin):
 
     title = models.TextField()
     description = models.TextField()
-    # creator = models.ForeignKey(User, related_name="%(class)s_created", on_delete=models.CASCADE)
     authors = models.ManyToManyField(User, related_name="%(class)s_authored")  # user.photo_authored
 
+    # The intent to use a content creator field is to be able to tie
+    # content to a registered user if it is authored by, for example,
+    # a guest writer outside of Silver Chips. We ultimately decided
+    # to drop this functionality because editors can see all content,
+    # and so should be in charge of managing external authors.
+    # creator = models.ForeignKey(User, related_name="%(class)s_created", on_delete=models.CASCADE)
+
+    # A content can be publishable or unpublishable. This essentially
+    # refers to whether or not it is to be made available as a
+    # standalone item on the site. For example, stories would always
+    # be publishable, whereas a supporting image such as a company
+    # logo might not.
     publishable = models.BooleanField(default=True)
+
+    # A publishable content has several states to improve editor
+    # workflow. An unpublished story is in progress, whereas a pending
+    # story is ready and awaiting editor approval. Once it receives
+    # this approval, it is published. If it is desired that the story
+    # be taken down, it should be hidden so as to indicate that it at
+    # one point passed the publishing process.
     published = models.IntegerField(default=UNPUBLISHED, choices=(
         (UNPUBLISHED, "unpublished"),
         (PENDING, "pending"),
@@ -153,7 +175,6 @@ class Content(TimestampMixin):
         (HIDDEN, "hidden")))
 
     tags = models.ManyToManyField(Tag)
-
     views = models.IntegerField(default=0)
 
     def __str__(self):
@@ -176,11 +197,11 @@ alphanumeric = RegexValidator(r"^[a-zA-Z0-9_]*$", "Only alphanumeric characters 
 
 
 class Section(models.Model):
+    """A broad category under which content can be organized."""
+
     parent = models.ForeignKey("self", related_name="subsections", null=True, blank=True, on_delete=models.SET_NULL)
-
-    name = models.CharField(max_length=32)
+    name = models.CharField(max_length=32, unique=True)
     title = models.CharField(max_length=64)
-
     active = models.BooleanField(default=True)
 
     def __str__(self):
