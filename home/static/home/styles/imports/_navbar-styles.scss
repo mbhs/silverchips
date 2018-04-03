@@ -4,7 +4,6 @@
 }
 .navbar {
     background: $navbar;
-    border-bottom: 3px solid black;
     @include mq("desktop") {
         padding: 0 0 !important; //Desktop does not need extra padding
     };
@@ -33,11 +32,16 @@
 .not-scrolled {
     .logo {width: 50%;}
     .lead {height: auto; margin-bottom: 0.75rem;}
-    .navbar .nav-link {padding: 10px 15px;}
+    .navbar .nav-link {
+        padding: 10px 15px;
+        border-bottom: 3px solid gray;
+    }
 }
 .scrolled {
+    box-shadow: 0 0 10px 3px rgba(0,0,0,.4);
     .logo {width: 30%;}
     .lead {height: 0px; margin-bottom: 0;}
+    .navbar {border-bottom: 3px solid gray;}
     .navbar .nav-link {padding: 4px 15px;}
 }
 .logo, .lead, .navbar .nav-link {

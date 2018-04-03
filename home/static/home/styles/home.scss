@@ -23,6 +23,9 @@ html {
 .solid-link {
     color: $solid-link;
     text-decoration: none;
+    &:hover {
+        color: $navbar-active;
+    }
 }
 
 /* Custom Card */
