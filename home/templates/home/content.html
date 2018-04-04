@@ -68,7 +68,7 @@
             <div class="card-header mb-4">
                 <h4 class="card-title mb-0">Latest Stories</h4>
             </div>
-
+            {% load static %}
             <ul class="list-group list-group-flush">
                 {% for top_story in stories|slice:":8" %}
                     <li class="list-group-item {% if not forloop.last %}mb-1{% else %}mb-3{% endif %} ml-3">
