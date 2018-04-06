@@ -20,6 +20,28 @@ html {
 @import "imports/_navbar-styles";
 @import "imports/_footer-styles";
 
+/* Featured */
+.featured {
+    .featured-col {position: relative;}
+    &-content {
+        position: absolute;
+        bottom: 0;
+    }
+    &-title {
+        font-size: 1.25rem;
+        color: white;
+        &:hover {
+            color: $navbar-active;
+        }
+    }
+    &-info * {
+        font-size: 0.75rem;
+        color: white;
+        &:hover {
+            color: $navbar-active;
+        }
+    }
+}
 .solid-link {
     color: $solid-link;
     text-decoration: none;
@@ -27,58 +49,6 @@ html {
         color: $navbar-active;
     }
 }
-/* Pill */
-
-/* Card */
-.card {
-    border: none;
-    border-radius: 0;
-    .card-header {
-        background-color: $card-header-bg;
-        .card-title {color: $card-title-color;}
-    }
-    .card-header:first-child {border-radius: 0;}
-}
-/* Latest Stories Card */
-.latest-stories {
-    border-left: 2px solid $card-header-bg;
-    .list-group:last-child .list-group-item:last-child {border-radius: 0;}
-    .card-header .card-title {
-        text-transform: uppercase;
-        font-family: "Oswald", sans-serif;
-        font-size: 1.5rem;
-    }
-    .list-group-item {
-        border: none;
-        background-color: $card-header-bg;
-        a, strong {
-            color: white;
-            line-height: 1.4rem;
-            font-size: 0.9rem;
-            font-weight: 700;
-            text-shadow: 0 0 5px rgba(0,0,0,0.4)
-        }
-    }
-}
-
-/* Story */
-.title {
-    padding-bottom: 1rem;
-    a {
-        color: $story-title;
-    }
-}
-.authors {
-    padding-bottom: 0.5rem;
-    line-height: 1.5rem;
-    a {
-        text-decoration: none;
-        color: $author;
-        font-weight: bold;
-        &:hover {text-decoration: underline;}
-    }
-}
-
 /* Section */
 .section-header {
     /* no link */
@@ -88,7 +58,6 @@ html {
     /* link */
     a {
         position: relative;
-        font-size: 3rem;
         color: $section-header;
         text-transform: uppercase;
         text-decoration: none;
@@ -119,7 +88,59 @@ html {
         width: 100%;
     }
 }
-
+/* Breadcrumb */
+.breadcrumb {
+    border-radius: 0;
+    background-color: $card-header-bg;
+    .breadcrumb-item a, .breadcrumb:after, .breadcrumb-item:before {color: $card-title-color; }
+}
+/* Story */
+.title {
+    padding-bottom: 1rem;
+    a {
+        color: $story-title;
+    }
+}
+.authors {
+    padding-bottom: 0.5rem;
+    line-height: 1.5rem;
+    a {
+        text-decoration: none;
+        color: $author;
+        font-weight: bold;
+        &:hover {text-decoration: underline;}
+    }
+}
+/* Card */
+.card {
+    border: none;
+    border-radius: 0;
+    .card-header {
+        background-color: $card-header-bg;
+        .card-title {color: $card-title-color;}
+    }
+    .card-header:first-child {border-radius: 0;}
+}
+/* Latest Stories Card */
+.latest-stories {
+    border-left: 2px solid $card-header-bg;
+    .list-group:last-child .list-group-item:last-child {border-radius: 0;}
+    .card-header .card-title {
+        text-transform: uppercase;
+        font-family: "Oswald", sans-serif;
+        font-size: 1.5rem;
+    }
+    .list-group-item {
+        border: none;
+        background-color: $card-header-bg;
+        a, strong {
+            color: white;
+            line-height: 1.4rem;
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
+    }
+}
 /* Custom Separators */
 .section-separator {
     margin-top: 1.5rem;
