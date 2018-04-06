@@ -1,6 +1,7 @@
 .navbar-wrapper {
     background: $navbar-header-background;
     margin-bottom: 2rem;
+    &-header {position: relative;}
 }
 .navbar {
     background: $navbar;
@@ -26,8 +27,10 @@
      }
  }
 .navbar-nav .active {.nav-link{color: $navbar-active;}}
-.navbar-wrapper-header .logo svg g {fill:$font;} //Dark on light logo
-.navbar .logo svg g {fill: $font;} //Light on dark logo
+.navbar-wrapper-header .logo svg g {
+    fill:$font;
+}
+.navbar .logo svg g {fill: $font;}
 /* Navbar Animation */
 .not-scrolled {
     .logo {width: 50%;}
@@ -46,4 +49,22 @@
 }
 .logo, .lead, .navbar .nav-link {
     transition: all 0.3s ease;
+}
+
+.navbar-wrapper-header #subscribe {
+    position: absolute;
+    right: 0;
+    z-index: 1;
+    height: 100%;
+    a {letter-spacing: 0.125rem;}
+    a:hover {
+        text-decoration: none;
+        text-shadow: 0 2px 8.896px #c4b59d, 0 -2px 1px #fff;
+    }
+}
+#subscribe a {
+    text-transform: uppercase;
+    font-family: "Oswald";
+    font-weight: bold;
+    color: $navbar-active;
 }
