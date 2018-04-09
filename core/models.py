@@ -56,6 +56,20 @@ class User(auth.User):
 
     objects = ProfileUserManager()
 
+    def __str__(self):
+        """Represent the user as a string.
+
+        This is the value Django Autocomplete Light displays in the
+        form element when a user is selected.
+        """
+
+        return self.get_full_name()
+
+    def __repr__(self):
+        """Represent the user as a string."""
+
+        return "User[{}]".format(self.get_full_name())
+
     def get_role(self):
         """Get the user role.
 
@@ -70,20 +84,6 @@ class User(auth.User):
         elif self.groups.filter(name="writers"):
             return "writer"
         return None
-
-    def __str__(self):
-        """Represent the user as a string.
-
-        This is the value Django Autocomplete Light displays in the
-        form element when a user is selected.
-        """
-
-        return self.get_full_name()
-
-    def __repr__(self):
-        """Represent the user as a string."""
-
-        return "User[{}]".format(self.get_full_name())
 
     class Meta:
         proxy = True
@@ -175,11 +175,11 @@ alphanumeric = RegexValidator(r"^[a-zA-Z0-9_]*$", "Only alphanumeric characters 
 
 
 class Section(models.Model):
+    """A broad category under which content can be organized."""
+
     parent = models.ForeignKey("self", related_name="subsections", null=True, blank=True, on_delete=models.SET_NULL)
-
-    name = models.CharField(max_length=32)
+    name = models.CharField(max_length=32, unique=True)
     title = models.CharField(max_length=64)
-
     active = models.BooleanField(default=True)
 
     def __str__(self):
