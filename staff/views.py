@@ -14,6 +14,9 @@ from django.views.generic import ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse
 
+from polymorphic.contrib.extra_views import PolymorphicFormSetView
+from polymorphic.formsets import PolymorphicFormSetChild
+
 # Local imports
 from . import forms
 from core import models

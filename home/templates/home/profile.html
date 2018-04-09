@@ -35,15 +35,15 @@
         {% endfor %}
     {% endif %}
 
-    {% if photos.count > 0 %}
+    {% if images.count > 0 %}
         <br/><br/>
-        <h2>Photos ({{ photos.count }})</h2>
+        <h2>Images ({{ images.count }})</h2>
         <hr/>
 
-        {% for photo in photos %}
-            <h4><a href="{% url "home:view_image" photo.pk %}" class="solid-link">{{ photo.title|safe }}</a></h4>
-            {{ photo.created }}
-            <p class="text-muted">{{ photo.description|safe }}</p>
+        {% for image in images %}
+            <h4><a href="{% url "home:view_image" image.pk %}" class="solid-link">{{ image.title|safe }}</a></h4>
+            {{ image.created }}
+            <p class="text-muted">{{ image.description|safe }}</p>
         {% endfor %}
     {% endif %}
 {% endblock %}

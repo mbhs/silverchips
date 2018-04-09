@@ -1,0 +1,22 @@
+[[source]]
+
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+name = "pypi"
+
+
+[packages]
+
+django = "*"
+django-autocomplete-light = "*"
+django-forms-bootstrap = "*"
+django-static-precompiler = "*"
+six = "*"
+pillow = "*"
+django-polymorphic = "*"
+django-extra-views = "*"
+
+
+[dev-packages]
+
+ipython = "*"

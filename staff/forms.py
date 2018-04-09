@@ -18,26 +18,30 @@ class LoginForm(forms.Form):
     password = forms.CharField(label="Password")
 
 
-class StoryForm(forms.ModelForm):
-    """The story editor form."""
+class ContentForm(forms.ModelForm):
+    """A generic editor for any kind of content."""
 
     authors = forms.ModelMultipleChoiceField(
         queryset=models.User.objects.all(),
         widget=autocomplete.ModelSelect2Multiple(url="staff:autocomplete:users"))
 
     class Meta:
+        model = models.Content
+        fields = ['title', 'authors', 'description']
+
+
+class StoryForm(forms.ModelForm):
+    """The story editor form."""
+
+    class Meta:
         model = models.Story
-        fields = ['title', 'authors', 'description', 'lead', 'text']
+        fields = ['lead', 'text']
         widgets = {'content': forms.HiddenInput()}
 
 
 class ImageForm(forms.ModelForm):
     """Form for image creation."""
 
-    authors = forms.ModelMultipleChoiceField(
-        queryset=models.User.objects.all(),
-        widget=autocomplete.ModelSelect2Multiple(url="staff:autocomplete:users"))
-
     class Meta:
         model = models.Image
-        fields = ['title', 'authors', 'description', 'source']
+        fields = ['source']
