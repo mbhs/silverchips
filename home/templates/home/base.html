@@ -25,9 +25,22 @@
                 {% endfor %}
             </ul>
             <form class="form-inline my-2 my-lg-0">
-              <input class="form-control mr-sm-2" type="text" placeholder="Search">
+              <input class="form-control mr-2" type="text" placeholder="Search">
               <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><i class="fas fa-search fa-lg" aria-hidden="true"></i></button>
             </form>
+            {% if request.user.is_authenticated %}
+                <ul class="navbar-nav ml-4">
+                    <li class="nav-item mr-2">
+                        <span class="navbar-text">{{ request.user.get_full_name }}</span>
+                    </li>
+                    <li class="nav-item mr-2">
+                        <a class="btn btn-primary" href="{% url "staff:index" %}">Dashboard <i class="fas fa-angle-double-up"></i></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-primary" href="{% url "staff:logout" %}">Logout <i class="fas fa-shield-alt"></i></a>
+                    </li>
+                </ul>
+            {% endif %}
           </div>
         </nav>
 
