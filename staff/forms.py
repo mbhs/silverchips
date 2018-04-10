@@ -6,6 +6,7 @@ applications.
 
 from django import forms
 from core import models
+from staff.widgets import RichTextWidget
 
 from dal import autocomplete
 
@@ -28,18 +29,20 @@ class ContentForm(forms.ModelForm):
     class Meta:
         model = models.Content
         fields = ['title', 'authors', 'description']
+        widgets = {'title': forms.widgets.TextInput(), 'lead': RichTextWidget(short=True)}
+        abstract = True
 
 
-class StoryForm(forms.ModelForm):
+class StoryForm(ContentForm):
     """The story editor form."""
 
-    class Meta:
+    class Meta(ContentForm.Meta):
         model = models.Story
-        fields = ['lead', 'text']
-        widgets = {'content': forms.HiddenInput()}
+        fields = ContentForm.Meta.fields + ['lead', 'text']
+        widgets = dict(ContentForm.Meta.widgets, text=RichTextWidget())
 
 
-class ImageForm(forms.ModelForm):
+class ImageForm(ContentForm):
     """Form for image creation."""
 
     class Meta:

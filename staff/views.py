@@ -112,6 +112,7 @@ class StoryCreateView(LoginRequiredMixin, CreateView):
         return reverse("staff:stories:view")
 
 
+
 @login_required
 def stories_edit(request, story_id):
     story_id = int(story_id)
