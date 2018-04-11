@@ -62,7 +62,6 @@ class User(auth.User):
         This is the value Django Autocomplete Light displays in the
         form element when a user is selected.
         """
-
         return self.get_full_name()
 
     def __repr__(self):
@@ -70,20 +69,8 @@ class User(auth.User):
 
         return "User[{}]".format(self.get_full_name())
 
-    def get_role(self):
-        """Get the user role.
-
-        For now, there are two roles. These are editor and writer.
-        Writers are in the lower access tier, and can only upload and
-        publish their own stories. Editors can view all stories and
-        configure some parts of the site.
-        """
-
-        if self.groups.filter(name="editors"):  # or self.is_superuser
-            return "editor"
-        elif self.groups.filter(name="writers"):
-            return "writer"
-        return None
+    def has_role(self, role):
+        return role in self.groups.all()
 
     class Meta:
         proxy = True
@@ -93,12 +80,6 @@ class Tag(models.Model):
     """Basic tag model for content."""
 
     name = models.CharField(max_length=32)
-
-
-UNPUBLISHED = 0
-PENDING = 1
-PUBLISHED = 2
-HIDDEN = -1
 
 
 class Content(PolymorphicModel):
@@ -129,13 +110,19 @@ class Content(PolymorphicModel):
     publishable = models.BooleanField(default=True)
 
     # A publishable content has several states to improve editor
-    # workflow. An unpublished story is in progress, whereas a pending
+    # workflow. An draft story is in progress, whereas a pending
     # story is ready and awaiting editor approval. Once it receives
     # this approval, it is published. If it is desired that the story
     # be taken down, it should be hidden so as to indicate that it at
     # one point passed the publishing process.
-    visibility = models.IntegerField(default=UNPUBLISHED, choices=(
-        (UNPUBLISHED, "unpublished"),
+
+    DRAFT = 0
+    PENDING = 1
+    PUBLISHED = 2
+    HIDDEN = -1
+
+    visibility = models.IntegerField(default=DRAFT, choices=(
+        (DRAFT, "draft"),
         (PENDING, "pending"),
         (PUBLISHED, "published"),
         (HIDDEN, "hidden")))

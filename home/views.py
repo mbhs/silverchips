@@ -14,7 +14,7 @@ from core import models
 def load_context(request):
     return {
         "section_roots": models.Section.objects.filter(parent=None),
-        "stories": models.Story.objects.filter(visibility=models.PUBLISHED)
+        "stories": models.Story.objects.filter(visibility=models.Content.PUBLISHED)
     }
 
 
@@ -37,7 +37,7 @@ def view_section(request, name):
 
     for subsection in section.subsections.all():
         subsections.append((subsection,
-                            subsection.all_stories().filter(visibility=models.PUBLISHED)
+                            subsection.all_stories().filter(visibility=models.Content.PUBLISHED)
                             .exclude(id__in=top_stories.values_list('id', flat=True))))
 
     return render(request, "home/section.html", {
@@ -49,7 +49,7 @@ def view_section(request, name):
 def view_content(request, pk):
     """Render specific content in the newspaper."""
 
-    content = get_object_or_404(models.Content, id=int(pk), visibility=models.PUBLISHED)
+    content = get_object_or_404(models.Content, id=int(pk))
 
     content.views += 1
     content.save()
@@ -65,8 +65,8 @@ def view_profile(request, pk):
     user = get_object_or_404(models.User, id=int(pk))
 
     # Find all the content that this user authored
-    stories = models.Story.objects.filter(authors__in=[user], visibility=models.PUBLISHED)
-    images = models.Image.objects.filter(authors__in=[user], visibility=models.PUBLISHED)
+    stories = models.Story.objects.filter(authors__in=[user], visibility=models.Content.PUBLISHED)
+    images = models.Image.objects.filter(authors__in=[user], visibility=models.Content.PUBLISHED)
 
     return render(request, "home/profile.html", {
         "user": user,
