@@ -6,6 +6,7 @@ applications.
 
 from django import forms
 from core import models
+from staff.widgets import RichTextWidget
 
 from dal import autocomplete
 
@@ -18,26 +19,32 @@ class LoginForm(forms.Form):
     password = forms.CharField(label="Password")
 
 
-class StoryForm(forms.ModelForm):
-    """The story editor form."""
+class ContentForm(forms.ModelForm):
+    """A generic editor for any kind of content."""
 
     authors = forms.ModelMultipleChoiceField(
         queryset=models.User.objects.all(),
         widget=autocomplete.ModelSelect2Multiple(url="staff:autocomplete:users"))
 
     class Meta:
+        model = models.Content
+        fields = ['title', 'authors', 'description']
+        widgets = {'title': forms.widgets.TextInput(), 'lead': RichTextWidget(short=True)}
+        abstract = True
+
+
+class StoryForm(ContentForm):
+    """The story editor form."""
+
+    class Meta(ContentForm.Meta):
         model = models.Story
-        fields = ['title', 'authors', 'description', 'lead', 'text']
-        widgets = {'content': forms.HiddenInput()}
+        fields = ContentForm.Meta.fields + ['lead', 'text']
+        widgets = dict(ContentForm.Meta.widgets, text=RichTextWidget())
 
 
-class ImageForm(forms.ModelForm):
+class ImageForm(ContentForm):
     """Form for image creation."""
-
-    authors = forms.ModelMultipleChoiceField(
-        queryset=models.User.objects.all(),
-        widget=autocomplete.ModelSelect2Multiple(url="staff:autocomplete:users"))
 
     class Meta:
         model = models.Image
-        fields = ['title', 'authors', 'description', 'source']
+        fields = ['source']

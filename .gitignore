@@ -101,3 +101,5 @@ db.sqlite3-journal
 static/compiled/
 
 import/data/
+
+Pipfile.lock
