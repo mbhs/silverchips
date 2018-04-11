@@ -3,5 +3,46 @@
 {% block content %}
     <h2>{% block title %}Staff Dashboard{% endblock %}</h2>
 
-    <p>Welcome to the SilverChips staff dashboard! Here's where you'll be able to access, create, review, and edit content on the site.</p>
+    <p>Welcome to the SilverChips staff dashboard! Here's where you'll be able to access, create, review, and edit
+        content on the site.</p>
+
+    <p>In SilverChips Online, every piece of <em>content</em>, whether a story, image, video, audio clip, poll,
+        sports game, movie review, or anything else, has a unique content ID number.</p>
+
+    <h3>Personal</h3>
+
+    <div class="row">
+        <div class="col-sm-6 col-xs-12">
+            <a class="btn btn-info btn-lg btn-block my-3" href="">Edit Profile <i class="fas fa-user"></i></a>
+        </div>
+        <div class="col-sm-6 col-xs-12">
+            <a class="btn btn-info btn-lg btn-block my-3" href="{% url "staff:content:list" %}">My Content <i class="fas fa-list-ul"></i></a>
+        </div>
+    </div>
+
+    <h3>Create Content</h3>
+
+    <div class="row">
+        <div class="col-lg-3 col-sm-6 col-xs-12">
+            <a class="btn btn-success btn-lg btn-block my-3" href="{% url "staff:stories:create" %}">Create Story <i class="fas fa-book"></i></a>
+        </div>
+        <div class="col-lg-3 col-sm-6 col-xs-12">
+            <a class="btn btn-success btn-lg btn-block my-3" href="">Create Image <i class="fas fa-camera"></i></a>
+        </div>
+        <div class="col-lg-3 col-sm-6 col-xs-12">
+            <a class="btn btn-success btn-lg btn-block my-3" href="">Create Audio <i class="fas fa-headphones"></i></a>
+        </div>
+        <div class="col-lg-3 col-sm-6 col-xs-12">
+            <a class="btn btn-success btn-lg btn-block my-3" href="">Create Video <i class="fas fa-video"></i></a>
+        </div>
+        <div class="col-lg-3 col-sm-6 col-xs-12">
+            <a class="btn btn-success btn-lg btn-block my-3" href="">Create Poll <i class="fas fa-clipboard-check"></i></a>
+        </div>
+        <div class="col-lg-3 col-sm-6 col-xs-12">
+            <a class="btn btn-success btn-lg btn-block my-3" href="">Create Review <i class="fas fa-star"></i></a>
+        </div>
+        <div class="col-lg-3 col-sm-6 col-xs-12">
+            <a class="btn btn-success btn-lg btn-block my-3" href="">Create Sports Game <i class="fas fa-trophy"></i></a>
+        </div>
+    </div>
 {% endblock %}

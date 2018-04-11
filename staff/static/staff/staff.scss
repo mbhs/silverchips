@@ -1,16 +1,10 @@
-.staff-container {
-  padding: 0 1em;
+.control-label {
+  font-weight: bold;
 }
 
-.nav-item {
-  display: block;
-
-  min-height: 100%;
-  background-color: gray;
-
-  &.hover {
-    &::after {
-      content: " &raquo;";
-    }
-  }
+.action-button {
+  color: white;
+  background-color: red;
+  padding: .8rem;
+  border-radius: 1.2rem;
 }

@@ -186,7 +186,7 @@ class Section(models.Model):
         return descendants
 
     def all_stories(self):
-        return Story.objects.filter(visibility=PUBLISHED, section__in=self.get_descendants())
+        return Story.objects.filter(visibility=Content.PUBLISHED, section__in=self.get_descendants())
 
     class Meta:
         verbose_name_plural = "sections"

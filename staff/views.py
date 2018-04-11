@@ -68,37 +68,22 @@ def logout(request):
 
 @login_required
 def index(request):
-    """Return the index page. Redirects to the dashboard."""
+    """Return the staff dashboard page."""
 
     return render(request, "staff/index.html")
 
 
-@login_required
-def profile(request):
-    """Get the user profile page."""
+class ContentListView(ListView):
+    """The content list view that supports pagination."""
 
-    return render(request, "staff/profile.html")
-
-
-@login_required
-def dummy(request):
-    """Dummy page generator."""
-
-    return render(request, "staff/base.html")
-
-
-class StoryListView(ListView):
-    """The story list view that supports pagination."""
-
-    model = models.Story
-    template_name = "staff/story/list.html"
-    context_object_name = "stories"
+    template_name = "staff/content_list.html"
+    context_object_name = "content_list"
     paginate_by = 25
 
     def get_queryset(self):
         """Get all stories by the request user."""
 
-        return models.Story.objects.filter(authors=self.request.user)
+        return models.Content.objects.filter(authors=self.request.user).all()
 
 
 class StoryCreateView(LoginRequiredMixin, CreateView):
@@ -110,32 +95,3 @@ class StoryCreateView(LoginRequiredMixin, CreateView):
 
     def get_success_url(self):
         return reverse("staff:stories:view")
-
-
-
-@login_required
-def stories_edit(request, story_id):
-    story_id = int(story_id)
-    story = models.Story.objects.get(id=story_id)
-
-    if request.method == 'POST':
-        form = forms.StoryForm(request.POST, instance=story)
-
-        if form.is_valid():
-            form.save()
-            return redirect("story", story_id)
-    else:
-        form = forms.StoryForm(instance=story)
-
-    return render(request, "staff/story/edit.html", {"form": form})
-
-
-class ImageCreateView(CreateView):
-    """View for uploading images to the staff site."""
-
-    model = models.Image
-
-    form_class = forms.ImageForm
-    # TODO: set active user as uploader
-
-    template_name = "staff/media/edit.html"
