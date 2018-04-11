@@ -100,3 +100,5 @@ db.sqlite3-journal
 .sass-cache/
 
 import/data/
+
+Pipfile.lock

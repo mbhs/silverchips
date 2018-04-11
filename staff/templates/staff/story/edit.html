@@ -8,78 +8,12 @@
 
 {% block content %}
 <h1>Story Editor</h1>
-<form name="editor" action="{% url "staff:stories:create" %}" method="POST">
+
+<form method="post" action="{% url "staff:stories:create" %}">
     {% csrf_token %}
 
-    {{ form.errors }}
+    {{ form|as_bootstrap }}
 
-    <!-- body onload = "quill.setText('{{ form.text.value|slugify }}');" -->
-
-    <div class="form-group">
-        <label for="title">{{ form.title.label }}</label>
-        {% for error in form.title.errors %}
-            <span class="error">{{ error }}</span>
-        {% endfor %}
-        <input id="title" name="{{ form.title.name }}" class="form-control" type="text" placeholder="Title" value="{% if form.title.value %}{{ form.title.value }}{% endif %}">
-    </div>
-
-    <div class="form-group">
-        <label for="authors">{{ form.authors.label }}</label>
-        {% for error in form.authors.errors %}
-            <span class="error">{{ error }}</span>
-        {% endfor %}
-        {{ form.authors }}
-    </div>
-
-    <div class="form-group">
-        <label for="description">{{ form.description.label }}</label>
-        {% for error in form.description.errors %}
-            <span class="error">{{ error }}</span>
-        {% endfor %}
-        <div id="description-editor" style="height: 100px;"></div>
-        <input id="description" name="description" type="hidden">
-    </div>
-
-    <div class="form-group">
-        <label for="lead">{{ form.lead.label }}</label>
-        {% for error in form.lead.errors %}
-            <span class="error">{{ error }}</span>
-        {% endfor %}
-        <div id="lead-editor" style="height: 100px;"></div>
-        <input id="lead" name="lead" type="hidden">
-    </div>
-
-    <div class="form-group">
-        <label for="text">Story</label>
-        {% for error in form.text.errors %}
-            <span class="error">{{ error }}</span>
-        {% endfor %}
-        <div id="text-editor"></div>
-        <input id="text" name="text" type="hidden">
-    </div>
-
-    <div class="form-group">
-        <button class="btn btn-danger">Cancel</button>
-        <button type="submit" class="btn btn-primary">Save</button>
-    </div>
+    <button type="submit" class="btn btn-success">Submit</button>
 </form>
-
-{{ form.media }}
-
-<script src="/static/js/quill.js"></script>
-<script type="text/javascript">
-    var descriptionEditor = quill("#description-editor");
-    descriptionEditor.root.innerHTML = "{{ form.description.value|default_if_none:""|safe }}";
-    var leadEditor = quill("#lead-editor");
-    leadEditor.root.innerHTML = "{{ form.lead.value|default_if_none:""|safe }}";
-    var textEditor = quill("#text-editor");
-    textEditor.root.innerHTML = "{{ form.text.value|default_if_none:""|safe }}";
-    var form = document.editor;
-    form.addEventListener("submit", function() {
-      form.description.value = descriptionEditor.root.innerHTML;
-      form.lead.value = leadEditor.root.innerHTML;
-      form.text.value = textEditor.root.innerHTML;
-    });
-</script>
-
 {% endblock %}

@@ -8,16 +8,56 @@
         <title>{% block title %}Staff Site{% endblock %}</title>
         {% block head %}{% endblock %}
     </head>
+
     <body id="staff">
-        {% include "staff/components/menubar.html" %}
-        <div id="column-wrapper">
-            {% include "staff/components/sidebar.html" %}
-            <div id="content-wrapper">
-                <div id="content">
+        <header>
+            <nav class="navbar navbar-dark bg-dark navbar-expand-sm mb-4">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#menu-items">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            
+                <div class="collapse navbar-collapse" id="menu-items">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item active">
+                            <a class="navbar-brand nav-link" href="{% url "home:index" %}">SilverChips Online Site</a>
+                        </li>
+                    </ul>
+
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url "staff:profile" %}">{{ user.get_full_name }}</a>
+                        </li>
+                        {% if user.is_superuser %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url "admin:index" %}">Admin</a>
+                            </li>
+                        {% endif %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url "staff:logout" %}">Logout</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+
+        <main class="staff-container">
+            <div class="row">
+                <nav class="nav col-lg-2 col-md-3 col-sm-4">
+                    <h3>Toolbar</h3>
+                    <a class="nav-item" href="{% url 'staff:index' %}">Dashboard</a>
+                    <a class="nav-item" href="{% url 'staff:stories:create' %}">Upload</a>
+                    <a class="nav-item" href="{% url 'staff:stories:view' %}">My stories</a>
+                    <a class="nav-item">Published</a>
+                    <div class="section">Content</div>
+                    <a class="item" href="{% url 'staff:create_image' %}">Upload</a>
+                    <a class="item">Media</a>
+                </nav>
+
+                <div id="content-wrapper">
                     {% block content %}
                     {% endblock %}
                 </div>
             </div>
-        </div>
+        </main>
     </body>
 </html>

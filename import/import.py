@@ -11,7 +11,7 @@ from django.utils import timezone
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "news.settings")
 setup()
 
-from core.models import Section, Story, User, Profile, Image
+from core.models import Section, Story, User, Profile, Image, PUBLISHED
 
 with open("import/data/silverchips.xml", 'r', encoding="latin-1", errors="replace") as xml_file:
     xml_data = xml_file.read()
@@ -100,11 +100,12 @@ if ask_reimport("pictures"):
         try:
             pic_id = get_field(old_pic, "id")
             date = read_date(get_field(old_pic, "date"))
-            pic = Image(id=get_field(old_pic, "id"),
+            pic = Image(legacy_id=get_field(old_pic, "id"),
                         title=get_field(old_pic, "title", "(no title)"),
                         description=get_field(old_pic, "caption", "(no caption)"),
                         created=date,
-                        modified=date)
+                        modified=date,
+                        visibility=PUBLISHED)
 
             extension = {"image/jpeg": "jpg", "image/png": "png", "image/gif": "gif"}[get_field(old_pic, "mimeType")]
             file_name = "{}.{}".format(pic_id, extension)
@@ -147,16 +148,17 @@ if ask_reimport("stories"):
             # Switch over old embedded content to new system
             # Replace the old picture ID with the new content ID corresponding to that picture
             text = re.sub("<sco:picture id=(\d+)>",
-                          lambda match: "<sco:embed type=\"image\" id={}/>".format(match.group(1)), text)
+                          lambda match: "<sco:embed id={}/>".format(Image.objects.get(legacy_id=match.group(1)).pk), text)
 
-            story = Story(id=get_field(old_story, "sid"),
+            story = Story(legacy_id=get_field(old_story, "sid"),
                           title=get_field(old_story, "headline", "(no title)"),
                           description=get_field(old_story, "secdeck", "(no description)").strip(),
                           lead=get_field(old_story, "lead", "(no lead)").strip(),
                           text=text,
                           section=(Section.objects.get(id=category_id) if category_id > 0 else None),
                           created=date,
-                          modified=date)
+                          modified=date,
+                          visibility=PUBLISHED)
             story.save()
         except:
             print("Failed to import story {}/{}".format(i, len(stories)))
@@ -164,7 +166,7 @@ if ask_reimport("stories"):
 if ask_reimport("authors"):
     for link in read_table("story_author"):
         try:
-            story = Story.objects.get(id=int(get_field(link, "sid")))
+            story = Story.objects.get(legacy_id=int(get_field(link, "sid")))
             story.authors.add(User.objects.get(id=int(get_field(link, "uid"))))
             story.save()
         except Exception as e:

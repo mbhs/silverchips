@@ -1,7 +1,7 @@
 from django import template
 import re
 
-from core.models import Image, Video, Audio
+from core.models import Content
 
 register = template.Library()
 
@@ -17,18 +17,7 @@ def render_content(content):
 @register.filter
 def expand_embeds(text):
     def replace(match):
-        try:
-            if match.group(1) == "image":
-                content_type = Image
-            elif match.group(1) == "video":
-                content_type = Video
-            elif match.group(1) == "audio":
-                content_type = Audio
+        return render_content(Content.objects.get(pk=int(match.group(1))))
 
-            return render_content(content_type.objects.get(pk=int(match.group(2))))
-        except Exception as e:
-            print(e)
-            return None
-
-    text = re.sub("<sco:embed type=\"([a-z]+)\" id=(\d+)/>", replace, text)
+    text = re.sub("<sco:embed id=(\d+)/>", replace, text)
     return text

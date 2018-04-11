@@ -8,10 +8,7 @@ from django.db import models
 import django.contrib.auth.models as auth
 from django.utils import timezone
 from django.core.validators import RegexValidator
-from django.dispatch import receiver
-from django.db.models.signals import post_migrate
-from django.contrib.auth.models import Group, Permission
-from django.contrib.contenttypes.models import ContentType
+from polymorphic.models import PolymorphicModel
 
 
 class Profile(models.Model):
@@ -65,7 +62,6 @@ class User(auth.User):
         This is the value Django Autocomplete Light displays in the
         form element when a user is selected.
         """
-
         return self.get_full_name()
 
     def __repr__(self):
@@ -73,54 +69,11 @@ class User(auth.User):
 
         return "User[{}]".format(self.get_full_name())
 
-    def get_role(self):
-        """Get the user role.
-
-        For now, there are two roles. These are editor and writer.
-        Writers are in the lower access tier, and can only upload and
-        publish their own stories. Editors can view all stories and
-        configure some parts of the site.
-        """
-
-        if self.groups.filter(name="editors"):  # or self.is_superuser
-            return "editor"
-        elif self.groups.filter(name="writers"):
-            return "writer"
-        return None
+    def has_role(self, role):
+        return role in self.groups.all()
 
     class Meta:
         proxy = True
-
-
-@receiver(post_migrate)
-def create_groups(sender, **kwargs):
-    """Create the writer and editor roles on database initialization."""
-
-    ContentType.objects.get_or_create(app_label="core", model="site")
-    Group.objects.get_or_create(name="writers")
-    Group.objects.get_or_create(name="editors")
-
-
-class TimestampMixin(models.Model):
-    """Model mixin for recording creation and edit times.
-
-    Note that this mixin has to have model as a parent because it
-    does not have a super to override save on otherwise.
-    """
-
-    created = models.DateTimeField()
-    modified = models.DateTimeField()
-
-    def save(self, *args, **kwargs):
-        """Save the model and update the creation and edit times."""
-
-        if not self.created:
-            self.created = timezone.now()
-        self.modified = timezone.now()
-        return super().save(*args, **kwargs)
-
-    class Meta:
-        abstract = True
 
 
 class Tag(models.Model):
@@ -129,13 +82,7 @@ class Tag(models.Model):
     name = models.CharField(max_length=32)
 
 
-UNPUBLISHED = 0
-PENDING = 1
-PUBLISHED = 2
-HIDDEN = 3
-
-
-class Content(TimestampMixin):
+class Content(PolymorphicModel):
     """A generic content model.
 
     This container provides the metaclass for all types of media,
@@ -146,7 +93,7 @@ class Content(TimestampMixin):
 
     title = models.TextField()
     description = models.TextField()
-    authors = models.ManyToManyField(User, related_name="%(class)s_authored")  # user.photo_authored
+    authors = models.ManyToManyField(User, related_name="%(class)s_authored")  # user.image_authored
 
     # The intent to use a content creator field is to be able to tie
     # content to a registered user if it is authored by, for example,
@@ -163,19 +110,27 @@ class Content(TimestampMixin):
     publishable = models.BooleanField(default=True)
 
     # A publishable content has several states to improve editor
-    # workflow. An unpublished story is in progress, whereas a pending
+    # workflow. An draft story is in progress, whereas a pending
     # story is ready and awaiting editor approval. Once it receives
     # this approval, it is published. If it is desired that the story
     # be taken down, it should be hidden so as to indicate that it at
     # one point passed the publishing process.
-    published = models.IntegerField(default=UNPUBLISHED, choices=(
-        (UNPUBLISHED, "unpublished"),
+
+    DRAFT = 0
+    PENDING = 1
+    PUBLISHED = 2
+    HIDDEN = -1
+
+    visibility = models.IntegerField(default=DRAFT, choices=(
+        (DRAFT, "draft"),
         (PENDING, "pending"),
         (PUBLISHED, "published"),
         (HIDDEN, "hidden")))
 
     tags = models.ManyToManyField(Tag)
     views = models.IntegerField(default=0)
+
+    legacy_id = models.IntegerField()
 
     def __str__(self):
         """Represent the content as a string."""
@@ -187,8 +142,18 @@ class Content(TimestampMixin):
 
         return self.tags.filter(name=name).exists()
 
+    created = models.DateTimeField()
+    modified = models.DateTimeField()
+
+    def save(self, *args, **kwargs):
+        """Save the model and update the creation and edit times."""
+
+        if not self.created:
+            self.created = timezone.now()
+        self.modified = timezone.now()
+        return super().save(*args, **kwargs)
+
     class Meta:
-        abstract = True
         ordering = ['-created']
 
 
@@ -214,14 +179,14 @@ class Section(models.Model):
         return ancestors[::-1]
 
     def get_descendants(self):
-        descendants = set([self])
+        descendants = {self}
         if self.subsections.count():
             for subsection in self.subsections.all():
                 descendants |= subsection.get_descendants()
         return descendants
 
     def all_stories(self):
-        return Story.objects.filter(section__in=self.get_descendants())
+        return Story.objects.filter(visibility=2, section__in=self.get_descendants())
 
     class Meta:
         verbose_name_plural = "sections"
@@ -300,9 +265,6 @@ class Audio(Content):
     template = "content/audio.html"
     descriptor = "Audio"
 
-    class Meta:
-        verbose_name_plural = "audio"
-
 
 class Story(Content):
     """The main story model.
@@ -326,3 +288,5 @@ class Story(Content):
     class Meta:
         verbose_name_plural = "stories"
         ordering = ['-created']
+
+from core import signals
