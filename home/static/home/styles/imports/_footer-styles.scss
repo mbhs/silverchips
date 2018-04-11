@@ -30,9 +30,14 @@
         .footer-links {
             padding-top: 1.5em;
             a {
-                color: white;
+                position: relative;
                 text-decoration: none;
+                text-transform: uppercase;
+                font-family: "Oswald", sans-serif;
+                font-size: 0.9em;
                 font-weight: bold;
+                letter-spacing: 0.125rem;
+                color: white;
             }
         }
     }

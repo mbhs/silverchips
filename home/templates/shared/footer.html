@@ -3,11 +3,9 @@
         <div class="site-footer-left">
             <h4 class="footer-logo">Silver<span>Chips</span> Online</h4>
             <p class="footer-links">
-                <a href="#">Home</a> ·
-                <a href="#">News</a> ·
-                <a href="#">Features</a> ·
-                <a href="#">Blogs</a> ·
-                <a href="#">Galleries</a>
+                {% for section in section_roots %}
+                    <a href="{% url 'home:view_section' section.name %}">{{section.title}}</a> {% if not forloop.last %} &middot; {% endif %}
+                {% endfor %}
             </p>
             <p class="copyright">Silver Chips © 2018</p>
         </div>
@@ -31,9 +29,9 @@
     			Lorem ipsum dolor sit amet, consectateur adispicing elit. Fusce euismod convallis velit, eu auctor lacus vehicula sit amet.
     		</p>
             <div class="footer-icons">
-                <a href="#"><i class="fab fa-facebook"></i></a>
-                <a href="#"><i class="fab fa-twitter"></i></a>
-    			<a href="#"><i class="fab fa-linkedin"></i></a>
+                <a target="_blank" href="https://twitter.com/mbhsSCO?lang=en"><i class="fab fa-twitter"></i></a>
+    			<a target="_blank" href="https://www.youtube.com/channel/UChQKJ8Jyaw6tgZUWha6SFSg"><i class="fab fa-youtube"></i></a>
+                <a target="_blank" href="https://www.facebook.com/SilverChipsOnline/"><i class="fab fa-facebook"></i></a>
     		</div>
         </div>
     </div>

@@ -1,18 +1,23 @@
 /* FONTS */
-@import url('https://fonts.googleapis.com/css?family=Open+Sans|Raleway|Playfair+Display');
+@import url('https://fonts.googleapis.com/css?family=Oswald|Open+Sans|Playfair+Display');
 
 /* COLORS */
 $background: #ffffff; //WHITE
 $font: #373737; //CHARCOAL
 
-$navbar: #a52714;
-$navbar-header-background:#f4f4f4;
-$navbar-active: #ffffff;
-$navbar-unactive: #DCD0C0;
+$navbar: #ffffff;
+$navbar-header-background:#ffffff;
+$navbar-active: #c54c3a;
+$navbar-unactive: #000000;
 
 $section-header: #373737;
+$solid-link: #373737;
+
 $story-title: #373737;
 $author: #373737;
+
+$card-header-bg: #373737;
+$card-title-color: #ffffff;
 
 /* MASTHEAD/FOOTER BACKGROUND IMAGE */
 $background-image: url("../images/footer_lodyas.png");

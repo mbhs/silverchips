@@ -9,7 +9,7 @@ html {
         background-color: $background;
         color: $font;
         h1,h2,h3,h4,h5,h6, {
-            font-family: 'Playfair Display', serif;
+            font-family: 'Oswald', serif;
             margin: 0;
             font-weight: 500;
         }
@@ -20,6 +20,80 @@ html {
 @import "imports/_navbar-styles";
 @import "imports/_footer-styles";
 
+/* Featured */
+.featured {
+    .featured-col {position: relative;}
+    &-content {
+        position: absolute;
+        bottom: 0;
+    }
+    &-title {
+        font-size: 1.25rem;
+        color: white;
+        &:hover {
+            color: $navbar-active;
+        }
+    }
+    &-info * {
+        font-size: 0.75rem;
+        color: white;
+        &:hover {
+            color: $navbar-active;
+        }
+    }
+}
+.solid-link {
+    color: $solid-link;
+    text-decoration: none;
+    &:hover {
+        color: $navbar-active;
+    }
+}
+/* Section */
+.section-header {
+    /* no link */
+    h1 {
+        color: $section-header;
+    }
+    /* link */
+    a {
+        position: relative;
+        color: $section-header;
+        text-transform: uppercase;
+        text-decoration: none;
+    }
+    a:before {
+        position: absolute;
+        left: 50%;
+        transform: translate(-50%);
+        content:"";
+        display: block;
+        width: 0;
+        height: 2px;
+        background: $section-header;
+        transition: width 0.3s;
+    }
+    a:after {
+        position: absolute;
+        left: 50%;
+        transform: translate(-50%);
+        content:"";
+        display: block;
+        width: 0;
+        height: 2px;
+        background: $section-header;
+        transition: width 0.3s;
+    }
+    a:hover:after, a:hover:before {
+        width: 100%;
+    }
+}
+/* Breadcrumb */
+.breadcrumb {
+    border-radius: 0;
+    background-color: $card-header-bg;
+    .breadcrumb-item a, .breadcrumb:after, .breadcrumb-item:before {color: $card-title-color; }
+}
 /* Story */
 .title {
     padding-bottom: 1rem;
@@ -34,41 +108,40 @@ html {
         text-decoration: none;
         color: $author;
         font-weight: bold;
+        &:hover {text-decoration: underline;}
     }
 }
-/* Home Featurette */
-.section-featurette {
-    .section-header a {
-        position: relative;
-        color: $section-header;
-        text-decoration: none;
+/* Card */
+.card {
+    border: none;
+    border-radius: 0;
+    .card-header {
+        background-color: $card-header-bg;
+        .card-title {color: $card-title-color;}
     }
-    .section-header a:before {
-        position: absolute;
-        left: 50%;
-        transform: translate(-50%);
-        content:"";
-        display: block;
-        width: 0;
-        height: 2px;
-        background: $section-header;
-        transition: width 0.3s;
+    .card-header:first-child {border-radius: 0;}
+}
+/* Latest Stories Card */
+.latest-stories {
+    border-left: 2px solid $card-header-bg;
+    .list-group:last-child .list-group-item:last-child {border-radius: 0;}
+    .card-header .card-title {
+        text-transform: uppercase;
+        font-family: "Oswald", sans-serif;
+        font-size: 1.5rem;
     }
-    .section-header a:after {
-        position: absolute;
-        left: 50%;
-        transform: translate(-50%);
-        content:"";
-        display: block;
-        width: 0;
-        height: 2px;
-        background: $section-header;
-        transition: width 0.3s;
-    }
-    .section-header a:hover:after, .section-header a:hover:before {
-        width: 100%;
+    .list-group-item {
+        border: none;
+        background-color: $card-header-bg;
+        a, strong {
+            color: white;
+            line-height: 1.4rem;
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
     }
 }
+/* Custom Separators */
 .section-separator {
     margin-top: 1.5rem;
     margin-bottom: 1.5rem;
