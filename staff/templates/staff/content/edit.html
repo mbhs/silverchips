@@ -7,14 +7,14 @@
 {% endblock %}
 
 {% block content %}
-<h1>Story Editor</h1>
+<h1>{{ content_type }} Editor</h1>
 
 <form method="post">
     {% csrf_token %}
 
     {{ form|as_bootstrap }}
 
-    <button type="submit" class="btn btn-success btn-block">Submit <i class="fas fa-save"></i></button>
+    <button type="submit" class="btn btn-success btn-block">Save <i class="fas fa-save"></i></button>
     {{ form.media }}
 </form>
 {% endblock %}

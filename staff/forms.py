@@ -5,9 +5,9 @@ applications.
 """
 
 from django import forms
+from django.utils import timezone
 from core import models
 from staff.widgets import RichTextWidget
-
 from dal import autocomplete
 
 
@@ -31,6 +31,15 @@ class ContentForm(forms.ModelForm):
             'authors': autocomplete.ModelSelect2Multiple(url="staff:autocomplete:users")
         }
         abstract = True
+
+    def save(self, commit=True):
+        model = super(ContentForm, self).save(commit=False)
+        model.modified = timezone.now()
+
+        if commit:
+            model.save()
+
+        return model
 
 
 class StoryForm(ContentForm):

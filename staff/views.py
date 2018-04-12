@@ -9,7 +9,6 @@ Also allows for some degree of customization.
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
-from django.contrib.contenttypes.models import ContentType
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -84,16 +83,16 @@ class ContentListView(ListView):
         return models.Content.objects.filter(authors=self.request.user).all()
 
 
-class ContentCreateView(LoginRequiredMixin, CreateView):
-    """Base view for uploading new content."""
-
+class ContentChangeMixin(LoginRequiredMixin):
     def get_success_url(self):
         return reverse("staff:content:list")
 
+
+class ContentCreateView(ContentChangeMixin, CreateView):
+    """Base view for uploading new content."""
+
     def get_initial(self):
-        return {
-            'authors': [self.request.user]
-        }
+        return dict(super(ContentCreateView, self).get_initial(), authors=[self.request.user])
 
 
 class StoryCreateView(ContentCreateView):
@@ -101,14 +100,13 @@ class StoryCreateView(ContentCreateView):
 
     model = models.Story
     form_class = forms.StoryForm
-    template_name = "staff/content/edit/story.html"
+    template_name = "staff/content/edit.html"
 
 
-class ContentEditView(LoginRequiredMixin, UpdateView):
+class ContentEditView(ContentChangeMixin, UpdateView):
     """Base view for editing content."""
 
-    def get_success_url(self):
-        return reverse("staff:content:list")
+    pass
 
 
 class StoryEditView(ContentEditView):
@@ -116,7 +114,7 @@ class StoryEditView(ContentEditView):
 
     model = models.Story
     form_class = forms.StoryForm
-    template_name = "staff/content/edit/story.html"
+    template_name = "staff/content/edit.html"
 
 
 def content_edit_view(request, pk):
