@@ -9,12 +9,12 @@
 {% block content %}
 <h1>Story Editor</h1>
 
-<form method="post" action="{% url "staff:content:create:story" %}">
+<form method="post">
     {% csrf_token %}
 
     {{ form|as_bootstrap }}
 
-    <button type="submit" class="btn btn-success">Submit</button>
+    <button type="submit" class="btn btn-success btn-block">Submit <i class="fas fa-save"></i></button>
     {{ form.media }}
 </form>
 {% endblock %}

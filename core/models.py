@@ -148,16 +148,16 @@ class Content(PolymorphicModel):
 
         return self.tags.filter(name=name).exists()
 
-    created = models.DateTimeField()
-    modified = models.DateTimeField()
+    created = models.DateTimeField(default=timezone.now)
+    modified = models.DateTimeField(default=timezone.now)
 
-    def save(self, *args, **kwargs):
-        """Save the model and update the creation and edit times."""
-
-        if not self.created:
-            self.created = timezone.now()
-        self.modified = timezone.now()
-        return super().save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     """Save the model and update the creation and edit times."""
+    #
+    #     if not self.created:
+    #         self.created = timezone.now()
+    #     self.modified = timezone.now()
+    #     return super().save(*args, **kwargs)
 
     class Meta:
         ordering = ['-created']
