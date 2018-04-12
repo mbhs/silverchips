@@ -1,0 +1,55 @@
+{% extends "staff/base.html" %}
+{% load news %}
+
+{% block title %}Content List{% endblock %}
+
+{% block content %}
+    <h1>Content List</h1>
+
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Modified</th>
+                    <th scope="col">Authors</th>
+                    <th scope="col">Visibility</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for content in content_list %}
+                    <tr>
+                        <th scope="row">{{ content.pk }}</th>
+                        <td>{{ content.title|safe }}</td>
+                        <td>{{ content.modified|date:"SHORT_DATETIME_FORMAT" }}</td>
+                        <td>{{ content|names }}</td>
+                        <td>{{ content.get_visibility_display|capfirst }}</td>
+                        <td>
+                            <div class="dropdown">
+                              <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink{{ forloop.counter }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+
+                              <div class="dropdown-menu" aria-labelledby="dropdownMenuLink{{ foorloop.counter }}">
+                                <a class="dropdown-item" href="{% url "home:view_content" content.pk %}">View <i class="fas fa-external-link-alt"></i></a>
+                                <a class="dropdown-item" href="{% url "staff:content:edit" content.pk %}">Edit <i class="fas fa-edit"></i></a>
+                                <div class="dropdown-divider"></div>
+                                {% if content.visibility == content.DRAFT %}
+                                  <a class="dropdown-item" href="#">Pend <i class="fas fa-thumbs-up"></i></a>
+                                {% endif %}
+                                {% if content.visibility < content.PUBLISHED %}
+                                  <a class="dropdown-item" href="#">Publish <i class="fas fa-paper-plane"></i></a>
+                                {% endif %}
+                                <a class="dropdown-item" href="#">Hide <i class="fas fa-eye-slash"></i></a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#" style="color: #f88;">Delete <i class="fas fa-trash-alt"></i></a>
+                              </div>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

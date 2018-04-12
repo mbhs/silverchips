@@ -22,14 +22,14 @@ class LoginForm(forms.Form):
 class ContentForm(forms.ModelForm):
     """A generic editor for any kind of content."""
 
-    authors = forms.ModelMultipleChoiceField(
-        queryset=models.User.objects.all(),
-        widget=autocomplete.ModelSelect2Multiple(url="staff:autocomplete:users"))
-
     class Meta:
         model = models.Content
         fields = ['title', 'authors', 'description']
-        widgets = {'title': forms.widgets.TextInput(), 'lead': RichTextWidget(short=True)}
+        widgets = {
+            'title': forms.widgets.TextInput(),
+            'lead': RichTextWidget(short=True),
+            'authors': autocomplete.ModelSelect2Multiple(url="staff:autocomplete:users")
+        }
         abstract = True
 
 

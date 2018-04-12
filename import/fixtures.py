@@ -5,7 +5,7 @@ import os
 from django import setup
 from django.db.models import Q
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "news.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "silverchips.settings")
 setup()
 
 from core.models import Section, Story, User, Profile, Image, PUBLISHED

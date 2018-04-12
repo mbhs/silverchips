@@ -15,8 +15,14 @@ from . import autocomplete
 
 app_name = "staff"
 
+create_urlpatterns = ([
+    path("story/", views.StoryCreateView.as_view(), name="story")
+], "create")
+
 content_urlpatterns = ([
-    path("user", views.ContentListView.as_view(), name="list"),
+    path("list/", views.ContentListView.as_view(), name="list"),
+    path("edit/<int:pk>/", views.content_edit_view, name="edit"),
+    path("create/", include(create_urlpatterns, "create"))
 ], "content")
 
 autocomplete_urlpatterns = ([

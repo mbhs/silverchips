@@ -7,6 +7,6 @@
     var editor = quill("#{{ widget.name }}-editor");
     var form = document.getElementById("{{ widget.name }}").form;
     form.addEventListener("submit", function() {
-        form.value = editor.root.innerHTML;
+        form.{{ widget.name }}.value = editor.root.innerHTML;
     })
 </script>

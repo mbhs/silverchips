@@ -29,3 +29,8 @@ def expand_embeds(text):
 def names(content):
     """A filter that returns the full names, joined by commas, of all the authors of a particular Content."""
     return ", ".join(map(lambda user: user.get_full_name(), content.authors.all()))
+
+
+@register.filter
+def user_in_group(user, group):
+    """A filter that checks if a """

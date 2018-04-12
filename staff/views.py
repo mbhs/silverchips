@@ -6,16 +6,14 @@ Also allows for some degree of customization.
 
 
 # Django imports
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
+from django.contrib.contenttypes.models import ContentType
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse
-
-from polymorphic.contrib.extra_views import PolymorphicFormSetView
-from polymorphic.formsets import PolymorphicFormSetChild
 
 # Local imports
 from . import forms
@@ -76,7 +74,7 @@ def index(request):
 class ContentListView(ListView):
     """The content list view that supports pagination."""
 
-    template_name = "staff/content_list.html"
+    template_name = "staff/content/list.html"
     context_object_name = "content_list"
     paginate_by = 25
 
@@ -86,12 +84,45 @@ class ContentListView(ListView):
         return models.Content.objects.filter(authors=self.request.user).all()
 
 
-class StoryCreateView(LoginRequiredMixin, CreateView):
+class ContentCreateView(LoginRequiredMixin, CreateView):
+    """Base view for uploading new content."""
+
+    def get_success_url(self):
+        return reverse("staff:content:list")
+
+    def get_initial(self):
+        return {
+            'authors': [self.request.user]
+        }
+
+
+class StoryCreateView(ContentCreateView):
     """View for uploading a new story."""
 
     model = models.Story
     form_class = forms.StoryForm
-    template_name = "staff/story/edit.html"
+    template_name = "staff/content/edit/story.html"
+
+
+class ContentEditView(LoginRequiredMixin, UpdateView):
+    """Base view for editing content."""
 
     def get_success_url(self):
-        return reverse("staff:stories:view")
+        return reverse("staff:content:list")
+
+
+class StoryEditView(ContentEditView):
+    """View for editing stories."""
+
+    model = models.Story
+    form_class = forms.StoryForm
+    template_name = "staff/content/edit/story.html"
+
+
+def content_edit_view(request, pk):
+    content = get_object_or_404(models.Content.objects, pk=pk)
+
+    # Switch which view gets received based on the kind of content
+    return {
+        models.Story: StoryEditView
+    }[type(content)].as_view()(request, pk=pk)

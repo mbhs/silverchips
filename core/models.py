@@ -75,6 +75,12 @@ class User(auth.User):
     class Meta:
         proxy = True
 
+        permissions = (
+            ('can_draft', "Can Draft and Create Content"),
+            ('can_edit_all', "Can Edit All Content"),
+            ('can_publish', "Can Publish Content")
+        )
+
 
 class Tag(models.Model):
     """Basic tag model for content."""
@@ -130,7 +136,7 @@ class Content(PolymorphicModel):
     tags = models.ManyToManyField(Tag)
     views = models.IntegerField(default=0)
 
-    legacy_id = models.IntegerField()
+    legacy_id = models.IntegerField(null=True)
 
     def __str__(self):
         """Represent the content as a string."""

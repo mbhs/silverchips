@@ -58,7 +58,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'news.urls'
+ROOT_URLCONF = 'silverchips.urls'
 
 APPEND_SLASH = True
 
@@ -79,7 +79,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'news.wsgi.application'
+WSGI_APPLICATION = 'silverchips.wsgi.application'
 
 
 # Database

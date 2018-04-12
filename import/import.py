@@ -8,7 +8,7 @@ from xml.etree import ElementTree as et
 from datetime import datetime
 from django.utils import timezone
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "news.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "silverchips.settings")
 setup()
 
 from core.models import Section, Story, User, Profile, Image, PUBLISHED
