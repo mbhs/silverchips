@@ -5,29 +5,28 @@
     <head>
         <title>Staff Login</title>
         {% include "shared/bootstrap.html" %}
-        <link type="text/css" rel="stylesheet" href="{% static "home/home.scss"|compile %}">
-        <link type="text/css" rel="stylesheet" href="{% static "staff/staff.scss"|compile %}">
+        <link rel="stylesheet" href="{% static "staff/_login.scss"|compile %}"/>
     </head>
-    <body id="login">
-        <div class="container-center">
-            <div class="center">
-                <h1 class="serif">SCO</h1>
-                <p>Staff Login</p>
+    <body>
+        <div>
+            <h1>SCO Staff Login</h1>
 
-                <form id="login-form" action="{% url "staff:login" %}" method="post">
-                    {% csrf_token %}
+            <form id="login-form" method="post">
+                {% csrf_token %}
 
-                    {% for error in form.non_field_errors %}
-                      <div class="alert alert-danger">
-                          <strong>Error:</strong> {{ error }}
-                      </div>
-                    {% endfor %}
-                    
-                    <input class="form-control" type="text" name="username" placeholder="Username">
-                    <input class="form-control" type="password" name="password" placeholder="Password">
-                    <button class="btn btn-primary" value="Login" type="submit">Login</button>
-                </form>
-            </div>
+                {% for error in form.non_field_errors %}
+                  <div class="alert alert-danger">
+                      <strong>Error:</strong> {{ error }}
+                  </div>
+                {% endfor %}
+
+                <input class="form-control" type="text" name="username" placeholder="Username">
+                <input class="form-control" type="password" name="password" placeholder="Password">
+
+                <br/>
+
+                <button class="btn btn-primary btn-block" type="submit">Login <i class="fas fa-key"></i></button>
+            </form>
         </div>
     </body>
 </html>

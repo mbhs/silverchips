@@ -11,7 +11,7 @@ from django.utils import timezone
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "silverchips.settings")
 setup()
 
-from core.models import Section, Story, User, Profile, Image, PUBLISHED
+from core.models import Section, Story, User, Profile, Image, Content
 
 with open("import/data/silverchips.xml", 'r', encoding="latin-1", errors="replace") as xml_file:
     xml_data = xml_file.read()
@@ -105,7 +105,7 @@ if ask_reimport("pictures"):
                         description=get_field(old_pic, "caption", "(no caption)"),
                         created=date,
                         modified=date,
-                        visibility=PUBLISHED)
+                        visibility=Content.PUBLISHED)
 
             extension = {"image/jpeg": "jpg", "image/png": "png", "image/gif": "gif"}[get_field(old_pic, "mimeType")]
             file_name = "{}.{}".format(pic_id, extension)
@@ -158,7 +158,7 @@ if ask_reimport("stories"):
                           section=(Section.objects.get(id=category_id) if category_id > 0 else None),
                           created=date,
                           modified=date,
-                          visibility=PUBLISHED)
+                          visibility=Content.PUBLISHED)
             story.save()
         except:
             print("Failed to import story {}/{}".format(i, len(stories)))
