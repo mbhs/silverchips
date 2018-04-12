@@ -54,6 +54,6 @@ class StoryForm(ContentForm):
 class ImageForm(ContentForm):
     """Form for image creation."""
 
-    class Meta:
+    class Meta(ContentForm.Meta):
         model = models.Image
-        fields = ['source']
+        fields = ContentForm.Meta.fields + ['source']

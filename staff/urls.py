@@ -16,7 +16,8 @@ from . import autocomplete
 app_name = "staff"
 
 create_urlpatterns = ([
-    path("story/", views.StoryCreateView.as_view(), name="story")
+    path("story/", views.StoryCreateView.as_view(), name="story"),
+    path("image/", views.ImageCreateView.as_view(), name="image")
 ], "create")
 
 content_urlpatterns = ([

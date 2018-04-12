@@ -1,8 +1,3 @@
-<link href="https://cdn.quilljs.com/1.3.4/quill.snow.css" rel="stylesheet">
-<link href="https://cdn.quilljs.com/1.3.4/quill.bubble.css" rel="stylesheet">
-<link href="https://cdn.quilljs.com/1.3.4/quill.core.css" rel="stylesheet">
-<script src="https://cdn.quilljs.com/1.3.4/quill.js"></script>
-<script>
 /** Default Quill options. */
 var options = [
   //[{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
@@ -26,4 +21,3 @@ function quill(id) {
     }
   });
 }
-</script>

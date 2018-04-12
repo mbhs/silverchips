@@ -103,6 +103,14 @@ class StoryCreateView(ContentCreateView):
     template_name = "staff/content/edit.html"
 
 
+class ImageCreateView(ContentCreateView):
+    """View for uploading a new image."""
+
+    model = models.Image
+    form_class = forms.ImageForm
+    template_name = "staff/content/edit.html"
+
+
 class ContentEditView(ContentChangeMixin, UpdateView):
     """Base view for editing content."""
 

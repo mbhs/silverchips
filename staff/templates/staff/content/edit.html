@@ -2,12 +2,8 @@
 {% load bootstrap_tags %}
 {% load staticfiles %}
 
-{% block head %}
-    {% include "shared/quill.html" %}
-{% endblock %}
-
 {% block content %}
-<h1>{{ content_type }} Editor</h1>
+<h1>Editor</h1>
 
 <form method="post">
     {% csrf_token %}
