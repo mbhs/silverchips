@@ -32,5 +32,5 @@ def names(content):
 
 
 @register.filter
-def user_in_group(user, group):
-    """A filter that checks if a """
+def has_perm(user, permission):
+    return user.has_perm(permission)

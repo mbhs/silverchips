@@ -13,6 +13,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse
+from django.utils import timezone
 
 # Local imports
 from . import forms
@@ -86,6 +87,10 @@ class ContentListView(ListView):
 class ContentChangeMixin(LoginRequiredMixin):
     def get_success_url(self):
         return reverse("staff:content:list")
+
+    def form_valid(self, form):
+        self.object.modified = timezone.now()
+        return super(ContentChangeMixin, self).form_valid(form)
 
 
 class ContentCreateView(ContentChangeMixin, CreateView):

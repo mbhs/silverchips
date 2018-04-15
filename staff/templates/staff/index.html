@@ -3,11 +3,8 @@
 {% block content %}
     <h2>{% block title %}Staff Dashboard{% endblock %}</h2>
 
-    <p>Welcome to the SilverChips staff dashboard! Here's where you'll be able to access, create, review, and edit
-        content on the site.</p>
-
-    <p>In SilverChips Online, every piece of <em>content</em>, whether a story, image, video, audio clip, poll,
-        sports game, movie review, or anything else, has a unique content ID number.</p>
+    <p>Welcome, {{ request.user.get_full_name }}, to the SilverChips staff dashboard! Here's where you'll be able to access, create, review, and edit
+        content on the site, as well as manage your profile and personal information.</p>
 
     <h3>Personal</h3>
 
@@ -45,4 +42,28 @@
             <a class="btn btn-success btn-lg btn-block my-3" href="">Create Sports Game <i class="fas fa-trophy"></i></a>
         </div>
     </div>
+
+    <h3>User Information</h3>
+
+    <p>Your name is {{ request.user.get_full_name }}; your username is <code>{{ request.user.username }}</code>.</p>
+
+    <p>You belong to the following groups:</p>
+
+    <ul>
+        {% for group in request.user.groups.all %}
+            <li><code>{{ group.name }}</code></li>
+        {% empty %}
+            <li>Sorry, you don't belong to any groups.</li>
+        {% endfor %}
+    </ul>
+
+    <p>and hold the following permissions:</p>
+
+    <ul>
+        {% for permission in request.user.get_all_permissions %}
+            <li><code>{{ permission }}</code></li>
+        {% empty %}
+            <li>Sorry, you don't have any permissions.</li>
+        {% endfor %}
+    </ul>
 {% endblock %}

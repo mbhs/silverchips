@@ -10,22 +10,21 @@ def can_read(user: User, content: Content):
         return True
 
     if user is not None:
-        # Editors can read all content
-        if user.has_role("editor"):
+        if user.has_perm("silverchips.read_all_content"):
             return True
-
-        if user.has_role("writer"):
-            # Writers can read all pending content
-            if content.visibility == Content.PENDING:
-                return True
-
-            # Writers can read their own drafting content
-            if content.visibility == Content.DRAFT and user in content.authors:
-                return True
+        if user in content.authors and content.visibility == Content.DRAFT:
+            return True
 
     return False
 
 
-def read_access_required(content):
-    """A decorator for Django views that tests whether the user has read-access to particular content."""
-    return user_passes_test(lambda user: can_read(user, content))
+def can_write(user: User, content: Content):
+    """Check whether a particular user has write-access to particular content."""
+
+    if user is not None:
+        if user.has_perm("silverchips.edit_all_content"):
+            return True
+        if user in content.authors and user.has_perm("silverchips.edit_own_content"):
+            return True
+
+    return False

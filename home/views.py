@@ -5,10 +5,12 @@ of everything a normal user would see while visiting the website.
 """
 
 # Django imports
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import render, get_object_or_404
 
 # News imports
 from core import models
+from core.permissions import can_read
 
 
 def load_context(request):
@@ -50,6 +52,9 @@ def view_content(request, pk):
     """Render specific content in the newspaper."""
 
     content = get_object_or_404(models.Content, id=int(pk))
+
+    if not can_read(request.user, content):
+        raise PermissionDenied
 
     content.views += 1
     content.save()

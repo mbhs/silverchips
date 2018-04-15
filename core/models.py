@@ -75,12 +75,6 @@ class User(auth.User):
     class Meta:
         proxy = True
 
-        permissions = (
-            ('can_draft', "Can Draft and Create Content"),
-            ('can_edit_all', "Can Edit All Content"),
-            ('can_publish', "Can Publish Content")
-        )
-
 
 class Tag(models.Model):
     """Basic tag model for content."""
@@ -151,16 +145,16 @@ class Content(PolymorphicModel):
     created = models.DateTimeField(default=timezone.now)
     modified = models.DateTimeField(default=timezone.now)
 
-    # def save(self, *args, **kwargs):
-    #     """Save the model and update the creation and edit times."""
-    #
-    #     if not self.created:
-    #         self.created = timezone.now()
-    #     self.modified = timezone.now()
-    #     return super().save(*args, **kwargs)
-
     class Meta:
         ordering = ['-created']
+        permissions = (
+            ('draft_content', "Can draft content"),
+            ('edit_own_content', "Can edit own content"),
+            ('edit_all_content', "Can edit all content"),
+            ('read_all_content', "Can read all content"),
+            ('publish_content', "Can publish content"),
+            ('hide_content', "Can hide content")
+        )
 
 
 # Section names should be pretty
@@ -294,5 +288,3 @@ class Story(Content):
     class Meta:
         verbose_name_plural = "stories"
         ordering = ['-created']
-
-from core import signals
