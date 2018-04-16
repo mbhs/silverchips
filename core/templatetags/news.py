@@ -35,3 +35,8 @@ for action in ['read', 'edit', 'pend', 'hide', 'delete', 'publish']:
     @register.filter("can_{}".format(action))
     def can(user, content, action=action):
         return user.can(action, content)
+
+
+@register.simple_tag(name='range')
+def do_range(start, end, step):
+    return list(range(start, end, step))
