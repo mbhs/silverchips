@@ -4,61 +4,127 @@
 {% block title %}Content List{% endblock %}
 
 {% block content %}
-    <h1>Content List</h1>
+<h1>Content List</h1>
 
-    <div class="table-responsive">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Title</th>
-                    <th scope="col">Modified</th>
-                    <th scope="col">Authors</th>
-                    <th scope="col">Visibility</th>
-                    <th scope="col">Actions</th>
-                </tr>
-            </thead>
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Type</th>
+            <th scope="col">Title</th>
+            <th scope="col">Modified</th>
+            <th scope="col">Authors</th>
+            <th scope="col">Visibility</th>
+            <th scope="col">Actions</th>
+        </tr>
+        </thead>
 
-            <tbody>
-                {% for content in content_list %}
-                    <tr>
-                        <th scope="row">{{ content.pk }}</th>
-                        <td>{{ content.title|safe }}</td>
-                        <td>{{ content.modified|date:"SHORT_DATETIME_FORMAT" }}</td>
-                        <td>{{ content|names }}</td>
-                        <td>{{ content.get_visibility_display|capfirst }}</td>
-                        <td>
-                            <div class="dropdown">
-                              <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink{{ forloop.counter }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+        <tbody>
+        {% for content in content_list %}
+        <tr>
+            <th scope="row">{{ content.pk }}</th>
+            <td>{{ content.type }}</td>
+            <td>{{ content.title|safe }}</td>
+            <td>{{ content.modified|date:"SHORT_DATETIME_FORMAT" }}</td>
+            <td>{{ content|names }}</td>
+            <td>{{ content.get_visibility_display|capfirst }}</td>
+            <td>
+                <div class="dropdown">
+                    <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink{{ forloop.counter }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
 
-                              <div class="dropdown-menu" aria-labelledby="droIn 1997, another best-selling romance writer, Janet Dailey, admitted to repeatedly plagiarizing Roberts' work. The practice came to light after a reader read Roberts' Sweet Revenge and Dailey's Notorious back-to-back; she noticed several similarities and posted the comparable passages on the Internet. Calling the plagiarism "mind-boggling," Roberts sued Dailey.[8] Dailey acknowledged the plagiarism and attributed it to a psychological disorder. She admitted that both Aspen Gold and Notorious lifted heavily from Roberts' work. Both of those novels were pulled from print after Dailey's admission.[37][38] In April 1998, Dailey settled the case. Roberts donated the settlement to various literary causes including the Literacy Volunteers of America (now ProLiteracy).[8][39][40][41]
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink{{ foorloop.counter }}">
+                        {% if request.user|can_read:content %}
+                        <a class="dropdown-item" href="{% url "home:view_content" content.pk %}">View <i class="fas fa-external-link-alt"></i></a>
+                        {% endif %}
+                        {% if request.user|can_edit:content %}
+                        <a class="dropdown-item" href="{% url "staff:content:edit" content.pk %}">Edit <i class="fas fa-edit"></i></a>
+                        {% endif %}
+                        <div class="dropdown-divider"></div>
+                        {% if request.user|can_pend:content %}
+                        <a class="dropdown-item" href="{% url "staff:content:set_visibility" content.pk content.PENDING %}">Pend <i class="fas fa-thumbs-up"></i></a>
+                        {% endif %}
+                        {% if request.user|can_publish:content %}
+                        <a class="dropdown-item" href="{% url "staff:content:set_visibility" content.pk content.PUBLISHED %}">Publish <i class="fas fa-paper-plane"></i></a>
+                        {% endif %}
+                        {% if request.user|can_hide:content %}
+                        <a class="dropdown-item" href="{% url "staff:content:set_visibility" content.pk content.HIDDEN %}">Hide <i class="fas fa-eye-slash"></i></a>
+                        {% endif %}
+                        {% if request.user|can_delete:content %}
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#" style="color: #f55;">Delete <i class="fas fa-trash-alt"></i></a>
+                        {% endif %}
+                    </div>
+                </div>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 
-pdownMenuLink{{ foorloop.counter }}">
-                                <a class="dropdown-item" href="{% url "home:view_content" content.pk %}">View <i class="fas fa-external-link-alt"></i></a>
+    {% if is_paginated %}
+    <nav aria-label="Pagination">
+        <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page=1"><i class="fas fa-fast-backward"></i> First</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}"><i class="fas fa-step-backward"></i> Previous</a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <span class="page-link"><i class="fas fa-fast-backward"> First</span>
+            </li>
+            <li class="page-item disabled">
+                <span class="page-link"><i class="fas fa-step-backward"> Previous</span>
+            </li>
+            {% endif %}
 
-                                {% if request.user|has_perm:"core.edit_all_content" or request.user|has_perm:"core.edit_own_content" and request.user in content.authors %}
-                                <a class="dropdown-item" href="{% url "staff:content:edit" content.pk %}">Edit <i class="fas fa-edit"></i></a>
-                                {% endif %}
-                                <div class="dropdown-divider"></div>
-                                {% if content.visibility == content.DRAFT and request.user|has_perm:"core.draft_content" %}
-                                  <a class="dropdown-item" href="#">Pend <i class="fas fa-thumbs-up"></i></a>
-                                {% endif %}
-                                {% if content.visibility < content.PUBLISHED and request.user|has_perm:"core.publish_content" %}
-                                  <a class="dropdown-item" href="#">Publish <i class="fas fa-paper-plane"></i></a>
-                                {% endif %}
-                                {% if request.user|has_perm:"core.hide_content" %}
-                                <a class="dropdown-item" href="#">Hide <i class="fas fa-eye-slash"></i></a>
-                                {% endif %}
-                                {% if request.user|has_perm:"core.delete_content" %}
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#" style="color: #faa;">Delete <i class="fas fa-trash-alt"></i></a>
-                                {% endif %}
-                              </div>
-                            </div>
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
+            {% for i in "-1,-2,-3"|make_list %}
+            {% if page_obj.number|add:i >= 0 %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.number|add:i }}">
+                    {{ page_obj.number|add:i }}
+                </a>
+            </li>
+            {% endif %}
+            {% endfor %}
+
+            <li class="page-item active">
+                <a class="page-link" href="?page={{ page_obj.number }}">
+                    {{ page_obj.number }}
+                    <span class="sr-only">(current)</span>
+                </a>
+            </li>
+
+            {% for i in "1,2,3"|make_list %}
+            {% if page_obj.number|add:i >= 0 %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.number|add:i }}">
+                    {{ page_obj.number|add:i }}
+                </a>
+            </li>
+            {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next <i class="fas fa-step-forward"></i></a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last <i class="fas fa-fast-forward"></i></a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <span class="page-link">Next <i class="fas fa-step-forward"></i></span>
+            </li>
+            <li class="page-item disabled">
+                <span class="page-link">Last <i class="fas fa-fast-forward"></i></span>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+</div>
 {% endblock %}

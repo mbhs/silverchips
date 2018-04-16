@@ -9,6 +9,7 @@ Also allows for some degree of customization.
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import PermissionDenied
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -16,8 +17,8 @@ from django.urls import reverse
 from django.utils import timezone
 
 # Local imports
-from . import forms
 from core import models
+from staff import forms
 
 
 # The main views
@@ -61,7 +62,7 @@ def logout(request):
     """Log out the user and go to logout page."""
 
     auth.logout(request)
-    return redirect("/staff")
+    return redirect("staff:index")
 
 
 @login_required
@@ -81,7 +82,15 @@ class ContentListView(ListView):
     def get_queryset(self):
         """Get all stories by the request user."""
 
-        return models.Content.objects.filter(authors=self.request.user).all()
+        if self.request.user.has_perm('core.read_content'):
+            return models.Content.objects.all()
+        else:
+            return models.Content.objects.filter(authors=self.request.user).all()
+
+    def get_context_data(self, **kwargs):
+        context = super(ListView, self).get_context_data(**kwargs)
+        context['pages'] = range(3)
+        return context
 
 
 class ContentChangeMixin(LoginRequiredMixin):
@@ -119,7 +128,11 @@ class ImageCreateView(ContentCreateView):
 class ContentEditView(ContentChangeMixin, UpdateView):
     """Base view for editing content."""
 
-    pass
+    def get_object(self, **kwargs):
+        obj = super(ContentEditView, self).get_object(**kwargs)
+        if not self.request.user.can('edit', obj):
+            raise PermissionDenied
+        return obj
 
 
 class StoryEditView(ContentEditView):
@@ -135,5 +148,18 @@ def content_edit_view(request, pk):
 
     # Switch which view gets received based on the kind of content
     return {
-        models.Story: StoryEditView
-    }[type(content)].as_view()(request, pk=pk)
+        'Story': StoryEditView
+    }[content.type].as_view()(request, pk=pk)
+
+
+@login_required
+def set_visibility_view(request, pk, level):
+    content = get_object_or_404(models.Content.objects, pk=pk)
+
+    if not request.user.can(['hide', 'draft', 'pend', 'publish'][level], content):
+        raise PermissionDenied
+
+    content.visibility = level
+    content.save()
+
+    return redirect("staff:index")

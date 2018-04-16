@@ -40,9 +40,10 @@ for user in User.objects.all():
     if not User.objects.filter(username=user.username).exists():
         user.save()
 
-User.objects.get(pk=909).groups.add(Group.objects.get(name='writers'))
+for user in User.objects.all():
+    user.groups.add(Group.objects.get(name='writers'))
+
 User.objects.get(pk=909).groups.add(Group.objects.get(name='editors'))
 User.objects.get(pk=909).groups.add(Group.objects.get(name='editors-in-chief'))
-User.objects.get(pk=908).groups.add(Group.objects.get(name='writers'))
 User.objects.get(pk=908).groups.add(Group.objects.get(name='editors'))
-User.objects.get(pk=908).groups.add(Group.objects.get(name='editors-in-chief'))
+

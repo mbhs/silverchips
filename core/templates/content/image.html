@@ -1,5 +1,5 @@
 {% with image=content %}
     <a href="{% url "home:view_content" image.id %}">
-        <img src="{{ image.source.url }}" style="max-width: 80%; height: auto;" class="mx-auto d-block">
+        <img src="{{ image.source.url }}" style="max-width: 80%; height: auto;" class="mx-auto d-block mb-2">
     </a>
 {% endwith %}

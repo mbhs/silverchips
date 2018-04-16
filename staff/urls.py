@@ -22,6 +22,7 @@ create_urlpatterns = ([
 
 content_urlpatterns = ([
     path("list/", views.ContentListView.as_view(), name="list"),
+    path("visibility/<int:pk>/<int:level>/", views.set_visibility_view, name="set_visibility"),
     path("edit/<int:pk>/", views.content_edit_view, name="edit"),
     path("create/", include(create_urlpatterns, "create"))
 ], "content")

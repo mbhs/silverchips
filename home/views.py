@@ -10,7 +10,6 @@ from django.shortcuts import render, get_object_or_404
 
 # News imports
 from core import models
-from core.permissions import can_read
 
 
 def load_context(request):
@@ -53,7 +52,7 @@ def view_content(request, pk):
 
     content = get_object_or_404(models.Content, id=int(pk))
 
-    if not can_read(request.user, content):
+    if not request.user.can('read', content):
         raise PermissionDenied
 
     content.views += 1

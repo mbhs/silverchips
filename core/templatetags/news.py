@@ -31,6 +31,7 @@ def names(content):
     return ", ".join(map(lambda user: user.get_full_name(), content.authors.all()))
 
 
-@register.filter
-def has_perm(user, permission):
-    return user.has_perm(permission)
+for action in ['read', 'edit', 'pend', 'hide', 'delete', 'publish']:
+    @register.filter("can_{}".format(action))
+    def can(user, content, action=action):
+        return user.can(action, content)
