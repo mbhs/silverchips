@@ -14,6 +14,9 @@ var options = [
 
 /** Create a new Quill editor for an element. */
 function quill(id) {
+  var icons = Quill.import('ui/icons');
+  icons['bold'] = '<i class="fas fa-bold" aria-hidden="true"></i>';
+
   return new Quill(id, {
     theme: "snow",
     modules: {

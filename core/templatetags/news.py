@@ -2,6 +2,7 @@ from django import template
 import re
 
 from core.models import Content
+from core import permissions
 
 register = template.Library()
 
@@ -31,10 +32,11 @@ def names(content):
     return ", ".join(map(lambda user: user.get_full_name(), content.authors.all()))
 
 
-for action in ['read', 'edit', 'pend', 'hide', 'delete', 'publish']:
+for action in permissions.ACTIONS:
     @register.filter("can_{}".format(action))
     def can(user, content, action=action):
-        return user.can(action, content)
+        """A filter that checks whether a user can {} a particular Content.""".format(action)
+        return permissions.can(user, action, content)
 
 
 @register.simple_tag(name='range')

@@ -10,6 +10,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
+from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_protect
+from django.views.decorators.http import require_http_methods
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -18,6 +21,7 @@ from django.utils import timezone
 
 # Local imports
 from core import models
+from core.permissions import can, VISIBILITY_ACTIONS
 from staff import forms
 
 
@@ -98,7 +102,7 @@ class ContentChangeMixin(LoginRequiredMixin):
         return reverse("staff:content:list")
 
     def form_valid(self, form):
-        self.object.modified = timezone.now()
+        form.instance.modified = timezone.now()
         return super(ContentChangeMixin, self).form_valid(form)
 
 
@@ -130,7 +134,7 @@ class ContentEditView(ContentChangeMixin, UpdateView):
 
     def get_object(self, **kwargs):
         obj = super(ContentEditView, self).get_object(**kwargs)
-        if not self.request.user.can('edit', obj):
+        if not can(self.request.user, 'edit', obj):
             raise PermissionDenied
         return obj
 
@@ -153,13 +157,15 @@ def content_edit_view(request, pk):
 
 
 @login_required
+# @csrf_protect
+@require_http_methods(["PATCH"])
 def set_visibility_view(request, pk, level):
     content = get_object_or_404(models.Content.objects, pk=pk)
 
-    if not request.user.can(['hide', 'draft', 'pend', 'publish'][level], content):
+    if not can(request.user, VISIBILITY_ACTIONS[level], content):
         raise PermissionDenied
 
     content.visibility = level
     content.save()
 
-    return redirect("staff:index")
+    return HttpResponse(status=200)

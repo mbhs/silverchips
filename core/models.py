@@ -69,24 +69,6 @@ class User(auth.User):
 
         return "User[{}]".format(self.get_full_name())
 
-    def can(self, action, content):
-        if action == 'read':
-            return content.visibility == Content.PUBLISHED or self.has_perm('core.read_content')
-        if action == 'edit':
-            return content.visibility == Content.DRAFT and self in content.authors.all() and self.has_perm('core.draft_content') \
-                   or (Content.DRAFT <= content.visibility <= Content.PENDING or content.visibility == Content.HIDDEN and self.has_perm('hide_content')) and self.has_perm('core.edit_content')
-        if action == 'delete':
-            return (content.visibility == Content.DRAFT and self in content.authors.all() and self.has_perm('core.draft_content')) or self.has_perm('core.delete_content')
-        if action == 'pend':
-            return content.visibility == Content.DRAFT and (
-                    (self in content.authors.all() and self.has_perm('core.draft_content')) or self.has_perm('core.edit_content')) \
-                     or content.visibility == Content.PUBLISHED and self.has_perm('core.publish_content') \
-                     or content.visibility == Content.HIDDEN and self.has_perm('core.hide_content')
-        if action == 'publish':
-            return (content.visibility == Content.PENDING or (content.visibility == Content.HIDDEN and self.has_perm('code.hide_content'))) and self.has_perm('core.publish_content')
-        if action == 'hide':
-            return content.visibility != Content.HIDDEN and self.has_perm('core.hide_content')
-
     class Meta:
         proxy = True
 
@@ -100,7 +82,7 @@ class Tag(models.Model):
 class Content(PolymorphicModel):
     """A generic content model.
 
-    This container provides the selfselfselfmetaclass for all types of media,
+    This container provides the metaclass for all types of media,
     including stories, images, videos, galleries, and podcasts. Each
     subclass should be capable of rendering itself to HTML so that it
     can be generically displayed or embedded.
