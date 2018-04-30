@@ -91,7 +91,7 @@ function doApi(url, verb) {
                         {% endif %}
                         {% if request.user|can_delete:content %}
                         <div class="dropdown-divider"></div>
-                        <!--<a class="dropdown-item" href="" data-pk={{ content.pk }} data-toggle="modal" data-target="#deleteModal" data-title="{{ content.title|safe }}" data-href="{% url "staff:content:delete" content.pk %}" style="color: #f55;">Delete <i class="fas fa-trash-alt"></i></a>-->
+                        <a class="dropdown-item" href="" data-pk={{ content.pk }} data-toggle="modal" data-target="#deleteModal" data-title="{{ content.title|safe }}" data-verb="delete" data-href="{% url "staff:content:delete" content.pk %}" style="color: #f55;">Delete <i class="fas fa-trash-alt"></i></a>
                         {% endif %}
                     </div>
                 </div>

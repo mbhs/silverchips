@@ -157,9 +157,9 @@ def content_edit_view(request, pk):
 
 
 @login_required
-# @csrf_protect
+@csrf_protect
 @require_http_methods(["PATCH"])
-def set_visibility_view(request, pk, level):
+def set_content_visibility(request, pk, level):
     content = get_object_or_404(models.Content.objects, pk=pk)
 
     if not can(request.user, VISIBILITY_ACTIONS[level], content):
@@ -167,5 +167,19 @@ def set_visibility_view(request, pk, level):
 
     content.visibility = level
     content.save()
+
+    return HttpResponse(status=200)
+
+
+@login_required
+@csrf_protect
+@require_http_methods(["DELETE"])
+def delete_content(request, pk):
+    content = get_object_or_404(models.Content.objects, pk=pk)
+
+    if not can(request.user, 'delete', content):
+        raise PermissionDenied
+
+    content.delete()
 
     return HttpResponse(status=200)
