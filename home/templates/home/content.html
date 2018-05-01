@@ -43,13 +43,15 @@
 </div>
 
 <div class="row">
-    <div class="col-lg-8 col-xl-9">
+    <div class="col-md-9">
     {% render_content content %}
 
     {% if content.created != content.modified %}
         Last updated: {{ content.modified }}
         <br/><br/>
     {% endif %}
+
+    <hr/>
 
     {% for author in content.authors.all %}
         <div class="row">
@@ -65,7 +67,7 @@
     {% endfor %}
     </div>
 
-    <div class="col-sm-3">
+    <div class="col-md-3">
         <div class="card latest-stories">
             <div class="card-header mb-4">
                 <h4 class="card-title mb-0">Latest Stories</h4>
