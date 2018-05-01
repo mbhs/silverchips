@@ -8,29 +8,23 @@
 {% endblock %}
 
 {% block content %}
-    {% if request.user.is_authenticated %}
-    <div class="clearfix">
-        <h1 class="float-sm-left">
-            {{ content.title|safe }}
-            {% if request.user and content.visibility != content.PUBLISHED %}
-                <span class="badge badge-warning">{{ content.get_visibility_display|lower }}</span>
-            {% endif %}
-        </h1>
-    </div>
-    {% else %}
-    <h1>{{ content.title|safe }}</h1>
+<h1>
+    {{ content.title|safe }}
+    {% if request.user and content.visibility != content.PUBLISHED %}
+        <span class="badge badge-warning">{{ content.get_visibility_display|lower }}</span>
     {% endif %}
+</h1>
+<br/>
 
-    {% if content.section %}
-        <br/>
-        <nav aria-label="breadcrumb" role="navigation">
-        <ol class="breadcrumb">
-            {% for ancestor in content.section.get_ancestors %}
-                <li class="breadcrumb-item"><a href="{% url "home:view_section" ancestor.name %}" class="solid-link">{{ ancestor.title }}</a></li>
-            {% endfor %}
-        </ol>
-        </nav>
-    {% endif %}
+{% if content.section %}
+    <nav aria-label="breadcrumb" role="navigation">
+    <ol class="breadcrumb">
+        {% for ancestor in content.section.get_ancestors %}
+            <li class="breadcrumb-item"><a href="{% url "home:view_section" ancestor.name %}" class="solid-link">{{ ancestor.title }}</a></li>
+        {% endfor %}
+    </ol>
+    </nav>
+{% endif %}
 
 <div class="row">
     <div class="col-md-9">
