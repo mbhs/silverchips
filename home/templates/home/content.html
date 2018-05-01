@@ -44,11 +44,11 @@
 
 <div class="row">
     <div class="col-md-9">
-    {% render_content content %}
+    {% render_content request.user content %}
 
     {% if content.created != content.modified %}
         Last updated: {{ content.modified }}
-        <br/><br/>
+        <br/>
     {% endif %}
 
     <hr/>

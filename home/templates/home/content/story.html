@@ -4,10 +4,10 @@
     <p class="text-muted">{{ story.lead|safe }}</p>
 
     {% if story.cover %}
-        {% render_content story.cover %}
+        {% render_content user story.cover %}
     {% endif %}
 
     <hr/>
 
-    {{ story.text|safe|linebreaks|expand_embeds|safe }}
+    {{ story.text|safe|linebreaks|expand_embeds:user }}
 {% endwith %}

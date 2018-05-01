@@ -44,8 +44,7 @@ def view_section(request, name):
 
     return render(request, "home/section.html", {
         "section": section,
-        "subsections": subsections,
-        "navbar": section.name,
+        "subsections": subsections
     })
 
 

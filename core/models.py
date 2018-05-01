@@ -188,6 +188,9 @@ class Section(models.Model):
     def all_stories(self):
         return Story.objects.filter(visibility=Content.PUBLISHED, section__in=self.get_descendants())
 
+    def is_root(self):
+        return 
+
     class Meta:
         verbose_name_plural = "sections"
 
@@ -244,7 +247,7 @@ class Image(Content):
 
     source = models.ImageField(upload_to="images/%Y/%m/%d/")
 
-    template = "content/image.html"
+    template = "home/content/image.html"
     descriptor = "Photo"
 
 
@@ -253,7 +256,7 @@ class Video(Content):
 
     source = models.FileField(upload_to="videos/%Y/%m/%d/")
 
-    template = "content/video.html"
+    template = "home/content/video.html"
     descriptor = "Video"
 
 
@@ -262,7 +265,7 @@ class Audio(Content):
 
     source = models.FileField(upload_to="audio/%Y/%m/%d/")
 
-    template = "content/audio.html"
+    template = "home/content/audio.html"
     descriptor = "Audio"
 
 
@@ -281,7 +284,7 @@ class Story(Content):
     section = models.ForeignKey(Section, related_name="stories", null=True, on_delete=models.SET_NULL)
     cover = models.ForeignKey(Image, null=True, on_delete=models.SET_NULL)
 
-    template = "content/story.html"
+    template = "home/content/story.html"
     descriptor = "Story"
     hide_caption = True
 

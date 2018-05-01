@@ -17,12 +17,12 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarDropdown">
             <ul class="navbar-nav mx-auto">
-                <li class="nav-item {% if request.get_full_path == "/" %} active {% endif %}">
-                  <a class="nav-link" href="{% url "home:index"%}">Home</a>
+                <li class="nav-item {% if section.is_root %} active {% endif %}">
+                  <a class="nav-link" href="{% url "home:index" %}">Home</a>
                 </li>
-                {% for section in section_roots %}
-                  <li class="nav-item {% if navbar == section.name %} active {% endif %}">
-                    <a class="nav-link" href="{% url "home:view_section" section.name %}">{{ section.title }}</a>
+                {% for root_section in section_roots %}
+                  <li class="nav-item {% if root_section.name == section.name %} active {% endif %}">
+                    <a class="nav-link" href="{% url "home:view_section" root_section.name %}">{{ root_section.title }}</a>
                   </li>
                 {% endfor %}
                 <li id="subscribe" class="nav-item d-lg-none">
