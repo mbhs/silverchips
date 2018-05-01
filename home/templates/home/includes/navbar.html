@@ -1,0 +1,38 @@
+<div class="navbar-wrapper fixed-top not-scrolled">
+    <header class="navbar-wrapper-header w-100">
+        <a class="logo mx-auto py-3 d-none d-lg-block" href="#">
+            {% include "home/includes/_logo-svg.html" %}
+        </a>
+        <div id="subscribe" class="d-none d-lg-block">
+            <a class="d-inline-block mx-4" href="#">Subscribe</a>
+        </div>
+        <h6 class="lead text-center d-none d-lg-block">Montgomery Blair High School's Online Student Newspaper</h6>
+    </header>
+    <nav class="navbar navbar-expand-lg">
+        <a class="navbar-brand logo mx-auto py-3 d-lg-none" href="#">
+            {% include "home/includes/_logo-svg.html" %}
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarDropdown">
+            <ul class="navbar-nav mx-auto">
+                <li class="nav-item {% if request.get_full_path == "/" %} active {% endif %}">
+                  <a class="nav-link" href="{% url "home:index"%}">Home</a>
+                </li>
+                {% for section in section_roots %}
+                  <li class="nav-item {% if navbar == section.name %} active {% endif %}">
+                    <a class="nav-link" href="{% url "home:view_section" section.name %}">{{ section.title }}</a>
+                  </li>
+                {% endfor %}
+                <li id="subscribe" class="nav-item d-lg-none">
+                  <a class="nav-link" href="#">Subscribe</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</div>
+
+<script type="text/javascript">
+    $("body").css("marginTop", $(".navbar-wrapper").outerHeight(true));
+</script>

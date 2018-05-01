@@ -1,0 +1,52 @@
+/* FONTS */
+@import url('https://fonts.googleapis.com/css?family=Oswald|Open+Sans|Playfair+Display');
+
+/* COLORS */
+$background: #ffffff; //WHITE
+$font: #373737; //CHARCOAL
+
+$navbar: #ffffff;
+$navbar-header-background:#ffffff;
+$navbar-active: #c54c3a;
+$navbar-unactive: #000000;
+
+$section-header: #373737;
+$solid-link: #373737;
+
+$story-title: #373737;
+$author: #373737;
+
+$card-header-bg: #373737;
+$card-title-color: #ffffff;
+
+/* MASTHEAD/FOOTER BACKGROUND IMAGE */
+$background-image: url("../images/footer_lodyas.png");
+
+/* MIXINS */
+$breakpoints: (            //   Bootstrap equivalents
+    "phone":        576px, //           sm
+    "tablet":       768px, //           md
+    "desktop":      992px, //           lg
+    "desktop-wide": 1200px //           xl
+);
+
+@mixin mq($width, $type: min) {
+    @if map_has_key($breakpoints, $width) {
+        $width: map_get($breakpoints, $width);
+        @if $type == max {
+            $width: $width - 1px;
+        }
+        @media only screen and (#{$type}-width: $width) {
+            @content;
+        }
+    }
+}
+
+@function z($name) {
+    @if index($z-indexes, $name) {
+        @return (length($z-indexes) - index($z-indexes, $name)) + 1;
+    } @else {
+        @warn 'There is no item "#{$name}" in this list; choose one of: #{$z-indexes}';
+        @return null;
+    }
+}

@@ -1,0 +1,33 @@
+@import url('https://fonts.googleapis.com/css?family=UnifrakturCook:700|Droid+Serif');
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Droid Serif", serif;
+  font-weight: 500; }
+
+.serif {
+  font-family: "UnifrakturCook", serif;
+  font-size: 7rem; }
+
+h1#title {
+  font-family: "UnifrakturCook", serif;
+  font-size: 10vw;
+  margin: 4rem 0;
+  text-align: center; }
+
+.square {
+  width: 150px;
+  height: 150px;
+  overflow: hidden; }
+
+img#story-cover {
+  width: 100%;
+  margin-bottom: .5rem; }
+
+a.solid-link {
+  color: black; }
+
+footer {
+  margin-top: 3rem;
+  padding: 1rem; }
+
+div#content {
+  max-width: 80%; }

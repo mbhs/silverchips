@@ -1,0 +1,70 @@
+.navbar-wrapper {
+    background: $navbar-header-background;
+    margin-bottom: 2rem;
+    &-header {position: relative;}
+}
+.navbar {
+    background: $navbar;
+    @include mq("desktop") {
+        padding: 0 0 !important; //Desktop does not need extra padding
+    };
+ }
+ .navbar-nav .nav-link {
+     text-decoration: none;
+     text-transform: uppercase;
+     font-family: "Oswald", sans-serif;
+     font-size: 0.9em;
+     font-weight: bold;
+     letter-spacing: 0.125rem;
+     color: $navbar-unactive;
+
+     transition: padding 1s ease;
+     transition: background-color, color 0.3s ease;
+
+     &:hover {
+         background-color: $navbar-active;
+         color: white !important;
+     }
+ }
+.navbar-nav .active {.nav-link{color: $navbar-active;}}
+.navbar-wrapper-header .logo svg g {
+    fill:$font;
+}
+.navbar .logo svg g {fill: $font;}
+/* Navbar Animation */
+.not-scrolled {
+    .logo {width: 50%;}
+    .lead {height: auto; margin-bottom: 0.75rem;}
+    .navbar .nav-link {
+        padding: 10px 15px;
+        border-bottom: 3px solid gray;
+    }
+}
+.scrolled {
+    box-shadow: 0 0 10px 3px rgba(0,0,0,.4);
+    .logo {width: 30%;}
+    .lead {height: 0px; margin-bottom: 0;}
+    .navbar {border-bottom: 3px solid gray;}
+    .navbar .nav-link {padding: 4px 15px;}
+}
+.logo, .lead, .navbar .nav-link {
+    transition: all 0.3s ease;
+}
+
+.navbar-wrapper-header #subscribe {
+    position: absolute;
+    right: 0;
+    z-index: 1;
+    height: 100%;
+    a {letter-spacing: 0.125rem;}
+    a:hover {
+        text-decoration: none;
+        text-shadow: 0 2px 8.896px #c4b59d, 0 -2px 1px #fff;
+    }
+}
+#subscribe a {
+    text-transform: uppercase;
+    font-family: "Oswald";
+    font-weight: bold;
+    color: $navbar-active;
+}

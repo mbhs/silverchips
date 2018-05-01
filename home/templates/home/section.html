@@ -1,34 +1,36 @@
 {% extends "home/base.html" %}
-
+{% load static %}
 {% block title %}
     {{ section.title }}
 {% endblock %}
 
 {% block content %}
-    <h1>{{ section.title }}</h1>
-
-    <br/><br/>
-
-    {% for subsection, stories in subsections %}
-        {% if stories.count > 0 %}
-            <div class="row">
-                <div class="col-md-2">
-                    <h5>
-                    {% if subsection %}
-                        <a class="solid-link" href="{% url "home:view_section" subsection.name %}">{{ subsection.title }}</a>
-                    {% else %}
-                        Top Stories
-                    {% endif %}
-                    </h5>
+    <div class="container">
+        <section class="section-header">
+            <h1 class="section-title">{{section.title}}</h1>
+        </section>
+        <hr class="section-separator">
+        {% for subsection, stories in subsections %}
+            {% if stories.count > 0 %}
+                <div class="row">
+                    <div class="col-md-2">
+                        <h5>
+                        {% if subsection %}
+                            <a class="solid-link" href="{% url "home:view_section" subsection.name %}">{{ subsection.title }}</a>
+                        {% else %}
+                            Top Stories
+                        {% endif %}
+                        </h5>
+                    </div>
+                    <div class="col-md-10">
+                        {% for story in stories.all|slice:":5" %}
+                            {% include "home/utils/story_summary.html" with story=story %}
+                            <hr/>
+                        {% endfor %}
+                    </div>
                 </div>
-                <div class="col-md-10">
-                    {% for story in stories.all|slice:":5" %}
-                        {% include "shared/story_summary.html" with story=story %}
-                        <hr/>
-                    {% endfor %}
-                </div>
-            </div>
-            <br/>
-        {% endif %}
-    {% endfor %}
+                <br/>
+            {% endif %}
+        {% endfor %}
+    </div>
 {% endblock %}

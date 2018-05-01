@@ -3,19 +3,62 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-    {% for section in section_roots %}
-        <div class="card">
-            <div class="card-header">
-                <a class="solid-link" href="{% url "home:view_section" section.name %}"><h4 class="card-title">{{ section.title }}</h4></a>
+    <div class="container">
+            {% load static %} <!-- FOR TESTING - IMAGES -->
+            <h1 class="display-4 text-center text-uppercase">Featured</h1>
+            <hr class="my-4" />
+            <div class="row featured mb-5">
+                <div class="col-md-6 featured-col">
+                    <img class="img-fluid featured-img" src="{% static 'home/images/img_5.jpg' %}" alt="">
+                    <div class="featured-content ml-3">
+                        <a class="featured-title" href="#">Featured Story Title</a>
+                        <p class="featured-info">
+                            <i class="far fa-user mr-1"></i><a href="#">Author</a>
+                             <i class="far fa-clock mx-1"></i><a href="#">Time Stamp</a>
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-6 featured-col">
+                    <img class="img-fluid featured-img" src="{% static 'home/images/img_5.jpg' %}" alt="">
+                    <div class="featured-content ml-3">
+                        <a class="featured-title" href="#">Featured Story Title</a>
+                        <p class="featured-info">
+                            <i class="far fa-user mr-1"></i><a href="#">Author</a>
+                             <i class="far fa-clock mx-1"></i><a href="#">Time Stamp</a>
+                        </p>
+                    </div>
+                </div>
             </div>
-            <ul class="list-group list-group-flush">
-                {% for story in section.all_stories.all|slice:":5" %}
-                    <li class="list-group-item">
-                        {% include "shared/story_summary.html" with story=story %}
-                    </li>
-                {% endfor %}
-            </ul>
-        </div>
-        <br>
-    {% endfor %}
+            {% for section in section_roots %}
+                <div id="{{section.title}}" class="container">
+                    <h1 class="section-header display-4 text-center text-uppercase">
+                        <a href="{% url "home:view_section" section.name %}">{{section.title}}</a>
+                    </h1>
+                    <hr class="my-4">
+                    {% for story in section.all_stories.all|slice:"3" %}
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <img class="img-fluid mx-auto"
+                                src="{% if forloop.counter|divisibleby:"3" %}
+                                        {% static "home/images/img_2.jpg" %}
+                                    {% elif forloop.counter|divisibleby:"2"  %}
+                                        {% static "home/images/work_5.jpg" %}
+                                    {% else %}
+                                        {% static "home/images/img_4.jpg" %}
+                                    {% endif %}"
+                                alt="featurette-img">
+                            </div>
+                            <div class="col-md-8">
+                                {% include "home/utils/story_summary.html" %}
+                            </div>
+                        </div>
+                        {% if forloop.last %}
+                            <hr class="section-separator">
+                        {% else %}
+                            <hr class="story-separator">
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endfor %}
+    </div>
 {% endblock %}

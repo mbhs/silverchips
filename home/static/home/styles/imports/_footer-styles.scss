@@ -1,0 +1,134 @@
+.site-footer-wrapper {
+    position: relative;
+    width: 100%;
+    height: auto;
+    margin-top: 4em;
+    background: $background-image;
+    background-attachment: fixed;
+    color: $background;
+    .site-footer-expand {
+        height: auto;
+        padding: 2em;
+        background: #base;
+    }
+    .site-footer-left {
+        width: 100%;
+        margin-bottom: 40px;
+        text-align: center;
+        display: block;
+        @include mq('desktop') {
+            display: inline-block;
+            width: 40%;
+            text-align: left;
+        };
+        vertical-align: top;
+        .footer-logo {
+            padding: 0;
+            margin: 0;
+            span {color: rgb(184, 80, 64);}
+        }
+        .footer-links {
+            padding-top: 1.5em;
+            a {
+                position: relative;
+                text-decoration: none;
+                text-transform: uppercase;
+                font-family: "Oswald", sans-serif;
+                font-size: 0.9em;
+                font-weight: bold;
+                letter-spacing: 0.125rem;
+                color: white;
+            }
+        }
+    }
+    .site-footer-center {
+        width: 100%;
+        margin-bottom: 40px;
+        text-align: center;
+        display: block;
+        @include mq('desktop') {
+            display: inline-block;
+            width: 35%;
+            text-align: left;
+        };
+        vertical-align: top;
+        div {
+            display: block;
+            font-weight: bold;
+            .fa {
+                background-color: rgb(184, 80, 64);
+                color: #ffffff;
+                font-size: 25px;
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                text-align: center;
+                line-height: 42px;
+                margin: 10px 15px;
+                vertical-align: middle;
+            }
+            p {
+                display: inline-block;
+                vertical-align: middle;
+                margin: 0;
+                span {
+                    display: block;
+                    font-weight: normal;
+                    line-height: 2;
+                    font-size: 0.85em;
+                }
+            }
+        }
+    }
+    .site-footer-right {
+        width: 100%;
+        margin-bottom: 40px;
+        text-align: center;
+        display: block;
+        @include mq('desktop') {
+            display: inline-block;
+            width: 20%;
+            text-align: left;
+        };
+        vertical-align: top;
+        .footer-company-about {
+            span {
+                display: block;
+                color: #ffffff;
+                font-size: 14px;
+                font-weight: bold;
+                margin-bottom: 20px;
+            }
+            line-height: 20px;
+            color: rgb(245, 184, 184);
+            font-size: 13px;
+            font-weight: normal;
+            margin: 0;
+        }
+        .footer-icons {
+            margin-top: 25px;
+            a {
+                display: inline-block;
+                width: 35px;
+                height: 35px;
+                cursor: pointer;
+                background-color:rgb(184, 80, 64);
+                border-radius: 2px;
+                font-size: 20px;
+                color: #ffffff;
+                text-align: center;
+                line-height: 35px;
+                margin-right: 3px;
+                margin-bottom: 5px;
+                .fab {
+                    margin-top: 8px;
+                }
+            }
+        }
+    }
+
+    .copyright {
+        color: rgb(231, 200, 200);
+        font-size: 0.85em;;
+    }
+}

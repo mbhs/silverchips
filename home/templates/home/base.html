@@ -3,61 +3,21 @@
 
 <html>
     <head>
-        {% load staticfiles %}
-        {% include "shared/bootstrap.html" %}
-        <link type="text/css" rel="stylesheet" href="{% static "home/home.scss"|compile %}">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{% block title %}{% endblock %} | SilverChips</title>
+
+        {% load staticfiles %}
+        <link rel="shortcut icon" href="{% static "favicon.ico" %}">
+        {% include "home/includes/head.html" %}
+        <link type="text/css" rel="stylesheet" href="{% static "home/styles/home.scss"|compile %}">
     </head>
 
     <body>
-        <header>
-            <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-              <a class="navbar-brand" href="{% url "home:index" %}">SilverChips</a>
-              <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarDropdown" aria-controls="navbarDropdown" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-              </button>
-              <div class="collapse navbar-collapse" id="navbarDropdown">
-                <ul class="navbar-nav mr-auto">
-                    {% for section in section_roots %}
-                      <li class="nav-item">
-                        <a class="nav-link" href="{% url "home:view_section" section.name %}">{{ section.title }}</a>
-                      </li>
-                    {% endfor %}
-                </ul>
-                <form class="form-inline my-2 my-lg-0 mr-4">
-                  <input class="form-control mr-2" type="text" placeholder="Search">
-                  <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><i class="fas fa-search fa-lg" aria-hidden="true"></i></button>
-                </form>
-                {% if request.user.is_authenticated %}
-                    <ul class="navbar-nav my-2 my-lg-0">
-                        <li class="nav-item mr-2">
-                            <span class="navbar-text">{{ request.user.get_full_name }}</span>
-                        </li>
-                        <li class="nav-item mr-2">
-                            <a class="btn btn-primary" href="{% url "staff:index" %}">Dashboard <i class="fas fa-angle-double-up"></i></a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="btn btn-primary" href="{% url "staff:logout" %}">Logout <i class="fas fa-sign-out-alt"></i></a>
-                        </li>
-                    </ul>
-                {% endif %}
-              </div>
-            </nav>
-        </header>
+        {% include "home/includes/navbar.html" %}
 
-        <h1 id="title">silverchips.</h1>
+        {% block content %}
+        {% endblock %}
 
-        <main class="container">
-            {% block content %}
-            {% endblock %}
-        </main>
-
-        <footer class="footer bg-dark text-white">
-            <div class="container">
-                <h4>Silver Chips Online</h4>
-                &copy; 2017 Silver Chips Online / Montgomery Blair High School | 51 University Blvd. E., Silver Spring, MD 20901
-            </div>
-        </footer>
+        {% include "home/includes/footer.html" %}
     </body>
 </html>

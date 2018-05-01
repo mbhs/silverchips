@@ -3,7 +3,14 @@
 {% load humanize %}
 {% load news %}
 
-{% block title %}{{ content.title }}{% endblock %}
+{% if request.user.is_authenticated %}
+<div class="clearfix">
+    <h1 class="float-sm-left">{{ content.title|safe }}</h1>
+{#    <a class="btn btn-secondary float-sm-right" role="button" href="{% url "staff:story:edit" %}">Edit <i class="fas fa-edit"></i></a>#}
+</div>
+{% else %}
+<h1 class="mb-3">{{ content.title|safe }}</h1>
+{% endif %}
 
 {% block content %}
     {% if request.user.is_authenticated %}
@@ -29,30 +36,28 @@
         </nav>
     {% endif %}
 
-    <hr/>
-
-    <div class="row">
-        <div class="col-md-9">
-            <h5>
-                <span class="text-muted">{% if content.authors.count > 0 %}By</span>
-                {% include "shared/authors.html" with authors=content.authors %}
-                <span class="text-muted">| {% endif %}{{ content.created }} | {{ content.created|naturaltime }}</span>
-            </h5>
-        </div>
-
-        <div class="col-md-3 text-right">
-            <a href="https://www.facebook.com/dialog/share?display=popup&href=https://silverchips.mbhs.edu{{ request.path|urlencode }}"
-               target="_blank"><i class="fab fa-facebook-square fa-2x" aria-hidden="true"></i></a>
-            <a href="https://twitter.com/intent/tweet?text=Check%20out%20this%20{{ content.descriptor }}%21&hashtags=SilverChipsOnline&url=https%3A%2F%2Fsilverchips.mbhs.edu{{ request.path|urlencode }}&via=mbhsSCO"
-               target="_blank"><i class="fab fa-twitter-square fa-2x" aria-hidden="true"></i></a>
-        </div>
+<div class="row">
+    <div class="col-md-9">
+        <h5>
+            <span class="text-muted">{% if content.authors.count > 0 %}By</span>
+            {% include "home/utils/authors.html" with authors=content.authors %}
+            <span class="text-muted">| {% endif %}{{ content.created }} | {{ content.created|naturaltime }}</span>
+        </h5>
+    </div>
+    <div class="col-md-3 text-right">
+        <a href="https://www.facebook.com/dialog/share?display=popup&href=https://silverchips.mbhs.edu{{ request.path|urlencode }}"
+           target="_blank"><i class="fab fa-facebook-square fa-2x mx-1" aria-hidden="true"></i></a>
+        <a href="https://twitter.com/intent/tweet?text=Check%20out%20this%20{{ content.descriptor }}%21&hashtags=SilverChipsOnline&url=https%3A%2F%2Fsilverchips.mbhs.edu{{ request.path|urlencode }}&via=mbhsSCO"
+           target="_blank"><i class="fab fa-twitter-square fa-2x mx-1" aria-hidden="true"></i></a>
     </div>
 
     <div class="row">
         <div class="col-sm-9">
             {% render_content content %}
 
-            <hr/>
+<div class="row">
+    <div class="col-lg-8 col-xl-9">
+        {% render_content content %}
 
             {% if content.created != content.modified %}
                 Last updated: {{ content.modified }}
@@ -79,17 +84,22 @@
                     <h4 class="card-title">Latest Stories</h4>
                 </div>
 
-                <ul class="list-group list-group-flush">
-                    {% for top_story in stories|slice:":8" %}
-                        <li class="list-group-item">
-                            <div class="row">
-                                <div class="col-2"><strong>{{ forloop.counter }}</strong></div>
-                                <div class="col-10"><a href="{% url "home:view_content" top_story.id %}" class="solid-link">{{ top_story.title|safe }}</a></div>
-                            </div>
-                        </li>
-                    {% endfor %}
-                </ul>
+    <div class="col-lg-4 col-xl-3">
+        <div class="card latest-stories">
+            <div class="card-header mb-4">
+                <h4 class="card-title mb-0">Latest Stories</h4>
             </div>
+            {% load static %}
+            <ul class="list-group list-group-flush">
+                {% for top_story in stories|slice:":8" %}
+                    <li class="list-group-item {% if not forloop.last %}mb-1{% else %}mb-3{% endif %} ml-3">
+                        <div class="row">
+                            <div class="col-2"><strong>{{ forloop.counter }}</strong></div>
+                            <div class="col-10"><a href="{% url "home:view_content" top_story.id %}" class="solid-link">{{ top_story.title|safe }}</a></div>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
         </div>
     </div>
 {% endblock %}

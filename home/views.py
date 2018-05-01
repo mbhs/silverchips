@@ -26,7 +26,7 @@ def index(request):
     return render(request, "home/index.html")
 
 
-SECTION_COUNT = 5
+SECTION_COUNT = 3
 
 
 def view_section(request, name):
@@ -44,7 +44,8 @@ def view_section(request, name):
 
     return render(request, "home/section.html", {
         "section": section,
-        "subsections": subsections
+        "subsections": subsections,
+        "navbar": section.name,
     })
 
 
