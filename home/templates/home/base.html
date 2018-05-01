@@ -15,8 +15,10 @@
     <body>
         {% include "home/includes/navbar.html" %}
 
+        <div class="container">
         {% block content %}
         {% endblock %}
+        </div>
 
         {% include "home/includes/footer.html" %}
     </body>
