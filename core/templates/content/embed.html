@@ -1,5 +1,11 @@
 <br/>
+{% if content %}
 {% include content.template %}
 {% if not content.hide_caption %}
-    <p class="text-muted text-center"><small>{{ content.descriptor }}: {{ content.description }}</small></p>
+  <p class="text-muted text-center"><small>{{ content.descriptor }}: {{ content.description }}</small></p>
+{% endif %}
+{% else %}
+<div class="alert alert-danger" role="alert">
+  <strong>Oh no!</strong> This content is missing or restricted.
+</div>
 {% endif %}

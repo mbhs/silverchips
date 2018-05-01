@@ -20,7 +20,11 @@ def expand_embeds(text):
     For example, <sco:embed id=3734/> will be replaced with the rendered HTML template of content #3734.
     """
     def replace(match):
-        return render_content(Content.objects.get(pk=int(match.group(1))))
+        try:
+            content = Content.objects.get(pk=int(match.group(1)))
+        except Content.DoesNotExist:
+            content = None
+        return render_content(content)
 
     text = re.sub("<sco:embed id=(\d+)/>", replace, text)
     return text

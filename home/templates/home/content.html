@@ -57,32 +57,34 @@
 
 <div class="row">
     <div class="col-lg-8 col-xl-9">
-        {% render_content content %}
+    {% render_content content %}
 
-            {% if content.created != content.modified %}
-                Last updated: {{ content.modified }}
-                <br/><br/>
-            {% endif %}
+    {% if content.created != content.modified %}
+        Last updated: {{ content.modified }}
+        <br/><br/>
+    {% endif %}
 
-            {% for author in content.authors.all %}
-                <div class="row">
-                    <div class="col-2">{% if author.profile.avatar %}<img src="{{ author.profile.avatar.source.url }}" class="img-fluid rounded-circle">{% endif %}</div>
-                    <div class="col-10">
-                        <p>
-                            <strong>{{ author.get_full_name }}.</strong>
-                            <span class="text-muted">{{ author.profile.biography|truncatewords:45 }}</span>
-                            <a href="{% url "home:view_profile" author.pk %}" class="solid-link">More &raquo;</a>
-                        </p>
-                    </div>
-                </div>
-            {% endfor %}
+    {% for author in content.authors.all %}
+        <div class="row">
+            <div class="col-2">{% if author.profile.avatar %}<img src="{{ author.profile.avatar.source.url }}" class="img-fluid rounded-circle">{% endif %}</div>
+            <div class="col-10">
+                <p>
+                    <strong>{{ author.get_full_name }}.</strong>
+                    <span class="text-muted">{{ author.profile.biography|truncatewords:45 }}</span>
+                    <a href="{% url "home:view_profile" author.pk %}" class="solid-link">More &raquo;</a>
+                </p>
+            </div>
         </div>
+    {% endfor %}
+    </div>
 
-        <div class="col-sm-3">
-            <div class="card">
-                <div class="card-header">
-                    <h4 class="card-title">Latest Stories</h4>
-                </div>
+    <div class="col-sm-3">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Latest Stories</h4>
+            </div>
+        </div>
+    </div>
 
     <div class="col-lg-4 col-xl-3">
         <div class="card latest-stories">
