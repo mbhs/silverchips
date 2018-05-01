@@ -1,11 +1,13 @@
 <br/>
+<div class="content">
 {% if content %}
-{% include content.template %}
-{% if not content.hide_caption %}
-  <p class="text-muted text-center"><small>{{ content.descriptor }}: {{ content.description }}</small></p>
+  {% include content.template %}
+  {% if not content.hide_caption %}
+    <p class="text-muted text-center"><small>{{ content.descriptor }}: {{ content.description }}</small></p>
+  {% endif %}
+  {% else %}
+  <div class="alert alert-danger" role="alert">
+    <strong>Oh no!</strong> The content that's supposed to go here is missing or restricted.
+  </div>
 {% endif %}
-{% else %}
-<div class="alert alert-danger" role="alert">
-  <strong>Oh no!</strong> The content that's supposed to go here is missing or restricted.
 </div>
-{% endif %}

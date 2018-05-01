@@ -4,8 +4,8 @@
     {{ widget.value|default_if_none:""|safe }}</div>
 <input id="{{ widget.name }}" name="{{ widget.name }}" type="hidden">
 <script>
-    window.addEventListener("load", function() {
-        var editor = quill("#{{ widget.name }}-editor");
+    $(window).on("load", function() {
+        var editor = quill("#{{ widget.name }}-editor", {{ widget.attrs.short|yesno:"true,false" }}, {{ widget.attrs.embed|yesno:"true,false" }});
         var form = document.getElementById("{{ widget.name }}").form;
         form.addEventListener("submit", function() {
             form.{{ widget.name }}.value = editor.root.innerHTML;

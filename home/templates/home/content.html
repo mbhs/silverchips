@@ -47,7 +47,7 @@
     {% render_content request.user content %}
 
     {% if content.created != content.modified %}
-        Last updated: {{ content.modified }}
+        <em>Last updated: {{ content.modified }}</em>
         <br/>
     {% endif %}
 

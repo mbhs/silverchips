@@ -1,3 +1,4 @@
+{% load staticfiles %}
 <div class="navbar-wrapper fixed-top not-scrolled">
     <header class="navbar-wrapper-header w-100">
         <a class="logo mx-auto py-3 d-none d-lg-block" href="#">
@@ -33,6 +34,4 @@
     </nav>
 </div>
 
-<script type="text/javascript">
-    $("body").css("marginTop", $(".navbar-wrapper").outerHeight(true));
-</script>
+<script defer src="{% static "home/scripts/navbar.js" %}"></script>

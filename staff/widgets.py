@@ -6,9 +6,10 @@ class RichTextWidget(Widget):
 
     template_name = 'staff/includes/richtext.html'
 
-    def __init__(self, short=False, **kwargs):
+    def __init__(self, short=False, embed=False, **kwargs):
         super(RichTextWidget, self).__init__(**kwargs)
         self.attrs['short'] = short
+        self.attrs['embed'] = embed
 
     class Media:
         css = {

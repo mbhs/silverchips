@@ -26,7 +26,7 @@ class ContentForm(forms.ModelForm):
         fields = ['title', 'authors', 'description']
         widgets = {
             'title': forms.widgets.TextInput(),
-            'lead': RichTextWidget(short=True),
+            'description': RichTextWidget(short=True),
             'authors': autocomplete.ModelSelect2Multiple(url="staff:autocomplete:users")
         }
         abstract = True
@@ -38,7 +38,7 @@ class StoryForm(ContentForm):
     class Meta(ContentForm.Meta):
         model = models.Story
         fields = ContentForm.Meta.fields + ['lead', 'text']
-        widgets = dict(ContentForm.Meta.widgets, text=RichTextWidget())
+        widgets = dict(ContentForm.Meta.widgets, text=RichTextWidget(embed=True), lead=RichTextWidget(short=True))
 
 
 class ImageForm(ContentForm):
