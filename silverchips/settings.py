@@ -140,13 +140,12 @@ STATICFILES_FINDER = (
     'static_precompiler.finders.StaticPrecompilerFinder',
 )
 
-# Not the official staticfiles root because we're not using static file collection
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
-STATICFILES_DIRS = (STATIC_ROOT,)
+STATICFILES_DIRS = (os.path.join(BASE_DIR, "silverchips", "static"),)
 STATIC_URL = '/static/'
 
-STATIC_PRECOMPILER_ROOT = STATIC_ROOT
+STATIC_PRECOMPILER_ROOT = os.path.join(BASE_DIR, "silverchips", "static")
 STATIC_PRECOMPILER_OUTPUT_DIR = "compiled"
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
