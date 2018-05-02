@@ -16,7 +16,7 @@ pillow = "*"
 django-polymorphic = "*"
 django-extra-views = "*"
 "psycopg2" = "*"
-
+gunicorn = "*"
 
 [dev-packages]
 

@@ -141,12 +141,12 @@ STATICFILES_FINDER = (
 )
 
 # Not the official staticfiles root because we're not using static file collection
-static_root = os.path.join(BASE_DIR, "static")
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
-STATICFILES_DIRS = (static_root,)
+STATICFILES_DIRS = (STATIC_ROOT,)
 STATIC_URL = '/static/'
 
-STATIC_PRECOMPILER_ROOT = static_root
+STATIC_PRECOMPILER_ROOT = STATIC_ROOT
 STATIC_PRECOMPILER_OUTPUT_DIR = "compiled"
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
