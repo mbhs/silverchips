@@ -102,3 +102,5 @@ db.sqlite3-journal
 import/data/
 
 Pipfile.lock
+
+static/
