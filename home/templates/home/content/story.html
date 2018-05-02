@@ -9,5 +9,7 @@
 
     <hr/>
 
+    <div class="story-text">
     {{ story.text|safe|linebreaks|expand_embeds:user }}
+    </div>
 {% endwith %}

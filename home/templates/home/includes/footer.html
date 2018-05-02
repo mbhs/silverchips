@@ -4,10 +4,10 @@
             <h4 class="footer-logo">Silver<span>Chips</span> Online</h4>
             <p class="footer-links">
                 {% for section in section_roots %}
-                    <a href="{% url 'home:view_section' section.name %}">{{section.title}}</a> {% if not forloop.last %} &middot; {% endif %}
+                    <a href="{% url 'home:view_section' section.name %}">{{ section.title }}</a> {% if not forloop.last %} &middot; {% endif %}
                 {% endfor %}
             </p>
-            <p class="copyright">Silver Chips © 2018</p>
+            <p class="copyright">Content &copy; 2001-2018, Website &copy; 2016-2018 SilverChips Online</p>
         </div>
         <div class="site-footer-center">
             <div>
@@ -16,17 +16,18 @@
     		</div>
     		<div>
     			<i class="fa fa-phone"></i>
-    			<p>+1 555 123456</p>
+    			<p>(301) 649-2856</p>
     		</div>
     		<div>
     			<i class="fa fa-envelope"></i>
-    		    <p>mbhs.edu@gmail.com</p>
+                <p>editors.sco@gmail.com</p>
     		</div>
         </div>
         <div class="site-footer-right">
             <p class="footer-company-about">
     			<span>About us</span>
-    			Lorem ipsum dolor sit amet, consectateur adispicing elit. Fusce euismod convallis velit, eu auctor lacus vehicula sit amet.
+    			SilverChips Online is the online version of SilverChips, the award-winning newspaper published by students from Montgomery
+                Blair High School in Silver Spring, Maryland.
     		</p>
             <div class="footer-icons">
                 <a target="_blank" href="https://twitter.com/mbhsSCO?lang=en"><i class="fab fa-twitter"></i></a>

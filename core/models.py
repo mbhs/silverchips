@@ -30,6 +30,7 @@ class Profile(models.Model):
     avatar = models.ForeignKey("Image", blank=True, null=True, on_delete=models.SET_NULL)
     position = models.TextField()
     graduation_year = models.IntegerField()
+    active = models.BooleanField(default=True)
 
     def __str__(self):
         """Represent the profile as a string."""
