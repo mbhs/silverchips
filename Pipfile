@@ -15,6 +15,7 @@ six = "*"
 pillow = "*"
 django-polymorphic = "*"
 django-extra-views = "*"
+"psycopg2" = "*"
 
 
 [dev-packages]
