@@ -134,18 +134,15 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
-STATICFILES_FINDER = (
+STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     'static_precompiler.finders.StaticPrecompilerFinder',
 )
 
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
-
-STATICFILES_DIRS = (os.path.join(BASE_DIR, "silverchips", "static"),)
 STATIC_URL = '/static/'
 
-STATIC_PRECOMPILER_ROOT = os.path.join(BASE_DIR, "silverchips", "static")
 STATIC_PRECOMPILER_OUTPUT_DIR = "compiled"
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
