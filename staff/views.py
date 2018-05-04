@@ -147,12 +147,21 @@ class StoryEditView(ContentEditView):
     template_name = "staff/content/edit.html"
 
 
+class ImageEditView(ContentEditView):
+    """View for editing images."""
+
+    model = models.Image
+    form_class = forms.ImageForm
+    template_name = "staff/content/edit.html"
+
+
 def content_edit_view(request, pk):
     content = get_object_or_404(models.Content.objects, pk=pk)
 
     # Switch which view gets received based on the kind of content
     return {
-        'Story': StoryEditView
+        'Story': StoryEditView,
+        'Image': ImageEditView,
     }[content.type].as_view()(request, pk=pk)
 
 

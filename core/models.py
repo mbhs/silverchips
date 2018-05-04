@@ -31,7 +31,7 @@ class Profile(models.Model):
     biography = models.TextField()
     avatar = models.ForeignKey("Image", blank=True, null=True, on_delete=models.SET_NULL)
     position = models.TextField()
-    graduation_year = models.IntegerField()
+    graduation_year = models.IntegerField(default=timezone.now().year+4)
     active = models.BooleanField(default=True)
 
     def __str__(self):
@@ -94,7 +94,7 @@ class Content(PolymorphicModel):
     title = models.TextField()
     description = models.TextField()
     authors = models.ManyToManyField(User, related_name="%(class)s_authored")  # user.image_authored
-    guest_authors = models.CharField(max_length=64, default="")
+    guest_authors = models.CharField(max_length=64, default="", blank=True)
 
     # A content can be publishable or unpublishable. This essentially
     # refers to whether or not it is to be made available as a

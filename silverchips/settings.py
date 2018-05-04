@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'core',
     'home',
     'staff',
+    'dal',
     'dal_select2',
     'polymorphic',
     'django.contrib.admin',
