@@ -6,7 +6,7 @@ of everything a normal user would see while visiting the website.
 
 # Django imports
 from django.core.exceptions import PermissionDenied
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 
 # News imports
 from core import models
@@ -48,10 +48,13 @@ def view_section(request, name):
     })
 
 
-def view_content(request, pk):
+def view_content(request, pk, slug=None):
     """Render specific content in the newspaper."""
 
     content = get_object_or_404(models.Content, id=int(pk))
+
+    if content.slug != slug:
+        return redirect("home:view_content", content.slug, content.pk)
 
     if not can(request.user, 'read', content):
         raise PermissionDenied

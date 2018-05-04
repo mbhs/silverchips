@@ -7,7 +7,9 @@ about models in the previous platform are located there as well.
 from django.db import models
 import django.contrib.auth.models as auth
 from django.utils import timezone
+from django.utils.text import slugify
 from django.core.validators import RegexValidator
+from django.urls import reverse
 from polymorphic.models import PolymorphicModel
 
 
@@ -93,13 +95,6 @@ class Content(PolymorphicModel):
     description = models.TextField()
     authors = models.ManyToManyField(User, related_name="%(class)s_authored")  # user.image_authored
 
-    # The intent to use a content creator field is to be able to tie
-    # content to a registered user if it is authored by, for example,
-    # a guest writer outside of Silver Chips. We ultimately decided
-    # to drop this functionality because editors can see all content,
-    # and so should be in charge of managing external authors.
-    # creator = models.ForeignKey(User, related_name="%(class)s_created", on_delete=models.CASCADE)
-
     # A content can be publishable or unpublishable. This essentially
     # refers to whether or not it is to be made available as a
     # standalone item on the site. For example, stories would always
@@ -134,6 +129,10 @@ class Content(PolymorphicModel):
     def type(self):
         return type(self).__name__
 
+    @property
+    def slug(self):
+        return slugify(self.title)
+
     def __str__(self):
         """Represent the content as a string."""
 
@@ -156,6 +155,9 @@ class Content(PolymorphicModel):
             ('publish_content', "Can publish content"),
             ('hide_content', "Can hide content")
         )
+
+    def get_absolute_url(self):
+        return reverse('home:view_content', args=[self.slug, self.pk])
 
 
 # Section names should be pretty

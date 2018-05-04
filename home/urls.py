@@ -15,6 +15,7 @@ app_name = "home"
 urlpatterns = [
     path("", views.index, name="index"),
     path("content/<int:pk>", views.view_content, name="view_content"),
+    path("content/<slug:slug>-<int:pk>", views.view_content, name="view_content"),
     path("profile/<int:pk>", views.view_profile, name="view_profile"),
     path("section/<path:name>", views.view_section, name="view_section"),
 
