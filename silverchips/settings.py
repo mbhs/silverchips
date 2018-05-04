@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
-    'django_forms_bootstrap',
+    'crispy_forms',
     'static_precompiler',
     'django.contrib.contenttypes',
 ]
@@ -148,6 +148,8 @@ STATIC_PRECOMPILER_OUTPUT_DIR = "compiled"
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
 MEDIA_URL = '/uploads/'
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 
 # Login

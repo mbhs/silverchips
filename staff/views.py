@@ -18,6 +18,7 @@ from django.views.generic import ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse
 from django.utils import timezone
+from django.db.models import Q
 
 # Local imports
 from core import models
@@ -87,13 +88,35 @@ class ContentListView(ListView):
         """Get all stories by the request user."""
 
         if self.request.user.has_perm('core.read_content'):
-            return models.Content.objects.all()
+            content = models.Content.objects.all()
         else:
-            return models.Content.objects.filter(authors=self.request.user).all()
+            content = models.Content.objects.filter(authors=self.request.user).all()
+
+        form = forms.ContentSearchForm(self.request.GET)
+        if form.is_valid():
+            query = Q()
+
+            if 'title' in form.data and form.data['title']:
+                query &= Q(title__contains=form.data['title'])
+            if 'id' in form.data and form.data['id']:
+                query &= Q(pk=int(form.data['id']))
+            if 'before' in form.data and form.data['before']:
+                query &= Q(created__lt=form.data['before'])
+            if 'after' in form.data and form.data['after']:
+                query &= Q(created__gt=form.data['after'])
+            if 'authors' in form.data and form.data['authors']:
+                query &= Q(authors=form.data['authors'])
+
+            content = content.filter(query)
+
+        content = content.filter()
+
+        return content
 
     def get_context_data(self, **kwargs):
         context = super(ListView, self).get_context_data(**kwargs)
         context['pages'] = range(3)
+        context['form'] = forms.ContentSearchForm(self.request.GET)
         return context
 
 

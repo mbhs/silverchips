@@ -1,3 +1,17 @@
-.control-label {
+.col-form-label {
   font-weight: bold;
+}
+
+.asteriskField {
+  display: none;
+}
+
+body {
+  margin-bottom: 1em;
+}
+
+.form-inline {
+  .col-form-label, .form-group {
+    margin-right: 1em;
+  }
 }

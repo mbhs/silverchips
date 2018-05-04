@@ -8,6 +8,8 @@ from django import forms
 from core import models
 from staff.widgets import RichTextWidget
 from dal import autocomplete
+from crispy_forms.helper import FormHelper
+
 
 
 # Form classes
@@ -20,6 +22,13 @@ class LoginForm(forms.Form):
 
 class ContentForm(forms.ModelForm):
     """A generic editor for any kind of content."""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_tag = False
+        self.helper.label_class = 'col-lg-2'
+        self.helper.field_class = 'col-lg-8'
 
     class Meta:
         model = models.Content
@@ -47,3 +56,20 @@ class ImageForm(ContentForm):
     class Meta(ContentForm.Meta):
         model = models.Image
         fields = ContentForm.Meta.fields + ['source']
+
+
+class ContentSearchForm(forms.Form):
+    """Form for searching through content."""
+
+    id = forms.IntegerField(label="ID:", required=False)
+    title = forms.CharField(label="Title:", required=False, max_length=100)
+    before = forms.DateField(label="Before:", required=False, widget=forms.TextInput(attrs={'type': 'date'}))
+    after = forms.DateField(label="After:", required=False, widget=forms.TextInput(attrs={'type': 'date'}))
+    authors = forms.ModelMultipleChoiceField(label="Authors:", queryset=models.User.objects.all(),
+                                             required=False, widget=autocomplete.ModelSelect2Multiple(url="staff:autocomplete:users"))
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_tag = False
+        self.helper.disable_csrf = True

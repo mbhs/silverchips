@@ -17,6 +17,7 @@ django-polymorphic = "*"
 django-extra-views = "*"
 "psycopg2" = "*"
 gunicorn = "*"
+django-crispy-forms = "*"
 
 
 [dev-packages]

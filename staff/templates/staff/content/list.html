@@ -1,11 +1,25 @@
 {% extends "staff/base.html" %}
 {% load news %}
+{% load crispy_forms_tags %}
 
 {% block title %}Content List{% endblock %}
 
 {% block content %}
 {% csrf_token %}
 <h1>Content List</h1>
+
+<div class="card">
+  <div class="card-body">
+    <form method="get">
+      <div class="form-inline">
+      {% crispy form form.helper %}
+      </div>
+      <br/>
+      <button type="submit" class="btn btn-success">Search <i class="fas fa-search"></i></button>
+    </form>
+  </div>
+</div>
+<br/>
 
 <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -45,6 +59,7 @@ function doApi(url, verb) {
 }
 </script>
 
+{% if content_list %}
 <div class="table-responsive">
     <table class="table table-striped">
         <thead>
@@ -107,10 +122,10 @@ function doApi(url, verb) {
     <ul class="pagination justify-content-center">
         {% if page_obj.has_previous %}
         <li class="page-item">
-            <a class="page-link" href="?page=1"><i class="fas fa-angle-double-left"></i> First</a>
+            <a class="page-link" href="?{{ request.GET.urlencode }}&page=1"><i class="fas fa-angle-double-left"></i> First</a>
         </li>
         <li class="page-item">
-            <a class="page-link" href="?page={{ page_obj.previous_page_number }}"><i class="fas fa-angle-left"></i> Previous</a>
+            <a class="page-link" href="?{{ request.GET.urlencode }}&page={{ page_obj.previous_page_number }}"><i class="fas fa-angle-left"></i> Previous</a>
         </li>
         {% else %}
         <li class="page-item disabled">
@@ -125,7 +140,7 @@ function doApi(url, verb) {
         {% for i in range %}
         {% if page_obj.number|add:i > 0 %}
         <li class="page-item">
-            <a class="page-link" href="?page={{ page_obj.number|add:i }}">
+            <a class="page-link" href="?{{ request.GET.urlencode }}&page={{ page_obj.number|add:i }}">
                 {{ page_obj.number|add:i }}
             </a>
         </li>
@@ -133,7 +148,7 @@ function doApi(url, verb) {
         {% endfor %}
 
         <li class="page-item active">
-            <a class="page-link" href="?page={{ page_obj.number }}">
+            <a class="page-link" href="?{{ request.GET.urlencode }}&page={{ page_obj.number }}">
                 {{ page_obj.number }}
                 <span class="sr-only">(current)</span>
             </a>
@@ -143,7 +158,7 @@ function doApi(url, verb) {
         {% for i in range %}
         {% if page_obj.number|add:i <= page_obj.paginator.num_pages  %}
         <li class="page-item">
-            <a class="page-link" href="?page={{ page_obj.number|add:i }}">
+            <a class="page-link" href="?{{ request.GET.urlencode }}&page={{ page_obj.number|add:i }}">
                 {{ page_obj.number|add:i }}
             </a>
         </li>
@@ -152,10 +167,10 @@ function doApi(url, verb) {
 
         {% if page_obj.has_next %}
         <li class="page-item">
-            <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next <i class="fas fa-angle-right"></i></a>
+            <a class="page-link" href="?{{ request.GET.urlencode }}&page={{ page_obj.next_page_number }}">Next <i class="fas fa-angle-right"></i></a>
         </li>
         <li class="page-item">
-            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last <i class="fas fa-angle-double-right"></i></a>
+            <a class="page-link" href="?{{ request.GET.urlencode }}&page={{ page_obj.paginator.num_pages }}">Last <i class="fas fa-angle-double-right"></i></a>
         </li>
         {% else %}
         <li class="page-item disabled">
@@ -167,5 +182,8 @@ function doApi(url, verb) {
         {% endif %}
     </ul>
 </nav>
+{% endif %}
+{% else %}
+Sorry, there was no content matching your request!
 {% endif %}
 {% endblock %}
