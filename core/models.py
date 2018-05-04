@@ -94,6 +94,7 @@ class Content(PolymorphicModel):
     title = models.TextField()
     description = models.TextField()
     authors = models.ManyToManyField(User, related_name="%(class)s_authored")  # user.image_authored
+    guest_authors = models.CharField(max_length=64, default="")
 
     # A content can be publishable or unpublishable. This essentially
     # refers to whether or not it is to be made available as a

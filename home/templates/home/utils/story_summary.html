@@ -1,5 +1,5 @@
 <h4 class="title"><a href="{% url "home:view_content" story.pk %}" class="solid-link">{{ story.title|safe }}</a></h4>
-<h6 class="authors"><span class="text-muted">By</span> {% include "home/utils/authors.html" with authors=story.authors %} <span class="text-muted">|</span>
+<h6 class="authors"><span class="text-muted">By</span> {% include "home/utils/authors.html" with content=story %} <span class="text-muted">|</span>
 {{ story.created }}
 {% if story.section %}<span class="text-muted">| In</span> <a href="{% url "home:view_section" story.section.name %}" class="solid-link">{{ story.section.title }} &raquo;</a>{% endif %}</h6>
 <p class="">{{ story.lead|safe }}</p>

@@ -23,7 +23,7 @@ class ContentForm(forms.ModelForm):
 
     class Meta:
         model = models.Content
-        fields = ['title', 'authors', 'description']
+        fields = ['title', 'authors', 'guest_authors', 'description']
         widgets = {
             'title': forms.widgets.TextInput(),
             'description': RichTextWidget(short=True),
