@@ -14,6 +14,7 @@ from . import views
 app_name = "home"
 urlpatterns = [
     path("", views.index, name="index"),
+    path("c/<int:pk>", views.view_content, name="view_content"),
     path("content/<int:pk>", views.view_content, name="view_content"),
     path("content/<slug:slug>-<int:pk>", views.view_content, name="view_content"),
     path("profile/<int:pk>", views.view_profile, name="view_profile"),

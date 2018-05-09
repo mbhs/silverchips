@@ -86,9 +86,7 @@ def view_profile(request, pk):
 def staff(request):
     """Display a list of all of the newspaper's staff."""
 
-
     active = models.User.objects.filter(profile__active=True)
-
 
     return render(request, "home/staff.html", {
         "active": models.User.objects.filter(profile__active=True)

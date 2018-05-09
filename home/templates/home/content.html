@@ -13,6 +13,10 @@
     {% if request.user and content.visibility != content.PUBLISHED %}
         <span class="badge badge-warning">{{ content.get_visibility_display|lower }}</span>
     {% endif %}
+
+    {% if request.user|can_edit:content %}
+    <a class="btn btn-primary" href="{% url "staff:content:edit" content.pk %}">Edit <i class="fas fa-pencil-alt"></i></a>
+    {% endif %}
 </h1>
 <br/>
 
@@ -26,20 +30,20 @@
     </nav>
 {% endif %}
 
-<div class="row">
+<div class="row mb-3">
     <div class="col-md-9">
-        <h5>
+        <span class="h5">
             <span class="text-muted">{% if content.authors.count > 0 %}By</span>
             {% include "home/utils/authors.html" with content=content %}
             <span class="text-muted">| {% endif %}{{ content.created }} | {{ content.created|naturaltime }}</span>
-        </h5>
+        </span>
     </div>
-    <!--<div class="col-md-3 text-right">-->
-        <!--<a href="https://www.facebook.com/dialog/share?display=popup&href=https://silverchips.mbhs.edu{{ request.path|urlencode }}"-->
-           <!--target="_blank"><i class="fab fa-facebook-square fa-2x mx-1" aria-hidden="true"></i></a>-->
-        <!--<a href="https://twitter.com/intent/tweet?text=Check%20out%20this%20{{ content.descriptor }}%21&hashtags=SilverChipsOnline&url=https%3A%2F%2Fsilverchips.mbhs.edu{{ request.path|urlencode }}&via=mbhsSCO"-->
-           <!--target="_blank"><i class="fab fa-twitter-square fa-2x mx-1" aria-hidden="true"></i></a>-->
-    <!--</div>-->
+    <div class="col-md-3 text-right">
+        <a href="https://www.facebook.com/dialog/share?display=popup&href=https://silverchips.mbhs.edu/content/{{ content.pk }}"
+           target="_blank"><i class="fab fa-facebook-square fa-2x mx-1" aria-hidden="true"></i></a>
+        <a href="https://twitter.com/intent/tweet?text=Check%20out%20this%20{{ content.descriptor }}%2C%20%22{{ content.title|urlencode }}%22%2C%20on%20SilverChips%20Online%21&hashtags=SilverChipsOnline&url=https%3A%2F%2Fsco.mbhs.edu%2Fc%2F{{ content.pk }}&via=mbhsSCO"
+           target="_blank"><i class="fab fa-twitter-square fa-2x mx-1" aria-hidden="true"></i></a>
+    </div>
 </div>
 
 <div class="row">
@@ -69,7 +73,7 @@
 
     <div class="col-md-3">
         <div class="card latest-stories">
-            <div class="card-header mb-4">
+            <div class="card-header mb-3">
                 <h4 class="card-title mb-0">Latest Stories</h4>
             </div>
 

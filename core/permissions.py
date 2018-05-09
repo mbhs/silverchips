@@ -16,7 +16,7 @@ def can(user, action, content):
         return content.visibility == Content.DRAFT and user in content.authors.all() and user.has_perm(
             'core.draft_content') \
                or (
-                           Content.DRAFT <= content.visibility <= Content.PENDING or content.visibility == Content.HIDDEN and user.has_perm(
+                           Content.DRAFT <= content.visibility or content.visibility == Content.HIDDEN and user.has_perm(
                        'hide_content')) and user.has_perm('core.edit_content')
     if action == 'delete':
         return (content.visibility == Content.DRAFT and user in content.authors.all() and user.has_perm(
