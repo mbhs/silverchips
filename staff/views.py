@@ -100,10 +100,10 @@ class ContentListView(ListView):
                 query &= Q(title__contains=form.data['title'])
             if 'id' in form.data and form.data['id']:
                 query &= Q(pk=int(form.data['id']))
-            if 'before' in form.data and form.data['before']:
-                query &= Q(created__lt=form.data['before'])
             if 'after' in form.data and form.data['after']:
                 query &= Q(created__gt=form.data['after'])
+            if 'before' in form.data and form.data['before']:
+                query &= Q(created__lt=form.data['before'])
             if 'authors' in form.data and form.data['authors']:
                 query &= Q(authors=form.data['authors'])
 

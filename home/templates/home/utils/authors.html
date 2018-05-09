@@ -1,6 +1,6 @@
 {% for author in content.authors.all %}
-    {% if forloop.last and authors.count > 1 %} <span class="text-muted">and</span> {% endif %}
-    <a href="{% url "home:view_profile" author.pk %}" class="solid-link">{{ author.get_full_name }}</a>{% if not forloop.last and authors.count > 2 %},{% endif %}
+    {% if forloop.last and content.authors.count > 1 %} <span class="text-muted">and</span> {% endif %}
+    <a href="{% url "home:view_profile" author.pk %}" class="solid-link">{{ author.get_full_name }}</a>{% if not forloop.last and content.authors.count > 2 %},{% endif %}
 {% endfor %}
 
 {% if content.guest_authors %} <span class="text-muted">with</span> {{ content.guest_authors }} {% endif %}

@@ -27,6 +27,7 @@ class ContentForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_tag = False
+        self.helper.form_class = 'form-horizontal'
         self.helper.label_class = 'col-lg-2'
         self.helper.field_class = 'col-lg-8'
 
@@ -63,8 +64,8 @@ class ContentSearchForm(forms.Form):
 
     id = forms.IntegerField(label="ID:", required=False)
     title = forms.CharField(label="Title:", required=False, max_length=100)
-    before = forms.DateField(label="Before:", required=False, widget=forms.TextInput(attrs={'type': 'date'}))
-    after = forms.DateField(label="After:", required=False, widget=forms.TextInput(attrs={'type': 'date'}))
+    after = forms.DateField(label="Created After:", required=False, widget=forms.TextInput(attrs={'type': 'date'}))
+    before = forms.DateField(label="Created Before:", required=False, widget=forms.TextInput(attrs={'type': 'date'}))
     authors = forms.ModelMultipleChoiceField(label="Authors:", queryset=models.User.objects.all(),
                                              required=False, widget=autocomplete.ModelSelect2Multiple(url="staff:autocomplete:users"))
 

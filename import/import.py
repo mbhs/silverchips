@@ -1,12 +1,13 @@
 # Generate the database dump with the following command:
 #   > mysqldump silverchips --xml -u root -p > /tmp/silverchips.xml
 
-import os, re
 from django import setup
 from django.core.files import File
+from django.utils import timezone
+
+pyimport os, re
 from xml.etree import ElementTree as et
 from datetime import datetime
-from django.utils import timezone
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "silverchips.settings")
 setup()
@@ -149,6 +150,7 @@ if ask_reimport("stories"):
             # Replace the old picture ID with the new content ID corresponding to that picture
             text = re.sub("<sco:picture id=(\d+)>",
                           lambda match: "<sco:embed id={}/>".format(Image.objects.get(legacy_id=match.group(1)).pk), text)
+            text = linebreaks(text)
 
             story = Story(legacy_id=get_field(old_story, "sid"),
                           title=get_field(old_story, "headline", "(no title)"),
