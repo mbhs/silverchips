@@ -16,10 +16,11 @@ Prequisites: Python 3+, `pip`, `pipenv`, and Ruby `sass`.
 ### Quick Start
 1. Clone this repository: `git clone https://github.com/mbhs/silverchips.git`.
 2. `cd` into `silverchips`: `cd silverchips`.
-3. Install requirements: `pipenv install`
+3. Run `pipenv --three install --dev` to make a new virtualenv/pipenv
+4. Run `pipenv shell` to enter the new environment
 5. Make migrations and apply:
    - `python manage.py makemigrations core`
-   - `python manage.py migrate`
+   - `python manage.py migrate --run-syncdb`
 6. Load test data: `manage.py loaddata core/fixtures/recent.json`.
 7. Run server: `python manage.py runserver`.
 8. Go to: `localhost:8000`
