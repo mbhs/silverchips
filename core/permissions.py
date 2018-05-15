@@ -12,11 +12,17 @@ USER_ACTIONS = ['manage', 'edit_profile']
 
 
 def can(user, action, obj):
-    """Master permission logic for the entire backend."""
+    """Master object-level permission logic for the entire backend.
 
-    t, action = action.split('.')
+    This function allows us to check whether a given user has permission
+    to perform a given "action" on a particular "object". This can depend
+    both on the permissions of the user and on properties of the object.
+    Actions will take the form "<type>.<type_action>", such as "content.edit".
+    """
 
-    if t == 'content':
+    _type, action = action.split('.')
+
+    if _type == 'content':
         assert isinstance(obj, Content)
 
         # This is the only action that can take place without any authentication
@@ -31,14 +37,14 @@ def can(user, action, obj):
                 'core.draft_content') \
                    or (
                                Content.DRAFT <= obj.visibility or obj.visibility == Content.HIDDEN and user.has_perm(
-                           'hide_content')) and user.has_perm('core.edit_content')
+                                'hide_content')) and user.has_perm('core.edit_content')
         if action == 'delete':
             return (obj.visibility == Content.DRAFT and user in obj.authors.all() and user.has_perm(
                 'core.draft_content')) or user.has_perm('core.delete_content')
         if action == 'pend':
             return obj.visibility == Content.DRAFT and (
                     (user in obj.authors.all() and user.has_perm('core.draft_content')) or user.has_perm(
-                'core.edit_content')) \
+                        'core.edit_content')) \
                    or obj.visibility == Content.PUBLISHED and user.has_perm('core.publish_content') \
                    or obj.visibility == Content.HIDDEN and user.has_perm('core.hide_content')
         if action == 'publish':
@@ -47,7 +53,7 @@ def can(user, action, obj):
                 'core.publish_content')
         if action == 'hide':
             return obj.visibility != Content.HIDDEN and user.has_perm('core.hide_content')
-    if t == 'users':
+    if _type == 'users':
         assert isinstance(obj, User)
 
         if user is None or not user.is_active:
@@ -62,6 +68,10 @@ def can(user, action, obj):
 
 
 def check_permission(user, action, pk):
+    """Helper function to check whether a user has permission to perform an action on an object, identified numerically.
+
+    This simply is convenient for use in views to check permissions.
+    """
     t, _ = action.split('.')
     if t == 'content':
         obj = Content.objects.get(pk=pk)
@@ -71,10 +81,12 @@ def check_permission(user, action, pk):
 
 
 def user_can(action):
+    """A decorator for views that tests whether a user can perform an object-level action."""
     def wrapper(view_func):
         def view(request, **kwargs):
             pk = kwargs['pk']
 
+            # If the user cannot perform the action, complain
             if not check_permission(request.user, action, pk):
                 raise PermissionDenied
 
@@ -84,9 +96,12 @@ def user_can(action):
 
 
 class UserCanMixin(AccessMixin):
-    """Verify that the current user has permission to perform some action."""
+    """A mixin for class-based views that tests whether a user can perform an object-level action."""
     def dispatch(self, request, *args, **kwargs):
         pk = kwargs['pk']
+
+        # If the user cannot perform the action, complain
         if not check_permission(request.user, self.action, pk):
             return self.handle_no_permission()
+
         return super().dispatch(request, **kwargs)

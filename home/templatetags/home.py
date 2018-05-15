@@ -10,7 +10,10 @@ register = template.Library()
 
 @register.simple_tag
 def render_content(user, content):
-    """A template tag that renders the template of some content, for example, story text or an image with a caption."""
+    """A template tag that renders the template of some Content, for example, story text or an image with a caption.
+
+    Only works when user has read permissions on the content object.
+    """
     return template.loader.get_template("home/content/embed.html").render({
         "content": content if content and permissions.can(user, 'content.read', content) else None,
         "user": user
@@ -30,5 +33,6 @@ def expand_embeds(text, user):
             content = None
         return render_content(user, content)
 
+    # Do a regular expression-based replace operation on embeds
     text = re.sub("<sco:embed id=(\d+)/>", replace, text)
     return mark_safe(text)

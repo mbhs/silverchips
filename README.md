@@ -10,24 +10,13 @@ while the intent is to keep this framework generic as to support news sites for
 different organizations, parts may be hardocoded until a full fork and release.
 
 ## Getting Started
-Prequisites: Python 3+, `pip`, `virtualenv`, `virtualenvwrapper-win`, and Ruby `sass`.
+Prequisites: Python 3+, `pip`, `pipenv`, and Ruby `sass`.
 `pip` should come shipped with Python 3 when you install it (just make sure it's on PATH); to install `virtualenv` and `virtualenvwrapper-win`, run (on the command line):
-  - `pip install virtualenv`
-  - `pip install virtualenvwrapper-win`
+  - `pip install pipenv`
 ### Quick Start
-1. Clone this repository: `git clone https://github.com/markojungo/silverchips.git`.
+1. Clone this repository: `git clone https://github.com/mbhs/silverchips.git`.
 2. `cd` into `silverchips`: `cd silverchips`.
-3. Make a virtual environment: `mkvirtualenv sco`. (sco) should now appear at the beginning of your command line.
-   - NOTE: Make sure to run `workon sco` every time you reopen the command line, or else you'll get an error
-4. Install requirements: `pip install -r requirements.txt`. Run `pip freeze`; you should see **at least**:
-   - django>=2.0
-   - django_forms_bootstrap>=3.1.0
-   - django-static-precompiler
-   - django-inspect
-   - Pillow>=4.1.1
-   - codecov>=2.0.9
-   - django-autocomplete-light
-   - six
+3. Install requirements: `pipenv install`
 5. Make migrations and apply:
    - `python manage.py makemigrations core`
    - `python manage.py migrate`
@@ -36,3 +25,15 @@ Prequisites: Python 3+, `pip`, `virtualenv`, `virtualenvwrapper-win`, and Ruby `
 8. Go to: `localhost:8000`
 
 And voila!
+
+##Organization
+Django code is organized broadly into *models*, which store data in the database and you can interact nicely with in
+Python; *views*, which perform server-side logic on models data, possibly making changes or organizing data for display;
+and *templates*, which render view results to HTML. For more information, see the excellent
+[official Django tutorial](https://www.djangoproject.com/start/).
+
+This code is organized into three main Django apps and a number of auxiliary scripts. The apps are:
+
+* `core`: Shared functionality between all aspects of SilverChips Online. Models live here.
+* `home`: Public-facing functionality that any user can see when they load the site.
+* `staff`: Private functionality that only SilverChips staff accesses to administer the newspaper.

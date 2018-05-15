@@ -1,3 +1,5 @@
+"""Setup the Django administrator interface for our models."""
+
 from django.contrib import admin
 from django.contrib.admin import StackedInline
 from django.contrib.auth.models import User, Permission
@@ -22,10 +24,12 @@ class ProfileUserAdmin(UserAdmin):
     inlines = (ProfileInline,)
 
 
+# Setup administrator interface for authentication
 admin.site.unregister(User)
 admin.site.register(models.User, ProfileUserAdmin)
 admin.site.register(Permission)
 
+# Setup administrator interface for our models
 admin.site.register(models.Story)
 admin.site.register(models.Section)
 admin.site.register(models.Image)

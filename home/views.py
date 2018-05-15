@@ -10,37 +10,37 @@ from django.shortcuts import render, redirect, get_object_or_404
 
 # News imports
 from core import models
-from core.permissions import can
+from core.permissions import can, user_can
 
 
 def load_context(request):
     return {
-        "section_roots": models.Section.objects.filter(parent=None),
-        "stories": models.Story.objects.filter(visibility=models.Content.PUBLISHED)
+        "section_roots": models.Section.objects.filter(parent=None),  # For navigation bar
+        "stories": models.Story.objects.filter(visibility=models.Content.PUBLISHED)  # For sidebar
     }
 
 
 def index(request):
-    """Return the index page of the Silver Chips site."""
+    """Render the index page of the SilverChips site."""
 
     return render(request, "home/index.html")
 
 
-SECTION_COUNT = 3
+STORY_COUNT = 3
 
 
 def view_section(request, name):
     """Render a section of the newspaper."""
-
     section = get_object_or_404(models.Section, name=name)
 
-    top_stories = section.all_stories()[:SECTION_COUNT]
+    # Get the top STORY_COUNT stories in the section
+    top_stories = section.all_stories()[:STORY_COUNT]
     subsections = [(None, top_stories)]
 
     for subsection in section.subsections.all():
         subsections.append((subsection,
                             subsection.all_stories().filter(visibility=models.Content.PUBLISHED)
-                            .exclude(id__in=top_stories.values_list('id', flat=True))))
+                            .exclude(id__in=top_stories.values_list('id', flat=True))))  # Exclude our top stories
 
     return render(request, "home/section.html", {
         "section": section,
@@ -48,17 +48,17 @@ def view_section(request, name):
     })
 
 
+@user_can('content.read')
 def view_content(request, pk, slug=None):
     """Render specific content in the newspaper."""
-
     content = get_object_or_404(models.Content, id=int(pk))
 
+    # Redirect to the correct URL for the content
+    # We allow accessing with any slug, but redirect to the correct slug
     if content.slug != slug:
         return redirect("home:view_content", content.slug, content.pk)
 
-    if not can(request.user, 'content.read', content):
-        raise PermissionDenied
-
+    # Mark another view for the content
     content.views += 1
     content.save()
 

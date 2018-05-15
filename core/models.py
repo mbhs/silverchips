@@ -1,8 +1,4 @@
-"""Core models for the Silverchips platform.
-
-The full model documentation is located in `/docs/models.md`. Details
-about models in the previous platform are located there as well.
-"""
+"""Core models for the SilverChips platform."""
 
 from django.db import models
 import django.contrib.auth.models as auth
@@ -14,17 +10,14 @@ from polymorphic.models import PolymorphicModel
 
 
 class Profile(models.Model):
-    """The profile model provides more information about users.
+    """The profile model provides non-authentication/identification information about users.
 
     When a new user object is instantiated, a profile object is
     immediately created and assigned to them. Note that roles are
     stored by Django groups instead of in members of the class.
-
-    Keep in mind that this profile will eventually be replaced by a
-    OpenID backend model which will allow for synchronization with
-    the main MBHS site.
     """
 
+    # Associate this Profile with a particular User
     user = models.OneToOneField("User", related_name="profile", on_delete=models.CASCADE)
 
     # Personal information
@@ -39,6 +32,7 @@ class Profile(models.Model):
         return "Profile[{}]".format(self.user.get_username())
 
     class Meta:
+        # Create permissions for Profile objects
         permissions = (
             ('edit_profile', "Edit one's own user profile"),
         )
@@ -98,10 +92,23 @@ class Content(PolymorphicModel):
     can be generically displayed or embedded.
     """
 
+    # Basic identification information
     title = models.TextField()
     description = models.TextField()
+    tags = models.ManyToManyField(Tag)
+    legacy_id = models.IntegerField(null=True)
+
+    # Time information
+    created = models.DateTimeField(default=timezone.now)
+    modified = models.DateTimeField(default=timezone.now)
+
+    # Authorship information
     authors = models.ManyToManyField(User, related_name="%(class)s_authored")  # user.image_authored
     guest_authors = models.CharField(max_length=64, default="", blank=True)
+
+    # Tracking information
+    section = models.ForeignKey("Section", related_name="content", null=True, on_delete=models.SET_NULL)
+    views = models.IntegerField(default=0)
 
     # A content can be publishable or unpublishable. This essentially
     # refers to whether or not it is to be made available as a
@@ -110,13 +117,7 @@ class Content(PolymorphicModel):
     # logo might not.
     publishable = models.BooleanField(default=True)
 
-    # A publishable content has several states to improve editor
-    # workflow. An draft story is in progress, whereas a pending
-    # story is ready and awaiting editor approval. Once it receives
-    # this approval, it is published. If it is desired that the story
-    # be taken down, it should be hidden so as to indicate that it at
-    # one point passed the publishing process.
-
+    # Content visibility workflow constants
     DRAFT = 1
     PENDING = 2
     PUBLISHED = 3
@@ -128,31 +129,25 @@ class Content(PolymorphicModel):
         (PUBLISHED, "published"),
         (HIDDEN, "hidden")))
 
-    tags = models.ManyToManyField(Tag)
-    views = models.IntegerField(default=0)
-
-    legacy_id = models.IntegerField(null=True)
-
     @property
     def type(self):
+        """Helper function to find the particular subclass type name of this Content."""
         return type(self).__name__
 
     @property
     def slug(self):
+        """Return a slugified version of this Content's title for use in URLs."""
         return slugify(self.title)
 
     def __str__(self):
-        """Represent the content as a string."""
+        """Represent this Content as a string."""
 
         return "Content[{}:{}]".format(self.type, self.title)
 
     def has_tag(self, name):
-        """Check if a model has a tag."""
+        """Check if this Content has a particular Tag."""
 
         return self.tags.filter(name=name).exists()
-
-    created = models.DateTimeField(default=timezone.now)
-    modified = models.DateTimeField(default=timezone.now)
 
     class Meta:
         ordering = ['-created']
@@ -166,6 +161,7 @@ class Content(PolymorphicModel):
         )
 
     def get_absolute_url(self):
+        """Find the URL through which this Content can be accessed."""
         return reverse('home:view_content', args=[self.slug, self.pk])
 
 
@@ -174,34 +170,46 @@ alphanumeric = RegexValidator(r"^[a-zA-Z0-9_]*$", "Only alphanumeric characters 
 
 
 class Section(models.Model):
-    """A broad category under which content can be organized."""
+    """A Content category under which Content can be organized."""
 
     parent = models.ForeignKey("self", related_name="subsections", null=True, blank=True, on_delete=models.SET_NULL)
-    name = models.CharField(max_length=32, unique=True)
-    title = models.CharField(max_length=64)
+
+    name = models.CharField(max_length=32, unique=True)  # Internal tracking name (used in URLs)
+    title = models.CharField(max_length=64)  # External name for display
     active = models.BooleanField(default=True)
 
     def __str__(self):
-        return 'Sections[{}]'.format(self.title)
+        """Represent this Section as a string."""
+        return 'Section[{}]'.format(self.title)
 
     def get_ancestors(self):
+        """Get all Sections that are ancestors of this Section."""
         ancestors = [self]
+
+        # Continually scale the ladder of parenthood
         while ancestors[-1].parent:
             ancestors.append(ancestors[-1].parent)
+
         return ancestors[::-1]
 
     def get_descendants(self):
+        """Get all Sections that are descendants of this Section."""
         descendants = {self}
-        if self.subsections.count():
+
+        # Continually descend the tree of childhood recursively
+        if self.subsections.exists():
             for subsection in self.subsections.all():
                 descendants |= subsection.get_descendants()
+
         return descendants
 
     def all_stories(self):
+        """Get all the Stories that belong to this section for display in section templates."""
         return Story.objects.filter(visibility=Content.PUBLISHED, section__in=self.get_descendants())
 
     def is_root(self):
-        return 
+        """Check whether this Section is a root Section."""
+        return self.parent is None
 
     class Meta:
         verbose_name_plural = "sections"
@@ -255,7 +263,7 @@ class Section(models.Model):
 
 
 class Image(Content):
-    """Image subclass for the content model."""
+    """Image subclass for the Content model."""
 
     source = models.ImageField(upload_to="images/%Y/%m/%d/")
 
@@ -264,7 +272,7 @@ class Image(Content):
 
 
 class Video(Content):
-    """Video subclass for the content model."""
+    """Video subclass for the Content model."""
 
     source = models.FileField(upload_to="videos/%Y/%m/%d/")
 
@@ -273,7 +281,7 @@ class Video(Content):
 
 
 class Audio(Content):
-    """Audio subclass for the content model."""
+    """Audio subclass for the Content model."""
 
     source = models.FileField(upload_to="audio/%Y/%m/%d/")
 
@@ -290,11 +298,9 @@ class Story(Content):
     status are also stored.
     """
 
-    lead = models.TextField()
-    text = models.TextField()
-
-    section = models.ForeignKey(Section, related_name="stories", null=True, on_delete=models.SET_NULL)
-    cover = models.ForeignKey(Image, null=True, on_delete=models.SET_NULL)
+    lead = models.TextField()  # Lead paragraph
+    text = models.TextField()  # Full text
+    cover = models.ForeignKey(Image, null=True, on_delete=models.SET_NULL)  # Cover photo
 
     template = "home/content/story.html"
     descriptor = "Story"
@@ -302,4 +308,3 @@ class Story(Content):
 
     class Meta:
         verbose_name_plural = "stories"
-        ordering = ['-created']
