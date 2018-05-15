@@ -27,7 +27,7 @@ Prequisites: Python 3+, `pip`, `pipenv`, and Ruby `sass`.
 
 And voila!
 
-##Organization
+## Organization
 Django code is organized broadly into *models*, which store data in the database and you can interact nicely with in
 Python; *views*, which perform server-side logic on models data, possibly making changes or organizing data for display;
 and *templates*, which render view results to HTML. For more information, see the excellent
