@@ -13,16 +13,16 @@ from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.http import require_http_methods
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic import ListView
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.urls import reverse
 from django.utils import timezone
 from django.db.models import Q
 
 # Local imports
 from core import models
-from core.permissions import can, VISIBILITY_ACTIONS
+from core.permissions import can, VISIBILITY_ACTIONS, UserCanMixin, user_can
 from staff import forms
 
 
@@ -46,6 +46,8 @@ def login(request):
             # Check if password wrong
             if not user:
                 form.add_error(None, "Invalid credentials")
+
+            # TODO: make this accessible
 
             # Check if user is inactive
             elif not user.is_active:
@@ -77,7 +79,7 @@ def index(request):
     return render(request, "staff/index.html")
 
 
-class ContentListView(ListView):
+class ContentListView(LoginRequiredMixin, ListView):
     """The content list view that supports pagination."""
 
     template_name = "staff/content/list.html"
@@ -85,8 +87,6 @@ class ContentListView(ListView):
     paginate_by = 25
 
     def get_queryset(self):
-        """Get all stories by the request user."""
-
         if self.request.user.has_perm('core.read_content'):
             content = models.Content.objects.all()
         else:
@@ -109,12 +109,10 @@ class ContentListView(ListView):
 
             content = content.filter(query)
 
-        content = content.filter()
-
-        return content
+        return content.order_by('-modified')
 
     def get_context_data(self, **kwargs):
-        context = super(ListView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         context['pages'] = range(3)
         context['form'] = forms.ContentSearchForm(self.request.GET)
         return context
@@ -128,9 +126,16 @@ class ContentChangeMixin(LoginRequiredMixin):
         form.instance.modified = timezone.now()
         return super(ContentChangeMixin, self).form_valid(form)
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['editing'] = "Content"
+        return context
 
-class ContentCreateView(ContentChangeMixin, CreateView):
+
+class ContentCreateView(ContentChangeMixin, PermissionRequiredMixin, CreateView):
     """Base view for uploading new content."""
+
+    permission = 'core.create_content'
 
     def get_initial(self):
         return dict(super(ContentCreateView, self).get_initial(), authors=[self.request.user])
@@ -141,7 +146,7 @@ class StoryCreateView(ContentCreateView):
 
     model = models.Story
     form_class = forms.StoryForm
-    template_name = "staff/content/edit.html"
+    template_name = "staff/edit.html"
 
 
 class ImageCreateView(ContentCreateView):
@@ -149,15 +154,17 @@ class ImageCreateView(ContentCreateView):
 
     model = models.Image
     form_class = forms.ImageForm
-    template_name = "staff/content/edit.html"
+    template_name = "staff/edit.html"
 
 
-class ContentEditView(ContentChangeMixin, UpdateView):
+class ContentEditView(ContentChangeMixin, UserCanMixin, UpdateView):
     """Base view for editing content."""
+
+    action = 'content.edit'
 
     def get_object(self, **kwargs):
         obj = super(ContentEditView, self).get_object(**kwargs)
-        if not can(self.request.user, 'edit', obj):
+        if not can(self.request.user, 'content.edit', obj):
             raise PermissionDenied
         return obj
 
@@ -167,7 +174,7 @@ class StoryEditView(ContentEditView):
 
     model = models.Story
     form_class = forms.StoryForm
-    template_name = "staff/content/edit.html"
+    template_name = "staff/edit.html"
 
 
 class ImageEditView(ContentEditView):
@@ -175,7 +182,7 @@ class ImageEditView(ContentEditView):
 
     model = models.Image
     form_class = forms.ImageForm
-    template_name = "staff/content/edit.html"
+    template_name = "staff/edit.html"
 
 
 def content_edit_view(request, pk):
@@ -205,13 +212,95 @@ def set_content_visibility(request, pk, level):
 
 @login_required
 @csrf_protect
+@user_can('content.delete')
 @require_http_methods(["DELETE"])
 def delete_content(request, pk):
     content = get_object_or_404(models.Content.objects, pk=pk)
 
-    if not can(request.user, 'delete', content):
-        raise PermissionDenied
-
     content.delete()
 
     return HttpResponse(status=200)
+
+
+# TODO: implement this
+class UserCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
+    """Base view for creating users."""
+
+    permission_required = 'auth.manage_users'
+
+    model = models.User
+    form_class = forms.UserForm
+    template_name = "staff/editor.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['editing'] = "User"
+        return context
+
+
+class UserManageView(LoginRequiredMixin, UserCanMixin, UpdateView):
+    """Base view for editing users."""
+
+    action = 'users.manage'
+
+    model = models.User
+    form_class = forms.UserForm
+    template_name = "staff/edit.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['editing'] = "User"
+        return context
+
+
+class UserListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    """The content list view that supports pagination."""
+
+    permission_required = 'auth.manage_users'
+
+    template_name = "staff/users/list.html"
+    context_object_name = "user_list"
+    paginate_by = 25
+
+    def get_queryset(self):
+        users = models.User.objects.all()
+
+        form = forms.UserSearchForm(self.request.GET)
+        if form.is_valid():
+            query = Q()
+
+            if 'id' in form.data and form.data['id']:
+                query &= Q(pk=int(form.data['id']))
+            if 'first_name' in form.data and form.data['first_name']:
+                query &= Q(first_name__contains=form.data['first_name'])
+            if 'last_name' in form.data and form.data['last_name']:
+                query &= Q(last_name__contains=form.data['last_name'])
+            if 'graduation_year' in form.data and form.data['graduation_year']:
+                query &= Q(profile__graduation_year=form.data['graduation_year'])
+            # if 'active' in form.data and form.data['active']:
+            #     query &= Q(active=form.data['active'])
+
+            users = users.filter(query)
+
+        return users
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['pages'] = range(3)
+        context['form'] = forms.UserSearchForm(self.request.GET)
+        return context
+
+
+class ProfileEditView(LoginRequiredMixin, UserCanMixin, UpdateView):
+    """Base view for editing users."""
+
+    action = 'users.edit_profile'
+
+    model = models.Profile
+    form_class = forms.ProfileForm
+    template_name = "staff/edit.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['editing'] = "Profile"
+        return context

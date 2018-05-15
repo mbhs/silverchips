@@ -1,4 +1,5 @@
 {% extends "staff/base.html" %}
+{% load core %}
 
 {% block content %}
     <h2>{% block title %}Staff Dashboard{% endblock %}</h2>
@@ -9,9 +10,11 @@
     <h3>Personal</h3>
 
     <div class="row">
+        {% if user|can:"core.edit_profile" %}
         <div class="col-sm-6 col-xs-12">
-            <a class="btn btn-info btn-lg btn-block my-3" href="">Edit Profile <i class="fas fa-user"></i></a>
+            <a class="btn btn-info btn-lg btn-block my-3" href="{% url "staff:user:edit_profile" request.user.pk %}">Edit Profile <i class="fas fa-user"></i></a>
         </div>
+        {% endif %}
         <div class="col-sm-6 col-xs-12">
             <a class="btn btn-info btn-lg btn-block my-3" href="{% url "staff:content:list" %}">My Content <i class="fas fa-list-ul"></i></a>
         </div>
@@ -42,6 +45,11 @@
             <!--<a class="btn btn-success btn-lg btn-block my-3" href="">Create Sports Game <i class="fas fa-trophy"></i></a>-->
         <!--</div>-->
     </div>
+
+    {% if user|can:"auth.manage_users" %}
+    <h3>Danger Zone</h3>
+    <a class="btn btn-danger btn-lg btn-block my-3" href="{% url "staff:user:list" %}">User List <i class="fas fa-users"></i></a>
+    {% endif %}
 
     <h3>User Information</h3>
 

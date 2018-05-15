@@ -29,15 +29,19 @@ class Profile(models.Model):
 
     # Personal information
     biography = models.TextField()
-    avatar = models.ForeignKey("Image", blank=True, null=True, on_delete=models.SET_NULL)
+    avatar = models.ImageField(null=True)
     position = models.TextField()
     graduation_year = models.IntegerField(default=timezone.now().year+4)
-    active = models.BooleanField(default=True)
 
     def __str__(self):
         """Represent the profile as a string."""
 
         return "Profile[{}]".format(self.user.get_username())
+
+    class Meta:
+        permissions = (
+            ('edit_profile', "Edit one's own user profile"),
+        )
 
 
 class ProfileUserManager(auth.UserManager):
@@ -74,6 +78,9 @@ class User(auth.User):
 
     class Meta:
         proxy = True
+        permissions = (
+            ('manage_users', "Manage user data and privileges"),
+        )
 
 
 class Tag(models.Model):
@@ -154,7 +161,8 @@ class Content(PolymorphicModel):
             ('edit_content', "Can edit content"),
             ('read_content', "Can read all content"),
             ('publish_content', "Can publish content"),
-            ('hide_content', "Can hide content")
+            ('hide_content', "Can hide content"),
+            ('create_content', "Can create content")
         )
 
     def get_absolute_url(self):

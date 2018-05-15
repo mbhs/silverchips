@@ -12,7 +12,7 @@ register = template.Library()
 def render_content(user, content):
     """A template tag that renders the template of some content, for example, story text or an image with a caption."""
     return template.loader.get_template("home/content/embed.html").render({
-        "content": content if content and permissions.can(user, 'read', content) else None,
+        "content": content if content and permissions.can(user, 'content.read', content) else None,
         "user": user
     })
 
@@ -32,21 +32,3 @@ def expand_embeds(text, user):
 
     text = re.sub("<sco:embed id=(\d+)/>", replace, text)
     return mark_safe(text)
-
-
-@register.filter
-def names(content):
-    """A filter that returns the full names, joined by commas, of all the authors of a particular Content."""
-    return ", ".join(map(lambda user: user.get_full_name(), content.authors.all()))
-
-
-for action in permissions.ACTIONS:
-    @register.filter("can_{}".format(action))
-    def can(user, content, action=action):
-        """A filter that checks whether a user can {} a particular Content.""".format(action)
-        return permissions.can(user, action, content)
-
-
-@register.simple_tag(name='range')
-def do_range(start, end, step):
-    return list(range(start, end, step))

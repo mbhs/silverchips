@@ -1,0 +1,66 @@
+{% extends "staff/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}User List{% endblock %}
+
+{% block content %}
+{% csrf_token %}
+<h1>User List</h1>
+
+<div class="card">
+
+  <div class="card-body">
+    <form method="get">
+      <div class="form-inline">
+      {% crispy form form.helper %}
+      </div>
+      <br/>
+      <button type="submit" class="btn btn-success">Search <i class="fas fa-search"></i></button>
+    </form>
+  </div>
+</div>
+<br/>
+
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">First Name</th>
+            <th scope="col">Last Name</th>
+            <th scope="col">Active</th>
+            <th scope="col">Groups</th>
+            <th scope="col">Grad. Year</th>
+            <th scope="col">Position</th>
+            <th scope="col">Actions</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        {% for user in user_list %}
+        <tr>
+            <th scope="row">{{ user.pk }}</th>
+            <td>{{ user.first_name }}</td>
+            <td>{{ user.last_name }}</td>
+            <td>{{ user.active|yesno:"Yes,No" }}</td>
+            <td>{{ user.groups.all|join:",<br/>" }}</td>
+            <td>{{ user.profile.graduation_year }}</td>
+            <td>{{ user.profile.position }}</td>
+            <td>
+                <div class="dropdown">
+                    <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink{{ forloop.counter }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink{{ foorloop.counter }}">
+                        <a class="dropdown-item" href="{% url "staff:user:manage" user.pk %}">Manage <i class="fas fa-wrench"></i></a>
+                        <a class="dropdown-item" href="{% url "staff:user:edit_profile" user.pk %}">Edit Profile <i class="fas fa-pencil-alt"></i></a>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% include "staff/utils/paginator.html" %}
+{% endblock %}

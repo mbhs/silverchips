@@ -1,9 +1,8 @@
 {% extends "staff/base.html" %}
 {% load crispy_forms_tags %}
-{% load staticfiles %}
 
 {% block content %}
-<h1>Editor</h1>
+<h1>{{ editing }} Editor</h1>
 
 <form class="form-horizontal" method="post" enctype="multipart/form-data">
     {% csrf_token %}

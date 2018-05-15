@@ -1,7 +1,7 @@
 {% extends "home/base.html" %}
 
 {% load humanize %}
-{% load news %}
+{% load home %}
 
 {% block title %}
 {{ content.title|safe }}
@@ -14,7 +14,7 @@
         <span class="badge badge-warning">{{ content.get_visibility_display|lower }}</span>
     {% endif %}
 
-    {% if request.user|can_edit:content %}
+    {% if request.user|can_edit_content:content %}
     <a class="btn btn-primary" href="{% url "staff:content:edit" content.pk %}">Edit <i class="fas fa-pencil-alt"></i></a>
     {% endif %}
 </h1>

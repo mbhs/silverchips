@@ -1,0 +1,74 @@
+{% load staff %}
+
+{% if paginator.count == 0 %}
+<p>Sorry, your search returned no results!</p>
+{% else %}
+<p>Your search returned {{ paginator.count }} results.</p>
+
+{% if is_paginated %}
+<nav aria-label="Pagination">
+    <ul class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?{{ request.GET.urlencode }}&page=1"><i class="fas fa-angle-double-left"></i> First</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="?{{ request.GET.urlencode }}&page={{ page_obj.previous_page_number }}"><i class="fas fa-angle-left"></i> Previous</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <span class="page-link"><i class="fas fa-angle-double-left"></i> First</span>
+        </li>
+        <li class="page-item disabled">
+            <span class="page-link"><i class="fas fa-angle-left"></i> Previous</span>
+        </li>
+        {% endif %}
+
+        {% range -3 0 1 as range %}
+        {% for i in range %}
+        {% if page_obj.number|add:i > 0 %}
+        <li class="page-item">
+            <a class="page-link" href="?{{ request.GET.urlencode }}&page={{ page_obj.number|add:i }}">
+                {{ page_obj.number|add:i }}
+            </a>
+        </li>
+        {% endif %}
+        {% endfor %}
+
+        <li class="page-item active">
+            <a class="page-link" href="?{{ request.GET.urlencode }}&page={{ page_obj.number }}">
+                {{ page_obj.number }}
+                <span class="sr-only">(current)</span>
+            </a>
+        </li>
+
+        {% range 1 4 1 as range %}
+        {% for i in range %}
+        {% if page_obj.number|add:i <= page_obj.paginator.num_pages  %}
+        <li class="page-item">
+            <a class="page-link" href="?{{ request.GET.urlencode }}&page={{ page_obj.number|add:i }}">
+                {{ page_obj.number|add:i }}
+            </a>
+        </li>
+        {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?{{ request.GET.urlencode }}&page={{ page_obj.next_page_number }}">Next <i class="fas fa-angle-right"></i></a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="?{{ request.GET.urlencode }}&page={{ page_obj.paginator.num_pages }}">Last <i class="fas fa-angle-double-right"></i></a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <span class="page-link">Next <i class="fas fa-angle-right"></i></span>
+        </li>
+        <li class="page-item disabled">
+            <span class="page-link">Last <i class="fas fa-angle-double-right"></i></span>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}
+{% endif %}

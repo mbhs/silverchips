@@ -56,7 +56,7 @@ def view_content(request, pk, slug=None):
     if content.slug != slug:
         return redirect("home:view_content", content.slug, content.pk)
 
-    if not can(request.user, 'read', content):
+    if not can(request.user, 'content.read', content):
         raise PermissionDenied
 
     content.views += 1
@@ -85,8 +85,6 @@ def view_profile(request, pk):
 
 def staff(request):
     """Display a list of all of the newspaper's staff."""
-
-    active = models.User.objects.filter(profile__active=True)
 
     return render(request, "home/staff.html", {
         "active": models.User.objects.filter(profile__active=True)

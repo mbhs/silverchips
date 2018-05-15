@@ -1,5 +1,6 @@
 {% extends "staff/base.html" %}
-{% load news %}
+{% load core %}
+{% load staff %}
 {% load crispy_forms_tags %}
 
 {% block title %}Content List{% endblock %}
@@ -59,7 +60,6 @@ function doApi(url, verb) {
 }
 </script>
 
-{% if content_list %}
 <div class="table-responsive">
     <table class="table table-striped">
         <thead>
@@ -88,23 +88,23 @@ function doApi(url, verb) {
                     <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink{{ forloop.counter }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
 
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuLink{{ foorloop.counter }}">
-                        {% if request.user|can_read:content %}
+                        {% if request.user|can_read_content:content %}
                         <a class="dropdown-item" href="{% url "home:view_content" content.pk %}" target="_blank">View <i class="fas fa-external-link-alt"></i></a>
                         {% endif %}
-                        {% if request.user|can_edit:content %}
+                        {% if request.user|can_edit_content:content %}
                         <a class="dropdown-item" href="{% url "staff:content:edit" content.pk %}">Edit <i class="fas fa-edit"></i></a>
                         {% endif %}
                         <div class="dropdown-divider"></div>
-                        {% if request.user|can_pend:content %}
+                        {% if request.user|can_pend_content:content %}
                         <a class="dropdown-item" href='javascript:doApi("{% url "staff:content:set_visibility" content.pk content.PENDING %}", "patch");'>Pend <i class="fas fa-thumbs-up"></i></a>
                         {% endif %}
-                        {% if request.user|can_publish:content %}
+                        {% if request.user|can_publish_content:content %}
                         <a class="dropdown-item" href='javascript:doApi("{% url "staff:content:set_visibility" content.pk content.PUBLISHED %}", "patch");'>Publish <i class="fas fa-paper-plane"></i></a>
                         {% endif %}
-                        {% if request.user|can_hide:content %}
+                        {% if request.user|can_hide_content:content %}
                         <a class="dropdown-item" href='javascript:doApi("{% url "staff:content:set_visibility" content.pk content.HIDDEN %}", "patch");'>Hide <i class="fas fa-eye-slash"></i></a>
                         {% endif %}
-                        {% if request.user|can_delete:content %}
+                        {% if request.user|can_delete_content:content %}
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="" data-pk={{ content.pk }} data-toggle="modal" data-target="#deleteModal" data-title="{{ content.title|safe }}" data-verb="delete" data-href="{% url "staff:content:delete" content.pk %}" style="color: #f55;">Delete <i class="fas fa-trash-alt"></i></a>
                         {% endif %}
@@ -117,73 +117,5 @@ function doApi(url, verb) {
     </table>
 </div>
 
-{% if is_paginated %}
-<nav aria-label="Pagination">
-    <ul class="pagination justify-content-center">
-        {% if page_obj.has_previous %}
-        <li class="page-item">
-            <a class="page-link" href="?{{ request.GET.urlencode }}&page=1"><i class="fas fa-angle-double-left"></i> First</a>
-        </li>
-        <li class="page-item">
-            <a class="page-link" href="?{{ request.GET.urlencode }}&page={{ page_obj.previous_page_number }}"><i class="fas fa-angle-left"></i> Previous</a>
-        </li>
-        {% else %}
-        <li class="page-item disabled">
-            <span class="page-link"><i class="fas fa-angle-double-left"></i> First</span>
-        </li>
-        <li class="page-item disabled">
-            <span class="page-link"><i class="fas fa-angle-left"></i> Previous</span>
-        </li>
-        {% endif %}
-
-        {% range -3 0 1 as range %}
-        {% for i in range %}
-        {% if page_obj.number|add:i > 0 %}
-        <li class="page-item">
-            <a class="page-link" href="?{{ request.GET.urlencode }}&page={{ page_obj.number|add:i }}">
-                {{ page_obj.number|add:i }}
-            </a>
-        </li>
-        {% endif %}
-        {% endfor %}
-
-        <li class="page-item active">
-            <a class="page-link" href="?{{ request.GET.urlencode }}&page={{ page_obj.number }}">
-                {{ page_obj.number }}
-                <span class="sr-only">(current)</span>
-            </a>
-        </li>
-
-        {% range 1 4 1 as range %}
-        {% for i in range %}
-        {% if page_obj.number|add:i <= page_obj.paginator.num_pages  %}
-        <li class="page-item">
-            <a class="page-link" href="?{{ request.GET.urlencode }}&page={{ page_obj.number|add:i }}">
-                {{ page_obj.number|add:i }}
-            </a>
-        </li>
-        {% endif %}
-        {% endfor %}
-
-        {% if page_obj.has_next %}
-        <li class="page-item">
-            <a class="page-link" href="?{{ request.GET.urlencode }}&page={{ page_obj.next_page_number }}">Next <i class="fas fa-angle-right"></i></a>
-        </li>
-        <li class="page-item">
-            <a class="page-link" href="?{{ request.GET.urlencode }}&page={{ page_obj.paginator.num_pages }}">Last <i class="fas fa-angle-double-right"></i></a>
-        </li>
-        {% else %}
-        <li class="page-item disabled">
-            <span class="page-link">Next <i class="fas fa-angle-right"></i></span>
-        </li>
-        <li class="page-item disabled">
-            <span class="page-link">Last <i class="fas fa-angle-double-right"></i></span>
-        </li>
-        {% endif %}
-    </ul>
-</nav>
-{% endif %}
-{% else %}
-Sorry, there was no content matching your request!
-{% endif %}
+{% include "staff/utils/paginator.html" %}
 {% endblock %}
