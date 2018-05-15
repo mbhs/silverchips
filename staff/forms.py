@@ -65,7 +65,8 @@ class ContentSearchForm(forms.Form):
     after = forms.DateField(label="Created After:", required=False, widget=forms.TextInput(attrs={'type': 'date'}))
     before = forms.DateField(label="Created Before:", required=False, widget=forms.TextInput(attrs={'type': 'date'}))
     authors = forms.ModelMultipleChoiceField(label="Authors:", queryset=models.User.objects.all(),
-                                             required=False, widget=autocomplete.ModelSelect2Multiple(url="staff:autocomplete:users"))
+                                             required=False,
+                                             widget=autocomplete.ModelSelect2Multiple(url="staff:autocomplete:users"))
     # type = forms.ModelMultipleChoiceField(label=)
 
     def __init__(self, *args, **kwargs):

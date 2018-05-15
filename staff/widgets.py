@@ -11,6 +11,7 @@ class RichTextWidget(Widget):
         self.attrs['short'] = short
         self.attrs['embed'] = embed
 
+    # Make sure that the widget includes appropriate files for Quill
     class Media:
         css = {
             'all': ("https://cdn.quilljs.com/1.3.4/quill.core.css", "https://cdn.quilljs.com/1.3.4/quill.snow.css")

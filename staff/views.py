@@ -87,13 +87,16 @@ class ContentListView(LoginRequiredMixin, ListView):
     paginate_by = 25
 
     def get_queryset(self):
+        """Return a list of all the content we're looking at, filtered by search criteria."""
         if self.request.user.has_perm('core.read_content'):
             content = models.Content.objects.all()
         else:
             content = models.Content.objects.filter(authors=self.request.user).all()
 
         form = forms.ContentSearchForm(self.request.GET)
+
         if form.is_valid():
+            # Filter the content by certain criteria
             query = Q()
 
             if 'title' in form.data and form.data['title']:
@@ -113,7 +116,6 @@ class ContentListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['pages'] = range(3)
         context['form'] = forms.ContentSearchForm(self.request.GET)
         return context
 
@@ -216,7 +218,6 @@ def set_content_visibility(request, pk, level):
 @require_http_methods(["DELETE"])
 def delete_content(request, pk):
     content = get_object_or_404(models.Content.objects, pk=pk)
-
     content.delete()
 
     return HttpResponse(status=200)
@@ -263,10 +264,12 @@ class UserListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     paginate_by = 25
 
     def get_queryset(self):
+        """Return a list of all the users we're looking at, filtered by search criteria."""
         users = models.User.objects.all()
 
         form = forms.UserSearchForm(self.request.GET)
         if form.is_valid():
+            # Filter the users by certain criteria
             query = Q()
 
             if 'id' in form.data and form.data['id']:
@@ -286,7 +289,6 @@ class UserListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['pages'] = range(3)
         context['form'] = forms.UserSearchForm(self.request.GET)
         return context
 
