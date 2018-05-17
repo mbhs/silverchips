@@ -17,7 +17,7 @@ from core.permissions import user_can
 def load_context(request):
     return {
         "section_roots": models.Section.objects.filter(parent=None),  # For navigation bar
-        "stories": models.Story.objects.filter(visibility=models.Content.PUBLISHED, publishable=True)  # For sidebar
+        "stories": models.Story.objects.filter(visibility=models.Content.PUBLISHED, embed_only=False)  # For sidebar
     }
 
 
@@ -74,11 +74,11 @@ def view_content(request, pk, slug=None):
 def view_profile(request, pk):
     """Render the profile of a given staff member."""
 
-    user = get_object_or_404(models.User, id=int(pk))
+    user = get_object_or_404(models.User, id=pk)
 
     # Find all the content that this user authored
-    stories = models.Story.objects.filter(authors__in=[user], visibility=models.Content.PUBLISHED, publishable=True)
-    images = models.Image.objects.filter(authors__in=[user], visibility=models.Content.PUBLISHED, publishable=True)
+    stories = models.Story.objects.filter(authors__in=[user], visibility=models.Content.PUBLISHED, embed_only=True)
+    images = models.Image.objects.filter(authors__in=[user], visibility=models.Content.PUBLISHED, embed_only=True)
 
     return render(request, "home/profile.html", {
         "user": user,

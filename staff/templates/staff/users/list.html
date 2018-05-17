@@ -42,7 +42,7 @@
             <th scope="row">{{ user.pk }}</th>
             <td>{{ user.first_name }}</td>
             <td>{{ user.last_name }}</td>
-            <td><i class="fas fa-{{ user.active|yesno:"check,times" }}"></i></td>
+            <td><i class="fas fa-{{ user.is_active|yesno:"check,times" }}"></i></td>
             <td>{{ user.groups.all|join:",<br/>" }}</td>
             <td>{{ user.profile.graduation_year }}</td>
             <td>{{ user.profile.position }}</td>

@@ -75,7 +75,7 @@ def index(request):
 
 class EditorMixin(View):
     """Simple mixin that allows various forms to use our generic editor template instead of using separate templates."""
-    template_name = "staff/edit.html"
+    template_name = "staff/editor.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -289,19 +289,21 @@ class UserListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         return context
 
 
-# TODO: implement this
-class UserCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
-    """Base view for creating users."""
+
+class UserChangeMixin(LoginRequiredMixin, PermissionRequiredMixin):
     permission_required = 'auth.manage_users'
 
-    model = models.User
-    form_class = forms.UserForm
+    # def form_valid(self):
+
+
+class UserCreateView(UserChangeMixin, CreateView):
+    """Base view for creating users."""
+
     editing = "User"
 
 
-class UserManageView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
+class UserManageView(UserChangeMixin, UpdateView):
     """Base view for editing users."""
-    permission = 'auth.manage_users'
 
     model = models.User
     form_class = forms.UserForm

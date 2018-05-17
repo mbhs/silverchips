@@ -9,6 +9,10 @@
 
     {% crispy form form.helper %}
 
+    {% for extra_form in extra_forms %}
+        {% crispy extra_form extra_form.helper %}
+    {% endfor %}
+
     <button type="submit" class="btn btn-success btn-block">Save <i class="fas fa-save"></i></button>
     {{ form.media }}
 </form>

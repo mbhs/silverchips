@@ -110,12 +110,8 @@ class Content(PolymorphicModel):
     section = models.ForeignKey("Section", related_name="content", null=True, on_delete=models.SET_NULL)
     views = models.IntegerField(default=0)
 
-    # A content can be publishable or unpublishable. This essentially
-    # refers to whether or not it is to be made available as a
-    # standalone item on the site. For example, stories would always
-    # be publishable, whereas a supporting image such as a company
-    # logo might not.
-    publishable = models.BooleanField(default=True)
+    # Whether this content should show up by itself
+    embed_only = models.BooleanField(default=False)
 
     # Content visibility workflow constants
     DRAFT = 1
@@ -205,7 +201,7 @@ class Section(models.Model):
 
     def all_stories(self):
         """Get all the Stories that belong to this Section for display in section templates."""
-        return Story.objects.filter(visibility=Content.PUBLISHED, publishable=True, section__in=self.get_descendants())
+        return Story.objects.filter(visibility=Content.PUBLISHED, embed_only=False, section__in=self.get_descendants())
 
     def is_root(self):
         """Check whether this Section is a root Section."""
