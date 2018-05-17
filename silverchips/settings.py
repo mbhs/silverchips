@@ -116,7 +116,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Authentication backends
 
-AUTHENTICATION_BACKENDS = ["core.auth.CustomModelBackend"]  #"django.contrib.auth.backends.ModelBackend"]
+AUTHENTICATION_BACKENDS = ["core.auth.ProxiedAllowAllUsersModelBackend"]  # "django.contrib.auth.backends.ModelBackend"]
 
 
 # Internationalization

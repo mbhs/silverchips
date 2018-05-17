@@ -7,6 +7,9 @@
     <p>Welcome, {{ request.user.get_full_name }}, to the SilverChips staff dashboard! Here's where you'll be able to access, create, review, and edit
         content on the site, as well as manage your profile and personal information.</p>
 
+    <h3>Site</h3>
+    <a class="btn btn-info btn-lg btn-block my-3" href="{% url "staff:content:list" %}">Content <i class="fas fa-list-ul"></i></a>
+
     <h3>Personal</h3>
 
     <div class="row">
@@ -15,22 +18,6 @@
             <a class="btn btn-info btn-lg btn-block my-3" href="{% url "staff:user:edit_profile" request.user.pk %}">Edit Profile <i class="fas fa-user"></i></a>
         </div>
         {% endif %}
-        <div class="col-sm-6 col-xs-12">
-            <a class="btn btn-info btn-lg btn-block my-3" href="{% url "staff:content:list" %}">My Content <i class="fas fa-list-ul"></i></a>
-        </div>
-    </div>
-
-    <h3>Create Content</h3>
-
-    <div class="row">
-        <div class="col-lg-3 col-sm-6 col-xs-12">
-            <a class="btn btn-success btn-lg btn-block my-3" href="{% url "staff:content:create:story" %}">Create Story <i class="fas fa-book"></i></a>
-        </div>
-        <div class="col-lg-3 col-sm-6 col-xs-12">
-            <a class="btn btn-success btn-lg btn-block my-3" href="{% url "staff:content:create:image" %}">Create Image <i class="fas fa-camera"></i></a>
-        </div>
-{# STUB_VIDEO #}
-{# STUB_POLL #}
     </div>
 
     <h3>Danger Zone</h3>

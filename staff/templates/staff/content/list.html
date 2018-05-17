@@ -7,18 +7,33 @@
 
 {% block content %}
 {% csrf_token %}
-<h1>Content List</h1>
+<h1>Content</h1>
+
+{% if user|can:"core.create_content" %}
+<div class="row">
+    <div class="col-lg-3 col-sm-6 col-xs-12">
+        <a class="btn btn-primary btn btn-block my-3" href="{% url "staff:content:create:story" %}">Create Story <i class="fas fa-book"></i></a>
+    </div>
+    <div class="col-lg-3 col-sm-6 col-xs-12">
+        <a class="btn btn-primary btn btn-block my-3" href="{% url "staff:content:create:image" %}">Create Image <i class="fas fa-camera"></i></a>
+    </div>
+{# STUB_VIDEO #}
+{# STUB_POLL #}
+</div>
+
+<hr/>
+{% endif %}
 
 <div class="card">
-  <div class="card-body">
-    <form method="get">
-      <div class="form-inline">
-      {% crispy form form.helper %}
-      </div>
-      <br/>
-      <button type="submit" class="btn btn-success">Search <i class="fas fa-search"></i></button>
-    </form>
-  </div>
+    <div class="card-body">
+        <form method="get">
+            <div class="form-inline">
+                {% crispy form form.helper %}
+            </div>
+            <br/>
+            <button type="submit" class="btn btn-success">Search <i class="fas fa-search"></i></button>
+        </form>
+    </div>
 </div>
 <br/>
 

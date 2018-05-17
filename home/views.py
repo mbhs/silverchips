@@ -89,7 +89,8 @@ def view_profile(request, pk):
 
 
 def legacy(klass):
-    def legacy_view(pk):
+    """A function that, given a content class, constructs a view which redirects legacy URLs to their current homes."""
+    def legacy_view(request, pk):
         content = get_object_or_404(klass, legacy_id=pk)
         return redirect('home:view_content', content.pk)
     return legacy_view

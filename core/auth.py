@@ -12,7 +12,7 @@ from . import models
 backends.UserModel = models.User
 
 
-class CustomModelBackend(backends.ModelBackend):
+class ProxiedAllowAllUsersModelBackend(backends.AllowAllUsersModelBackend):
     """Create a model backend for the user proxy.
 
     This is kind of a hack but is also reasonably clean. It basically

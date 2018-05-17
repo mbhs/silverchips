@@ -16,7 +16,6 @@ from django.views.decorators.http import require_http_methods
 from django.views.generic.edit import CreateView, UpdateView, View
 from django.views.generic import ListView
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.contrib.auth.backends import AllowAllUsersModelBackend
 from django.urls import reverse
 from django.utils import timezone
 from django.db.models import Q
@@ -40,14 +39,11 @@ def login(request):
         if form.is_valid():
             # Attempt to authenticate the user
             user = auth.authenticate(username=form.cleaned_data["username"],
-                                     password=form.cleaned_data["password"],
-                                     backend=AllowAllUsersModelBackend)
+                                     password=form.cleaned_data["password"])
 
             # Check if password wrong
             if not user:
                 form.add_error(None, "Invalid credentials")
-
-            # TODO: make this accessible
 
             # Check if user is inactive
             elif not user.is_active:
@@ -142,7 +138,7 @@ class ContentChangeMixin(LoginRequiredMixin):
 
 class ContentCreateView(ContentChangeMixin, PermissionRequiredMixin, EditorMixin, CreateView):
     """Base view for uploading new content."""
-    permission = 'core.create_content'
+    permission_required = 'core.create_content'
 
     def get_initial(self):
         return dict(super(ContentCreateView, self).get_initial(), authors=[self.request.user])
