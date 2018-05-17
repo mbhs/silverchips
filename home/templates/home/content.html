@@ -11,12 +11,17 @@
 {% block content %}
 <h1>
     {{ content.title|safe }}
-    {% if request.user and content.visibility != content.PUBLISHED %}
-        <span class="badge badge-warning">{{ content.get_visibility_display|lower }}</span>
+    {% if request.user %}
+        {% if content.visibility != content.PUBLISHED %}
+            <span class="badge badge-warning">{{ content.get_visibility_display|lower }}</span>
+        {% endif %}
+        {% if not content.publishable %}
+            <span class="badge badge-danger">not publishable</span>
+        {% endif %}
     {% endif %}
 
     {% if request.user|can_edit_content:content %}
-    <a class="btn btn-primary" href="{% url "staff:content:edit" content.pk %}">Edit <i class="fas fa-pencil-alt"></i></a>
+        <a class="btn btn-primary" href="{% url "staff:content:edit" content.pk %}">Edit <i class="fas fa-pencil-alt"></i></a>
     {% endif %}
 </h1>
 <br/>

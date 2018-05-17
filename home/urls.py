@@ -7,7 +7,8 @@ Included directly under the root of the site.
 from django.urls import path, include
 
 # Local imports
-from . import views
+from home import views
+from core import models
 
 app_name = "home"
 
@@ -27,5 +28,9 @@ urlpatterns = [
     path("about/", include(about_urlpatterns, "about")),
 
     path("vote/<int:pk>/<int:choice>/", views.vote, name="vote"),
-    path("comment/submit/<int:pk>/", views.CommentSubmitView, name="submit_comment")
+    path("comment/submit/<int:pk>/", views.CommentSubmitView, name="submit_comment"),
+
+    # Legacy URLs to make sure old links work
+    path("story/<int:pk>/", views.legacy(models.Story)),
+    path("picture/<int:pk>/", views.legacy(models.Image))
 ]

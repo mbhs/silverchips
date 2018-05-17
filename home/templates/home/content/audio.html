@@ -1,8 +1,8 @@
 {% with audio=content %}
-        <a href="{% url "home:view_audio" audio.id %}">
-          <audio controls style="max-width: 80%; height: auto;" class="mx-auto d-block">
+    {% if audio.publishable %}<a href="{% url "home:view_audio" audio.id %}">{% endif %}
+        <audio controls style="max-width: 80%; height: auto;" class="mx-auto d-block">
             <source src="{{ audio.source.url }}">
             Your browser does not support the audio tag.
-          </audio>
-        </a>
+        </audio>
+    {% if audio.publishable %}</a>{% endif %}
 {% endwith %}

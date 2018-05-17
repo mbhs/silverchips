@@ -205,7 +205,7 @@ class Section(models.Model):
 
     def all_stories(self):
         """Get all the Stories that belong to this Section for display in section templates."""
-        return Story.objects.filter(visibility=Content.PUBLISHED, section__in=self.get_descendants())
+        return Story.objects.filter(visibility=Content.PUBLISHED, publishable=True, section__in=self.get_descendants())
 
     def is_root(self):
         """Check whether this Section is a root Section."""
