@@ -21,9 +21,9 @@ Prequisites: Python 3+, `pip`, and `pipenv`. Ruby, `gem`, and `sass` for static 
 5. Make migrations and apply:
    - `python manage.py makemigrations core`
    - `python manage.py migrate --run-syncdb`
-6. Load test data: `manage.py loaddata core/fixtures/recent.json`.
+6. Load test data: `python manage.py loaddata core/fixtures/recent.json`.
 7. Run server: `python manage.py runserver`.
-8. Go to: `localhost:8000`
+8. Visit in browser: `localhost:8000`
 
 And voila!
 

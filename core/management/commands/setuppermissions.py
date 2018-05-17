@@ -36,3 +36,4 @@ class Command(BaseCommand):
         eics.permissions.add(Permission.objects.get(content_type=content, codename='hide_content'))
         eics.permissions.add(Permission.objects.get(content_type=content, codename='delete_content'))
         eics.permissions.add(Permission.objects.get(content_type=user, codename='manage_users'))
+        # STUB_COMMENT

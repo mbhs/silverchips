@@ -5,12 +5,12 @@ of everything a normal user would see while visiting the website.
 """
 
 # Django imports
-from django.core.exceptions import PermissionDenied
+from django.views.generic import CreateView
 from django.shortcuts import render, redirect, get_object_or_404
 
 # News imports
 from core import models
-from core.permissions import can, user_can
+from core.permissions import user_can
 
 
 def load_context(request):
@@ -95,6 +95,11 @@ def staff(request):
     return render(request, "home/about/staff.html")
 
 
+# Content interaction views
 def vote(request):
     """Vote in a poll."""
     pass # STUB_POLL
+
+
+class CommentSubmitView(CreateView):
+    pass # STUB_COMMENT

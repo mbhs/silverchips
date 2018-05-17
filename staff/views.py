@@ -8,7 +8,7 @@ Also allows for some degree of customization.
 # Django imports
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import auth
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_protect
@@ -319,3 +319,16 @@ class ProfileEditView(LoginRequiredMixin, UserCanMixin, EditorMixin, UpdateView)
     model = models.Profile
     form_class = forms.ProfileForm
     editing = "Profile"
+
+
+# Comment views
+class CommentListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    pass # STUB_COMMENT
+
+
+@login_required
+@csrf_protect
+@permission_required("") # STUB_COMMENT
+@require_http_methods(["PATCH"])
+def approve_content(request, pk, approved):
+    pass # STUB_COMMENT

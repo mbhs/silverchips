@@ -4,8 +4,10 @@
 from django import setup
 from django.core.files import File
 from django.utils import timezone
+from django.utils.html import linebreaks
 
-pyimport os, re
+import os
+import re
 from xml.etree import ElementTree as et
 from datetime import datetime
 

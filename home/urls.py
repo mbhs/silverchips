@@ -25,5 +25,7 @@ urlpatterns = [
     path("profile/<int:pk>/", views.view_profile, name="view_profile"),
     path("section/<path:name>/", views.view_section, name="view_section"),
     path("about/", include(about_urlpatterns, "about")),
-    path("vote/<int:pk>/<int:choice>/", views.vote, name="vote")
+
+    path("vote/<int:pk>/<int:choice>/", views.vote, name="vote"),
+    path("comment/submit/<int:pk>/", views.CommentSubmitView, name="submit_comment")
 ]
