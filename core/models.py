@@ -34,7 +34,7 @@ class Profile(models.Model):
     class Meta:
         # Create permissions for Profile objects
         permissions = (
-            ('edit_profile', "Edit one's own user profile"),
+            ('edit_profile', "Can edit one's own user profile"),
         )
 
 
@@ -73,7 +73,7 @@ class User(auth.User):
     class Meta:
         proxy = True
         permissions = (
-            ('manage_users', "Manage user data and privileges"),
+            ('manage_users', "Can manage user data and privileges"),
         )
 
 
