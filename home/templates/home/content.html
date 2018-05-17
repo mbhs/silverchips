@@ -2,6 +2,7 @@
 
 {% load humanize %}
 {% load home %}
+{% load core %}
 
 {% block title %}
 {{ content.title|safe }}
@@ -54,6 +55,8 @@
         <em>Last updated: {{ content.modified }}</em>
         <br/>
     {% endif %}
+
+    <p>Tags: {# STUB_TAG #}</p>
 
     <hr/>
 

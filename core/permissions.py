@@ -59,8 +59,6 @@ def can(user, action, obj):
         if user is None or not user.is_active:
             return False
 
-        if action == 'manage':
-            return user.has_perm('auth.manage_users')
         if action == 'edit_profile':
             return user.has_perm('auth.manage_users') or user == obj and user.has_perm('core.edit_profile')
 

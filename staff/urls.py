@@ -17,7 +17,10 @@ app_name = "staff"
 
 create_urlpatterns = ([
     path("story/", views.StoryCreateView.as_view(), name="story"),
-    path("image/", views.ImageCreateView.as_view(), name="image")
+    path("image/", views.ImageCreateView.as_view(), name="image"),
+    path("video/", views.VideoCreateView.as_view(), name="video"),
+    path("audio/", views.AudioCreateView.as_view(), name="audio"),
+    path("poll/", views.PollCreateView.as_view(), name="poll")
 ], "create")
 
 content_urlpatterns = ([

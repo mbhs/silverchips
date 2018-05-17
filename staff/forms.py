@@ -1,8 +1,4 @@
-"""Custom forms for convenience.
-
-Contains convenient intermediary forms for login and similar
-applications.
-"""
+"""Custom forms for the staff interface."""
 
 from django import forms
 from core import models
@@ -42,7 +38,6 @@ class ContentForm(forms.ModelForm):
 
 class StoryForm(ContentForm):
     """The story editor form."""
-
     class Meta(ContentForm.Meta):
         model = models.Story
         fields = ContentForm.Meta.fields + ['lead', 'text']
@@ -51,15 +46,28 @@ class StoryForm(ContentForm):
 
 class ImageForm(ContentForm):
     """Form for image creation."""
-
     class Meta(ContentForm.Meta):
         model = models.Image
         fields = ContentForm.Meta.fields + ['source']
 
 
+class VideoForm(ContentForm):
+    pass
+    # STUB_VIDEO
+
+
+class AudioForm(ContentForm):
+    pass
+    # STUB_VIDEO
+
+
+class PollForm(ContentForm):
+    pass
+    # STUB_POLL
+
+
 class ContentSearchForm(forms.Form):
     """Form for searching through content."""
-
     id = forms.IntegerField(label="ID:", required=False)
     title = forms.CharField(label="Title:", required=False, max_length=100)
     after = forms.DateField(label="Created After:", required=False, widget=forms.TextInput(attrs={'type': 'date'}))
@@ -68,6 +76,8 @@ class ContentSearchForm(forms.Form):
                                              required=False,
                                              widget=autocomplete.ModelSelect2Multiple(url="staff:autocomplete:users"))
     # type = forms.ModelMultipleChoiceField(label=)
+
+    tags = None # STUB_TAG
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

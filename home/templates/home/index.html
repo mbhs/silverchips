@@ -30,11 +30,13 @@
                 </div>
             </div>
             {% for section in section_roots %}
-                <div id="{{section.title}}" class="container">
+                <div id="{{ section.title }}" class="container">
                     <h1 class="section-header display-4 text-center text-uppercase">
-                        <a href="{% url "home:view_section" section.name %}">{{section.title}}</a>
+                        <a href="{% url "home:view_section" section.name %}">{{ section.title }}</a>
                     </h1>
                     <hr class="my-4">
+
+                    {{ section.all_stories.count     }}
                     {% for story in section.all_stories.all|slice:"3" %}
                         <div class="row mb-3">
                             <div class="col-md-4">

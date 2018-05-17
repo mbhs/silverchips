@@ -13,9 +13,10 @@ from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.http import require_http_methods
-from django.views.generic.edit import CreateView, UpdateView
+from django.views.generic.edit import CreateView, UpdateView, View
 from django.views.generic import ListView
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.backends import AllowAllUsersModelBackend
 from django.urls import reverse
 from django.utils import timezone
 from django.db.models import Q
@@ -26,22 +27,21 @@ from core.permissions import can, VISIBILITY_ACTIONS, UserCanMixin, user_can
 from staff import forms
 
 
-# The main views
+# Staff views
 def login(request):
-    """Return the login page to the staff site."""
-
+    """Login to the staff site."""
+    # Redirect users who are already authenticated
     if request.user.is_authenticated:
         return redirect("staff:index")
 
-    # Check if post and validate
+    # Check for login form submission
     if request.method == "POST":
         form = forms.LoginForm(request.POST)
         if form.is_valid():
-
-            # Get username, password, and corresponding User
-            username = form.cleaned_data["username"]
-            password = form.cleaned_data["password"]
-            user = auth.authenticate(username=username, password=password)
+            # Attempt to authenticate the user
+            user = auth.authenticate(username=form.cleaned_data["username"],
+                                     password=form.cleaned_data["password"],
+                                     backend=AllowAllUsersModelBackend)
 
             # Check if password wrong
             if not user:
@@ -67,7 +67,6 @@ def login(request):
 @login_required
 def logout(request):
     """Log out the user and go to logout page."""
-
     auth.logout(request)
     return redirect("staff:index")
 
@@ -75,10 +74,20 @@ def logout(request):
 @login_required
 def index(request):
     """Return the staff dashboard page."""
-
     return render(request, "staff/index.html")
 
 
+class EditorMixin(View):
+    """Simple mixin that allows various forms to use our generic editor template instead of using separate templates."""
+    template_name = "staff/edit.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['editing'] = self.editing
+        return context
+
+
+# Content views
 class ContentListView(LoginRequiredMixin, ListView):
     """The content list view that supports pagination."""
 
@@ -121,22 +130,18 @@ class ContentListView(LoginRequiredMixin, ListView):
 
 
 class ContentChangeMixin(LoginRequiredMixin):
+    """Mixin that organizes shared functionality across various content creation and editing views."""
     def get_success_url(self):
         return reverse("staff:content:list")
 
     def form_valid(self, form):
+        # Automatically update the "modified" field when the form is saved
         form.instance.modified = timezone.now()
-        return super(ContentChangeMixin, self).form_valid(form)
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['editing'] = "Content"
-        return context
+        return super().form_valid(form)
 
 
-class ContentCreateView(ContentChangeMixin, PermissionRequiredMixin, CreateView):
+class ContentCreateView(ContentChangeMixin, PermissionRequiredMixin, EditorMixin, CreateView):
     """Base view for uploading new content."""
-
     permission = 'core.create_content'
 
     def get_initial(self):
@@ -145,55 +150,78 @@ class ContentCreateView(ContentChangeMixin, PermissionRequiredMixin, CreateView)
 
 class StoryCreateView(ContentCreateView):
     """View for uploading a new story."""
-
     model = models.Story
     form_class = forms.StoryForm
-    template_name = "staff/edit.html"
+    editing = "Story"
 
 
 class ImageCreateView(ContentCreateView):
     """View for uploading a new image."""
-
     model = models.Image
     form_class = forms.ImageForm
-    template_name = "staff/edit.html"
+    editing = "Image"
 
 
-class ContentEditView(ContentChangeMixin, UserCanMixin, UpdateView):
+class VideoCreateView(ContentCreateView):
+    """View for uploading a new video."""
+    pass # STUB_VIDEo
+
+
+class AudioCreateView(ContentCreateView):
+    """View for uploading new audio."""
+    pass # VIDEO_STUVB
+
+
+class PollCreateView(ContentCreateView):
+    """View for uploading a new poll."""
+    pass # STUB_POLL
+
+
+class ContentEditView(ContentChangeMixin, UserCanMixin, EditorMixin, UpdateView):
     """Base view for editing content."""
-
     action = 'content.edit'
-
-    def get_object(self, **kwargs):
-        obj = super(ContentEditView, self).get_object(**kwargs)
-        if not can(self.request.user, 'content.edit', obj):
-            raise PermissionDenied
-        return obj
 
 
 class StoryEditView(ContentEditView):
     """View for editing stories."""
-
     model = models.Story
     form_class = forms.StoryForm
-    template_name = "staff/edit.html"
+    editing = "Story"
 
 
 class ImageEditView(ContentEditView):
     """View for editing images."""
-
     model = models.Image
     form_class = forms.ImageForm
-    template_name = "staff/edit.html"
+    editing = "Image"
+
+
+class VideoEditView(ContentEditView):
+    """View for editing videos."""
+    pass # STUB_VIDEO
+
+
+class AudioEditView(ContentEditView):
+    """View for editing audio."""
+    pass # STUB_VIDEO
+
+
+class PollEditView(ContentEditView):
+    """View for editing polls."""
+    pass # STUB_POLL
 
 
 def content_edit_view(request, pk):
+    """View for editing general content, rendering different views depending on the type of content."""
     content = get_object_or_404(models.Content.objects, pk=pk)
 
     # Switch which view gets received based on the kind of content
     return {
         'Story': StoryEditView,
         'Image': ImageEditView,
+        'Video': VideoEditView,
+        'Audio': AudioEditView,
+        'Poll': PollEditView
     }[content.type].as_view()(request, pk=pk)
 
 
@@ -201,8 +229,10 @@ def content_edit_view(request, pk):
 @csrf_protect
 @require_http_methods(["PATCH"])
 def set_content_visibility(request, pk, level):
+    """View to change the visibility of certain content."""
     content = get_object_or_404(models.Content.objects, pk=pk)
 
+    # Check whether the requesting user has permission to change the content's visibility to the given level
     if not can(request.user, VISIBILITY_ACTIONS[level], content):
         raise PermissionDenied
 
@@ -217,46 +247,16 @@ def set_content_visibility(request, pk, level):
 @user_can('content.delete')
 @require_http_methods(["DELETE"])
 def delete_content(request, pk):
+    """View to delete content."""
     content = get_object_or_404(models.Content.objects, pk=pk)
     content.delete()
 
     return HttpResponse(status=200)
 
 
-# TODO: implement this
-class UserCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
-    """Base view for creating users."""
-
-    permission_required = 'auth.manage_users'
-
-    model = models.User
-    form_class = forms.UserForm
-    template_name = "staff/editor.html"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['editing'] = "User"
-        return context
-
-
-class UserManageView(LoginRequiredMixin, UserCanMixin, UpdateView):
-    """Base view for editing users."""
-
-    action = 'users.manage'
-
-    model = models.User
-    form_class = forms.UserForm
-    template_name = "staff/edit.html"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['editing'] = "User"
-        return context
-
-
+# User views
 class UserListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     """The content list view that supports pagination."""
-
     permission_required = 'auth.manage_users'
 
     template_name = "staff/users/list.html"
@@ -293,16 +293,29 @@ class UserListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         return context
 
 
-class ProfileEditView(LoginRequiredMixin, UserCanMixin, UpdateView):
-    """Base view for editing users."""
+# TODO: implement this
+class UserCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
+    """Base view for creating users."""
+    permission_required = 'auth.manage_users'
 
+    model = models.User
+    form_class = forms.UserForm
+    editing = "User"
+
+
+class UserManageView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
+    """Base view for editing users."""
+    permission = 'auth.manage_users'
+
+    model = models.User
+    form_class = forms.UserForm
+    editing = "User"
+
+
+class ProfileEditView(LoginRequiredMixin, UserCanMixin, EditorMixin, UpdateView):
+    """Base view for editing user profiles."""
     action = 'users.edit_profile'
 
     model = models.Profile
     form_class = forms.ProfileForm
-    template_name = "staff/edit.html"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['editing'] = "Profile"
-        return context
+    editing = "Profile"

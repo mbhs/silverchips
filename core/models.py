@@ -104,7 +104,7 @@ class Content(PolymorphicModel):
 
     # Authorship information
     authors = models.ManyToManyField(User, related_name="%(class)s_authored")  # user.image_authored
-    guest_authors = models.CharField(max_length=64, default="", blank=True)
+    guest_authors = models.CharField(max_length=64, default="", blank=True)  # Authors who aren't in the database
 
     # Tracking information
     section = models.ForeignKey("Section", related_name="content", null=True, on_delete=models.SET_NULL)
@@ -197,14 +197,14 @@ class Section(models.Model):
         descendants = {self}
 
         # Continually descend the tree of childhood recursively
-        if self.subsections.exists():
+        if self.subsections.count():
             for subsection in self.subsections.all():
                 descendants |= subsection.get_descendants()
 
         return descendants
 
     def all_stories(self):
-        """Get all the Stories that belong to this section for display in section templates."""
+        """Get all the Stories that belong to this Section for display in section templates."""
         return Story.objects.filter(visibility=Content.PUBLISHED, section__in=self.get_descendants())
 
     def is_root(self):
@@ -264,7 +264,6 @@ class Section(models.Model):
 
 class Image(Content):
     """Image subclass for the Content model."""
-
     source = models.ImageField(upload_to="images/%Y/%m/%d/")
 
     template = "home/content/image.html"
@@ -273,7 +272,6 @@ class Image(Content):
 
 class Video(Content):
     """Video subclass for the Content model."""
-
     source = models.FileField(upload_to="videos/%Y/%m/%d/")
 
     template = "home/content/video.html"
@@ -282,11 +280,14 @@ class Video(Content):
 
 class Audio(Content):
     """Audio subclass for the Content model."""
-
     source = models.FileField(upload_to="audio/%Y/%m/%d/")
 
     template = "home/content/audio.html"
     descriptor = "Audio"
+
+
+class Poll(Content):
+    pass # STUB_POLL
 
 
 class Story(Content):
@@ -297,7 +298,6 @@ class Story(Content):
     the written contents, states pertaining to editing and publishing
     status are also stored.
     """
-
     lead = models.TextField()  # Lead paragraph
     text = models.TextField()  # Full text
     cover = models.ForeignKey(Image, null=True, on_delete=models.SET_NULL)  # Cover photo
@@ -308,3 +308,7 @@ class Story(Content):
 
     class Meta:
         verbose_name_plural = "stories"
+
+
+class Comment(models.Model):
+    pass # STUB_COMMENT

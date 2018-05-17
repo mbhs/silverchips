@@ -27,19 +27,6 @@
             margin: 0;
             span {color: rgb(184, 80, 64);}
         }
-        .footer-links {
-            padding-top: 1.5em;
-            a {
-                position: relative;
-                text-decoration: none;
-                text-transform: uppercase;
-                font-family: "Oswald", sans-serif;
-                font-size: 0.9em;
-                font-weight: bold;
-                letter-spacing: 0.125rem;
-                color: white;
-            }
-        }
     }
     .site-footer-center {
         width: 100%;
@@ -125,6 +112,16 @@
                 }
             }
         }
+    }
+    .footer-link {
+        position: relative;
+        text-decoration: none;
+        text-transform: uppercase;
+        font-family: "Oswald", sans-serif;
+        font-size: 0.9em;
+        font-weight: bold;
+        letter-spacing: 0.125rem;
+        color: white;
     }
 
     .copyright {

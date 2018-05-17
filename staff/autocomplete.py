@@ -9,3 +9,7 @@ class UserAutoComplete(LoginRequiredMixin, autocomplete.Select2QuerySetView):
     def get_queryset(self):
         """Get the list of users."""
         return User.objects.filter(first_name__istartswith=self.q).order_by("first_name", "last_name")
+
+
+class TagAutoComplete(LoginRequiredMixin, autocomplete.Select2QuerySetView):
+    pass # STUB_TAG

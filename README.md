@@ -10,7 +10,7 @@ while the intent is to keep this framework generic as to support news sites for
 different organizations, parts may be hardocoded until a full fork and release.
 
 ## Getting Started
-Prequisites: Python 3+, `pip`, `pipenv`, and Ruby `sass`.
+Prequisites: Python 3+, `pip`, and `pipenv`. Ruby, `gem`, and `sass` for static precompilation.
 `pip` should come shipped with Python 3 when you install it (just make sure it's on PATH); to install `virtualenv` and `virtualenvwrapper-win`, run (on the command line):
   - `pip install pipenv`
 ### Quick Start

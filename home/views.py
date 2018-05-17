@@ -22,7 +22,6 @@ def load_context(request):
 
 def index(request):
     """Render the index page of the SilverChips site."""
-
     return render(request, "home/index.html")
 
 
@@ -79,13 +78,23 @@ def view_profile(request, pk):
     return render(request, "home/profile.html", {
         "user": user,
         "stories": stories,
-        "images": images
+        "images": images,
+        # STUB_VIDEO
     })
 
 
+# STUB_ABOUT
+def about(request):
+    """Render the about page for the newspaper."""
+    return render(request, "home/about/about.html")
+
+
+# STUB_ABOUT
 def staff(request):
     """Display a list of all of the newspaper's staff."""
+    return render(request, "home/about/staff.html")
 
-    return render(request, "home/staff.html", {
-        "active": models.User.objects.filter(profile__active=True)
-    })
+
+def vote(request):
+    """Vote in a poll."""
+    pass # STUB_POLL
