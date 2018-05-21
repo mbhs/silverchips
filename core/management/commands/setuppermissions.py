@@ -30,7 +30,7 @@ class Command(BaseCommand):
         editors.permissions.add(Permission.objects.get(content_type=content, codename='read_content'))
         editors.permissions.add(Permission.objects.get(content_type=content, codename='edit_content'))
 
-        # Grand permissions to editors-in-chief
+        # Grant permissions to editors-in-chief
         eics, _ = Group.objects.get_or_create(name="editors-in-chief")
         eics.permissions.add(Permission.objects.get(content_type=content, codename='publish_content'))
         eics.permissions.add(Permission.objects.get(content_type=content, codename='hide_content'))
