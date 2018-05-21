@@ -283,7 +283,7 @@ class Audio(Content):
 
 
 class Poll(Content):
-    pass # STUB_POLL
+    pass  # STUB_POLL
 
 
 class Story(Content):
@@ -307,4 +307,4 @@ class Story(Content):
 
 
 class Comment(models.Model):
-    pass # STUB_COMMENT
+    pass  # STUB_COMMENT
