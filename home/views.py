@@ -12,7 +12,7 @@ from django.http import HttpResponseForbidden
 # News imports
 from core import models
 from core.permissions import user_can
-
+from home import forms
 
 def load_context(request):
     return {
@@ -100,7 +100,40 @@ def legacy(klass):
 
 
 class TaggedContentList(ListView):
-    pass # STUB_TAG
+    """The content list view that supports pagination."""
+    template_name = "home/tag.html"
+    context_object_name = "tag_list"
+    paginate_by = 25
+
+    def get_queryset(self):
+        """Return a list of all the tags we're looking at, filtered by search criteria."""
+        tags = models.Tag.objects.all()
+
+        form = forms.TagSearchForm(self.request.GET)
+        if form.is_valid():
+            # Filter the users by certain criteria
+            query = Q()
+
+            if 'id' in form.data and form.data['id']:
+                query &= Q(pk=int(form.data['id']))
+            if 'first_name' in form.data and form.data['first_name']:
+                query &= Q(first_name__contains=form.data['first_name'])
+            if 'last_name' in form.data and form.data['last_name']:
+                query &= Q(last_name__contains=form.data['last_name'])
+            if 'graduation_year' in form.data and form.data['graduation_year']:
+                query &= Q(profile__graduation_year=form.data['graduation_year'])
+            # if 'active' in form.data and form.data['active']:
+            #     query &= Q(active=form.data['active'])
+
+            users = users.filter(query)
+
+        return users
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = forms.UserSearchForm(self.request.GET)
+        return context
+
 
 
 # STUB_ABOUT

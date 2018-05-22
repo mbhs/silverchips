@@ -61,7 +61,11 @@
         <br/>
     {% endif %}
 
-    <p>Tags: {# STUB_TAG #}</p>
+    <p>Tags:
+        {% for tag in content.tags %}
+            <span class="tag"> {{ tag.name }}</span>
+        {% endfor %}
+    </p>
 
     <hr/>
 

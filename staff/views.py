@@ -104,15 +104,15 @@ class ContentListView(LoginRequiredMixin, ListView):
             # Filter the content by certain criteria
             query = Q()
 
-            if 'title' in form.data and form.data['title']:
+            if form.data.get("title"):
                 query &= Q(title__contains=form.data['title'])
-            if 'id' in form.data and form.data['id']:
+            if form.data.get("id"):
                 query &= Q(pk=int(form.data['id']))
-            if 'after' in form.data and form.data['after']:
+            if form.data.get("after"):
                 query &= Q(created__gt=form.data['after'])
-            if 'before' in form.data and form.data['before']:
+            if form.data.get("before"):
                 query &= Q(created__lt=form.data['before'])
-            if 'authors' in form.data and form.data['authors']:
+            if form.data.get("authors"):
                 query &= Q(authors=form.data['authors'])
 
             content = content.filter(query)

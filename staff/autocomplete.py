@@ -17,4 +17,6 @@ class UserAutoComplete(LoginRequiredMixin, autocomplete.Select2QuerySetView):
 
 
 class TagAutoComplete(LoginRequiredMixin, autocomplete.Select2QuerySetView):
-    pass # STUB_TAG
+    def get_queryset(self):
+        """Get the list of tags."""
+        return User.objects.filter(Q(name__icontains=self.q)).order_by("name")
