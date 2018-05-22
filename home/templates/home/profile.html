@@ -46,4 +46,28 @@
             <p class="text-muted">{{ image.description|safe }}</p>
         {% endfor %}
     {% endif %}
+
+    {% if videos.count > 0 %}
+        <br/><br/>
+        <h2>Images ({{ videos.count }})</h2>
+        <hr/>
+
+        {% for video in videos %}
+            <h4><a href="{% url "home:view_video" audio.pk %}" class="solid-link">{{ video.title|safe }}</a></h4>
+            {{ video.created }}
+            <p class="text-muted">{{ video.description|safe }}</p>
+        {% endfor %}
+    {% endif %}
+
+    {% if audios.count > 0 %}
+        <br/><br/>
+        <h2>Images ({{ audios.count }})</h2>
+        <hr/>
+
+        {% for audio in audios %}
+            <h4><a href="{% url "home:view_audio" audio.pk %}" class="solid-link">{{ audio.title|safe }}</a></h4>
+            {{ audio.created }}
+            <p class="text-muted">{{ audio.description|safe }}</p>
+        {% endfor %}
+    {% endif %}
 {% endblock %}

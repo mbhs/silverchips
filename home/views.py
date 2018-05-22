@@ -79,12 +79,15 @@ def view_profile(request, pk):
     # Find all the content that this user authored
     stories = models.Story.objects.filter(authors__in=[user], visibility=models.Content.PUBLISHED, embed_only=True)
     images = models.Image.objects.filter(authors__in=[user], visibility=models.Content.PUBLISHED, embed_only=True)
+    videos = models.Video.objects.filter(authors__in=[user], visibility=models.Content.PUBLISHED, embed_only=True)
+    audios = models.Audio.objects.filter(authors__in=[user], visibility=models.Content.PUBLISHED, embed_only=True)
 
     return render(request, "home/profile.html", {
         "user": user,
         "stories": stories,
         "images": images,
-        # STUB_VIDEO
+        "videos": videos,
+        "audios": audios
     })
 
 

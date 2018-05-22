@@ -160,12 +160,16 @@ class ImageCreateView(ContentCreateView):
 
 class VideoCreateView(ContentCreateView):
     """View for uploading a new video."""
-    pass # STUB_VIDEo
+    model = models.Video
+    form_class = forms.VideoForm
+    editing = "Video"
 
 
 class AudioCreateView(ContentCreateView):
     """View for uploading new audio."""
-    pass # VIDEO_STUVB
+    model = models.Audio
+    form_class = forms.AudioForm
+    editing = "Audio"
 
 
 class PollCreateView(ContentCreateView):
@@ -184,7 +188,6 @@ class StoryEditView(ContentEditView):
     form_class = forms.StoryForm
     editing = "Story"
 
-
 class ImageEditView(ContentEditView):
     """View for editing images."""
     model = models.Image
@@ -194,12 +197,16 @@ class ImageEditView(ContentEditView):
 
 class VideoEditView(ContentEditView):
     """View for editing videos."""
-    pass # STUB_VIDEO
+    model = models.Video
+    form_class = forms.VideoForm
+    editing = "Video"
 
 
 class AudioEditView(ContentEditView):
     """View for editing audio."""
-    pass # STUB_VIDEO
+    model = models.Audio
+    form_class = forms.AudioForm
+    editing = "Audio"
 
 
 class PollEditView(ContentEditView):

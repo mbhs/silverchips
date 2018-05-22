@@ -77,13 +77,16 @@ class ImageForm(ContentForm):
 
 
 class VideoForm(ContentForm):
-    pass
-    # STUB_VIDEO
-
+    """Form for video creation."""
+    class Meta(ContentForm.Meta):
+        model = models.Video
+        fields = ContentForm.Meta.fields + ['source']
 
 class AudioForm(ContentForm):
-    pass
-    # STUB_VIDEO
+    """Form for audio creation."""
+    class Meta(ContentForm.Meta):
+        model = models.Audio
+        fields = ContentForm.Meta.fields + ['source']
 
 
 class PollForm(ContentForm):
