@@ -43,6 +43,9 @@ class ContentSearchForm(forms.Form):
     authors = forms.ModelMultipleChoiceField(label="Authors:", queryset=models.User.objects.all(),
                                              required=False,
                                              widget=autocomplete.ModelSelect2Multiple(url="staff:autocomplete:users"))
+    helper = FormHelper()
+    helper.form_tag = False
+    helper.disable_csrf = True
     # type = forms.ModelMultipleChoiceField(label=)
 
     tags = None  # STUB_TAG
