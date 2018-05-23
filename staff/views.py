@@ -114,7 +114,8 @@ class ContentListView(LoginRequiredMixin, ListView):
                 query &= Q(created__lt=form.data['before'])
             if form.data.get("authors"):
                 query &= Q(authors=form.data['authors'])
-
+            if form.data.get("tags"):
+                query &= Q(tags=form.data['tags'])
             content = content.filter(query)
 
         return content.order_by('-modified')

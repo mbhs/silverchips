@@ -43,12 +43,15 @@ class ContentSearchForm(forms.Form):
     authors = forms.ModelMultipleChoiceField(label="Authors:", queryset=models.User.objects.all(),
                                              required=False,
                                              widget=autocomplete.ModelSelect2Multiple(url="staff:autocomplete:users"))
+    tags = forms.ModelMultipleChoiceField(label="Tags:", queryset=models.Tag.objects.all(),
+                                          required=False,
+                                          widget=autocomplete.ModelSelect2Multiple(url="staff:autocomplete:tags"))
+
     helper = FormHelper()
     helper.form_tag = False
     helper.disable_csrf = True
     # type = forms.ModelMultipleChoiceField(label=)
 
-    tags = None  # STUB_TAG
 
 
 class ContentForm(VerticalMixin, forms.ModelForm):
