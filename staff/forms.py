@@ -55,11 +55,12 @@ class ContentForm(VerticalMixin, forms.ModelForm):
     """A generic editor for any kind of content."""
     class Meta:
         model = models.Content
-        fields = ['title', 'authors', 'guest_authors', 'description', 'embed_only']
+        fields = ['title', 'authors', 'guest_authors', 'description', 'embed_only'] #, 'tags']
         widgets = {
             'title': forms.widgets.TextInput(),
             'description': RichTextWidget(short=True),
-            'authors': autocomplete.ModelSelect2Multiple(url="staff:autocomplete:users")
+            'authors': autocomplete.ModelSelect2Multiple(url="staff:autocomplete:users"),
+            # 'tags': autocomplete.ModelSelect2Multiple(url="staff:autocomplete:tags")
         }
         abstract = True
 

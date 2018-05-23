@@ -131,7 +131,7 @@ class TaggedContentList(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['form'] = forms.UserSearchForm(self.request.GET)
+        context['form'] = forms.TagSearchForm(self.request.GET)
         return context
 
 
