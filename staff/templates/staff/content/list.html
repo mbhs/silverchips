@@ -89,6 +89,7 @@ function doApi(url, verb) {
             <th scope="col">Title</th>
             <th scope="col">Modified</th>
             <th scope="col">Authors</th>
+            <th scope="col">Tags</th>
             <th scope="col">Embed Only</th>
             <th scope="col">Visibility</th>
             <th scope="col">Actions</th>
@@ -103,6 +104,7 @@ function doApi(url, verb) {
             <td>{{ content.title|safe }}</td>
             <td>{{ content.modified|date:"SHORT_DATETIME_FORMAT" }}</td>
             <td>{{ content|names }}</td>
+            <td>{{ content|tags }}</td>
             <td><i class="fas fa-{{ content.embed_only|yesno:"check,times" }}"></i></td>
             <td>{{ content.get_visibility_display|capfirst }}</td>
             <td>
