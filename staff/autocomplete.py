@@ -3,7 +3,7 @@ from django.db.models import Q
 
 from dal import autocomplete
 
-from core.models import User
+from core.models import User, Tag
 
 
 class UserAutoComplete(LoginRequiredMixin, autocomplete.Select2QuerySetView):
@@ -19,4 +19,9 @@ class UserAutoComplete(LoginRequiredMixin, autocomplete.Select2QuerySetView):
 class TagAutoComplete(autocomplete.Select2QuerySetView):
     def get_queryset(self):
         """Get the list of tags."""
-        return User.objects.filter(Q(name__icontains=self.q)).order_by("name")
+        return Tag.objects.filter(Q(name__icontains=self.q)).order_by("name")
+
+Tag.objects.all().delete()
+for t in ['opinions', 'news', 'lifestyle', 'sports', 'spanish', 'blogs']:
+    tag = Tag(name=t)
+    tag.save()
