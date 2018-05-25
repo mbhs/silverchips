@@ -5,6 +5,7 @@ of everything a normal user would see while visiting the website.
 """
 
 # Django imports
+from django.db.models import Q
 from django.views.generic import CreateView, ListView
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponseForbidden
@@ -58,7 +59,7 @@ def view_content(request, pk, slug=None):
     if content.slug != slug:
         return redirect("home:view_content", content.slug, content.pk)
 
-    if not content.publishable:
+    if not content.visibility == 3:
         # This content shouldn't have it's own page!
         return HttpResponseForbidden("This content is not publishable.")
 
@@ -107,27 +108,19 @@ class TaggedContentList(ListView):
 
     def get_queryset(self):
         """Return a list of all the tags we're looking at, filtered by search criteria."""
-        tags = models.Tag.objects.all()
+        content = models.Content.objects.all()
 
         form = forms.TagSearchForm(self.request.GET)
         if form.is_valid():
             # Filter the users by certain criteria
             query = Q()
 
-            if 'id' in form.data and form.data['id']:
-                query &= Q(pk=int(form.data['id']))
-            if 'first_name' in form.data and form.data['first_name']:
-                query &= Q(first_name__contains=form.data['first_name'])
-            if 'last_name' in form.data and form.data['last_name']:
-                query &= Q(last_name__contains=form.data['last_name'])
-            if 'graduation_year' in form.data and form.data['graduation_year']:
-                query &= Q(profile__graduation_year=form.data['graduation_year'])
-            # if 'active' in form.data and form.data['active']:
-            #     query &= Q(active=form.data['active'])
+            if form.data.get("tags"):
+                query &= Q(tags=form.data['tags'])
 
-            users = users.filter(query)
+            content = content.filter(query)
 
-        return users
+        return content
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
