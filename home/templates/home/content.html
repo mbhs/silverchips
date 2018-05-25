@@ -62,7 +62,7 @@
     {% endif %}
 
     <p>Tags:
-        {% for tag in content.tags %}
+        {% for tag in content.tags.all %}
             <span class="tag"> {{ tag.name }}</span>
         {% endfor %}
     </p>
