@@ -5,7 +5,7 @@
     margin-top: 4em;
     background: $background-image;
     background-attachment: fixed;
-    color: $background;
+    color: $site-white;
     .site-footer-expand {
         height: auto;
         padding: 2em;
@@ -25,7 +25,7 @@
         .footer-logo {
             padding: 0;
             margin: 0;
-            span {color: rgb(184, 80, 64);}
+            span {color: $site-red;}
         }
     }
     .site-footer-center {
@@ -43,8 +43,8 @@
             display: block;
             font-weight: bold;
             .fa {
-                background-color: rgb(184, 80, 64);
-                color: #ffffff;
+                background-color: $site-red;
+                color: $site-white;
                 font-size: 25px;
                 width: 40px;
                 height: 40px;
@@ -81,7 +81,7 @@
         .footer-company-about {
             span {
                 display: block;
-                color: #ffffff;
+                color: $site-white;
                 font-size: 14px;
                 font-weight: bold;
                 margin-bottom: 20px;
@@ -99,7 +99,7 @@
                 width: 35px;
                 height: 35px;
                 cursor: pointer;
-                background-color:rgb(184, 80, 64);
+                background-color: $site-red;
                 border-radius: 2px;
                 font-size: 20px;
                 color: #ffffff;
@@ -121,7 +121,7 @@
         font-size: 0.9em;
         font-weight: bold;
         letter-spacing: 0.125rem;
-        color: white;
+        color: $site-white;
     }
 
     .copyright {

@@ -1,14 +1,19 @@
 /* FONTS */
 @import url('https://fonts.googleapis.com/css?family=Oswald|Open+Sans|Playfair+Display');
-
+$site-header-font: "Oswald", serif;
+$site-paragraph-font: "Open Sans", sans-serif;
 /* COLORS */
-$background: #ffffff; //WHITE
-$font: #373737; //CHARCOAL
+$site-gray: #373737;
+$site-white: #ffffff;
+$site-red: #c54c3a;
 
-$navbar: #ffffff;
-$navbar-header-background:#ffffff;
-$navbar-active: #c54c3a;
-$navbar-unactive: #000000;
+$site-background: $site-white;
+$site-header: $site-gray;
+$site-paragraph: $site-gray;
+
+$navbar-background: $site-background;
+$navbar-active-link: $site-red;
+$navbar-unactive-link: $site-paragraph;
 
 $section-header: #373737;
 $solid-link: #373737;
@@ -19,15 +24,53 @@ $author: #373737;
 $card-header-bg: #373737;
 $card-title-color: #ffffff;
 
+
 /* MASTHEAD/FOOTER BACKGROUND IMAGE */
 $background-image: url("../images/footer_lodyas.png");
+
+/* CUSTOM BOOTSTRAP BREAKPOINTS */
+$grid-breakpoints: (
+  // Extra small screen / phone
+  xs: 0,
+  // Small screen / phone
+  sm: 576px,
+  // Medium screen / tablet
+  md: 768px,
+  // Large screen / desktop
+  lg: 992px,
+  // Extra large screen / wide desktop
+  xl: 1280px
+);
+/* CUSTOM BOOTSTRAP CONTAINER */
+.container {
+  padding-right: 10px;
+  padding-left: 10px;
+  margin-right: auto;
+  margin-left: auto;
+}
+@media (min-width: 768px) {
+  .container {
+    max-width: calc(100vw - 50px);
+  }
+}
+@media (min-width: 992px) {
+  .container {
+    max-width: calc(100vw - 80px);
+  }
+}
+@media (min-width: 1280px) {
+  .container {
+    max-width: calc(100vw - 120px);
+  }
+}
+
 
 /* MIXINS */
 $breakpoints: (            //   Bootstrap equivalents
     "phone":        576px, //           sm
     "tablet":       768px, //           md
     "desktop":      992px, //           lg
-    "desktop-wide": 1200px //           xl
+    "desktop-wide": 1250px //           xl
 );
 
 @mixin mq($width, $type: min) {
