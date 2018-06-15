@@ -44,4 +44,4 @@ This code is organized into three main Django apps and a number of auxiliary scr
 
 ### Creating Fixtures
 
-Simply run the command `python3 manage.py dumpdata --natural-foreign --natural-primary -e contenttypes.contenttype -e auth.permission > core/fixtures/recent.json`.
+Simply run the command `python manage.py dumpdata --natural-foreign --natural-primary -e contenttypes.contenttype -e auth.permission > core/fixtures/recent.json`.

@@ -1,8 +1,6 @@
 {% with video=content %}
-    {% if video.publishable %}<a href="{% url "home:view_video" video.id %}">{% endif %}
-        <video controls style="max-width: 80%; height: auto;" class="mx-auto d-block">
-            <source src="{{ video.source.url }}" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
-    {% if video.publishable %}</a>{% endif %}
+    <video controls style="max-width: 80%; height: auto;" class="mx-auto d-block">
+        <source src="{{ video.source.url }}" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
 {% endwith %}

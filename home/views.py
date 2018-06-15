@@ -11,7 +11,7 @@ from django.http import HttpResponseForbidden
 
 # News imports
 from core import models
-from core.permissions import user_can
+from core.permissions import can, user_can
 
 
 def load_context(request):
@@ -58,9 +58,9 @@ def view_content(request, pk, slug=None):
     if content.slug != slug:
         return redirect("home:view_content", content.slug, content.pk)
 
-    if not content.publishable:
+    if content.embed_only and not can(request.user, 'content.edit', content):
         # This content shouldn't have it's own page!
-        return HttpResponseForbidden("This content is not publishable.")
+        return HttpResponseForbidden("This content is for embedding only.")
 
     # Mark another view for the content
     content.views += 1
