@@ -15,9 +15,6 @@
         {% if content.visibility != content.PUBLISHED %}
             <span class="badge badge-warning">{{ content.get_visibility_display|lower }}</span>
         {% endif %}
-        {% if not content.publishable %}
-            <span class="badge badge-danger">not publishable</span>
-        {% endif %}
     {% endif %}
 
     {% if request.user|can_edit_content:content %}
@@ -54,7 +51,7 @@
 
 <div class="row">
     <div class="col-md-9">
-    {% render_content request.user content %}
+    {% render_content request.user content False %}
 
     {% if content.created != content.modified %}
         <em>Last updated: {{ content.modified }}</em>

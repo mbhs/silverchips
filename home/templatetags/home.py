@@ -13,14 +13,15 @@ def tags(content):
     return ", ".join(map(str, content.tags.all()))
 
 @register.simple_tag
-def render_content(user, content):
+def render_content(user, content, embedding=True):
     """A template tag that renders the template of some Content, for example, story text or an image with a caption.
 
     Only works when user has read permissions on the content object.
     """
-    return template.loader.get_template("home/content/embed.html").render({
+    return template.loader.get_template("home/content/display.html").render({
         "content": content if content and permissions.can(user, 'content.read', content) else None,
-        "user": user
+        "user": user,
+        "embedding": embedding
     })
 
 
