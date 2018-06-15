@@ -51,20 +51,65 @@
     transition: all 0.3s ease;
 }
 
-.navbar-wrapper-header #subscribe {
+.navbar-wrapper-header #search {
     position: absolute;
     right: 0;
     z-index: 1;
-    height: 100%;
-    a {letter-spacing: 0.125rem;}
-    a:hover {
-        text-decoration: none;
-        text-shadow: 0 2px 8.896px #c4b59d, 0 -2px 1px #fff;
-    }
 }
-#subscribe a {
+#search button {
+    height: 100%;
+    border: none;
+    background: transparent;
+    display: inline;
+    padding: 0 10% 0 10px;
     text-transform: uppercase;
     font-family: "Oswald";
     font-weight: bold;
+    letter-spacing: 0.125rem;
     color: $navbar-active;
+    &:hover {
+        text-decoration: none;
+        cursor: pointer;
+    }
+}
+
+#searchModal {
+    .modal-dialog {
+        position: fixed;
+        top: 35%;
+        left: 50%;
+        transform: translate(-50%, -35%);
+        width: 100%;
+    }
+    .modal-content {
+        background: $background;
+        border-radius: 0;
+    }
+    .modal-body .modal-search-form {
+        .modal-search-input {
+            float: left;
+            width: 100%;
+            border: 3px solid $navbar-active;
+            padding: 20px;
+            height: 20px;
+            outline: none;
+            background: transparent;
+            &:focus {color: $navbar-active;}
+        }
+        .modal-search-submit {
+            position: absolute;
+            right: 15px;
+            z-index: 1;
+            width: 50px;
+            height: 46px;
+            background: $navbar-active;
+            color: $background;
+            text-align: center;
+            cursor: pointer;
+
+            border: 1px solid $navbar-active;
+            display: inline-block;
+
+        }
+    }
 }
