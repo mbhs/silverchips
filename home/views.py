@@ -8,6 +8,7 @@ of everything a normal user would see while visiting the website.
 from django.views.generic import CreateView, ListView
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponseForbidden
+from django.contrib.auth.models import User
 
 # News imports
 from core import models
@@ -97,26 +98,30 @@ def legacy(klass):
 
 
 class TaggedContentList(ListView):
-    pass # STUB_TAG
+    pass  # STUB_TAG
 
 
-# STUB_ABOUT
 def about(request):
     """Render the about page for the newspaper."""
-    return render(request, "home/about/about.html")
+    eics = User.objects.filter(groups__name="editors-in-chief")
+    return render(request, "home/about/about.html", {
+        "eics": eics,
+    })
 
 
-# STUB_ABOUT
 def staff(request):
     """Display a list of all of the newspaper's staff."""
-    return render(request, "home/about/staff.html")
+    users = User.objects.all()
+    return render(request, "home/about/staff.html", {
+        "users": users,
+    })
 
 
 # Content interaction views
 def vote(request):
     """Vote in a poll."""
-    pass # STUB_POLL
+    pass  # STUB_POLL
 
 
 class CommentSubmitView(CreateView):
-    pass # STUB_COMMENT
+    pass  # STUB_COMMENT
