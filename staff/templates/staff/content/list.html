@@ -17,7 +17,12 @@
     <div class="col-lg-3 col-sm-6 col-xs-12">
         <a class="btn btn-primary btn btn-block my-3" href="{% url "staff:content:create:image" %}">Create Image <i class="fas fa-camera"></i></a>
     </div>
-{# STUB_VIDEO #}
+    <div class="col-lg-3 col-sm-6 col-xs-12">
+        <a class="btn btn-primary btn btn-block my-3" href="{% url "staff:content:create:video" %}">Create Video <i class="fas fa-camera"></i></a>
+    </div>
+    <div class="col-lg-3 col-sm-6 col-xs-12">
+        <a class="btn btn-primary btn btn-block my-3" href="{% url "staff:content:create:audio" %}">Create Audio <i class="fas fa-camera"></i></a>
+    </div>
 {# STUB_POLL #}
 </div>
 
@@ -84,6 +89,7 @@ function doApi(url, verb) {
             <th scope="col">Title</th>
             <th scope="col">Modified</th>
             <th scope="col">Authors</th>
+            <th scope="col">Tags</th>
             <th scope="col">Embed Only</th>
             <th scope="col">Visibility</th>
             <th scope="col">Actions</th>
@@ -98,6 +104,7 @@ function doApi(url, verb) {
             <td>{{ content.title|safe }}</td>
             <td>{{ content.modified|date:"SHORT_DATETIME_FORMAT" }}</td>
             <td>{{ content|names }}</td>
+            <td>{{ content|tags }}</td>
             <td><i class="fas fa-{{ content.embed_only|yesno:"check,times" }}"></i></td>
             <td>{{ content.get_visibility_display|capfirst }}</td>
             <td>
