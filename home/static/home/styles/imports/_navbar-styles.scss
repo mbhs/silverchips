@@ -49,9 +49,9 @@
 }
 
 //SEARCH BUTTON
-#search {
-    position: absolute;
-    right: 0;
+#search.d-lg-block {    //only applies to button on desktops
+    position: absolute; //also fix this; repeated buttons were only to save time
+    right: 0;           //use js or something
     z-index: 1;
 }
 #search button {
