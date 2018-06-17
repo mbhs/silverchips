@@ -82,6 +82,13 @@ class Tag(models.Model):
 
     name = models.CharField(max_length=32)
 
+    def __str__(self):
+        """Represent the tag as a string.
+
+        This is the value Django Autocomplete Light displays in the
+        form element when a tag is selected.
+        """
+        return self.name
 
 class Content(PolymorphicModel):
     """A generic content model.

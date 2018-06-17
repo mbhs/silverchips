@@ -104,17 +104,18 @@ class ContentListView(LoginRequiredMixin, ListView):
             # Filter the content by certain criteria
             query = Q()
 
-            if 'title' in form.data and form.data['title']:
+            if form.data.get("title"):
                 query &= Q(title__contains=form.data['title'])
-            if 'id' in form.data and form.data['id']:
+            if form.data.get("id"):
                 query &= Q(pk=int(form.data['id']))
-            if 'after' in form.data and form.data['after']:
+            if form.data.get("after"):
                 query &= Q(created__gt=form.data['after'])
-            if 'before' in form.data and form.data['before']:
+            if form.data.get("before"):
                 query &= Q(created__lt=form.data['before'])
-            if 'authors' in form.data and form.data['authors']:
+            if form.data.get("authors"):
                 query &= Q(authors=form.data['authors'])
-
+            if form.data.get("tags"):
+                query &= Q(tags=form.data['tags'])
             content = content.filter(query)
 
         return content.order_by('-modified')
@@ -160,12 +161,16 @@ class ImageCreateView(ContentCreateView):
 
 class VideoCreateView(ContentCreateView):
     """View for uploading a new video."""
-    pass # STUB_VIDEo
+    model = models.Video
+    form_class = forms.VideoForm
+    editing = "Video"
 
 
 class AudioCreateView(ContentCreateView):
     """View for uploading new audio."""
-    pass # VIDEO_STUVB
+    model = models.Audio
+    form_class = forms.AudioForm
+    editing = "Audio"
 
 
 class PollCreateView(ContentCreateView):
@@ -184,7 +189,6 @@ class StoryEditView(ContentEditView):
     form_class = forms.StoryForm
     editing = "Story"
 
-
 class ImageEditView(ContentEditView):
     """View for editing images."""
     model = models.Image
@@ -194,12 +198,16 @@ class ImageEditView(ContentEditView):
 
 class VideoEditView(ContentEditView):
     """View for editing videos."""
-    pass # STUB_VIDEO
+    model = models.Video
+    form_class = forms.VideoForm
+    editing = "Video"
 
 
 class AudioEditView(ContentEditView):
     """View for editing audio."""
-    pass # STUB_VIDEO
+    model = models.Audio
+    form_class = forms.AudioForm
+    editing = "Audio"
 
 
 class PollEditView(ContentEditView):
