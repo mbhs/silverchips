@@ -1,5 +1,3 @@
 {% with image=content %}
-    {% if image.publishable %}<a href="{% url "home:view_content" image.id %}">{% endif %}
-        <img src="{{ image.source.url }}" style="max-width: 80%; height: auto;" class="mx-auto d-block mb-2">
-    {% if image.publishable %}</a>{% endif %}
+    <img src="{{ image.source.url }}" style="max-width: 80%; height: auto;" class="mx-auto d-block mb-2">
 {% endwith %}

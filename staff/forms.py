@@ -34,7 +34,7 @@ class SearchMixin:
         self.helper.disable_csrf = True
 
 
-class ContentSearchForm(forms.Form):
+class ContentSearchForm(SearchMixin, forms.Form):
     """Form for searching through content."""
     id = forms.IntegerField(label="ID:", required=False)
     title = forms.CharField(label="Title:", required=False, max_length=100)

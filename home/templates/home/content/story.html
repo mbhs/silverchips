@@ -4,7 +4,7 @@
     <p class="text-muted">{{ story.lead|safe }}</p>
 
     {% if story.cover %}
-        {% render_content user story.cover %}
+      {% render_content user story.cover False %}
     {% endif %}
 
     <hr/>

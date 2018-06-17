@@ -8,10 +8,11 @@ of everything a normal user would see while visiting the website.
 from django.views.generic import CreateView, ListView
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponseForbidden
+from django.contrib.auth.models import User
 
 # News imports
 from core import models
-from core.permissions import user_can
+from core.permissions import can, user_can
 
 
 def load_context(request):
@@ -58,9 +59,9 @@ def view_content(request, pk, slug=None):
     if content.slug != slug:
         return redirect("home:view_content", content.slug, content.pk)
 
-    if not content.publishable:
+    if content.embed_only and not can(request.user, 'content.edit', content):
         # This content shouldn't have it's own page!
-        return HttpResponseForbidden("This content is not publishable.")
+        return HttpResponseForbidden("This content is for embedding only.")
 
     # Mark another view for the content
     content.views += 1
@@ -97,26 +98,32 @@ def legacy(klass):
 
 
 class TaggedContentList(ListView):
-    pass # STUB_TAG
+    pass  # STUB_TAG
 
 
-# STUB_ABOUT
 def about(request):
     """Render the about page for the newspaper."""
-    return render(request, "home/about/about.html")
+    eics = User.objects.filter(groups__name="editors-in-chief")
+    return render(request, "home/about/about.html", {
+        "eics": eics,
+    })
 
 
-# STUB_ABOUT
 def staff(request):
     """Display a list of all of the newspaper's staff."""
-    return render(request, "home/about/staff.html")
+    active_users = User.objects.filter(is_active=True).order_by('profile__graduation_year')
+    inactive_users = User.objects.filter(is_active=False).order_by('profile__graduation_year')
+    return render(request, "home/about/staff.html", {
+        "active_users": active_users,
+        "inactive_users": inactive_users
+    })
 
 
 # Content interaction views
 def vote(request):
     """Vote in a poll."""
-    pass # STUB_POLL
+    pass  # STUB_POLL
 
 
 class CommentSubmitView(CreateView):
-    pass # STUB_COMMENT
+    pass  # STUB_COMMENT
