@@ -116,6 +116,7 @@
     }
     .footer-link {
         position: relative;
+
         text-decoration: none;
         text-transform: uppercase;
         font-family: "Oswald", sans-serif;
@@ -123,6 +124,8 @@
         font-weight: bold;
         letter-spacing: 0.125rem;
         color: $site-white;
+
+        &:hover { color: $site-red; }
     }
 
     .copyright {
