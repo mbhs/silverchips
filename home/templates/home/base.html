@@ -9,16 +9,14 @@
         {% load staticfiles %}
         <link rel="shortcut icon" href="{% static "favicon.ico" %}">
         {% include "home/includes/head.html" %}
-        <link type="text/css" rel="stylesheet" href="{% static "home/styles/home.scss"|compile %}">
+        <link type="text/css" rel="stylesheet" href="{% static "home/styles/styles.scss"|compile %}">
     </head>
 
     <body>
         {% include "home/includes/navbar.html" %}
 
-        <div class="container">
         {% block content %}
         {% endblock %}
-        </div>
 
         {% include "home/includes/footer.html" %}
     </body>
