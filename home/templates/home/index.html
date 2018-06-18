@@ -3,7 +3,7 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-    {% include "home/includes/index-social-media-sidebar.html" %}
+    {% include "home/includes/index-sm-sidebar.html" %}
     <div class="container">
             {% load static %} <!-- FOR TESTING - IMAGES -->
             <h1 class="display-4 text-center text-uppercase">Featured</h1>
@@ -31,16 +31,17 @@
                 </div>
             </div>
             {% for section in section_roots %}
-                <div id="{{ section.title }}">
+                <div id="{{ section.title }}" class="container">
                     <h1 class="section-header display-4 text-center text-uppercase">
                         <a href="{% url "home:view_section" section.name %}">{{ section.title }}</a>
                     </h1>
                     <hr class="my-4">
-                <div class="card-group">
-                    {% for story in section.all_stories.all|slice:"4" %}
-                        <div class="card {% if not forloop.last %}pr-1{% endif %}">
-                            <img class="card-img-top"
-                                src="{% if forloop.counter|divisibleby:"4" %}
+
+                    {% for story in section.all_stories.all|slice:"3" %}
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <img class="img-fluid mx-auto"
+                                src="{% if forloop.counter|divisibleby:"3" %}
                                         {% static "home/images/img_2.jpg" %}
                                     {% elif forloop.counter|divisibleby:"2"  %}
                                         {% static "home/images/work_5.jpg" %}
@@ -48,12 +49,17 @@
                                         {% static "home/images/img_4.jpg" %}
                                     {% endif %}"
                                 alt="featurette-img">
-                            <div class="card-body">
+                            </div>
+                            <div class="col-md-8">
                                 {% include "home/utils/story_summary.html" %}
                             </div>
                         </div>
+                        {% if forloop.last %}
+                            <hr class="section-separator">
+                        {% else %}
+                            <hr class="story-separator">
+                        {% endif %}
                     {% endfor %}
-                </div>
                 </div>
             {% endfor %}
     </div>
