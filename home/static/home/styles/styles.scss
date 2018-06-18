@@ -5,39 +5,104 @@
 html {
     font-size: 16px;
     body {
-        font-family: 'Open Sans', sans-serif;
-        background-color: $background;
-        color: $font;
+        font-family: $site-paragraph-font;
+        background-color: $site-background;
+        color: $site-paragraph;
         h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6 {
-            font-family: 'Oswald', serif;
+            color: $site-header;
+            font-family: $site-header-font;
             font-weight: 500;
         }
     }
 }
 
-/* Separate, pseudoprenon-bootstrapian styles */
+/* Separate, pseudo-bootstrapian styles */
 @import "imports/_navbar-styles";
 @import "imports/_footer-styles";
 
+/* Social Media Sidebar - templates/home/includes */
+.social-media-sidebar {
+    z-index: 1000;
+    right: 0;
+    top: 35%;
+    position: fixed;
+
+    list-style: none;
+    margin-right: 0.8vw;
+    padding: 0;
+
+    li {
+        &:nth-child(1):hover a { background: #3b5998; }
+        &:nth-child(2):hover a { background: #1DA1F2; }
+        &:nth-child(3):hover a { background: #ea4c89; }
+    }
+}
+.social-media-sidebar li a {
+    display: block;
+    margin-bottom: 5px;
+    border-radius: 50%;
+    width: 2.5rem;
+    height: 2.5rem;
+    overflow: hidden;
+    background: $site-gray;
+    color: $site-white;
+    text-align: center;
+
+    transition: background 0.5s ease .3ms;
+
+    &:hover span {
+        visibility: visible;
+        opacity: 1;
+        transform: rotateY(0);
+    }
+}
+.social-media-sidebar li a i {
+    position: absolute;
+    right:0;
+    width: 100%;
+    margin-top: 30%;
+}
+.social-media-sidebar li a span {
+    position: absolute;
+    right: 120%;
+    display: block;
+    visibility: hidden;
+    opacity: 0;
+    margin-top: 5%;
+    border-radius: 5px;
+    padding: 5px;
+
+    background-color: $site-gray;
+    color: $site-white;
+    font-size: 1rem;
+
+    transform-origin: right;
+    transform: rotateY(45deg);
+    transition: all 0.5s ease .3ms;
+}
 /* Featured */
 .featured {
-    .featured-col {position: relative;}
+    .featured-col { position: relative; }
     &-content {
         position: absolute;
-        bottom: 0;
+        margin-left: auto;
+        margin-right: auto;
+        left: 0;
+        right: 0;
+        bottom: 5%;
     }
     &-title {
         font-size: 1.25rem;
         color: white;
         &:hover {
-            color: $navbar-active;
+            color: $site-red;
         }
     }
     &-info * {
         font-size: 0.75rem;
         color: white;
         &:hover {
-            color: $navbar-active;
+            color: $site-red;
         }
     }
 }
@@ -45,19 +110,19 @@ html {
     color: $solid-link;
     text-decoration: none;
     &:hover {
-        color: $navbar-active;
+        color: $site-red;
     }
 }
-/* Section */
+/* Index Section */
 .section-header {
     /* no link */
     h1 {
-        color: $section-header;
+        color: $site-header;
     }
     /* link */
     a {
         position: relative;
-        color: $section-header;
+        color: $site-header;
         text-transform: uppercase;
         text-decoration: none;
     }
@@ -69,7 +134,7 @@ html {
         display: block;
         width: 0;
         height: 2px;
-        background: $section-header;
+        background: $site-header;
         transition: width 0.3s;
     }
     a:after {
@@ -80,7 +145,7 @@ html {
         display: block;
         width: 0;
         height: 2px;
-        background: $section-header;
+        background: $site-header;
         transition: width 0.3s;
     }
     a:hover:after, a:hover:before {
