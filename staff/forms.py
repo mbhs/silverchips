@@ -43,20 +43,27 @@ class ContentSearchForm(SearchMixin, forms.Form):
     authors = forms.ModelMultipleChoiceField(label="Authors:", queryset=models.User.objects.all(),
                                              required=False,
                                              widget=autocomplete.ModelSelect2Multiple(url="staff:autocomplete:users"))
+    tags = forms.ModelMultipleChoiceField(label="Tags:", queryset=models.Tag.objects.all(),
+                                          required=False,
+                                          widget=autocomplete.ModelSelect2Multiple(url="staff:autocomplete:tags"))
+
+    helper = FormHelper()
+    helper.form_tag = False
+    helper.disable_csrf = True
     # type = forms.ModelMultipleChoiceField(label=)
 
-    tags = None  # STUB_TAG
 
 
 class ContentForm(VerticalMixin, forms.ModelForm):
     """A generic editor for any kind of content."""
     class Meta:
         model = models.Content
-        fields = ['title', 'authors', 'guest_authors', 'description', 'embed_only']
+        fields = ['title', 'authors', 'guest_authors', 'description', 'embed_only', 'tags']
         widgets = {
             'title': forms.widgets.TextInput(),
             'description': RichTextWidget(short=True),
-            'authors': autocomplete.ModelSelect2Multiple(url="staff:autocomplete:users")
+            'authors': autocomplete.ModelSelect2Multiple(url="staff:autocomplete:users"),
+            'tags': autocomplete.ModelSelect2Multiple(url="staff:autocomplete:tags")
         }
         abstract = True
 
@@ -77,13 +84,16 @@ class ImageForm(ContentForm):
 
 
 class VideoForm(ContentForm):
-    pass
-    # STUB_VIDEO
-
+    """Form for video creation."""
+    class Meta(ContentForm.Meta):
+        model = models.Video
+        fields = ContentForm.Meta.fields + ['source']
 
 class AudioForm(ContentForm):
-    pass
-    # STUB_VIDEO
+    """Form for audio creation."""
+    class Meta(ContentForm.Meta):
+        model = models.Audio
+        fields = ContentForm.Meta.fields + ['source']
 
 
 class PollForm(ContentForm):

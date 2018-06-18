@@ -8,6 +8,9 @@ def names(content):
     """A filter that returns the full names, joined by commas, of all the authors of a particular Content."""
     return ", ".join(map(lambda user: user.get_full_name(), content.authors.all()))
 
+@register.filter
+def tags(content):
+    return ", ".join(map(str, content.tags.all()))
 
 @register.simple_tag(name='range')
 def do_range(start, end, step):

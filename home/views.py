@@ -5,6 +5,7 @@ of everything a normal user would see while visiting the website.
 """
 
 # Django imports
+from django.db.models import Q
 from django.views.generic import CreateView, ListView
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponseForbidden
@@ -13,7 +14,7 @@ from django.contrib.auth.models import User
 # News imports
 from core import models
 from core.permissions import can, user_can
-
+from home import forms
 
 def load_context(request):
     return {
@@ -80,12 +81,15 @@ def view_profile(request, pk):
     # Find all the content that this user authored
     stories = models.Story.objects.filter(authors__in=[user], visibility=models.Content.PUBLISHED, embed_only=True)
     images = models.Image.objects.filter(authors__in=[user], visibility=models.Content.PUBLISHED, embed_only=True)
+    videos = models.Video.objects.filter(authors__in=[user], visibility=models.Content.PUBLISHED, embed_only=True)
+    audios = models.Audio.objects.filter(authors__in=[user], visibility=models.Content.PUBLISHED, embed_only=True)
 
     return render(request, "home/profile.html", {
         "user": user,
         "stories": stories,
         "images": images,
-        # STUB_VIDEO
+        "videos": videos,
+        "audios": audios
     })
 
 
@@ -98,7 +102,31 @@ def legacy(klass):
 
 
 class TaggedContentList(ListView):
-    pass  # STUB_TAG
+    """The content list view that supports pagination."""
+    template_name = "home/tag.html"
+    context_object_name = "tag_list"
+    paginate_by = 25
+
+    def get_queryset(self):
+        """Return a list of all the tags we're looking at, filtered by search criteria."""
+        content = models.Content.objects.all()
+
+        form = forms.TagSearchForm(self.request.GET)
+        if form.is_valid():
+            # Filter the users by certain criteria
+            query = Q()
+
+            if form.data.get("tags"):
+                query &= Q(tags=form.data['tags'])
+
+            content = content.filter(query)
+
+        return content
+
+    def get_context_data(self, **kwargs):
+        context = super(TaggedContentList, self).get_context_data(**kwargs)
+        context['form'] = forms.TagSearchForm(self.request.GET)
+        return context
 
 
 def about(request):
