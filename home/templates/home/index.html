@@ -2,65 +2,65 @@
 
 {% block title %}Home{% endblock %}
 
+{% load static %} <!-- FOR TESTING - IMAGES -->
+
 {% block content %}
     {% include "home/includes/index-sm-sidebar.html" %}
-    <div class="container">
-            {% load static %} <!-- FOR TESTING - IMAGES -->
-            <h1 class="display-4 text-center text-uppercase">Featured</h1>
-            <hr class="my-4" />
-            <div class="row featured mb-5">
-                <div class="col-md-6 featured-col">
-                    <img class="img-fluid mx-auto featured-img d-block" src="{% static 'home/images/img_5.jpg' %}" alt="">
-                    <div class="featured-content text-center ml-3">
-                        <a class="featured-title" href="#">Featured Story Title</a>
-                        <p class="featured-info">
-                            <i class="far fa-user mr-1"></i><a href="#">Author</a>
-                             <i class="far fa-clock mx-1"></i><a href="#">Time Stamp</a>
-                        </p>
-                    </div>
-                </div>
-                <div class="col-md-6 featured-col">
-                    <img class="img-fluid mx-auto featured-img d-block" src="{% static 'home/images/img_5.jpg' %}" alt="">
-                    <div class="featured-content text-center ml-3">
-                        <a class="featured-title" href="#">Featured Story Title</a>
-                        <p class="featured-info">
-                            <i class="far fa-user mr-1"></i><a href="#">Author</a>
-                             <i class="far fa-clock mx-1"></i><a href="#">Time Stamp</a>
-                        </p>
-                    </div>
-                </div>
-            </div>
             {% for section in section_roots %}
-                <div id="{{ section.title }}" class="container">
-                    <h1 class="section-header display-4 text-center text-uppercase">
-                        <a href="{% url "home:view_section" section.name %}">{{ section.title }}</a>
-                    </h1>
-                    <hr class="my-4">
+                <div id="{{ section.title }}">
+                    <h2 class="container rounded display-4 mb-4 py-2 text-center text-uppercase section-header"><a href="{% url "home:view_section" section.name %}">{{ section.title }}</a></h2>
 
-                    {% for story in section.all_stories.all|slice:"3" %}
-                        <div class="row mb-3">
-                            <div class="col-md-4">
-                                <img class="img-fluid mx-auto"
-                                src="{% if forloop.counter|divisibleby:"3" %}
-                                        {% static "home/images/img_2.jpg" %}
-                                    {% elif forloop.counter|divisibleby:"2"  %}
-                                        {% static "home/images/work_5.jpg" %}
-                                    {% else %}
-                                        {% static "home/images/img_4.jpg" %}
-                                    {% endif %}"
-                                alt="featurette-img">
+                    <div class="section-featured mb-4 my-0 py-0">
+                        {% for story in section.all_stories.all|slice:"1" %}
+                            <img class="featured-img img-fluid" src="{% if forloop.parentloop.counter|divisibleby:"3"  %}
+                                    {% static "home/images/sunset.jpg" %}
+                                 {% elif forloop.parentloop.counter|divisibleby:"2"  %}
+                                    {% static "home/images/iceberg.jpg" %}
+                                 {% else %}
+                                    {% static "home/images/beach.jpg" %}
+                                 {% endif %}" alt="image not found"/>
+
+                            <div class="content container text-center">
+                                <h2 class="display-4 mt-5 feature-title"><a href="{% url "home:view_content" story.pk %}">{{ story.title|safe }}</a></h4>
+                                <h6 class="lead py-1">{% include "home/utils/authors.html" with content=story %} | {{ story.created }}</h6>
                             </div>
-                            <div class="col-md-8">
-                                {% include "home/utils/story_summary.html" %}
-                            </div>
-                        </div>
-                        {% if forloop.last %}
-                            <hr class="section-separator">
-                        {% else %}
-                            <hr class="story-separator">
-                        {% endif %}
-                    {% endfor %}
+                        {% endfor %}
+                    </div>
+
+                    <div class="container"><div class="row">
+                        {% for story in section.all_stories.all|slice:"1:5" %}
+                            {% if not forloop.counter|divisibleby:"2" %}<div class="col-md-6">{% endif %}
+
+                                    <div class="card align-middle rounded-0 mb-4 section-card">
+                                        <div class="img-wrapper"><img class="card-img-top mx-auto rounded-0 d-inline-block" src="{% if forloop.counter|divisibleby:"4"  %}
+                                                {% static "home/images/img_4.jpg" %}
+                                             {% elif forloop.counter|divisibleby:"3" %}
+                                                {% static "home/images/bird.jpg" %}
+                                             {% elif forloop.counter|divisibleby:"2"  %}
+                                                {% static "home/images/chair.jpg" %}
+                                             {% else %}
+                                                {% static "home/images/grass.jpg" %}
+                                             {% endif %}"  alt="featurette-img"/></div>
+                                        <div class="card-body">
+                                            <h6 class="authors font-weight-bold">{% include "home/utils/authors.html" with content=story %}</h6>
+                                            <p>{{ story.created }}</p>
+                                            <h4 class="card-title"><a href="{% url "home:view_content" story.pk %}" class="solid-link">{{ story.title|safe }}</a></h4>
+                                        </div>
+                                    </div>
+
+                            {% if forloop.counter|divisibleby:"2" %}</div>{% endif %}
+                        {% endfor %}
+                    </div></div>
+                    <hr class="mt-3 mb-5" />
                 </div>
             {% endfor %}
-    </div>
 {% endblock %}
+
+{% comment %} <img class="img-fluid mx-auto"
+src="{% if forloop.counter|divisibleby:"3" %}
+        {% static "home/images/img_2.jpg" %}
+    {% elif forloop.counter|divisibleby:"2"  %}
+        {% static "home/images/work_5.jpg" %}
+    {% else %}
+        {% static "home/images/img_4.jpg" %}
+    {% endif %}"  alt="featurette-img"> {% endcomment %}

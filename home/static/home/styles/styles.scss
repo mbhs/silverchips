@@ -20,7 +20,91 @@ html {
 @import "imports/_navbar-styles";
 @import "imports/_footer-styles";
 
-/* Social Media Sidebar - templates/home/includes */
+.solid-link {
+    color: $site-gray;
+    text-decoration: none;
+    &:hover {
+        color: $site-red;
+    }
+}
+
+.section-header {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.section-featured {
+    position: relative;
+    overflow: hidden;
+
+    &:before {
+        display: block;
+        content: "";
+        width: 100%;
+        padding-top: 75%;
+        @media (min-width: 992px) {
+            padding-top: 42.8571%;
+        }
+    }
+
+    .featured-img {
+        object-fit: cover;
+        position: absolute;
+        top: 0;
+    }
+
+    .content {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+
+        a { color: $site-white; }
+
+        .feature-title a, .lead {
+            background-color: $site-white;
+        }
+
+        .feature-title a, .lead, a {
+            display: inline-block;
+            font-family: $fugaz-one;
+            color: $site-gray;
+            text-shadow: 0px 3px 1px darkorange;
+        }
+    }
+}
+
+.section-card {
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+
+    transition: transform 0.5s ease .3ms;
+    &:hover {
+        transform: scale(1.01562); // 1/64
+    }
+
+    .card-img-top {
+        position: relative;
+        float: left;
+        width: 100%;
+
+        &:after {
+            padding-top: 56.25%;
+            display: block;
+            content: "";
+        }
+    }
+    .card-img-top .img-wrapper {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+    .card-body {
+        p { font-size: 0.75rem; }
+        h4 a { font-family: $fugaz-one; }
+    }
+}
+
+/* Social Media Sidebar */
 .social-media-sidebar {
     z-index: 1000;
     right: 0;
@@ -37,14 +121,15 @@ html {
         &:nth-child(3):hover a { background: #ea4c89; }
     }
 }
+
 .social-media-sidebar li a {
     display: block;
     margin-bottom: 5px;
     border-radius: 50%;
-    width: 2.5rem;
-    height: 2.5rem;
+    width: 3rem;
+    height: 3rem;
     overflow: hidden;
-    background: $site-gray;
+    background: $site-red;
     color: $site-white;
     text-align: center;
 
@@ -56,12 +141,16 @@ html {
         transform: rotateY(0);
     }
 }
+
 .social-media-sidebar li a i {
     position: absolute;
     right:0;
     width: 100%;
     margin-top: 30%;
+
+    font-size: 1.25rem;
 }
+
 .social-media-sidebar li a span {
     position: absolute;
     right: 120%;
@@ -69,7 +158,6 @@ html {
     visibility: hidden;
     opacity: 0;
     margin-top: 5%;
-    border-radius: 5px;
     padding: 5px;
 
     background-color: $site-gray;
@@ -80,39 +168,7 @@ html {
     transform: rotateY(45deg);
     transition: all 0.5s ease .3ms;
 }
-/* Featured */
-.featured {
-    .featured-col { position: relative; }
-    &-content {
-        position: absolute;
-        margin-left: auto;
-        margin-right: auto;
-        left: 0;
-        right: 0;
-        bottom: 5%;
-    }
-    &-title {
-        font-size: 1.25rem;
-        color: white;
-        &:hover {
-            color: $site-red;
-        }
-    }
-    &-info * {
-        font-size: 0.75rem;
-        color: white;
-        &:hover {
-            color: $site-red;
-        }
-    }
-}
-.solid-link {
-    color: $solid-link;
-    text-decoration: none;
-    &:hover {
-        color: $site-red;
-    }
-}
+
 /* Index Section */
 .section-header {
     /* no link */
@@ -155,36 +211,10 @@ html {
 /* Breadcrumb */
 .breadcrumb {
     border-radius: 0;
-    background-color: $card-header-bg;
+    background-color: $site-gray;
     .breadcrumb-item a, .breadcrumb:after, .breadcrumb-item:before {color: $card-title-color; }
 }
-/* Story */
-.title {
-    padding-bottom: 1rem;
-    a {
-        color: $story-title;
-    }
-}
-.authors {
-    padding-bottom: 0.5rem;
-    line-height: 1.5rem;
-    a {
-        text-decoration: none;
-        color: $author;
-        font-weight: bold;
-        &:hover {text-decoration: underline;}
-    }
-}
-/* Card */
-.card {
-    border: none;
-    border-radius: 0;
-    .card-header {
-        background-color: $card-header-bg;
-        .card-title {color: $card-title-color;}
-    }
-    .card-header:first-child {border-radius: 0;}
-}
+
 /* Latest Stories Card */
 .latest-stories {
     border-left: 2px solid $card-header-bg;
@@ -204,15 +234,6 @@ html {
             font-weight: 700;
         }
     }
-}
-/* Custom Separators */
-.section-separator {
-    margin-top: 1.5rem;
-    margin-bottom: 1.5rem;
-}
-.story-separator {
-    margin-top: 1rem;
-    margin-bottom: 1rem;
 }
 
 .story-text:first-letter {

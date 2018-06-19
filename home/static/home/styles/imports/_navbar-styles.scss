@@ -121,10 +121,10 @@
         margin-left: auto;
         .modal-search-input {
             display: inline-block;
-            width: calc(100% - 50px);
-            height: 20px;
+            width: calc(100% - 80px);
+            height: 30px;
             border: 3px solid $site-red;
-            padding: 20px;
+            padding: 30px;
 
             &:focus {
                 outline: none;
@@ -135,8 +135,8 @@
             position: absolute;
             right: 0;
             display: inline-block;
-            width: 50px;
-            height: 46px;
+            width: 80px;
+            height: 66px;
             border: 1px solid $site-red;
 
             background: $site-red;
