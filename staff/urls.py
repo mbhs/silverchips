@@ -39,8 +39,8 @@ user_urlpatterns = ([
 ], "user")
 
 autocomplete_urlpatterns = ([
-    path("users/", autocomplete.UserAutoComplete.as_view(), name="users"),
-    path("tags/", autocomplete.TagAutoComplete.as_view(), name="tags")
+    path("users/", autocomplete.UserAutocomplete.as_view(), name="users"),
+    path("tags/", autocomplete.TagAutocomplete.as_view(create_field="name"), name="tags")
 ], "autocomplete")
 
 urlpatterns = [

@@ -16,6 +16,7 @@ from core import models
 from core.permissions import can, user_can
 from home import forms
 
+
 def load_context(request):
     return {
         "section_roots": models.Section.objects.filter(parent=None),  # For navigation bar
@@ -104,28 +105,16 @@ def legacy(klass):
 class TaggedContentList(ListView):
     """The content list view that supports pagination."""
     template_name = "home/tag.html"
-    context_object_name = "tag_list"
+    context_object_name = "content_list"
     paginate_by = 25
 
     def get_queryset(self):
         """Return a list of all the tags we're looking at, filtered by search criteria."""
-        content = models.Content.objects.all()
-
-        form = forms.TagSearchForm(self.request.GET)
-        if form.is_valid():
-            # Filter the users by certain criteria
-            query = Q()
-
-            if form.data.get("tags"):
-                query &= Q(tags=form.data['tags'])
-
-            content = content.filter(query)
-
-        return content
+        return models.Content.objects.filter(tags__name=self.kwargs["tag"])
 
     def get_context_data(self, **kwargs):
-        context = super(TaggedContentList, self).get_context_data(**kwargs)
-        context['form'] = forms.TagSearchForm(self.request.GET)
+        context = super().get_context_data(**kwargs)
+        context["tag"] = self.kwargs["tag"]
         return context
 
 

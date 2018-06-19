@@ -6,7 +6,7 @@ from dal import autocomplete
 from core.models import User, Tag
 
 
-class UserAutoComplete(LoginRequiredMixin, autocomplete.Select2QuerySetView):
+class UserAutocomplete(LoginRequiredMixin, autocomplete.Select2QuerySetView):
     """Autocomplete for selecting other authors."""
 
     def get_queryset(self):
@@ -16,12 +16,7 @@ class UserAutoComplete(LoginRequiredMixin, autocomplete.Select2QuerySetView):
                                    Q(username__icontains=self.q)).order_by("first_name", "last_name")
 
 
-class TagAutoComplete(autocomplete.Select2QuerySetView):
+class TagAutocomplete(autocomplete.Select2QuerySetView):
     def get_queryset(self):
         """Get the list of tags."""
         return Tag.objects.filter(Q(name__icontains=self.q)).order_by("name")
-
-Tag.objects.all().delete()
-for t in ['opinions', 'news', 'lifestyle', 'sports', 'spanish', 'blogs']:
-    tag = Tag(name=t)
-    tag.save()

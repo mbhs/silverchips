@@ -80,7 +80,7 @@ class User(auth.User):
 class Tag(models.Model):
     """Basic tag model for content."""
 
-    name = models.CharField(max_length=32)
+    name = models.CharField(max_length=32, unique=True)
 
     def __str__(self):
         """Represent the tag as a string.
@@ -89,6 +89,7 @@ class Tag(models.Model):
         form element when a tag is selected.
         """
         return self.name
+
 
 class Content(PolymorphicModel):
     """A generic content model.

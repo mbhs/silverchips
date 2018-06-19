@@ -53,7 +53,6 @@ class ContentSearchForm(SearchMixin, forms.Form):
     # type = forms.ModelMultipleChoiceField(label=)
 
 
-
 class ContentForm(VerticalMixin, forms.ModelForm):
     """A generic editor for any kind of content."""
     class Meta:

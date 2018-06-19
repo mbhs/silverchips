@@ -7,7 +7,7 @@ from django.contrib.auth.models import Group, Permission
 from django.contrib.contenttypes.models import ContentType
 from django.core.management.base import BaseCommand
 
-from core.models import Content, User, Profile
+from core.models import Content, User, Profile, Tag
 
 
 class Command(BaseCommand):
@@ -17,6 +17,7 @@ class Command(BaseCommand):
         # Permissions are associated with particular content types
         content = ContentType.objects.get_for_model(Content)
         user = ContentType.objects.get_for_model(User)
+        tag = ContentType.objects.get_for_model(Tag)
         profile = ContentType.objects.get_for_model(Profile)
 
         # Grant permissions to writers
@@ -24,6 +25,7 @@ class Command(BaseCommand):
         writers.permissions.add(Permission.objects.get(content_type=content, codename='draft_content'))
         writers.permissions.add(Permission.objects.get(content_type=content, codename='create_content'))
         writers.permissions.add(Permission.objects.get(content_type=profile, codename='edit_profile'))
+        writers.permissions.add(Permission.objects.get(content_type=tag, codename='add_tag'))
 
         # Grant permissions to editors
         editors, _ = Group.objects.get_or_create(name="editors")
