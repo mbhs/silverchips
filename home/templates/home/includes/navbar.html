@@ -1,18 +1,21 @@
 {% load staticfiles %}
+
 <div class="navbar-wrapper fixed-top not-scrolled">
     <header class="navbar-wrapper-header w-100">
-        <a class="logo mx-auto py-3 d-none d-lg-block" href="#">
-            {% include "home/includes/_logo-svg.html" %}
-        </a>
+        {# logo for desktop #}
+        <a class="logo mx-auto py-3 d-none d-lg-block" href="#"> {% include "home/includes/_logo-svg.html" %} </a>
+
         <li id="search" class="d-none d-lg-block">
-          <button class="nav-link d-inline-block mx-4" data-toggle="modal" data-target="#searchModal">Search</button>
+          <button class="nav-link d-inline-block mx-4" data-toggle="modal" data-target="#searchModal"><i class="fa fa-search"></i></button>
         </li>
-        <h6 class="lead text-center d-none d-lg-block">Montgomery Blair High School's Online Student Newspaper</h6>
+        <h6 class="lead text-center d-none d-lg-block">
+            Montgomery Blair High School's Online Student Newspaper | <span id="date"></span>
+        </h6>
     </header>
-    <nav class="navbar navbar-expand-lg">
-        <a class="navbar-brand logo mx-auto py-3 d-lg-none" href="#">
-            {% include "home/includes/_logo-svg.html" %}
-        </a>
+    <nav class="navbar navbar-expand-lg pb-0">
+        {# logo for mobile #}
+        <a class="navbar-brand logo mx-auto py-3 d-lg-none" href="#"> {% include "home/includes/_logo-svg.html" %} </a>
+
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <i class="fas fa-bars"></i>
         </button>
@@ -27,16 +30,18 @@
                   </li>
                 {% endfor %}
                 <li id="search" class="nav-item d-lg-none">
-                  <button type="button" class="py-2 w-100 s-0" data-toggle="modal" data-target="#searchModal">Search</button>
+                  <button type="button" class="py-2 w-100 s-0" data-toggle="modal" data-target="#searchModal">Search <i class="fa fa-search"></i></button>
                 </li>
             </ul>
         </div>
     </nav>
 </div>
+
 <div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-body">
+                <button type="button" id="modal-close-btn" class="fas fa-times"></button>
                 <form class="modal-search-form">
                     <input class="modal-search-input" type="search" placeholder="Search...">
                     <button class="modal-search-submit" type="submit">
@@ -47,4 +52,14 @@
         </div>
     </div>
 </div>
+
 <script defer src="{% static "home/scripts/navbar.js" %}"></script>
+<script>
+var opt = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+var d = new Date();
+document.getElementById("date").innerHTML = d.toLocaleDateString("en-US", opt);
+
+$("#modal-close-btn").on("click", function() {
+    $("#searchModal").modal("hide");
+});
+</script>

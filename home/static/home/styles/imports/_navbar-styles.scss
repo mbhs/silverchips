@@ -1,115 +1,148 @@
 .navbar-wrapper {
-    background: $navbar-header-background;
-    margin-bottom: 2rem;
-    &-header {position: relative;}
+    background: $site-background;
+    margin-bottom: 3rem;
+    &-header { position: relative; }
 }
 .navbar {
-    background: $navbar;
-    @include mq("desktop") {
-        padding: 0 0 !important; //Desktop does not need extra padding
-    };
+    background: $site-background;
+    @include mq("desktop") { padding: 0 0 !important; } //Desktop does not need extra padding
  }
- .navbar-nav .nav-link {
-     text-decoration: none;
-     text-transform: uppercase;
-     font-family: "Oswald", sans-serif;
-     font-size: 0.9em;
-     font-weight: bold;
-     letter-spacing: 0.125rem;
-     color: $navbar-unactive;
 
-     transition: padding 1s ease;
-     transition: background-color, color 0.3s ease;
+//LOGO
+.navbar-wrapper-header .logo svg g { fill: $site-header; }
+.navbar .logo svg g { fill: $site-header; }
 
-     &:hover {
-         background-color: $navbar-active;
-         color: white !important;
-     }
- }
-.navbar-nav .active {.nav-link{color: $navbar-active;}}
-.navbar-wrapper-header .logo svg g {
-    fill:$font;
+//NAV-LINKS
+.navbar .nav-link {
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.125rem;
+
+    font: bold 0.9rem $site-header-font;
+    color: $navbar-unactive-link;
+
+    &:hover{
+        background: $navbar-active-link;
+        color: $site-white !important; }
 }
-.navbar .logo svg g {fill: $font;}
-/* Navbar Animation */
+.navbar .active .nav-link { color: $navbar-active-link; }
+
+// NAVBAR ANIMATION
+.logo, .lead, .navbar .nav-link { transition: all 0.3s ease; }
 .not-scrolled {
-    .logo {width: 50%;}
-    .lead {height: auto; margin-bottom: 0.75rem;}
+    .logo { width: 50%; }
+    .lead {
+        height: auto;
+        margin-bottom: 0.75rem; }
     .navbar .nav-link {
         padding: 10px 15px;
-        border-bottom: 3px solid gray;
-    }
+        border-bottom: 2px solid gray; }
 }
 .scrolled {
-    box-shadow: 0 0 10px 3px rgba(0,0,0,.4);
-    .logo {width: 30%;}
-    .lead {height: 0px; margin-bottom: 0;}
-    .navbar {border-bottom: 3px solid gray;}
-    .navbar .nav-link {padding: 4px 15px;}
-}
-.logo, .lead, .navbar .nav-link {
-    transition: all 0.3s ease;
+    box-shadow: 0 0 10px 2px rgba(0,0,0,.4);
+    .logo { width: 30%; }
+    .lead {
+        height: 0px;
+        margin-bottom: 0; }
+    .navbar { border-bottom: 2px solid gray; }
+    .navbar .nav-link { padding: 4px 15px; }
 }
 
-.navbar-wrapper-header #search {
-    position: absolute;
-    right: 0;
+//SEARCH BUTTON
+#search.d-lg-block {    //only applies to button on desktops
+    position: absolute; //also fix this; repeated buttons were only to save time
+    right: 0;           //use js or something
     z-index: 1;
 }
 #search button {
     height: 100%;
     border: none;
-    background: transparent;
+
     display: inline;
     padding: 0 10% 0 10px;
+
     text-transform: uppercase;
-    font-family: "Oswald";
-    font-weight: bold;
-    letter-spacing: 0.125rem;
-    color: $navbar-active;
+    font: bold 1.25rem $site-header-font;
+
+    background: transparent;
+    color: $site-red;
     &:hover {
         text-decoration: none;
         cursor: pointer;
     }
+    &:active, &:focus {
+        outline: 0;
+        border: none;
+        -moz-outline-style: none;
+    }
 }
-
+//SEARCH MODAL
 #searchModal {
     .modal-dialog {
         position: fixed;
-        top: 35%;
-        left: 50%;
-        transform: translate(-50%, -35%);
+        margin: 0;
         width: 100%;
+        height: 100%;
+        padding: 0;
+        max-width: 100%;
     }
     .modal-content {
-        background: $background;
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
         border-radius: 0;
+        box-shadow: none;
     }
-    .modal-body .modal-search-form {
+    .modal-body {
+        position: absolute;
+        width: 100%;
+        font-weight: 300;
+        overflow: auto;
+    }
+    #modal-close-btn {
+        position: absolute;
+        right: 0;
+        margin: 2rem;
+
+        border: none;
+        background: none;
+        cursor: pointer;
+
+        font-size: 2rem;
+        color: $site-red;
+    }
+    .modal-search-form {
+        position: relative;
+        width: 75%;
+        margin-top: 25%;
+        margin-right: auto;
+        margin-left: auto;
         .modal-search-input {
-            float: left;
-            width: 100%;
-            border: 3px solid $navbar-active;
-            padding: 20px;
-            height: 20px;
-            outline: none;
-            background: transparent;
-            &:focus {color: $navbar-active;}
+            display: inline-block;
+            width: calc(100% - 80px);
+            height: 30px;
+            border: 3px solid $site-red;
+            padding: 30px;
+
+            &:focus {
+                outline: none;
+                color: $site-red;
+            }
         }
         .modal-search-submit {
             position: absolute;
-            right: 15px;
-            z-index: 1;
-            width: 50px;
-            height: 46px;
-            background: $navbar-active;
-            color: $background;
+            right: 0;
+            display: inline-block;
+            width: 80px;
+            height: 66px;
+            border: 1px solid $site-red;
+
+            background: $site-red;
+            color: $site-background;
             text-align: center;
             cursor: pointer;
-
-            border: 1px solid $navbar-active;
-            display: inline-block;
-
         }
     }
 }
