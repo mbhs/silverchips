@@ -189,6 +189,7 @@ class StoryEditView(ContentEditView):
     form_class = forms.StoryForm
     editing = "Story"
 
+
 class ImageEditView(ContentEditView):
     """View for editing images."""
     model = models.Image

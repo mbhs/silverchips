@@ -5,7 +5,6 @@ of everything a normal user would see while visiting the website.
 """
 
 # Django imports
-from django.db.models import Q
 from django.views.generic import CreateView, ListView
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponseForbidden
@@ -16,10 +15,13 @@ from core import models
 from core.permissions import can, user_can
 from home import forms
 
+from django.utils import timezone
+
 
 def load_context(request):
     return {
         "section_roots": models.Section.objects.filter(parent=None),  # For navigation bar
+        "now": timezone.now(),  # For navigation bar
         "stories": models.Story.objects.filter(visibility=models.Content.PUBLISHED, embed_only=False)  # For sidebar
     }
 

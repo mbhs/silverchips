@@ -6,9 +6,8 @@
 
 {% block content %}
   <div class="container">
-    <section class="section-header">
-      <h1 class="section-title">{{ section.title }}</h1>
-    </section>
+    <h1 class="container rounded display-4 mb-4 py-2 text-center text-uppercase section-header">{{ section.title }}</h1>
+
     <hr class="section-separator">
     {% for subsection, stories in subsections %}
       {% if stories.count > 0 %}
