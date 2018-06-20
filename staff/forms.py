@@ -1,5 +1,5 @@
 """Custom forms for the staff interface."""
-
+from betterforms.multiform import MultiForm
 from django import forms
 from dal import autocomplete
 from crispy_forms.helper import FormHelper
@@ -16,8 +16,8 @@ class LoginForm(forms.Form):
 
 class VerticalMixin:
     """A mixin that makes a form display as a vertically organized crispy form."""
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_tag = False
         self.helper.form_class = 'form-horizontal'
@@ -88,6 +88,7 @@ class VideoForm(ContentForm):
         model = models.Video
         fields = ContentForm.Meta.fields + ['source']
 
+
 class AudioForm(ContentForm):
     """Form for audio creation."""
     class Meta(ContentForm.Meta):
@@ -109,7 +110,7 @@ class UserSearchForm(SearchMixin, forms.Form):
     graduation_year = forms.IntegerField(label="Graduation Year:", required=False)
 
 
-class UserForm(VerticalMixin, forms.ModelForm):
+class UserManageForm(VerticalMixin, forms.ModelForm):
     """An editor for users and their permissions."""
     class Meta:
         model = models.User
@@ -119,18 +120,8 @@ class UserForm(VerticalMixin, forms.ModelForm):
         }
 
 
-class ProfileMasterForm(VerticalMixin, forms.ModelForm):
+class ProfileManageForm(VerticalMixin, forms.ModelForm):
     """An editor for profiles, available only to privileged users."""
     class Meta:
         model = models.Profile
         fields = ['biography', 'avatar', 'graduation_year', 'position']
-
-
-# ProfileMasterFormSet = forms.inlineformset_factory(UserForm, ProfileMasterForm)
-
-
-class ProfileForm(VerticalMixin, forms.ModelForm):
-    """An editor for profiles, available to every active use."""
-    class Meta:
-        model = models.Profile
-        fields = ['biography', 'avatar']

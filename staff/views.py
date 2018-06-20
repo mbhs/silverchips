@@ -298,34 +298,62 @@ class UserListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         return context
 
 
+class UserChangeView(LoginRequiredMixin, View):
+    def get_instances(self, request, **kwargs):
+        if not self.update_existing_users:
+            return None, None
+        if self.request_user_only:
+            user = request.user
+        else:
+            user = get_object_or_404(models.User.objects, pk=kwargs.get('pk'))
+        return user, user.profile
 
-class UserChangeMixin(LoginRequiredMixin, PermissionRequiredMixin):
-    permission_required = 'auth.manage_users'
+    def get(self, request, **kwargs):
+        user, profile = self.get_instances(request, **kwargs)
+        user_form = self.user_form_class(instance=user)
+        profile_form = self.profile_form_class(instance=profile)
 
-    # def form_valid(self):
+        return render(request, "staff/editor.html", {
+            "forms": (user_form, profile_form)
+        })
+
+    def post(self, request, **kwargs):
+        user, profile = self.get_instances(request, **kwargs)
+        user_form = self.user_form_class(request.POST, request.FILES, instance=user)
+        profile_form = self.profile_form_class(request.POST, request.FILES, instance=profile)
+
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            return redirect(self.redirect_url)
+
+        return render(request, "staff/editor.html", {
+            "forms": [user_form, profile_form]
+        })
 
 
-class UserCreateView(UserChangeMixin, CreateView):
-    """Base view for creating users."""
-
-    editing = "User"
-
-
-class UserManageView(UserChangeMixin, UpdateView):
-    """Base view for editing users."""
-
-    model = models.User
-    form_class = forms.UserForm
-    editing = "User"
+class UserCreateView(UserChangeView):
+    user_form_class = forms.UserManageForm
+    profile_form_class = forms.ProfileManageForm
+    redirect_url = "staff:users:list"
+    update_existing_users = False
+    request_user_only = False
 
 
-class ProfileEditView(LoginRequiredMixin, UserCanMixin, EditorMixin, UpdateView):
-    """Base view for editing user profiles."""
-    action = 'users.edit_profile'
+class UserManageView(UserChangeView):
+    user_form_class = forms.UserManageForm
+    profile_form_class = forms.ProfileManageForm
+    redirect_url = "staff:users:list"
+    update_existing_users = True
+    request_user_only = False
 
-    model = models.Profile
-    form_class = forms.ProfileForm
-    editing = "Profile"
+
+class UserSelfManageView(UserChangeView):
+    user_form_class = forms.UserManageForm
+    profile_form_class = forms.ProfileManageForm
+    redirect_url = "staff:users:list"
+    update_existing_users = True
+    request_user_only = False
 
 
 # Comment views
@@ -337,5 +365,5 @@ class CommentListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
 @csrf_protect
 @permission_required("") # STUB_COMMENT
 @require_http_methods(["PATCH"])
-def approve_content(request, pk, approved):
+def approve_comment(request, pk, approved):
     pass # STUB_COMMENT

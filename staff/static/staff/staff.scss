@@ -15,3 +15,8 @@ body {
     margin-right: 1em;
   }
 }
+
+// not sure why this is necessary but crispy forms doesn't appear to be working properly
+.invalid-feedback {
+  display: block;
+}

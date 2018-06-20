@@ -33,10 +33,9 @@ content_urlpatterns = ([
 
 user_urlpatterns = ([
     path("manage/<int:pk>/", views.UserManageView.as_view(), name="manage"),
-    path("profile/edit/<int:pk>/", views.ProfileEditView.as_view(), name="edit_profile"),
     path("create/", views.UserCreateView.as_view(), name="create"),
     path("list/", views.UserListView.as_view(), name="list")
-], "user")
+], "users")
 
 autocomplete_urlpatterns = ([
     path("users/", autocomplete.UserAutocomplete.as_view(), name="users"),
