@@ -55,6 +55,7 @@
               <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink{{ forloop.counter }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
 
               <div class="dropdown-menu" aria-labelledby="dropdownMenuLink{{ foorloop.counter }}">
+                <a class="dropdown-item" href="{% url "home:view_profile" user.pk %}" target="_blank">View Profile <i class="fas fa-external-link-alt"></i></a>
                 <a class="dropdown-item" href="{% url "staff:users:manage" user.pk %}">Manage <i class="fas fa-wrench"></i></a>
               </div>
             </div>

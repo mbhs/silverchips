@@ -86,7 +86,6 @@ class EditorMixin(View):
 # Content views
 class ContentListView(LoginRequiredMixin, ListView):
     """The content list view that supports pagination."""
-
     template_name = "staff/content/list.html"
     context_object_name = "content_list"
     paginate_by = 25
@@ -129,7 +128,7 @@ class ContentListView(LoginRequiredMixin, ListView):
 class ContentChangeMixin(LoginRequiredMixin):
     """Mixin that organizes shared functionality across various content creation and editing views."""
     def get_success_url(self):
-        return reverse("staff:content:list")
+        return reverse("staff:content:listlist")
 
     def form_valid(self, form):
         # Automatically update the "modified" field when the form is saved
@@ -290,7 +289,7 @@ class UserListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
 
             users = users.filter(query)
 
-        return users
+        return users.order_by('-pk')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -310,7 +309,7 @@ class UserChangeView(LoginRequiredMixin, View):
 
     def get(self, request, **kwargs):
         user, profile = self.get_instances(request, **kwargs)
-        user_form = self.user_form_class(instance=user)
+        user_form = self.user_form_class(instance=user, request=request)
         profile_form = self.profile_form_class(instance=profile)
 
         return render(request, "staff/editor.html", {
@@ -319,7 +318,7 @@ class UserChangeView(LoginRequiredMixin, View):
 
     def post(self, request, **kwargs):
         user, profile = self.get_instances(request, **kwargs)
-        user_form = self.user_form_class(request.POST, request.FILES, instance=user)
+        user_form = self.user_form_class(request.POST, request.FILES, request=request, instance=user)
         profile_form = self.profile_form_class(request.POST, request.FILES, instance=profile)
 
         if user_form.is_valid() and profile_form.is_valid():

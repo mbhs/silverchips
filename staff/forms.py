@@ -1,6 +1,6 @@
 """Custom forms for the staff interface."""
-from betterforms.multiform import MultiForm
 from django import forms
+from django.contrib import auth
 from dal import autocomplete
 from crispy_forms.helper import FormHelper
 
@@ -112,12 +112,28 @@ class UserSearchForm(SearchMixin, forms.Form):
 
 class UserManageForm(VerticalMixin, forms.ModelForm):
     """An editor for users and their permissions."""
+    verify_password = forms.CharField(label="Verify password",
+                                      help_text="Since this action may be sensitive, we ask you to very your current "
+                                                "password.",
+                                      widget=forms.PasswordInput())
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
+        super().__init__(*args, **kwargs)
+
     class Meta:
         model = models.User
         fields = ['first_name', 'last_name', 'groups', 'is_active']
         widgets = {
             'groups': forms.CheckboxSelectMultiple()
         }
+
+    def is_valid(self):
+        valid = super().is_valid()
+        if not auth.authenticate(username=self.request.user.username, password=self.cleaned_data['verify_password']):
+            self._errors['verify_password'] = ["Password was incorrect"]
+            return False
+        return valid
 
 
 class ProfileManageForm(VerticalMixin, forms.ModelForm):

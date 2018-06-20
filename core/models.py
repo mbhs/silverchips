@@ -21,7 +21,8 @@ class Profile(models.Model):
     user = models.OneToOneField("User", related_name="profile", on_delete=models.CASCADE)
 
     # Personal information
-    biography = models.TextField()
+    biography = models.TextField(help_text="A short biography, often including likes and dislikes, accomplishments,"
+                                           " etc. Should be several sentences minimum.")
     avatar = models.ImageField(null=True)
     position = models.TextField()
     graduation_year = models.IntegerField(default=timezone.now().year+4)
@@ -119,7 +120,11 @@ class Content(PolymorphicModel):
     views = models.IntegerField(default=0)
 
     # Whether this content should show up by itself
-    embed_only = models.BooleanField(default=False)
+    embed_only = models.BooleanField(default=False, help_text="Whether this content should be used only in the context"
+                                     " of embedding into other content (especially stories), or whether it should"
+                                     " appear independently on the site. You will often mark content as embed only"
+                                     " when it is not original or when it is meaningless outside of some"
+                                     " broader story.")
 
     # Content visibility workflow constants
     DRAFT = 1
