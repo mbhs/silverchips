@@ -34,6 +34,7 @@ content_urlpatterns = ([
 user_urlpatterns = ([
     path("manage/<int:pk>/", views.UserManageView.as_view(), name="manage"),
     path("create/", views.UserCreateView.as_view(), name="create"),
+    path("self-manage/", views.UserSelfManageView.as_view(), name="self_manage"),
     path("list/", views.UserListView.as_view(), name="list")
 ], "users")
 

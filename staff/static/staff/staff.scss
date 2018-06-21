@@ -3,7 +3,12 @@
 }
 
 .asteriskField {
-  display: none;
+  color: red;
+  font-weight: bold;
+
+  &::before {
+      content: " ";
+  }
 }
 
 body {

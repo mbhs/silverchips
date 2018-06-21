@@ -297,7 +297,7 @@ class UserListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         return context
 
 
-class UserChangeView(LoginRequiredMixin, View):
+class UserChangeView(LoginRequiredMixin, EditorMixin, View):
     def get_instances(self, request, **kwargs):
         if not self.update_existing_users:
             return None, None
@@ -313,7 +313,8 @@ class UserChangeView(LoginRequiredMixin, View):
         profile_form = self.profile_form_class(instance=profile)
 
         return render(request, "staff/editor.html", {
-            "forms": (user_form, profile_form)
+            "forms": (user_form, profile_form),
+            "editing": "User"
         })
 
     def post(self, request, **kwargs):
@@ -322,12 +323,17 @@ class UserChangeView(LoginRequiredMixin, View):
         profile_form = self.profile_form_class(request.POST, request.FILES, instance=profile)
 
         if user_form.is_valid() and profile_form.is_valid():
+            # Check if they set a new password
+            if user_form.cleaned_data['new_password']:
+                user_form.instance.set_password(user_form.cleaned_data['new_password'])
+
             user_form.save()
             profile_form.save()
             return redirect(self.redirect_url)
 
         return render(request, "staff/editor.html", {
-            "forms": [user_form, profile_form]
+            "forms": [user_form, profile_form],
+            "editing": "User"
         })
 
 
@@ -348,11 +354,11 @@ class UserManageView(UserChangeView):
 
 
 class UserSelfManageView(UserChangeView):
-    user_form_class = forms.UserManageForm
-    profile_form_class = forms.ProfileManageForm
-    redirect_url = "staff:users:list"
+    user_form_class = forms.UserSelfManageForm
+    profile_form_class = forms.ProfileSelfManageForm
+    redirect_url = "staff:dashboard"
     update_existing_users = True
-    request_user_only = False
+    request_user_only = True
 
 
 # Comment views

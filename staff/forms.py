@@ -112,28 +112,50 @@ class UserSearchForm(SearchMixin, forms.Form):
 
 class UserManageForm(VerticalMixin, forms.ModelForm):
     """An editor for users and their permissions."""
-    verify_password = forms.CharField(label="Verify password",
+    verify_password = forms.CharField(label="Verify current password",
                                       help_text="Since this action may be sensitive, we ask you to very your current "
                                                 "password.",
                                       widget=forms.PasswordInput())
+    new_password = forms.CharField(label="New password",
+                                   help_text="Only fill in this field if you wish to change your password.",
+                                   widget=forms.PasswordInput(),
+                                   required=False)
+    confirm_password = forms.CharField(label="Confirm new password",
+                                       widget=forms.PasswordInput(),
+                                       required=False)
 
     def __init__(self, *args, **kwargs):
-        self.request = kwargs.pop('request', None)
+        self.request = kwargs.pop('request', None)  # save the request so we can check against request.user later
         super().__init__(*args, **kwargs)
+
+    def is_valid(self):
+        valid = super().is_valid()
+
+        # Authenticate the user to make sure form submission is authorized
+        if not auth.authenticate(username=self.request.user.username, password=self.cleaned_data['verify_password']):
+            self._errors['verify_password'] = ["Unauthorized; password is incorrect"]
+            valid = False
+        # Check that passwords match if passwords are being updated
+        if (self.cleaned_data['new_password'] or self.cleaned_data['confirm_password']) and \
+                self.cleaned_data['new_password'] != self.cleaned_data['confirm_password']:
+            self._errors['confirm_password'] = ["New passwords do not match"]
+            valid = False
+
+        return valid
 
     class Meta:
         model = models.User
-        fields = ['first_name', 'last_name', 'groups', 'is_active']
+        fields = ['username', 'first_name', 'last_name', 'email', 'groups', 'is_active']
         widgets = {
             'groups': forms.CheckboxSelectMultiple()
         }
 
-    def is_valid(self):
-        valid = super().is_valid()
-        if not auth.authenticate(username=self.request.user.username, password=self.cleaned_data['verify_password']):
-            self._errors['verify_password'] = ["Password was incorrect"]
-            return False
-        return valid
+
+class UserSelfManageForm(UserManageForm):
+    class Meta:
+        model = models.User
+        # Override metaclass to only expose name change interface
+        fields = ['first_name', 'last_name', 'email']
 
 
 class ProfileManageForm(VerticalMixin, forms.ModelForm):
@@ -141,3 +163,10 @@ class ProfileManageForm(VerticalMixin, forms.ModelForm):
     class Meta:
         model = models.Profile
         fields = ['biography', 'avatar', 'graduation_year', 'position']
+
+
+class ProfileSelfManageForm(VerticalMixin, forms.ModelForm):
+    """An editor for profiles, available only to all users."""
+    class Meta:
+        model = models.Profile
+        fields = ['biography', 'avatar']
