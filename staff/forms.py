@@ -25,7 +25,7 @@ class VerticalMixin:
         self.helper.field_class = 'col-lg-8'
 
 
-class SearchMixin:
+class HorizontalMixin:
     """A mixin that makes a form display as an inline crispy form."""
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -34,7 +34,7 @@ class SearchMixin:
         self.helper.disable_csrf = True
 
 
-class ContentSearchForm(SearchMixin, forms.Form):
+class ContentSearchForm(HorizontalMixin, forms.Form):
     """Form for searching through content."""
     id = forms.IntegerField(label="ID:", required=False)
     title = forms.CharField(label="Title:", required=False, max_length=100)
@@ -75,6 +75,27 @@ class StoryForm(ContentForm):
         widgets = dict(ContentForm.Meta.widgets, text=RichTextWidget(embed=True), lead=RichTextWidget(short=True))
 
 
+class GalleryForm(ContentForm):
+    """The gallery editor form.
+
+    The actual gallery entry editing takes place outside of this form, which is used to edit
+    gallery metadata.
+    """
+    class Meta(ContentForm.Meta):
+        model = models.Gallery
+
+
+class GalleryContentInsertionForm(HorizontalMixin, forms.Form):
+    """A small form for selecting content to add into a gallery."""
+    content = forms.ModelChoiceField(
+        queryset=models.Content.objects.all(),
+        widget=autocomplete.ModelSelect2(url='staff:autocomplete:content')
+    )
+
+    class Meta:
+        fields = '__all__'
+
+
 class ImageForm(ContentForm):
     """Form for image creation."""
     class Meta(ContentForm.Meta):
@@ -101,7 +122,7 @@ class PollForm(ContentForm):
     # STUB_POLL
 
 
-class UserSearchForm(SearchMixin, forms.Form):
+class UserSearchForm(HorizontalMixin, forms.Form):
     """Form for searching through content."""
     id = forms.IntegerField(label="ID:", required=False)
     first_name = forms.CharField(label="First Name:", required=False, max_length=100)

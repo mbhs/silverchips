@@ -141,7 +141,10 @@ class ContentCreateView(ContentChangeMixin, PermissionRequiredMixin, EditorMixin
     permission_required = 'core.create_content'
 
     def get_initial(self):
-        return dict(super(ContentCreateView, self).get_initial(), authors=[self.request.user])
+        return dict(super().get_initial(), authors=[self.request.user])
+
+    def get_success_url(self):
+        return reverse("staff:content:edit", kwargs={'pk': self.object.pk})
 
 
 class StoryCreateView(ContentCreateView):
@@ -149,6 +152,14 @@ class StoryCreateView(ContentCreateView):
     model = models.Story
     form_class = forms.StoryForm
     editing = "Story"
+
+
+class GalleryCreateView(ContentCreateView):
+    """View for creating a new gallery."""
+    model = models.Gallery
+    form_class = forms.GalleryForm
+    editing = "Gallery"
+    template_name = "staff/content/gallery/editor.html"
 
 
 class ImageCreateView(ContentCreateView):
@@ -189,6 +200,71 @@ class StoryEditView(ContentEditView):
     editing = "Story"
 
 
+class GalleryEditView(ContentEditView):
+    """View for editing galleries."""
+    model = models.Gallery
+    form_class = forms.GalleryForm
+    editing = "Gallery"
+    template_name = "staff/content/gallery/editor.html"
+
+    def get_context_data(self, *args, **kwargs):
+        data = super().get_context_data(*args, **kwargs)
+        data['insertion_form'] = forms.GalleryContentInsertionForm()
+        return data
+
+
+def gallery_insert(request, pk):
+    gallery = get_object_or_404(models.Gallery, pk=pk)
+    entry = get_object_or_404(models.Content, pk=request.POST.get("entry"))
+    link = models.GalleryEntryLink(gallery=gallery, entry=entry)
+    link.save()
+
+    return render(request, "staff/content/gallery/entry_list.html", {
+        'gallery': gallery
+    })
+
+
+def gallery_swap(request, pk):
+    gallery = get_object_or_404(models.Gallery, pk=pk)
+
+    print(gallery.entry_links.all())
+
+    try:
+        link1 = gallery.entry_links.all()[int(request.POST['index1'])]
+        link2 = gallery.entry_links.all()[int(request.POST['index2'])]
+    except (IndexError, ValueError):
+        return HttpResponse(status=400)
+
+    print(link1, link2)
+
+    link1.swap(link2)
+    link1.save()
+
+    print(gallery.entry_links.all())
+
+    return render(request, "staff/content/gallery/entry_list.html", {
+        'gallery': gallery
+    })
+
+
+def gallery_remove(request, pk):
+    gallery = get_object_or_404(models.Gallery, pk=pk)
+
+    try:
+        print(request.body)
+        link = gallery.entry_links.all()[int(request.POST['index'])]
+        print("here")
+    except (IndexError, ValueError):
+        return HttpResponse(status=400)
+
+    link.delete()
+    print("HIEY")
+
+    return render(request, "staff/content/gallery/entry_list.html", {
+        'gallery': gallery
+    })
+
+
 class ImageEditView(ContentEditView):
     """View for editing images."""
     model = models.Image
@@ -222,6 +298,7 @@ def content_edit_view(request, pk):
     # Switch which view gets received based on the kind of content
     return {
         'Story': StoryEditView,
+        'Gallery': GalleryEditView,
         'Image': ImageEditView,
         'Video': VideoEditView,
         'Audio': AudioEditView,

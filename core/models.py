@@ -6,6 +6,7 @@ from django.utils import timezone
 from django.utils.text import slugify
 from django.core.validators import RegexValidator
 from django.urls import reverse
+from ordered_model.models import OrderedModel
 from polymorphic.models import PolymorphicModel
 
 
@@ -98,13 +99,14 @@ class Content(PolymorphicModel):
     This container provides the metaclass for all types of media,
     including stories, images, videos, galleries, and podcasts. Each
     subclass should be capable of rendering itself to HTML so that it
-    can be generically displayed or embedded.
+    can be generically displayed or embedded. States pertaining to editing and publishing
+    status are also stored.
     """
 
     # Basic identification information
     title = models.TextField()
     description = models.TextField()
-    tags = models.ManyToManyField(Tag)
+    tags = models.ManyToManyField(Tag, blank=True)
     legacy_id = models.IntegerField(null=True)
 
     # Time information
@@ -300,13 +302,7 @@ class Poll(Content):
 
 
 class Story(Content):
-    """The main story model.
-
-    Stories are the backbone of a news site, and are one of the most
-    important models. In addition to storing information relating to
-    the written contents, states pertaining to editing and publishing
-    status are also stored.
-    """
+    """The main story model."""
     lead = models.TextField()  # Lead paragraph
     text = models.TextField()  # Full text
     cover = models.ForeignKey(Image, null=True, on_delete=models.SET_NULL)  # Cover photo
@@ -317,6 +313,23 @@ class Story(Content):
 
     class Meta:
         verbose_name_plural = "stories"
+
+
+class Gallery(Content):
+    """A model representing an ordered gallery of other Content."""
+    entries = models.ManyToManyField(Content, through='core.GalleryEntryLink', related_name="containing_galleries")
+
+    def entries_in_order(self):
+        return self.entries.order_by("gallery_links")
+
+
+class GalleryEntryLink(OrderedModel):
+    gallery = models.ForeignKey(Gallery, on_delete=models.CASCADE, related_name="entry_links")
+    entry = models.ForeignKey(Content, on_delete=models.CASCADE, related_name="gallery_links")
+    order_with_respect_to = 'gallery'
+
+    class Meta:
+        ordering = ('gallery', 'order')
 
 
 class Comment(models.Model):

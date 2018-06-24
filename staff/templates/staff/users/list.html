@@ -9,6 +9,7 @@
   <h1>User List</h1>
 
   <div class="card">
+    <h5 class="card-header">Search users</h5>
     <div class="card-body">
       <form method="get">
         <div class="form-inline">
@@ -22,7 +23,7 @@
   <br/>
 
   {% if user|can:"core.manage-users" %}
-    <a class="btn btn-primary btn btn-block my-3" href="{% url "staff:users:create" %}">Create User <i class="fas fa-user-plus"></i></a>
+    <a class="btn btn-primary btn-lg btn-block my-3" href="{% url "staff:users:create" %}">Create User <i class="fas fa-user-plus"></i></a>
   {% endif %}
 
   <div class="table-responsive">

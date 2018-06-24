@@ -12,16 +12,19 @@
   {% if user|can:"core.create_content" %}
     <div class="row">
       <div class="col-lg-3 col-sm-6 col-xs-12">
-        <a class="btn btn-primary btn btn-block my-3" href="{% url "staff:content:create:story" %}">Create Story <i class="fas fa-book"></i></a>
+        <a class="btn btn-primary btn-lg btn-block my-3" href="{% url "staff:content:create:story" %}">Create Story <i class="fas fa-book"></i></a>
       </div>
       <div class="col-lg-3 col-sm-6 col-xs-12">
-        <a class="btn btn-primary btn btn-block my-3" href="{% url "staff:content:create:image" %}">Create Image <i class="fas fa-camera"></i></a>
+        <a class="btn btn-primary btn-lg btn-block my-3" href="{% url "staff:content:create:gallery" %}">Create Gallery <i class="fas fa-images"></i></a>
       </div>
       <div class="col-lg-3 col-sm-6 col-xs-12">
-        <a class="btn btn-primary btn btn-block my-3" href="{% url "staff:content:create:video" %}">Create Video <i class="fas fa-video"></i></a>
+        <a class="btn btn-primary btn-lg btn-block my-3" href="{% url "staff:content:create:image" %}">Create Image <i class="fas fa-camera"></i></a>
       </div>
       <div class="col-lg-3 col-sm-6 col-xs-12">
-        <a class="btn btn-primary btn btn-block my-3" href="{% url "staff:content:create:audio" %}">Create Audio <i class="fas fa-microphone"></i></a>
+        <a class="btn btn-primary btn-lg btn-block my-3" href="{% url "staff:content:create:video" %}">Create Video <i class="fas fa-video"></i></a>
+      </div>
+      <div class="col-lg-3 col-sm-6 col-xs-12">
+        <a class="btn btn-primary btn-lg btn-block my-3" href="{% url "staff:content:create:audio" %}">Create Audio <i class="fas fa-microphone"></i></a>
       </div>
       {# STUB_POLL #}
     </div>
@@ -30,6 +33,7 @@
   {% endif %}
 
   <div class="card">
+    <h5 class="card-header">Search content</h5>
     <div class="card-body">
       <form method="get">
         <div class="form-inline">

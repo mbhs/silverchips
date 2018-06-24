@@ -14,10 +14,10 @@ django-static-precompiler = "*"
 six = "*"
 pillow = "*"
 django-polymorphic = "*"
-django-extra-views = "*"
 "psycopg2" = "*"
 gunicorn = "*"
 django-crispy-forms = "*"
+django-ordered-model = "*"
 
 
 [dev-packages]
