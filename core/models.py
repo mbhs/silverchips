@@ -319,6 +319,10 @@ class Gallery(Content):
     """A model representing an ordered gallery of other Content."""
     entries = models.ManyToManyField(Content, through='core.GalleryEntryLink', related_name="containing_galleries")
 
+    template = "home/content/gallery.html"
+    descriptor = "Gallery"
+    hide_caption = True
+
     def entries_in_order(self):
         return self.entries.order_by("gallery_links")
 
