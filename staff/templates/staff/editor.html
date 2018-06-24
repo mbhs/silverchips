@@ -4,6 +4,11 @@
 {% block content %}
   <h1>{{ editing }} Editor</h1>
 
+  {% if object and object.get_absolute_url %}
+      <a class="btn btn-block btn-lg btn-dark" target="_blank" href="{{ object.get_absolute_url }}">View {{ editing }} <i class="fas fa-external-link-alt"></i></a>
+      <br/>
+  {% endif %}
+
   <form class="form-horizontal" method="post" enctype="multipart/form-data">
     {% csrf_token %}
 
@@ -17,7 +22,7 @@
       {% endfor %}
     {% endif %}
 
-    <button type="submit" class="btn btn-success btn-block">Save <i class="fas fa-save"></i></button>
+    <button type="submit" class="btn btn-lg btn-success btn-block">Save <i class="fas fa-save"></i></button>
   </form>
 
   {% block subeditor %}

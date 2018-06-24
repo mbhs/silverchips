@@ -19,7 +19,7 @@
       {% endif %}
 
       {% if request.user|can_edit_content:content %}
-        <a class="btn btn-primary" href="{% url "staff:content:edit" content.pk %}">Edit <i class="fas fa-pencil-alt"></i></a>
+        <a class="btn btn-primary" href="{% url "staff:content:edit" content.pk %}" target="_blank">Edit <i class="fas fa-pencil-alt"></i></a>
       {% endif %}
     </h1>
     <br/>
