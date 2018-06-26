@@ -1,9 +1,10 @@
+/** Helper function to produce tooltipped FontAwesome icons. */
 function fa(icon, tooltip, direction) {
   direction = direction || 'top';
   return `<i class="fas fa-${icon}" aria-hidden="true" data-toggle="tooltip" data-placement="${direction}" title="${tooltip}"/>`;
 }
 
-/** Override default Quill icons */
+// Override default Quill icons
 var icons = Quill.import('ui/icons');
 icons['bold'] = fa('bold', 'Bold');
 icons['italic'] = fa('italic', 'Italicize');
@@ -38,7 +39,7 @@ ContentBlot.tagName = 'div';
 
 Quill.register(ContentBlot);
 
-/** Create a new Quill editor for an element. */
+/** Create a new Quill editor for a form field. */
 function quill(name, short, embed) {
   let toolbar = { container: [
       ['bold', 'italic', 'underline', 'strike']
@@ -71,9 +72,8 @@ function quill(name, short, embed) {
 
         if (content) {
           // Add the data to the Quill model
-          quill.insertText(selection.index, '\n', Quill.sources.USER);
-          quill.insertEmbed(selection.index + 1, 'content-embed', content, Quill.sources.USER);
-          quill.insertText(selection.index + 2, '\n', Quill.sources.SILENT);
+          quill.insertEmbed(selection.index, 'content-embed', content, Quill.sources.USER);
+
           // Preview the embedded data
           preview_embeds();
         }
@@ -101,7 +101,9 @@ function quill(name, short, embed) {
   return quill;
 }
 
-/** Load content placeholders in text with content previews using AJAX. */
+/** Load content placeholders in text with content previews using AJAX.
+ *  This is the equivalent of expand_embeds() on the server-side, but works *as* you're editing content.
+ */
 function preview_embeds() {
   $("div.content-embed").each(function () {
     if (!$(this).data("previewing")) {
@@ -111,9 +113,9 @@ function preview_embeds() {
 
       // Load a preview from the site using AJAX
       $.get(`/content/preview/${contentId}`, function (result) {
-        // We need to strip whitespace in appropriate places so Quill doesn't insert extra newlines
+        // Strip whitespace in appropriate places so Quill doesn't insert extra newlines
         result = result.trim().replace(/>\s+/g, ">").replace(/\s+</g, "<");
-        that.html(`<div class=\"card\"><div class=\"card-body p-2\">${result}</div></div>`);
+        that.html(`<div class=\"card my-2\"><div class=\"card-body p-2\">${result}</div></div>`);
       });
     }
   });
