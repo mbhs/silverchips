@@ -20,6 +20,7 @@ icons['embed'] = fa('plus-circle', 'Embed content');
 // TODO: customize fonts and sizes
 let BlockEmbed = Quill.import('blots/block/embed');
 
+/** Quill blot model for content placeholders. */
 class ContentBlot extends BlockEmbed {
   static create(contentId) {
     let node = super.create();
@@ -60,20 +61,26 @@ function quill(name, short, embed) {
   if (embed) {
     toolbar.container.push(['embed']);
     toolbar.handlers.embed = function() {
+      // Save old selection (text box is unfocused when modal shows)
       let selection = quill.getSelection(true);
 
       $("#embed-modal").modal('show');
-      $("#embed-button").on('click', function() {
+      $("#embed-button").on('click', function () {
+        // Find the dropdown for content in the modal
         let content = $("#embed-form").find("select[name=content]").val();
 
         if (content) {
+          // Add the data to the Quill model
           quill.insertText(selection.index, '\n', Quill.sources.USER);
           quill.insertEmbed(selection.index + 1, 'content-embed', content, Quill.sources.USER);
           quill.insertText(selection.index + 2, '\n', Quill.sources.SILENT);
+          // Preview the embedded data
           preview_embeds();
         }
 
         $("#embed-modal").modal('hide');
+
+        // Restore old selection
         quill.setSelection(selection);
       });
     };
@@ -87,26 +94,34 @@ function quill(name, short, embed) {
   });
 
   if (embed) {
+    // Reload previewed content after Quill operations like undo, redo, etc.
     quill.on('text-change', preview_embeds);
   }
 
   return quill;
 }
 
+/** Load content placeholders in text with content previews using AJAX. */
 function preview_embeds() {
-  $("div.content-embed[data-previewing!='true']").each(function () {
-    $(this).data("previewing", "true");
-    let contentId = $(this).data("content-id");
-    let that = $(this);
-    $.get(`/content/embed/${contentId}`, function (result) {
-      console.log(result.replace(/\n+/g, ''));
-      that.html("<div class=\"card\"><div class=\"card-body\">" + result.replace(/\n+/g, '') + "</div></div>");
-    });
+  $("div.content-embed").each(function () {
+    if (!$(this).data("previewing")) {
+      $(this).data("previewing", "true");
+      let contentId = $(this).data("content-id");
+      let that = $(this);
+
+      // Load a preview from the site using AJAX
+      $.get(`/content/preview/${contentId}`, function (result) {
+        // We need to strip whitespace in appropriate places so Quill doesn't insert extra newlines
+        result = result.trim().replace(/>\s+/g, ">").replace(/\s+</g, "<");
+        that.html(`<div class=\"card\"><div class=\"card-body p-2\">${result}</div></div>`);
+      });
+    }
   });
 }
 
+/** Empty all content placeholders of previews. */
 function unpreview_embeds() {
-  $("div.content-embed").each(function (index, element) {
+  $("div.content-embed").each(function () {
     $(this).removeData("previewing");
     $(this).empty();
   });

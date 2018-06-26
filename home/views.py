@@ -56,7 +56,7 @@ def view_section(request, name):
 
 
 @user_can('content.read')
-def embed_content(request, pk, slug=None):
+def preview_content(request, pk):
     """Render specific content in the newspaper."""
     content = get_object_or_404(models.Content, pk=pk)
     return HttpResponse(render_content(request.user, content))
