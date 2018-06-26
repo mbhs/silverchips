@@ -35,8 +35,8 @@ icons['embed'] = fa('plus-circle', 'Embed content');
 //ContentBlot.className = 'content';
 
 /** Create a new Quill editor for an element. */
-function quill(id, short, embed) {
-  var toolbar = { container: [
+function quill(name, short, embed) {
+  let toolbar = { container: [
       ['bold', 'italic', 'underline', 'strike']
   ], handlers: { } };
 
@@ -52,17 +52,29 @@ function quill(id, short, embed) {
     ]);
   }
 
+  let quill;
+
   if (embed) {
     toolbar.container.push(['embed']);
     toolbar.handlers.embed = function() {
-      this.quill.insertEmbed(this.quill.getSelection().index, 'image', 'https://quilljs.com/images/cloud.png');
+      let selection = quill.getSelection();
+
+      $("#embed-modal").modal('show');
+      $("#embed-button").on('click', function() {
+        let content = $("#embed-form").find("select[name=content]").val();
+        quill.insertText(selection.index, content);
+        $("#embed-modal").modal('hide');
+        quill.setSelection(selection);
+      });
     };
   }
 
-  return new Quill(id, {
+  quill = new Quill("#" + name + "-editor", {
     theme: "snow",
     modules: {
       toolbar: toolbar
     }
   });
+
+  return quill;
 }

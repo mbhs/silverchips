@@ -85,7 +85,7 @@ class GalleryForm(ContentForm):
         model = models.Gallery
 
 
-class GalleryContentInsertionForm(HorizontalMixin, forms.Form):
+class ContentInsertionForm(HorizontalMixin, forms.Form):
     """A small form for selecting content to add into a gallery."""
     content = forms.ModelChoiceField(
         queryset=models.Content.objects.all(),

@@ -3,12 +3,12 @@
 <div class="table-responsive">
   <table class="table table-striped">
     <thead>
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">ID</th>
-        <th scope="col">Title</th>
-        <th scope="col">Actions</th>
-      </tr>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">ID</th>
+      <th scope="col">Title</th>
+      <th scope="col">Actions</th>
+    </tr>
     </thead>
 
     <tbody>
@@ -18,16 +18,16 @@
         <td>{{ entry.pk }}</td>
         <td>{{ entry.title }}</td>
         <td>
-            <a class="btn btn-success" href="{% url "home:view_content" entry.pk %}" target="_blank"><i class="fas fa-external-link-alt"></i></a>
-            {% if not forloop.first %}
-                <a class="btn btn-info" href="javascript:swap({{ forloop.counter0 }}, {{ forloop.counter0 }}-1)"><i class="fas fa-angle-up"></i></a>
-                <a class="btn btn-info" href="javascript:swap({{ forloop.counter0 }}, 0)"><i class="fas fa-angle-double-up"></i></a>
-            {% endif %}
-            {% if not forloop.last %}
-                <a class="btn btn-info" href="javascript:swap({{ forloop.counter0 }}, {{ forloop.counter0 }}+1)"><i class="fas fa-angle-down"></i></a>
-                <a class="btn btn-info" href="javascript:swap({{ forloop.counter0 }}, {{ gallery.entries.count }}-1)"><i class="fas fa-angle-double-down"></i></a>
-            {% endif %}
-            <a class="btn btn-danger" href="javascript:remove({{ forloop.counter0 }})"><i class="fas fa-trash-alt"></i></a>
+          <a class="btn btn-success" href="{% url "home:view_content" entry.pk %}" target="_blank"><i class="fas fa-external-link-alt"></i></a>
+          {% if not forloop.first %}
+            <a class="btn btn-info" href="javascript:swap({{ forloop.counter0 }}, {{ forloop.counter0 }}-1)"><i class="fas fa-angle-up"></i></a>
+            <a class="btn btn-info" href="javascript:swap({{ forloop.counter0 }}, 0)"><i class="fas fa-angle-double-up"></i></a>
+          {% endif %}
+          {% if not forloop.last %}
+            <a class="btn btn-info" href="javascript:swap({{ forloop.counter0 }}, {{ forloop.counter0 }}+1)"><i class="fas fa-angle-down"></i></a>
+            <a class="btn btn-info" href="javascript:swap({{ forloop.counter0 }}, {{ gallery.entries.count }}-1)"><i class="fas fa-angle-double-down"></i></a>
+          {% endif %}
+          <a class="btn btn-danger" href="javascript:remove({{ forloop.counter0 }})"><i class="fas fa-trash-alt"></i></a>
         </td>
       </tr>
     {% endfor %}

@@ -2,66 +2,66 @@
 {% load crispy_forms_tags %}
 
 {% block subeditor %}
-    <hr/>
-    <h2>Gallery Entries</h2>
-    {% if object %}
-        {% with gallery=object %}
-            <div id="entry-list">
-                {% include "staff/content/gallery/entry_list.html" %}
+  <hr/>
+  <h2>Gallery Entries</h2>
+  {% if object %}
+    {% with gallery=object %}
+      <div id="entry-list">
+        {% include "staff/content/gallery/entry_list.html" %}
+      </div>
+
+      <div class="card">
+        <h5 class="card-header">Insert entry</h5>
+        <div class="card-body">
+          <form class="form-horizontal" id="insert-form">
+            {% csrf_token %}
+            <div class="form-inline">
+              {% crispy insertion_form insertion_form.helper %}
+              <button id="insert-button" type="submit" class="btn btn-success">Insert <i class="fas fa-plus"></i></button>
             </div>
+          </form>
+        </div>
+      </div>
 
-            <div class="card">
-                <h5 class="card-header">Insert entry</h5>
-                <div class="card-body">
-                    <form class="form-horizontal" id="insert-form">
-                        {% csrf_token %}
-                        <div class="form-inline">
-                            {% crispy insertion_form insertion_form.helper %}
-                            <button id="insert-button" type="submit" class="btn btn-success">Insert <i class="fas fa-plus"></i></button>
-                        </div>
-                    </form>
-                </div>
-            </div>
+      <script type="text/javascript">
+        const csrftoken = $("[name=csrfmiddlewaretoken]").val();
 
-            <script type="text/javascript">
-              const csrftoken = $("[name=csrfmiddlewaretoken]").val();
+        function apiRequest(url, data) {
+          $.ajax({
+            url: url,
+            type: "post",
+            data: data,
+            headers: {
+              "X-CSRFToken": csrftoken
+            }, success: function(resp_data) {
+              $("#entry-list").html(resp_data);
+            }});
+        }
 
-              function apiRequest(url, data) {
-                $.ajax({
-                  url: url,
-                  type: "post",
-                  data: data,
-                  headers: {
-                    "X-CSRFToken": csrftoken
-                  }, success: function(resp_data) {
-                    $("#entry-list").html(resp_data);
-                  }});
-              }
+        $("#insert-form").submit(function(event) {
+          event.preventDefault();
+          const content_id = $("#insert-form").find("select[name=content]").val();
+          apiRequest("{% url "staff:content:gallery:insert" gallery.pk %}", {
+            entry: content_id
+          });
+        });
 
-              $("#insert-form").submit(function(event) {
-                event.preventDefault();
-                const content_id = $("#id_content").val();
-                apiRequest("{% url "staff:content:gallery:insert" gallery.pk %}", {
-                  entry: content_id
-                });
-              });
+        function swap(index1, index2) {
+          apiRequest("{% url "staff:content:gallery:swap" gallery.pk %}", {
+            index1: index1,
+            index2: index2
+          });
+        }
 
-              function swap(index1, index2) {
-                apiRequest("{% url "staff:content:gallery:swap" gallery.pk %}", {
-                  index1: index1,
-                  index2: index2
-                });
-              }
-
-              function remove(index) {
-                apiRequest("{% url "staff:content:gallery:remove" gallery.pk %}", {
-                  index: index
-                });
-              }
-            </script>
-        {% endwith %}
-    {% else %}
-        <p>It doesn't appear that you've saved this gallery yet! Make sure to save this gallery before you
-            go ahead and add some entries to it. Afterwards, you'll be able to add entries here.</p>
-    {% endif %}
+        function remove(index) {
+          apiRequest("{% url "staff:content:gallery:remove" gallery.pk %}", {
+            index: index
+          });
+        }
+      </script>
+    {% endwith %}
+  {% else %}
+    <p>It doesn't appear that you've saved this gallery yet! Make sure to save this gallery before you
+      go ahead and add some entries to it. Afterwards, you'll be able to add entries here.</p>
+  {% endif %}
 {% endblock %}

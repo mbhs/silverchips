@@ -67,21 +67,21 @@
   </div>
 
   <script>
-      $('#deleteModal').on('show.bs.modal', function (event) {
-          var button = $(event.relatedTarget);
-          var recipient = button.data('title');
-          var modal = $(this);
-          modal.find('#deleteTitle').text(recipient);
-          $('#deleteButton').on('click', () => doApi(button.data('href'), button.data('verb')));
-      });
+    $('#deleteModal').on('show.bs.modal', function (event) {
+      let button = $(event.relatedTarget);
+      let recipient = button.data('title');
+      let modal = $(this);
+      modal.find('#deleteTitle').text(recipient);
+      $('#deleteButton').on('click', () => doApi(button.data('href'), button.data('verb')));
+    });
 
-      function doApi(url, verb) {
-          $.ajax({
-              url: url,
-              method: verb,
-              headers: {'X-CSRFToken': $("[name=csrfmiddlewaretoken]").val()},
-          }).done(() => location.reload());
-      }
+    function doApi(url, verb) {
+      $.ajax({
+        url: url,
+        method: verb,
+        headers: {'X-CSRFToken': $("[name=csrfmiddlewaretoken]").val()},
+      }).done(() => location.reload());
+    }
   </script>
 
   <div class="table-responsive">
