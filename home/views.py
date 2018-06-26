@@ -7,7 +7,7 @@ of everything a normal user would see while visiting the website.
 # Django imports
 from django.views.generic import CreateView, ListView
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponseForbidden
+from django.http import HttpResponseForbidden, HttpResponse
 from django.contrib.auth.models import User
 
 # News imports
@@ -16,6 +16,8 @@ from core.permissions import can, user_can
 from home import forms
 
 from django.utils import timezone
+
+from home.templatetags.home import render_content
 
 
 def load_context(request):
@@ -51,6 +53,13 @@ def view_section(request, name):
         "section": section,
         "subsections": subsections
     })
+
+
+@user_can('content.read')
+def embed_content(request, pk, slug=None):
+    """Render specific content in the newspaper."""
+    content = get_object_or_404(models.Content, pk=pk)
+    return HttpResponse(render_content(request.user, content))
 
 
 @user_can('content.read')

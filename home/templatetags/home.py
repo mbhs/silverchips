@@ -12,6 +12,7 @@ register = template.Library()
 def tags(content):
     return ", ".join(map(str, content.tags.all()))
 
+
 @register.simple_tag
 def render_content(user, content, embedding=True):
     """A template tag that renders the template of some Content, for example, story text or an image with a caption.

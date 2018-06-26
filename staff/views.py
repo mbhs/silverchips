@@ -128,7 +128,7 @@ class ContentListView(LoginRequiredMixin, ListView):
 class ContentChangeMixin(LoginRequiredMixin):
     """Mixin that organizes shared functionality across various content creation and editing views."""
     def get_success_url(self):
-        return reverse("staff:content:listlist")
+        return reverse("staff:content:list")
 
     def form_valid(self, form):
         # Automatically update the "modified" field when the form is saved

@@ -9,8 +9,10 @@
 <script>
   $(window).on("load", function() {
     let editor = quill("{{ widget.name }}", {{ widget.attrs.short|yesno:"true,false" }}, {{ widget.attrs.embed|yesno:"true,false" }});
+    preview_embeds();
     let form = document.getElementById("{{ widget.name }}").form;
     form.addEventListener("submit", function() {
+      unpreview_embeds();
       form.{{ widget.name }}.value = editor.root.innerHTML;
     })
   });
