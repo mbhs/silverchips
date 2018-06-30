@@ -103,5 +103,7 @@ import/data/
 
 Pipfile.lock
 
+# static
 /static/
 
+.vscode/

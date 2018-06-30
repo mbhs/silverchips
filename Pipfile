@@ -1,12 +1,9 @@
 [[source]]
-
 url = "https://pypi.python.org/simple"
 verify_ssl = true
 name = "pypi"
 
-
 [packages]
-
 django = "*"
 django-autocomplete-light = "*"
 django-forms-bootstrap = "*"
@@ -19,7 +16,7 @@ django-extra-views = "*"
 gunicorn = "*"
 django-crispy-forms = "*"
 
-
 [dev-packages]
-
 ipython = "*"
+pylint = "*"
+"flake8" = "*"
