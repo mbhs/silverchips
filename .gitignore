@@ -107,3 +107,4 @@ Pipfile.lock
 /static/
 
 .vscode/
+setup.cfg

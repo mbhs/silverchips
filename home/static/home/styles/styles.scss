@@ -59,11 +59,43 @@ html {
 
     .featured-img {
         position: absolute;
-        top: 0;
+        top:0;
         left: 0;
+        width: 100%;
+        height: auto;
     }
 
     .content {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+
+        .feature-title a, .lead, a {
+            display: inline-block;
+            font-family: $fugaz-one;
+            color: $site-white;
+        }
+    }
+}
+
+.section-card-0 {
+    .img-wrapper {
+        height: 0;
+        overflow: hidden;
+        position: relative;
+        padding-top: 42.8571%;
+    }
+    .card-img-top {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+        height: auto;
+    }
+
+    .card-body {
         position: absolute;
         top: 0;
         bottom: 0;

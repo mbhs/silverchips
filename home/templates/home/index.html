@@ -8,9 +8,10 @@
     {% include "home/includes/index-sm-sidebar.html" %}
             {% for section in section_roots %}
                 {% if section.name == "news" %}
-
                 <div id="{{ section.title }}" class="large-container">
-                    <div class="row">
+                    <h2 class="container display-4 mb-4 py-2 text-center text-uppercase section-header"><a href="{% url "home:view_section" section.name %}">{{ section.title }}</a></h2>
+                    
+                    <div class="row mb-4">
                         <div class="col-md-3 section-recently-0">
                             <h1 class="recently">Recently...</h1>
                             <hr>
@@ -23,19 +24,39 @@
                             {% endfor %}
                         </div>
                         <div class="col-md-9">
-                            {% for story in section.all_stories.all|slice:"7"  %}
-                            {% if forloop.first %}
-                                <div class="section-featured-0">
+                            {% for story in section.all_stories.all|slice:"1" %}
+                                <div class="row section-featured-0 mb-2">
                                     <img class="featured-img" src="{% static "home/images/bird.jpg" %}" alt="img not found">
                                     <div class="content">
                                         <h2 class="text-center mt-4 feature-title"><a href="{% url "home:view_content" story.pk %}">{{ story.title|safe }}</a></h2>
                                         <h6 class="text-center py-2">{% include "home/utils/authors.html" with content=story %} | {{ story.created }}</h6>
                                     </div>
                                 </div>
-                            {% else %}
-
-                            {% endif %}
                             {% endfor %}
+                            <div class="row">
+                            {% for story in section.all_stories.all|slice:"1:5"%}
+                                {% if not forloop.counter|divisibleby:"2" %}<div class="col-md-6 px-0">{% endif %}
+                                    <div class="card align-middle mb-2 rounded-0 section-card-0">
+                                        <div class="img-wrapper">
+                                            <img class="card-img-top mx-auto rounded-0 d--block" src="{% if forloop.counter|divisibleby:"4"  %}
+                                                {% static "home/images/img_4.jpg" %}
+                                                {% elif forloop.counter|divisibleby:"3" %}
+                                                {% static "home/images/iceberg.jpg" %}
+                                                {% elif forloop.counter|divisibleby:"2"  %}
+                                                {% static "home/images/img_5.jpg" %}
+                                                {% else %}
+                                                {% static "home/images/img_2.jpg" %}
+                                                {% endif %}"  alt="featurette-img"/>
+                                        </div>
+                                        <div class="card-body">
+                                                <h6 class="authors font-weight-bold">{% include "home/utils/authors.html" with content=story %}</h6>
+                                                <p class="story-created">{{ story.created }}</p>
+                                                <h4 class="card-title"><a href="{% url "home:view_content" story.pk %}" class="solid-link">{{ story.title|safe }}</a></h4>
+                                        </div>
+                                    </div>
+                                {% if forloop.counter|divisibleby:"2" %}</div>{% endif %}
+                            {% endfor %}
+                            </div>
                         </div>
                     </div>
                 </div>
