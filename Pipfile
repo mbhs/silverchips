@@ -15,6 +15,7 @@ django-polymorphic = "*"
 gunicorn = "*"
 django-crispy-forms = "*"
 django-ordered-model = "*"
+bs4 = "*"
 
 [dev-packages]
 ipython = "*"
