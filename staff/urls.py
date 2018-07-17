@@ -15,8 +15,16 @@ from . import autocomplete
 
 app_name = "staff"
 
+
+gallery_urlpatterns = ([
+    path("<int:pk>/insert/", views.gallery_insert, name="insert"),
+    path("<int:pk>/swap/", views.gallery_swap, name="swap"),
+    path("<int:pk>/remove/", views.gallery_remove, name="remove")
+], "gallery")
+
 create_urlpatterns = ([
     path("story/", views.StoryCreateView.as_view(), name="story"),
+    path("gallery/", views.GalleryCreateView.as_view(), name="gallery"),
     path("image/", views.ImageCreateView.as_view(), name="image"),
     path("video/", views.VideoCreateView.as_view(), name="video"),
     path("audio/", views.AudioCreateView.as_view(), name="audio"),
@@ -25,22 +33,24 @@ create_urlpatterns = ([
 
 content_urlpatterns = ([
     path("list/", views.ContentListView.as_view(), name="list"),
-    path("visibility/set/<int:pk>/<int:level>/", views.set_content_visibility, name="set_visibility"),
-    path("delete/<int:pk>/", views.delete_content, name="delete"),
-    path("edit/<int:pk>/", views.content_edit_view, name="edit"),
-    path("create/", include(create_urlpatterns, "create"))
+    path("<int:pk>/set-visibility/<int:level>/", views.set_content_visibility, name="set_visibility"),
+    path("<int:pk>/delete/", views.delete_content, name="delete"),
+    path("<int:pk>/edit/", views.content_edit_view, name="edit"),
+    path("create/", include(create_urlpatterns, "create")),
+    path("gallery/", include(gallery_urlpatterns, "gallery"))
 ], "content")
 
 user_urlpatterns = ([
-    path("manage/<int:pk>/", views.UserManageView.as_view(), name="manage"),
-    path("profile/edit/<int:pk>/", views.ProfileEditView.as_view(), name="edit_profile"),
+    path("<int:pk>/manage/", views.UserManageView.as_view(), name="manage"),
     path("create/", views.UserCreateView.as_view(), name="create"),
+    path("self-manage/", views.UserSelfManageView.as_view(), name="self_manage"),
     path("list/", views.UserListView.as_view(), name="list")
-], "user")
+], "users")
 
 autocomplete_urlpatterns = ([
-    path("users/", autocomplete.UserAutoComplete.as_view(), name="users"),
-    path("tags/", autocomplete.TagAutoComplete.as_view(), name="tags")
+    path("users/", autocomplete.UserAutocomplete.as_view(), name="users"),
+    path("tags/", autocomplete.TagAutocomplete.as_view(create_field="name"), name="tags"),
+    path("content/", autocomplete.ContentAutocomplete.as_view(), name="content")
 ], "autocomplete")
 
 urlpatterns = [

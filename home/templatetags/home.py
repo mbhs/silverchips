@@ -1,3 +1,6 @@
+import time
+
+from bs4 import BeautifulSoup
 from django import template
 from django.utils.html import mark_safe
 import re
@@ -11,6 +14,7 @@ register = template.Library()
 @register.filter
 def tags(content):
     return ", ".join(map(str, content.tags.all()))
+
 
 @register.simple_tag
 def render_content(user, content, embedding=True):
@@ -29,15 +33,18 @@ def render_content(user, content, embedding=True):
 def expand_embeds(text, user):
     """A filter that expands embedding tags in story HTML.
 
-    For example, <sco:embed id=3734/> will be replaced with the rendered HTML template of content #3734.
+    For example, the contents of <div class="embed-content" data-content-id="3734"/>
+    will be expanded with the rendered HTML template of content #3734.
     """
-    def replace(match):
-        try:
-            content = Content.objects.get(pk=int(match.group(1)))
-        except Content.DoesNotExist:
-            content = None
-        return render_content(user, content)
+    soup = BeautifulSoup(text, "html.parser")
+    for div in soup.findAll('div'):
+        if "content-embed" in div["class"]:
+            pk = int(div["data-content-id"])
+            try:
+                content = Content.objects.get(pk=pk)
+            except Content.DoesNotExist:
+                content = None
+            html = render_content(user, content)
+            div.insert(0, BeautifulSoup(html, "html.parser"))
 
-    # Do a regular expression-based replace operation on embeds
-    text = re.sub("<sco:embed id=(\d+)/>", replace, text)
-    return mark_safe(text)
+    return mark_safe(soup.prettify())

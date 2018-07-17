@@ -5,10 +5,9 @@ of everything a normal user would see while visiting the website.
 """
 
 # Django imports
-from django.db.models import Q
 from django.views.generic import CreateView, ListView
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponseForbidden
+from django.http import HttpResponseForbidden, HttpResponse
 from django.contrib.auth.models import User
 
 # News imports
@@ -16,9 +15,15 @@ from core import models
 from core.permissions import can, user_can
 from home import forms
 
+from django.utils import timezone
+
+from home.templatetags.home import render_content
+
+
 def load_context(request):
     return {
         "section_roots": models.Section.objects.filter(parent=None),  # For navigation bar
+        "now": timezone.now(),  # For navigation bar
         "stories": models.Story.objects.filter(visibility=models.Content.PUBLISHED, embed_only=False)  # For sidebar
     }
 
@@ -51,6 +56,13 @@ def view_section(request, name):
 
 
 @user_can('content.read')
+def preview_content(request, pk):
+    """Render specific content in the newspaper."""
+    content = get_object_or_404(models.Content, pk=pk)
+    return HttpResponse(render_content(request.user, content))
+
+
+@user_can('content.read')
 def view_content(request, pk, slug=None):
     """Render specific content in the newspaper."""
     content = get_object_or_404(models.Content, pk=pk)
@@ -75,14 +87,13 @@ def view_content(request, pk, slug=None):
 
 def view_profile(request, pk):
     """Render the profile of a given staff member."""
-
     user = get_object_or_404(models.User, id=pk)
 
     # Find all the content that this user authored
-    stories = models.Story.objects.filter(authors__in=[user], visibility=models.Content.PUBLISHED, embed_only=True)
-    images = models.Image.objects.filter(authors__in=[user], visibility=models.Content.PUBLISHED, embed_only=True)
-    videos = models.Video.objects.filter(authors__in=[user], visibility=models.Content.PUBLISHED, embed_only=True)
-    audios = models.Audio.objects.filter(authors__in=[user], visibility=models.Content.PUBLISHED, embed_only=True)
+    stories = models.Story.objects.filter(authors__in=[user], visibility=models.Content.PUBLISHED, embed_only=False)
+    images = models.Image.objects.filter(authors__in=[user], visibility=models.Content.PUBLISHED, embed_only=False)
+    videos = models.Video.objects.filter(authors__in=[user], visibility=models.Content.PUBLISHED, embed_only=False)
+    audios = models.Audio.objects.filter(authors__in=[user], visibility=models.Content.PUBLISHED, embed_only=False)
 
     return render(request, "home/profile.html", {
         "user": user,
@@ -104,28 +115,16 @@ def legacy(klass):
 class TaggedContentList(ListView):
     """The content list view that supports pagination."""
     template_name = "home/tag.html"
-    context_object_name = "tag_list"
+    context_object_name = "content_list"
     paginate_by = 25
 
     def get_queryset(self):
         """Return a list of all the tags we're looking at, filtered by search criteria."""
-        content = models.Content.objects.all()
-
-        form = forms.TagSearchForm(self.request.GET)
-        if form.is_valid():
-            # Filter the users by certain criteria
-            query = Q()
-
-            if form.data.get("tags"):
-                query &= Q(tags=form.data['tags'])
-
-            content = content.filter(query)
-
-        return content
+        return models.Content.objects.filter(tags__name=self.kwargs["tag"])
 
     def get_context_data(self, **kwargs):
-        context = super(TaggedContentList, self).get_context_data(**kwargs)
-        context['form'] = forms.TagSearchForm(self.request.GET)
+        context = super().get_context_data(**kwargs)
+        context["tag"] = self.kwargs["tag"]
         return context
 
 

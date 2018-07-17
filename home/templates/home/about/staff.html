@@ -3,24 +3,26 @@
 {% block title %}Staff{% endblock %}
 
 {% block content %}
-  <h1>SilverChips Online Staff</h1>
+  <div class="container">
+    <h1>SilverChips Online Staff</h1>
 
-  <ul>
-    {% for user in active_users %}
-      <li>
-        <a href="{% url 'home:view_profile' user.profile.pk %}"> {{ user.get_full_name }}</a>, {{ user.profile.position }}
-        {% if user.email %}&mdash; <a href="mailto:{{ user.email }}">{{ user.email }}</a>{% endif %}
-      </li>
-    {% endfor %}
-  </ul>
+    <ul>
+      {% for user in active_users %}
+        <li>
+          <a href="{% url 'home:view_profile' user.profile.pk %}"> {{ user.get_full_name }}</a>, {{ user.profile.position }}
+          {% if user.email %}&mdash; <a href="mailto:{{ user.email }}">{{ user.email }}</a>{% endif %}
+        </li>
+      {% endfor %}
+    </ul>
 
-  <h3>Past Staff</h3>
-  <ul>
-    {% for user in inactive_users %}
-      <li>
-        <a href="{% url 'home:view_profile' user.profile.pk %}"> {{ user.get_full_name }}</a>, {{ user.profile.position }}
-        (graduated {{ user.profile.graduation_year }})
-      </li>
-    {% endfor %}
-  </ul>
+    <h3>Past Staff</h3>
+    <ul>
+      {% for user in inactive_users %}
+        <li>
+          <a href="{% url 'home:view_profile' user.profile.pk %}"> {{ user.get_full_name }}</a>, {{ user.profile.position }}
+          (graduated {{ user.profile.graduation_year }})
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
 {% endblock %}

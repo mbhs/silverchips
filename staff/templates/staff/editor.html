@@ -2,18 +2,29 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-<h1>{{ editing }} Editor</h1>
+  <h1>{{ editing }} Editor</h1>
 
-<form class="form-horizontal" method="post" enctype="multipart/form-data">
+  {% if object and object.get_absolute_url %}
+      <a class="btn btn-block btn-lg btn-dark" target="_blank" href="{{ object.get_absolute_url }}">View {{ editing }} <i class="fas fa-external-link-alt"></i></a>
+      <br/>
+  {% endif %}
+
+  <form class="form-horizontal" method="post" enctype="multipart/form-data">
     {% csrf_token %}
 
-    {% crispy form form.helper %}
+    {% if form %}
+      {% crispy form form.helper %}
+    {% endif %}
 
-    {% for extra_form in extra_forms %}
-        {% crispy extra_form extra_form.helper %}
-    {% endfor %}
+    {% if forms %}
+      {% for one_form in forms %}
+        {% crispy one_form one_form.helper %}
+      {% endfor %}
+    {% endif %}
 
-    <button type="submit" class="btn btn-success btn-block">Save <i class="fas fa-save"></i></button>
-    {{ form.media }}
-</form>
+    <button type="submit" class="btn btn-lg btn-success btn-block">Save <i class="fas fa-save"></i></button>
+  </form>
+
+  {% block subeditor %}
+  {% endblock %}
 {% endblock %}

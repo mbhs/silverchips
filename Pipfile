@@ -5,16 +5,16 @@ name = "pypi"
 
 [packages]
 django = "*"
-django-autocomplete-light = "*"
+django-autocomplete-light = ">=3.3.0rc6"
 django-forms-bootstrap = "*"
 django-static-precompiler = "*"
 six = "*"
 pillow = "*"
 django-polymorphic = "*"
-django-extra-views = "*"
 "psycopg2" = "*"
 gunicorn = "*"
 django-crispy-forms = "*"
+django-ordered-model = "*"
 
 [dev-packages]
 ipython = "*"

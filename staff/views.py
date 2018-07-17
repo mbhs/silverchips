@@ -86,7 +86,6 @@ class EditorMixin(View):
 # Content views
 class ContentListView(LoginRequiredMixin, ListView):
     """The content list view that supports pagination."""
-
     template_name = "staff/content/list.html"
     context_object_name = "content_list"
     paginate_by = 25
@@ -142,7 +141,10 @@ class ContentCreateView(ContentChangeMixin, PermissionRequiredMixin, EditorMixin
     permission_required = 'core.create_content'
 
     def get_initial(self):
-        return dict(super(ContentCreateView, self).get_initial(), authors=[self.request.user])
+        return dict(super().get_initial(), authors=[self.request.user])
+
+    def get_success_url(self):
+        return reverse("staff:content:edit", kwargs={'pk': self.object.pk})
 
 
 class StoryCreateView(ContentCreateView):
@@ -150,6 +152,14 @@ class StoryCreateView(ContentCreateView):
     model = models.Story
     form_class = forms.StoryForm
     editing = "Story"
+
+
+class GalleryCreateView(ContentCreateView):
+    """View for creating a new gallery."""
+    model = models.Gallery
+    form_class = forms.GalleryForm
+    editing = "Gallery"
+    template_name = "staff/content/gallery/editor.html"
 
 
 class ImageCreateView(ContentCreateView):
@@ -188,6 +198,78 @@ class StoryEditView(ContentEditView):
     model = models.Story
     form_class = forms.StoryForm
     editing = "Story"
+    template_name = "staff/content/story/editor.html"
+
+    def get_context_data(self, *args, **kwargs):
+        data = super().get_context_data(*args, **kwargs)
+        data['content_embed_form'] = forms.ContentInsertionForm()
+        return data
+
+
+class GalleryEditView(ContentEditView):
+    """View for editing galleries."""
+    model = models.Gallery
+    form_class = forms.GalleryForm
+    editing = "Gallery"
+    template_name = "staff/content/gallery/editor.html"
+
+    def get_context_data(self, *args, **kwargs):
+        data = super().get_context_data(*args, **kwargs)
+        data['insertion_form'] = forms.ContentInsertionForm()
+        return data
+
+
+def gallery_insert(request, pk):
+    gallery = get_object_or_404(models.Gallery, pk=pk)
+    entry = get_object_or_404(models.Content, pk=request.POST.get("entry"))
+    link = models.GalleryEntryLink(gallery=gallery, entry=entry)
+    link.save()
+
+    return render(request, "staff/content/gallery/entry_list.html", {
+        'gallery': gallery
+    })
+
+
+def gallery_swap(request, pk):
+    gallery = get_object_or_404(models.Gallery, pk=pk)
+
+    print(gallery.entry_links.all())
+
+    try:
+        link1 = gallery.entry_links.all()[int(request.POST['index1'])]
+        link2 = gallery.entry_links.all()[int(request.POST['index2'])]
+    except (IndexError, ValueError):
+        return HttpResponse(status=400)
+
+    print(link1, link2)
+
+    link1.swap(link2)
+    link1.save()
+
+    print(gallery.entry_links.all())
+
+    return render(request, "staff/content/gallery/entry_list.html", {
+        'gallery': gallery
+    })
+
+
+def gallery_remove(request, pk):
+    gallery = get_object_or_404(models.Gallery, pk=pk)
+
+    try:
+        print(request.body)
+        link = gallery.entry_links.all()[int(request.POST['index'])]
+        print("here")
+    except (IndexError, ValueError):
+        return HttpResponse(status=400)
+
+    link.delete()
+    print("HIEY")
+
+    return render(request, "staff/content/gallery/entry_list.html", {
+        'gallery': gallery
+    })
+
 
 class ImageEditView(ContentEditView):
     """View for editing images."""
@@ -222,6 +304,7 @@ def content_edit_view(request, pk):
     # Switch which view gets received based on the kind of content
     return {
         'Story': StoryEditView,
+        'Gallery': GalleryEditView,
         'Image': ImageEditView,
         'Video': VideoEditView,
         'Audio': AudioEditView,
@@ -289,7 +372,7 @@ class UserListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
 
             users = users.filter(query)
 
-        return users
+        return users.order_by('-pk')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -297,34 +380,68 @@ class UserListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         return context
 
 
+class UserChangeView(LoginRequiredMixin, EditorMixin, View):
+    def get_instances(self, request, **kwargs):
+        if not self.update_existing_users:
+            return None, None
+        if self.request_user_only:
+            user = request.user
+        else:
+            user = get_object_or_404(models.User.objects, pk=kwargs.get('pk'))
+        return user, user.profile
 
-class UserChangeMixin(LoginRequiredMixin, PermissionRequiredMixin):
-    permission_required = 'auth.manage_users'
+    def get(self, request, **kwargs):
+        user, profile = self.get_instances(request, **kwargs)
+        user_form = self.user_form_class(instance=user, request=request)
+        profile_form = self.profile_form_class(instance=profile)
 
-    # def form_valid(self):
+        return render(request, "staff/editor.html", {
+            "forms": (user_form, profile_form),
+            "editing": "User"
+        })
+
+    def post(self, request, **kwargs):
+        user, profile = self.get_instances(request, **kwargs)
+        user_form = self.user_form_class(request.POST, request.FILES, request=request, instance=user)
+        profile_form = self.profile_form_class(request.POST, request.FILES, instance=profile)
+
+        if user_form.is_valid() and profile_form.is_valid():
+            # Check if they set a new password
+            if user_form.cleaned_data['new_password']:
+                user_form.instance.set_password(user_form.cleaned_data['new_password'])
+
+            user_form.save()
+            profile_form.save()
+            return redirect(self.redirect_url)
+
+        return render(request, "staff/editor.html", {
+            "forms": [user_form, profile_form],
+            "editing": "User"
+        })
 
 
-class UserCreateView(UserChangeMixin, CreateView):
-    """Base view for creating users."""
-
-    editing = "User"
-
-
-class UserManageView(UserChangeMixin, UpdateView):
-    """Base view for editing users."""
-
-    model = models.User
-    form_class = forms.UserForm
-    editing = "User"
+class UserCreateView(UserChangeView):
+    user_form_class = forms.UserManageForm
+    profile_form_class = forms.ProfileManageForm
+    redirect_url = "staff:users:list"
+    update_existing_users = False
+    request_user_only = False
 
 
-class ProfileEditView(LoginRequiredMixin, UserCanMixin, EditorMixin, UpdateView):
-    """Base view for editing user profiles."""
-    action = 'users.edit_profile'
+class UserManageView(UserChangeView):
+    user_form_class = forms.UserManageForm
+    profile_form_class = forms.ProfileManageForm
+    redirect_url = "staff:users:list"
+    update_existing_users = True
+    request_user_only = False
 
-    model = models.Profile
-    form_class = forms.ProfileForm
-    editing = "Profile"
+
+class UserSelfManageView(UserChangeView):
+    user_form_class = forms.UserSelfManageForm
+    profile_form_class = forms.ProfileSelfManageForm
+    redirect_url = "staff:dashboard"
+    update_existing_users = True
+    request_user_only = True
 
 
 # Comment views
@@ -336,5 +453,5 @@ class CommentListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
 @csrf_protect
 @permission_required("") # STUB_COMMENT
 @require_http_methods(["PATCH"])
-def approve_content(request, pk, approved):
+def approve_comment(request, pk, approved):
     pass # STUB_COMMENT

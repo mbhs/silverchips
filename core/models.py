@@ -6,6 +6,7 @@ from django.utils import timezone
 from django.utils.text import slugify
 from django.core.validators import RegexValidator
 from django.urls import reverse
+from ordered_model.models import OrderedModel
 from polymorphic.models import PolymorphicModel
 
 
@@ -21,7 +22,8 @@ class Profile(models.Model):
     user = models.OneToOneField("User", related_name="profile", on_delete=models.CASCADE)
 
     # Personal information
-    biography = models.TextField()
+    biography = models.TextField(help_text="A short biography, often including likes and dislikes, accomplishments,"
+                                           " etc. Should be several sentences minimum.")
     avatar = models.ImageField(null=True)
     position = models.TextField()
     graduation_year = models.IntegerField(default=timezone.now().year+4)
@@ -80,7 +82,7 @@ class User(auth.User):
 class Tag(models.Model):
     """Basic tag model for content."""
 
-    name = models.CharField(max_length=32)
+    name = models.CharField(max_length=32, unique=True)
 
     def __str__(self):
         """Represent the tag as a string.
@@ -90,19 +92,21 @@ class Tag(models.Model):
         """
         return self.name
 
+
 class Content(PolymorphicModel):
     """A generic content model.
 
     This container provides the metaclass for all types of media,
     including stories, images, videos, galleries, and podcasts. Each
     subclass should be capable of rendering itself to HTML so that it
-    can be generically displayed or embedded.
+    can be generically displayed or embedded. States pertaining to editing and publishing
+    status are also stored.
     """
 
     # Basic identification information
     title = models.TextField()
     description = models.TextField()
-    tags = models.ManyToManyField(Tag)
+    tags = models.ManyToManyField(Tag, blank=True)
     legacy_id = models.IntegerField(null=True)
 
     # Time information
@@ -118,7 +122,11 @@ class Content(PolymorphicModel):
     views = models.IntegerField(default=0)
 
     # Whether this content should show up by itself
-    embed_only = models.BooleanField(default=False)
+    embed_only = models.BooleanField(default=False, help_text="Whether this content should be used only in the context"
+                                     " of embedding into other content (especially stories), or whether it should"
+                                     " appear independently on the site. You will often mark content as embed only"
+                                     " when it is not original or when it is meaningless outside of some"
+                                     " broader story.")
 
     # Content visibility workflow constants
     DRAFT = 1
@@ -294,13 +302,7 @@ class Poll(Content):
 
 
 class Story(Content):
-    """The main story model.
-
-    Stories are the backbone of a news site, and are one of the most
-    important models. In addition to storing information relating to
-    the written contents, states pertaining to editing and publishing
-    status are also stored.
-    """
+    """The main story model."""
     lead = models.TextField()  # Lead paragraph
     text = models.TextField()  # Full text
     cover = models.ForeignKey(Image, null=True, on_delete=models.SET_NULL)  # Cover photo
@@ -311,6 +313,27 @@ class Story(Content):
 
     class Meta:
         verbose_name_plural = "stories"
+
+
+class Gallery(Content):
+    """A model representing an ordered gallery of other Content."""
+    entries = models.ManyToManyField(Content, through='core.GalleryEntryLink', related_name="containing_galleries")
+
+    template = "home/content/gallery.html"
+    descriptor = "Gallery"
+    hide_caption = True
+
+    def entries_in_order(self):
+        return self.entries.order_by("gallery_links")
+
+
+class GalleryEntryLink(OrderedModel):
+    gallery = models.ForeignKey(Gallery, on_delete=models.CASCADE, related_name="entry_links")
+    entry = models.ForeignKey(Content, on_delete=models.CASCADE, related_name="gallery_links")
+    order_with_respect_to = 'gallery'
+
+    class Meta:
+        ordering = ('gallery', 'order')
 
 
 class Comment(models.Model):

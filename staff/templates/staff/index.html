@@ -15,14 +15,14 @@
     <div class="row">
         {% if user|can:"core.edit_profile" %}
         <div class="col-sm-6 col-xs-12">
-            <a class="btn btn-info btn-lg btn-block my-3" href="{% url "staff:user:edit_profile" request.user.pk %}">Edit Profile <i class="fas fa-user"></i></a>
+            <a class="btn btn-info btn-lg btn-block my-3" href="{% url "staff:users:self_manage" %}">Edit Profile <i class="fas fa-user"></i></a>
         </div>
         {% endif %}
     </div>
 
     <h3>Danger Zone</h3>
     {% if user|can:"auth.manage_users" %}
-    <a class="btn btn-danger btn-lg btn-block my-3" href="{% url "staff:user:list" %}">User List <i class="fas fa-users"></i></a>
+    <a class="btn btn-danger btn-lg btn-block my-3" href="{% url "staff:users:list" %}">User List <i class="fas fa-users"></i></a>
     {% endif %}
 {# STUB_COMMENT #}
 
