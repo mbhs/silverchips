@@ -9,6 +9,7 @@ $fugaz-one: "Fugaz One", serif;
 $site-gray: #373737;
 $site-white: #ffffff;
 $site-red: #c54c3a;
+$site-light-red: lighten($site-red, 10);
 
 $site-background: $site-white;
 $site-header: $site-gray;
@@ -46,19 +47,34 @@ $grid-breakpoints: (
   margin-right: auto;
   margin-left: auto;
 }
+.medium-container {
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
 @media (min-width: 768px) {
   .large-container {
     max-width: calc(100vw - 100px);
+  }
+  .medium-container {
+    max-width: calc(100vw - 200px);
   }
 }
 @media (min-width: 992px) {
   .large-container {
     max-width: calc(100vw - 160px);
   }
+  .medium-container {
+    max-width: calc(100vw - 240px);
+  }
 }
 @media (min-width: 1280px) {
   .large-container {
     max-width: calc(100vw - 200px);
+  }
+  .medium-container {
+    max-width: calc(100vw - 280px);
   }
 }
 

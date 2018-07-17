@@ -5,62 +5,167 @@
 {% load static %} <!-- FOR TESTING - IMAGES -->
 
 {% block content %}
-  {% include "home/includes/index-sm-sidebar.html" %}
-  {% for section in section_roots %}
-    <div id="{{ section.title }}">
-      <h2 class="container rounded display-4 mb-4 py-2 text-center text-uppercase section-header"><a href="{% url "home:view_section" section.name %}">{{ section.title }}</a></h2>
-
-      <div class="section-featured mb-4 my-0 py-0">
-        {% for story in section.all_stories.all|slice:"1" %}
-          <img class="featured-img img-fluid" src="{% if forloop.parentloop.counter|divisibleby:"3"  %}
-                                    {% static "home/images/sunset.jpg" %}
-                                 {% elif forloop.parentloop.counter|divisibleby:"2"  %}
-                                    {% static "home/images/iceberg.jpg" %}
-                                 {% else %}
-                                    {% static "home/images/beach.jpg" %}
-                                 {% endif %}" alt="image not found"/>
-
-          <div class="content container text-center">
-            <h2 class="display-4 mt-5 feature-title"><a href="{% url "home:view_content" story.pk %}">{{ story.title|safe }}</a></h4>
-              <h6 class="lead py-1">{% include "home/utils/authors.html" with content=story %} | {{ story.created }}</h6>
-          </div>
-        {% endfor %}
-      </div>
-
-      <div class="container"><div class="row">
-        {% for story in section.all_stories.all|slice:"1:5" %}
-          {% if not forloop.counter|divisibleby:"2" %}<div class="col-md-6">{% endif %}
-
-        <div class="card align-middle rounded-0 mb-4 section-card">
-          <div class="img-wrapper"><img class="card-img-top mx-auto rounded-0 d-inline-block" src="{% if forloop.counter|divisibleby:"4" %}
+    {% include "home/includes/index-sm-sidebar.html" %}
+            {% for section in section_roots %}
+                {% if section.name == "news" %}
+                <div id="{{ section.title }}" class="medium-container">
+                    <h2 class="container display-4 mb-4 py-2 text-center text-uppercase section-header"><a href="{% url "home:view_section" section.name %}">{{ section.title }}</a></h2>
+                    
+                    <div class="row mb-4">
+                        <div class="col-md-3 section-recently-0">
+                            <h1 class="recently">Recently...</h1>
+                            <hr>
+                            {% for story in section.all_stories.all|slice:"7"  %}
+                                <div>
+                                    <h5 class="title"><a href="{% url "home:view_content" story.pk %}">{{ story.title|safe }}</a></h4>
+                                    <p class="in-section"><a href="{% url "home:view_section" story.section.name %}" class="solid-link">{{ story.section.title }}</a> | {{ story.created }}</p>
+                                    <hr>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <div class="col-md-9">
+                            {% for story in section.all_stories.all|slice:"1" %}
+                                <div class="row section-featured-0 mb-2">
+                                    <img class="featured-img" src="{% static "home/images/bird.jpg" %}" alt="img not found">
+                                    <div class="content">
+                                        <h2 class="text-center mt-4 feature-title"><a href="{% url "home:view_content" story.pk %}">{{ story.title|safe }}</a></h2>
+                                        <h6 class="text-center py-2">{% include "home/utils/authors.html" with content=story %} | {{ story.created }}</h6>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                            <div class="row">
+                            {% for story in section.all_stories.all|slice:"1:5"%}
+                                {% if not forloop.counter|divisibleby:"2" %}<div class="col-md-6 px-0">{% endif %}
+                                    <div class="card mb-2 rounded-0 section-card-0">
+                                        <div class="img-wrapper">
+                                            <img class="card-img-top mx-auto rounded-0 d--block" src="{% if forloop.counter|divisibleby:"4"  %}
                                                 {% static "home/images/img_4.jpg" %}
-                                             {% elif forloop.counter|divisibleby:"3" %}
-                                                {% static "home/images/bird.jpg" %}
-                                             {% elif forloop.counter|divisibleby:"2"  %}
-                                                {% static "home/images/chair.jpg" %}
-                                             {% else %}
-                                                {% static "home/images/grass.jpg" %}
-                                             {% endif %}"  alt="featurette-img"/></div>
-          <div class="card-body">
-            <h6 class="authors font-weight-bold">{% include "home/utils/authors.html" with content=story %}</h6>
-            <p>{{ story.created }}</p>
-            <h4 class="card-title"><a href="{% url "home:view_content" story.pk %}" class="solid-link">{{ story.title|safe }}</a></h4>
-          </div>
-        </div>
+                                                {% elif forloop.counter|divisibleby:"3" %}
+                                                {% static "home/images/iceberg.jpg" %}
+                                                {% elif forloop.counter|divisibleby:"2"  %}
+                                                {% static "home/images/img_5.jpg" %}
+                                                {% else %}
+                                                {% static "home/images/img_2.jpg" %}
+                                                {% endif %}"  alt="featurette-img"/>
+                                        </div>
+                                        <div class="card-body">
+                                                <h6 class="authors d-inline-block">{% include "home/utils/authors.html" with content=story %}</h6>
+                                                <h6 class="d-inline-block w-auto text-left">{{ story.created }}</h6>
+                                                <h4 class="card-title"><a href="{% url "home:view_content" story.pk %}" class="solid-link">{{ story.title|safe }}</a></h4>
+                                        </div>
+                                    </div>
+                                {% if forloop.counter|divisibleby:"2" %}</div>{% endif %}
+                            {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-        {% if forloop.counter|divisibleby:"2" %}</div>{% endif %}
-        {% endfor %}
-      </div></div>
-      <hr class="mt-3 mb-5" />
-    </div>
-  {% endfor %}
+                {% elif section.name == "lifestyle" %}
+                    <div id="{{ section.title }}">
+                        <h2 class="container display-4 mb-4 py-2 text-center text-uppercase section-header"><a href="{% url "home:view_section" section.name %}">{{ section.title }}</a></h2>
+
+                        <div class="section-featured-1 mb-4 my-0 py-0">
+                            {% for story in section.all_stories.all|slice:"1" %}
+                                <img class="featured-img img-fluid" src="{% static "home/images/iceberg.jpg" %}" alt="image not found"/>
+
+                                <div class="content container text-center">
+                                    <h2 class="display-4 mt-5 feature-title"><a href="{% url "home:view_content" story.pk %}">{{ story.title|safe }}</a></h4>
+                                    <h6 class="lead py-1">{% include "home/utils/authors.html" with content=story %} | {{ story.created }}</h6>
+                                </div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="container-fluid"><div class="row">
+                            {% for story in section.all_stories.all|slice:"1:7" %}
+                                {% if not forloop.counter|divisibleby:"2" %}<div class="col-md-4">{% endif %}
+
+                                        <div class="card align-middle rounded-0 mb-4 section-card-1">
+                                            <div class="img-wrapper">
+                                                <img class="card-img-top mx-auto rounded-0 d-block" src="{% if forloop.counter|divisibleby:"4"  %}
+                                                    {% static "home/images/img_4.jpg" %}
+                                                 {% elif forloop.counter|divisibleby:"3" %}
+                                                    {% static "home/images/bird.jpg" %}
+                                                 {% elif forloop.counter|divisibleby:"2"  %}
+                                                    {% static "home/images/chair.jpg" %}
+                                                 {% else %}
+                                                    {% static "home/images/grass.jpg" %}
+                                                 {% endif %}"  alt="featurette-img"/>
+                                             </div>
+                                             <div class="in-section">
+                                                 <a href="{% url "home:view_section" story.section.name %}" class="solid-link">{{ story.section.title }} </a>
+                                             </div>
+                                             <div class="card-body">
+                                                 <h6 class="authors font-weight-bold">{% include "home/utils/authors.html" with content=story %}</h6>
+                                                 <p class="story-created">{{ story.created }}</p>
+                                                 <h4 class="card-title"><a href="{% url "home:view_content" story.pk %}" class="solid-link">{{ story.title|safe }}</a></h4>
+                                                 <p>
+                                                   {{ story.lead|safe }}
+                                                 </p>
+                                             </div>
+                                        </div>
+
+                                {% if forloop.counter|divisibleby:"2" %}</div>{% endif %}
+                            {% endfor %}
+                        </div></div>
+                        
+                        <hr class="mt-3 mb-5" />
+                    </div>
+
+                {% elif section.name == "sports" %}
+                    <h2 class="container display-4 mb-4 py-2 text-center text-uppercase section-header"><a href="{% url "home:view_section" section.name %}">{{ section.title }}</a></h2>
+
+                    <div class="medium-container">
+                        <div class="row">
+                            <div class="col-md-9">
+                                <div class="row">
+                                    {% for story in section.all_stories.all|slice:"6" %}
+                                        {% if forloop.first or forloop.counter|divisibleby:"4" %}<div class="col-6">{% endif %}
+
+                                            <div class="card align-middle rounded-0 mb-4 section-card-2">
+                                                <div class="card-body">
+                                                    <div class="card-body-top d-inline-block mb-3">
+                                                            <img class="card-img-top mx-auto rounded-0 d-block" src="{% if forloop.counter|divisibleby:"4"  %}
+                                                                {% static "home/images/img_4.jpg" %}
+                                                                {% elif forloop.counter|divisibleby:"3" %}
+                                                                {% static "home/images/bird.jpg" %}
+                                                                {% elif forloop.counter|divisibleby:"2"  %}
+                                                                {% static "home/images/chair.jpg" %}
+                                                                {% else %}
+                                                                {% static "home/images/grass.jpg" %}
+                                                                {% endif %}"  alt="featurette-img"/>
+                                                    </div>
+                                                    <div class="card-body-bottom d-inline-block">
+                                                        <h6 class="authors font-weight-bold">{% include "home/utils/authors.html" with content=story %}</h6>
+                                                        <p class="story-created">{{ story.created }}</p>
+                                                        <h4 class="card-title"><a href="{% url "home:view_content" story.pk %}" class="solid-link">{{ story.title|safe }}</a></h4>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        {% if forloop.counter == 3 or forloop.last %}</div>{% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="col-md-3 subscribe-col">
+                                <div class="card rounded-0 mb-4 subscribe-2 w-100 h-75">
+                                    <div class="card-img-top my-4 px-2">
+                                        {% include "home/includes/_logo-svg.html" %}
+                                    </div>
+                                    <div class="card-title text-center">
+                                        <h2>Subscribe!</h2>
+                                    </div>
+                                    <div class="card-body text-center">
+                                        <p class="lead">
+                                            Get the latest Silver<span style="color:#a31700">Chips</span> newsletter right in your inbox! Stay up to date with local and national news! Subscribe now!
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+
+            {% endfor %}
+            <script src="{% static "home/scripts/index.js" %}"></script>
 {% endblock %}
-
-{% comment %} <img class="img-fluid mx-auto"
-src="{% if forloop.counter|divisibleby:"3" %}
-        {% static "home/images/img_2.jpg" %}
-    {% elif forloop.counter|divisibleby:"2"  %}
-        {% static "home/images/work_5.jpg" %}
-    {% else %}
-        {% static "home/images/img_4.jpg" %}
-    {% endif %}"  alt="featurette-img"> {% endcomment %}
