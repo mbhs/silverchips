@@ -12,23 +12,12 @@
       <h1 class="container display-4 mb-4 py-2 text-center text-uppercase section-header"><a href="{% url "home:view_section" section.name %}">{{ section.title }}</a></h1>
 
       <div class="row mb-4">
-        <div class="col-md-3 section-recently-0">
-          <h1 class="recently">Recently...</h1>
-          <hr>
-          {% for story in section.all_stories.all|slice:"7"  %}
-            <div>
-              <h5 class="title"><a href="{% url "home:view_content" story.pk %}">{{ story.title|safe }}</a></h4>
-                <p class="in-section"><a href="{% url "home:view_section" story.section.name %}" class="solid-link">{{ story.section.title }}</a> | {{ story.created }}</p>
-                <hr>
-            </div>
-          {% endfor %}
-        </div>
         <div class="col-md-9">
           {% for story in section.all_stories.all|slice:"1" %}
             <div class="row section-featured-0 mb-2">
               <img class="featured-img" src="{% static "home/images/bird.jpg" %}" alt="img not found">
               <div class="content">
-                <h2 class="text-center mt-4 feature-title"><a href="{% url "home:view_content" story.pk %}">{{ story.title|safe }}</a></h2>
+                <h2 class="text-center mt-4 feature-title"><a href="{{ story.get_absolute_url }}">{{ story.title|safe }}</a></h2>
                 <h6 class="text-center py-2">{% include "home/utils/authors.html" with content=story %} | {{ story.created }}</h6>
               </div>
             </div>
@@ -57,6 +46,17 @@
             {% if forloop.counter|divisibleby:"2" %}</div>{% endif %}
             {% endfor %}
           </div>
+        </div>
+        <div class="col-md-3 section-recently-0 pl-5">
+          <h1 class="recently">Latest</h1>
+          <hr>
+          {% for story in section.all_stories.all|slice:"7"  %}
+            <div>
+              <h4 class="title"><a href="{% url "home:view_content" story.pk %}">{{ story.title|safe }}</a></h4>
+              <p class="in-section"><a href="{% url "home:view_section" story.section.name %}" class="solid-link">{{ story.section.title }}</a> | {{ story.created }}</p>
+              <hr>
+            </div>
+          {% endfor %}
         </div>
       </div>
     {% endfor %}
