@@ -48,3 +48,15 @@ def expand_embeds(text, user):
             div.insert(0, BeautifulSoup(html, "html.parser"))
 
     return mark_safe(soup.prettify())
+
+
+# TODO: FIX THIS
+@register.simple_tag(takes_context=True)
+def see_content(context, content, num_content):
+        if 'seen_content' not in context:
+            context['seen_content'] = set()
+        print(context['seen_content'])
+        context['new_content'] = content.exclude(pk__in=list(context['seen_content']))[:num_content]
+        context['seen_content'].update(context['new_content'].values_list('pk', flat=True))
+        print(context['seen_content'])
+        return ""

@@ -1,5 +1,7 @@
 {% extends "home/base.html" %}
 {% load static %}
+{% load home %}
+
 {% block title %}
   {{ section.title }}
 {% endblock %}
@@ -11,6 +13,8 @@
     <hr class="section-separator">
     {% for subsection, stories in subsections %}
       {% if stories.count > 0 %}
+        {% see_content stories 5 %}
+
         <div class="row">
           <div class="col-md-2">
             <h5>
@@ -22,8 +26,8 @@
             </h5>
           </div>
           <div class="col-md-10">
-            {% for story in stories.all|slice:":5" %}
-              {% include "home/utils/story_summary.html" with story=story %}
+            {% for story in new_content.all|slice:":5" %}
+            {% include "home/utils/story_summary.html" with story=story %}
               <hr/>
             {% endfor %}
           </div>

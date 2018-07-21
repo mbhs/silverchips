@@ -13,7 +13,6 @@ from django.contrib.auth.models import User
 # News imports
 from core import models
 from core.permissions import can, user_can
-from home import forms
 
 from django.utils import timezone
 
@@ -22,7 +21,7 @@ from home.templatetags.home import render_content
 
 def load_context(request):
     return {
-        "section_roots": models.Section.objects.filter(parent=None),  # For navigation bar
+        "section_roots": models.Section.objects.filter(parent=None, visible=True),  # For navigation bar
         "now": timezone.now(),  # For navigation bar
         "stories": models.Story.objects.filter(visibility=models.Content.PUBLISHED, embed_only=False)  # For sidebar
     }
@@ -30,7 +29,13 @@ def load_context(request):
 
 def index(request):
     """Render the index page of the SilverChips site."""
-    return render(request, "home/index.html")
+    return render(request, "home/index.html", {
+        "dense_sections": models.Section.objects.filter(index_display=models.Section.DENSE),
+        "compact_sections": models.Section.objects.filter(index_display=models.Section.COMPACT),
+        "list_sections": models.Section.objects.filter(index_display=models.Section.LIST),
+        "feature_sections": models.Section.objects.filter(index_display=models.Section.FEATURES),
+        "main_sections": models.Section.objects.filter(index_display=models.Section.MAIN)
+    })
 
 
 STORY_COUNT = 3
@@ -41,13 +46,10 @@ def view_section(request, name):
     section = get_object_or_404(models.Section, name=name)
 
     # Get the top STORY_COUNT stories in the section
-    top_stories = section.all_stories()[:STORY_COUNT]
-    subsections = [(None, top_stories)]
+    subsections = [(None, section.all_stories)]
 
-    for subsection in section.subsections.all():
-        subsections.append((subsection,
-                            subsection.all_stories().filter(visibility=models.Content.PUBLISHED)
-                            .exclude(id__in=top_stories.values_list('id', flat=True))))  # Exclude our top stories
+    for subsection in section.subsections.filter(visible=True):
+        subsections.append((subsection, subsection.all_stories().filter(visibility=models.Content.PUBLISHED)))
 
     return render(request, "home/section.html", {
         "section": section,

@@ -187,7 +187,23 @@ class Section(models.Model):
 
     name = models.CharField(max_length=32, unique=True)  # Internal tracking name (used in URLs)
     title = models.CharField(max_length=64)  # External name for display
-    active = models.BooleanField(default=True)
+
+    visible = models.BooleanField(default=True)  # Whether this section should show up on the site
+
+    NONE = -1
+    DENSE = 0
+    COMPACT = 1
+    LIST = 2
+    FEATURES = 3
+    MAIN = 4
+
+    index_display = models.IntegerField(default=NONE, choices=(
+        (NONE, "-1"),
+        (DENSE, "dense"),
+        (COMPACT, "compact"),
+        (LIST, "list"),
+        (FEATURES, "features"),
+        (MAIN, "main")))
 
     def __str__(self):
         """Represent this Section as a string."""
@@ -221,6 +237,10 @@ class Section(models.Model):
     def is_root(self):
         """Check whether this Section is a root Section."""
         return self.parent is None
+
+    def get_absolute_url(self):
+        """Find the URL through which this Section can be accessed."""
+        return reverse('home:view_section', args=[self.name])
 
     class Meta:
         verbose_name_plural = "sections"
