@@ -5,7 +5,7 @@ name = "pypi"
 
 [packages]
 django = "*"
-django-autocomplete-light = ">=3.3.0rc6"
+django-autocomplete-light = "*"
 django-forms-bootstrap = "*"
 django-static-precompiler = "*"
 six = "*"
