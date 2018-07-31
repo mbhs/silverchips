@@ -50,19 +50,19 @@ class ContentSearchForm(HorizontalMixin, forms.Form):
     helper = FormHelper()
     helper.form_tag = False
     helper.disable_csrf = True
-    # type = forms.ModelMultipleChoiceField(label=)
 
 
 class ContentForm(VerticalMixin, forms.ModelForm):
     """A generic editor for any kind of content."""
     class Meta:
         model = models.Content
-        fields = ['title', 'authors', 'guest_authors', 'description', 'embed_only', 'tags']
+        fields = ['title', 'authors', 'guest_authors', 'description', 'embed_only', 'tags', 'section']
         widgets = {
             'title': forms.widgets.TextInput(),
             'description': RichTextWidget(short=True),
             'authors': autocomplete.ModelSelect2Multiple(url="staff:autocomplete:users"),
-            'tags': autocomplete.ModelSelect2Multiple(url="staff:autocomplete:tags")
+            'tags': autocomplete.ModelSelect2Multiple(url="staff:autocomplete:tags"),
+            'section': autocomplete.ModelSelect2(url="staff:autocomplete:section")
         }
         abstract = True
 
@@ -71,7 +71,7 @@ class StoryForm(ContentForm):
     """The story editor form."""
     class Meta(ContentForm.Meta):
         model = models.Story
-        fields = ContentForm.Meta.fields + ['lead', 'text']
+        fields = ContentForm.Meta.fields + ['second_deck', 'text']
         widgets = dict(ContentForm.Meta.widgets, text=RichTextWidget(embed=True), lead=RichTextWidget(short=True))
 
 
@@ -166,7 +166,7 @@ class UserManageForm(VerticalMixin, forms.ModelForm):
 
     class Meta:
         model = models.User
-        fields = ['username', 'first_name', 'last_name', 'email', 'groups', 'is_active']
+        fields = ['username', 'first_name', 'last_name', 'email', 'groups', 'is_active', 'is_superuser']
         widgets = {
             'groups': forms.CheckboxSelectMultiple()
         }

@@ -69,7 +69,6 @@ class User(auth.User):
 
     def __repr__(self):
         """Represent the user as a string."""
-
         return "User[{}]".format(self.get_full_name())
 
     class Meta:
@@ -150,9 +149,8 @@ class Content(PolymorphicModel):
         """Return a slugified version of this Content's title for use in URLs."""
         return slugify(self.title)
 
-    def __str__(self):
+    def __repr__(self):
         """Represent this Content as a string."""
-
         return "Content[{}:{}]".format(self.type, self.title)
 
     def has_tag(self, name):
@@ -207,7 +205,7 @@ class Section(models.Model):
 
     def __str__(self):
         """Represent this Section as a string."""
-        return 'Section[{}]'.format(self.title)
+        return self.title
 
     def get_ancestors(self):
         """Get all Sections that are ancestors of this Section."""
@@ -231,7 +229,7 @@ class Section(models.Model):
         return descendants
 
     def all_content(self):
-        """Get all the Content that belong to this Section for display in section templates."""
+        """Get all the Content that belongs to this Section for display in section templates."""
         return Content.objects.filter(visibility=Content.PUBLISHED, embed_only=False,
                                       section__in=self.get_descendants())
 
