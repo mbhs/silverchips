@@ -64,7 +64,7 @@
     {% for section in feature_sections %}
       <h1 class="display-4 mb-4 py-2 text-center text-uppercase section-header"><a href="{{ section.get_absolute_url }}">{{ section.title }}</a></h1>
 
-      {% see_content section.all_stories 6 %}
+      {% reserve_content section.all_stories 6 %}
       <div class="card-columns">
         {% for content in new_content %}
           <div class="card align-middle rounded-0 mb-4 section-card-1">
@@ -102,7 +102,7 @@
     {% for section in list_sections %}
       <h1 class="display-4 mb-4 py-2 text-center text-uppercase section-header"><a href="{{ section.get_absolute_url }}">{{ section.title }}</a></h1>
 
-      {% see_content section.all_stories 12 %}
+      {% reserve_content section.all_stories 12 %}
       {% for content in new_content %}
         <div class="row">
           <div class="col-2">
@@ -120,7 +120,7 @@
       <h1 class="display-4 mb-4 py-2 text-center text-uppercase section-header"><a href="{{ section.get_absolute_url }}">{{ section.title }}</a></h1>
 
       <div class="card-columns card-columns-compact">
-        {% see_content section.all_stories 12 %}
+        {% reserve_content section.all_stories 12 %}
         {% for content in new_content %}
           <div class="card">
             <div class="card-body row">
@@ -144,7 +144,7 @@
             <h5 class="card-title">{{ section.title }}</h5>
           </div>
           <ul class="list-group list-group-flush">
-            {% see_content section.all_stories 5 %}
+            {% reserve_content section.all_stories 5 %}
             {% for content in new_content %}
               <li class="list-group-item">
                 <a class="solid-link h6" href="{{ content.get_absolute_url }}">{{ content.title }}</a>
