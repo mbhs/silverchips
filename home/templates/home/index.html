@@ -11,19 +11,20 @@
     {% for section in main_sections %}
       <h1 class="container display-4 mb-4 py-2 text-center text-uppercase section-header"><a href="{% url "home:view_section" section.name %}">{{ section.title }}</a></h1>
 
+      {% reserve_content section.all_content 1 %}
       <div class="row mb-4">
         <div class="col-md-9">
-          {% for story in section.all_stories.all|slice:"1" %}
-            <div class="row section-featured-0 mb-2">
-              <img class="featured-img" src="{% static "home/images/bird.jpg" %}" alt="img not found">
-              <div class="content">
-                <h2 class="text-center mt-4 feature-title"><a href="{{ story.get_absolute_url }}">{{ story.title|safe }}</a></h2>
-                <h6 class="text-center py-2">{% include "home/utils/authors.html" with content=story %} | {{ story.created }}</h6>
-              </div>
+          <div class="row section-featured-0 mb-2">
+            <img class="featured-img" src="{% static "home/images/bird.jpg" %}" alt="img not found">
+            <div class="content">
+              <h2 class="text-center mt-4 feature-title"><a href="{{ new_content.get_absolute_url }}">{{ new_content.title|safe }}</a></h2>
+              <h6 class="text-center py-2">{% include "home/utils/authors.html" with content=new_content %} | {{ new_content.created }}</h6>
             </div>
-          {% endfor %}
+          </div>
+
           <div class="row">
-            {% for story in section.all_stories.all|slice:"1:5"%}
+            {% reserve_content section.all_content 4 %}
+            {% for content in new_content %}
               {% if not forloop.counter|divisibleby:"2" %}<div class="col-md-6 px-0">{% endif %}
             <div class="card mb-2 rounded-0 section-card-0">
               <div class="img-wrapper">
@@ -38,9 +39,9 @@
                                                 {% endif %}"  alt="featurette-img"/>
               </div>
               <div class="card-body">
-                <h6 class="authors d-inline-block">{% include "home/utils/authors.html" with content=story %}</h6>
-                <h6 class="d-inline-block w-auto text-left">{{ story.created }}</h6>
-                <h4 class="card-title"><a href="{% url "home:view_content" story.pk %}" class="solid-link">{{ story.title|safe }}</a></h4>
+                <h6 class="authors d-inline-block">{% include "home/utils/authors.html" with content=content %}</h6>
+                <h6 class="d-inline-block w-auto text-left">{{ content.created }}</h6>
+                <h4 class="card-title"><a href="{% url "home:view_content" content.pk %}" class="solid-link">{{ content.title|safe }}</a></h4>
               </div>
             </div>
             {% if forloop.counter|divisibleby:"2" %}</div>{% endif %}
@@ -50,10 +51,11 @@
         <div class="col-md-3 section-recently-0 pl-5">
           <h1 class="recently">Latest</h1>
           <hr>
-          {% for story in section.all_stories.all|slice:"7"  %}
+          {% reserve_content section.all_content 7 %}
+          {% for content in new_content %}
             <div>
-              <h4 class="title"><a href="{% url "home:view_content" story.pk %}">{{ story.title|safe }}</a></h4>
-              <p class="in-section"><a href="{% url "home:view_section" story.section.name %}" class="solid-link">{{ story.section.title }}</a> | {{ story.created }}</p>
+              <h4 class="title"><a href="{% url "home:view_content" content.pk %}">{{ content.title|safe }}</a></h4>
+              <p class="in-section"><a href="{% url "home:view_section" content.section.name %}" class="solid-link">{{ content.section.title }}</a> | {{ content.created }}</p>
               <hr>
             </div>
           {% endfor %}
@@ -64,7 +66,7 @@
     {% for section in feature_sections %}
       <h1 class="display-4 mb-4 py-2 text-center text-uppercase section-header"><a href="{{ section.get_absolute_url }}">{{ section.title }}</a></h1>
 
-      {% reserve_content section.all_stories 6 %}
+      {% reserve_content section.all_content 6 %}
       <div class="card-columns">
         {% for content in new_content %}
           <div class="card align-middle rounded-0 mb-4 section-card-1">
@@ -89,7 +91,7 @@
               <p class="story-created">{{ content.created }}</p>
               <h4 class="card-title"><a href="{{ content.get_absolute_url }}" class="solid-link">{{ content.title|safe }}</a></h4>
               <p>
-                {{ content.lead|safe }}
+                {{ content.description|safe }}
               </p>
             </div>
           </div>
@@ -102,14 +104,14 @@
     {% for section in list_sections %}
       <h1 class="display-4 mb-4 py-2 text-center text-uppercase section-header"><a href="{{ section.get_absolute_url }}">{{ section.title }}</a></h1>
 
-      {% reserve_content section.all_stories 12 %}
+      {% reserve_content section.all_content 12 %}
       {% for content in new_content %}
         <div class="row">
           <div class="col-2">
             <img class="img-fluid" src="{% static "home/images/chair.jpg" %}"/>
           </div>
           <div class="col-10">
-            {% include "home/utils/story_summary.html" with story=content %}
+            {% include "home/content/summary.html" with content=content %}
           </div>
         </div>
         {% if not forloop.last %}<hr/>{% endif %}
@@ -120,7 +122,7 @@
       <h1 class="display-4 mb-4 py-2 text-center text-uppercase section-header"><a href="{{ section.get_absolute_url }}">{{ section.title }}</a></h1>
 
       <div class="card-columns card-columns-compact">
-        {% reserve_content section.all_stories 12 %}
+        {% reserve_content section.all_content 12 %}
         {% for content in new_content %}
           <div class="card">
             <div class="card-body row">
@@ -144,7 +146,7 @@
             <h5 class="card-title">{{ section.title }}</h5>
           </div>
           <ul class="list-group list-group-flush">
-            {% reserve_content section.all_stories 5 %}
+            {% reserve_content section.all_content 5 %}
             {% for content in new_content %}
               <li class="list-group-item">
                 <a class="solid-link h6" href="{{ content.get_absolute_url }}">{{ content.title }}</a>

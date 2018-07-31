@@ -10,7 +10,7 @@
     <hr/>
 
     {% for content in content_list %}
-      {% include "home/utils/story_summary.html" with story=content %}
+      {% include "home/content/summary.html" with content=content %}
       <hr/>
     {% endfor %}
 

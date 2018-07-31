@@ -1,15 +1,15 @@
 {% load home %}
 
 {% with story=content %}
-    <p class="text-muted">{{ story.lead|safe }}</p>
+  <p class="text-muted">{{ story.second_deck|safe }}</p>
 
-    {% if story.cover %}
-      {% render_content user story.cover False %}
-    {% endif %}
+  {% if story.cover %}
+    {% render_content user story.cover False %}
+  {% endif %}
 
-    <hr/>
+  <hr/>
 
-    <div class="story-text">
+  <div class="story-text">
     {{ story.text|safe|expand_embeds:user }}
-    </div>
+  </div>
 {% endwith %}

@@ -45,11 +45,10 @@ def view_section(request, name):
     """Render a section of the newspaper."""
     section = get_object_or_404(models.Section, name=name)
 
-    # Get the top STORY_COUNT stories in the section
-    subsections = [(None, section.all_stories)]
-
+    # First load the top stories in the entire section, and then in each subsection
+    subsections = [(None, section.all_content())]
     for subsection in section.subsections.filter(visible=True):
-        subsections.append((subsection, subsection.all_stories().filter(visibility=models.Content.PUBLISHED)))
+        subsections.append((subsection, subsection.all_content()))
 
     return render(request, "home/section.html", {
         "section": section,
@@ -96,13 +95,15 @@ def view_profile(request, pk):
     images = models.Image.objects.filter(authors__in=[user], visibility=models.Content.PUBLISHED, embed_only=False)
     videos = models.Video.objects.filter(authors__in=[user], visibility=models.Content.PUBLISHED, embed_only=False)
     audios = models.Audio.objects.filter(authors__in=[user], visibility=models.Content.PUBLISHED, embed_only=False)
+    galleries = models.Gallery.objects.filter(authors__in=[user], visibility=models.Content.PUBLISHED, embed_only=False)
 
     return render(request, "home/profile.html", {
         "user": user,
         "stories": stories,
         "images": images,
         "videos": videos,
-        "audios": audios
+        "audios": audios,
+        "galleries": galleries
     })
 
 

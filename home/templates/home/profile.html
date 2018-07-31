@@ -31,8 +31,8 @@
       <h2>Stories ({{ stories.count }})</h2>
       <hr/>
 
-      {% for story in stories %}
-        {% include "home/utils/story_summary.html" with story=story %}
+      {% for content in stories %}
+        {% include "home/content/summary.html" with content=content %}
       {% endfor %}
     {% endif %}
 
@@ -50,7 +50,7 @@
 
     {% if videos.count > 0 %}
       <br/><br/>
-      <h2>Images ({{ videos.count }})</h2>
+      <h2>Videos ({{ videos.count }})</h2>
       <hr/>
 
       {% for video in videos %}
@@ -61,6 +61,18 @@
     {% endif %}
 
     {% if audios.count > 0 %}
+      <br/><br/>
+      <h2>Audios ({{ audios.count }})</h2>
+      <hr/>
+
+      {% for audio in audios %}
+        <h4><a href="{% url "home:view_audio" audio.pk %}" class="solid-link">{{ audio.title|safe }}</a></h4>
+        {{ audio.created }}
+        <p class="text-muted">{{ audio.description|safe }}</p>
+      {% endfor %}
+    {% endif %}
+
+    {% if galleries.count > 0 %}
       <br/><br/>
       <h2>Images ({{ audios.count }})</h2>
       <hr/>

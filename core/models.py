@@ -230,9 +230,10 @@ class Section(models.Model):
 
         return descendants
 
-    def all_stories(self):
-        """Get all the Stories that belong to this Section for display in section templates."""
-        return Story.objects.filter(visibility=Content.PUBLISHED, embed_only=False, section__in=self.get_descendants())
+    def all_content(self):
+        """Get all the Content that belong to this Section for display in section templates."""
+        return Content.objects.filter(visibility=Content.PUBLISHED, embed_only=False,
+                                      section__in=self.get_descendants())
 
     def is_root(self):
         """Check whether this Section is a root Section."""
@@ -244,53 +245,6 @@ class Section(models.Model):
 
     class Meta:
         verbose_name_plural = "sections"
-
-
-# class Section(models.Model):
-#     """All stories are categorized by sections.
-#
-#     To avoid using a recursive system, sections have an identifying
-#     string and absolute path. The absolute path is set when the
-#     """
-#
-#     id = models.CharField(max_length=16, validators=[alphanumeric])
-#     _path = models.CharField(max_length=64, unique=True, primary_key=True)
-#
-#     name = models.CharField(max_length=32)
-#     title = models.CharField(max_length=64)
-#     active = models.BooleanField(default=True)
-#
-#     def assign(self, section: "Section"=None):
-#         """Assign this section under another section."""
-#
-#         if not self.id:
-#             raise RuntimeError("Section ID is not set.")
-#         if section is None:
-#             self._path = "/" + self.id
-#         else:
-#             self._path = posixpath.join(section.path, self.id)
-#
-#     def save(self, *args, **kwargs):
-#         """Save the section model.
-#
-#         If the path is not set, the section is automatically assigned
-#         to the root path.
-#         """
-#
-#         if not self._path:
-#             self.assign()
-#         super().save(*args, **kwargs)
-#
-#     @property
-#     def path(self):
-#         """Get the path to the section."""
-#
-#         return self._path
-#
-#     def __str__(self):
-#         """Represent the section as a string."""
-#
-#         return "Sections[{}]".format(self.title)
 
 
 class Image(Content):
@@ -323,7 +277,7 @@ class Poll(Content):
 
 class Story(Content):
     """The main story model."""
-    lead = models.TextField()  # Lead paragraph
+    second_deck = models.TextField()  # Second deck
     text = models.TextField()  # Full text
     cover = models.ForeignKey(Image, null=True, on_delete=models.SET_NULL)  # Cover photo
 

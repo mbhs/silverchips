@@ -11,23 +11,22 @@
     <h1 class="container rounded display-4 mb-4 py-2 text-center text-uppercase section-header">{{ section.title }}</h1>
 
     <hr class="section-separator">
-    {% for subsection, stories in subsections %}
-      {% if stories.count > 0 %}
-        {% reserve_content stories 5 %}
-
+    {% for subsection, content in subsections %}
+      {% reserve_content content 5 %}
+      {% if new_content.count > 0 %}
         <div class="row">
           <div class="col-md-2">
             <h5>
               {% if subsection %}
                 <a class="solid-link" href="{% url "home:view_section" subsection.name %}">{{ subsection.title }}</a>
               {% else %}
-                Top Stories
+                Top Content
               {% endif %}
             </h5>
           </div>
           <div class="col-md-10">
-            {% for story in new_content.all|slice:":5" %}
-            {% include "home/utils/story_summary.html" with story=story %}
+            {% for content in new_content %}
+            {% include "home/content/summary.html" with content=content %}
               <hr/>
             {% endfor %}
           </div>

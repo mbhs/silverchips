@@ -83,6 +83,9 @@ class ReserveContentNode(template.Node):
         # Reserve the content we just loaded
         reserved_content.update(new_content.values_list('pk', flat=True))
 
+        if len(new_content) == self.count == 1:
+            new_content = new_content[0]
+
         context['new_content'] = new_content
 
         # Force setting as global variable by placing variable in all levels of context stack
