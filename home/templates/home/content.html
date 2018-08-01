@@ -102,11 +102,11 @@
           </div>
 
           <ul class="list-group list-group-flush">
-            {% for top_content in content|slice:":8" %}
+            {% for content_item in top_content|slice:":8" %}
               <li class="list-group-item {% if not forloop.last %}mb-1{% else %}mb-3{% endif %} ml-3">
                 <div class="row">
                   <div class="col-2"><strong>{{ forloop.counter }}</strong></div>
-                  <div class="col-10"><a href="{{ top_content.get_absolute_url }}" class="solid-link">{{ top_content.title|safe }}</a></div>
+                  <div class="col-10"><a href="{{ content_item.get_absolute_url }}" class="solid-link">{{ content_item.title|safe }}</a></div>
                 </div>
               </li>
             {% endfor %}

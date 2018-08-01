@@ -23,7 +23,7 @@ def load_context(request):
     return {
         "section_roots": models.Section.objects.filter(parent=None, visible=True),  # For navigation bar
         "now": timezone.now(),  # For navigation bar
-        "stories": models.Story.objects.filter(visibility=models.Content.PUBLISHED, embed_only=False)  # For sidebar
+        "top_content": models.Content.objects.filter(visibility=models.Content.PUBLISHED, embed_only=False)  # For sidebar
     }
 
 
