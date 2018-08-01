@@ -72,10 +72,12 @@
         {% endif %}
 
         <br/><br/>
-        <strong class="mr-3">Tags:</strong>
-        {% for tag in content.tags.all %}
-          <a href="{% url "home:tagged" tag.name %}" class="btn btn-outline-info" role="button"><i class="fas fa-tag"></i> {{ tag.name }}</a>
-        {% endfor %}
+        {% if content.tags.count > 0 %}
+          <strong class="mr-3">Tags:</strong>
+          {% for tag in content.tags.all %}
+            <a href="{% url "home:tagged" tag.name %}" class="btn btn-outline-info" role="button"><i class="fas fa-tag"></i> {{ tag.name }}</a>
+          {% endfor %}
+        {% endif %}
 
         <hr/>
 
