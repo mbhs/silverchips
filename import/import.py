@@ -14,8 +14,8 @@ from datetime import datetime
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "silverchips.settings")
 setup()
 
-from core.models import Section, Story, Profile, Image, Content
-from django.contrib.auth.models import User, Group
+from core.models import Section, Story, Profile, Image, Content, User, Tag
+from django.contrib.auth.models import Group
 
 with open("import/data/silverchips.xml", 'r', encoding="latin-1", errors="replace") as xml_file:
     xml_data = xml_file.read()
@@ -152,11 +152,12 @@ if ask_reimport("pictures"):
 
             author = int(get_field(old_pic, "authorId"))
             if author is not 0:
-                pic.authors.add(User.objects.get(id=author))
+                pic.authors.add(User.objects.get(pk=author))
 
             pic.save()
         except Exception as e:
             print(e)
+
 
 if ask_reimport("user avatars"):
     users = read_table("user")
@@ -205,6 +206,31 @@ if ask_reimport("stories"):
             story.save()
         except:
             print("Failed to import story {}/{}".format(i, len(stories)))
+
+
+if ask_reimport("story tags"):
+    tags = read_table("tags")
+    for old_tag in tags:
+        try:
+            tag_name = get_field(old_tag, "name")
+            if tag_name:
+                tag = Tag.objects.get_or_create(name=tag_name)
+                story = Story.objects.get(pk=int(get_field(old_tag, "sid")))
+                story.tags.add(tag)
+        except:
+            pass
+
+
+if ask_reimport("user avatars"):
+    users = read_table("user")
+    for i, old_user in enumerate(users):
+        try:
+            profile = User.objects.get(pk=int(get_field(old_user, "id"))).profile
+            profile.avatar = Image.objects.get(pk=int(get_field(old_user, "pid")))
+            profile.save()
+        except:
+            print("Failed to import user avatar {}/{}".format(i, len(users)))
+
 
 if ask_reimport("authors"):
     for link in read_table("story_author"):

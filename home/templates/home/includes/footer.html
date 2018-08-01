@@ -1,7 +1,7 @@
 <footer class="site-footer-wrapper">
   <div class="site-footer-expand">
     <div class="site-footer-left">
-      <h4 class="footer-logo">Silver<span>Chips</span> Online</h4>
+      <h4 class="footer-logo">Silver <span>Chips</span> Online</h4>
       <p class="mt-4">
         {% for section in section_roots %}
           <a class="footer-link" href="{% url 'home:view_section' section.name %}">{{ section.title }}</a> {% if not forloop.last %} &middot; {% endif %}
@@ -11,15 +11,15 @@
     </div>
     <div class="site-footer-center">
       <div>
-        <i class="fa fa-map-marker"></i>
-        <p><span>51 University Blvd. E.</span> Silver Spring, Maryland</p>
+        <i class="fas fa-map-marker-alt"></i>
+        <p><span>51 University Blvd. E.</span> Silver Spring, Maryland 20901</p>
       </div>
       <div>
-        <i class="fa fa-phone"></i>
-        <p>(301) 649-2856</p>
+        <i class="fas fa-phone"></i>
+        <p>+1 (301) 649-2856</p>
       </div>
       <div>
-        <i class="fa fa-envelope"></i>
+        <i class="fas fa-envelope"></i>
         <p>editors.sco@gmail.com</p>
       </div>
     </div>

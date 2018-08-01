@@ -9,7 +9,7 @@
 
   <div class="container">
     {% for section in main_sections %}
-      <h1 class="container display-4 mb-4 py-2 text-center text-uppercase section-header"><a href="{% url "home:view_section" section.name %}">{{ section.title }}</a></h1>
+      <h1 class="display-4 mb-4 py-2 text-center text-uppercase section-header"><a href="{% url "home:view_section" section.name %}">{{ section.title }}</a></h1>
 
       {% reserve_content section.all_content 1 %}
       <div class="row mb-4">
@@ -130,7 +130,7 @@
                 <img class="img-fluid" src="{% static "home/images/chair.jpg" %}"/>
               </div>
               <div class="col-9">
-                <h5>{{ content.title }}</h5>
+                <a class="h5" href="{{ content.get_absolute_url }}">{{ content.title }}</a>
                 <h6><span class="text-muted">By</span> {% include "home/utils/authors.html" with content=content %}</h6>
               </div>
             </div>
@@ -143,7 +143,7 @@
       {% for section in dense_sections %}
         <div class="card">
           <div class="card-header">
-            <h5 class="card-title">{{ section.title }}</h5>
+            <h4 class="text-center text-uppercase section-header"><a href="{% url "home:view_section" section.name %}">{{ section.title }}</a></h4>
           </div>
           <ul class="list-group list-group-flush">
             {% reserve_content section.all_content 5 %}
