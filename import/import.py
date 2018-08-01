@@ -142,6 +142,8 @@ if ask_reimport("pictures"):
                         description=get_field(old_pic, "caption", ""),
                         created=date,
                         modified=date,
+                        authors=[User.objects.get(pk=get_field(old_pic, "authorId"))],
+                        guest_authors=get_field(old_pic, "altAuthor", ""),
                         visibility=Content.PUBLISHED)
 
             extension = {"image/jpeg": "jpg", "image/png": "png", "image/gif": "gif"}[get_field(old_pic, "mimeType")]
@@ -206,7 +208,8 @@ if ask_reimport("stories"):
                           section=(Section.objects.get(id=category_id) if category_id > 0 else None),
                           created=date,
                           modified=date,
-                          visibility=Content.PUBLISHED)
+                          visibility=Content.PUBLISHED if get_field(old_story, "published") == "true" and
+                                                          get_field(old_story, "hide") != "1" else Content.HIDDEN)
             story.save()
         except:
             print("Failed to import story {}/{}".format(i, len(stories)))

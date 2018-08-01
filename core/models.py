@@ -113,7 +113,7 @@ class Content(PolymorphicModel):
     modified = models.DateTimeField(default=timezone.now)
 
     # Authorship information
-    authors = models.ManyToManyField(User, related_name="%(class)s_authored")  # user.image_authored
+    authors = models.ManyToManyField(User, related_name="%(class)s_authored", blank=True)  # user.images_authored
     guest_authors = models.CharField(max_length=64, default="", blank=True)  # Authors who aren't in the database
 
     # Tracking information
