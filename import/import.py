@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 # Generate the database dump with the following command:
 #   > mysqldump silverchips --xml -u root -p > /tmp/silverchips.xml
 
