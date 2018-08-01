@@ -173,6 +173,7 @@ class UserManageForm(VerticalMixin, forms.ModelForm):
 
 
 class UserSelfManageForm(UserManageForm):
+    """An editor for users that edits a limited subset of information, available to all users."""
     class Meta:
         model = models.User
         # Override metaclass to only expose name change interface
@@ -187,7 +188,7 @@ class ProfileManageForm(VerticalMixin, forms.ModelForm):
 
 
 class ProfileSelfManageForm(VerticalMixin, forms.ModelForm):
-    """An editor for profiles, available only to all users."""
+    """An editor for profiles that edits a limited subset of information, available to all users."""
     class Meta:
         model = models.Profile
         fields = ['biography', 'avatar']

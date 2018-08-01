@@ -19,8 +19,6 @@
     {% endif %}
   </div>
 
-
-
   {% if user|can:"auth.manage_users" or user.is_superuser %}
     <h3>Danger Zone</h3>
     {% if user|can:"auth.manage_users" %}

@@ -381,26 +381,42 @@ class UserListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
 
 
 class UserChangeView(LoginRequiredMixin, EditorMixin, View):
+    """Superclass view to modify a user account.
+
+    Specially designed because it involves separate ModelForms to edit Users and user Profiles. Particular
+    values on subclasses will specify the exact logic of the form. In particular, the `create_new_users`
+    specifies whether the form will create new users or update existing users; `request_user_only` further specifies
+    whether only the current (logged-in) user can be updated, or whether any user can be. `user_form_class`
+    and `profile_form_class` must point to ModelForms for editing Users and Profiles, respectively; typically,
+    they will be instances or subinstances of UserManageForm and ProfileManageForm, respectively.
+    """
     def get_instances(self, request, **kwargs):
-        if not self.update_existing_users:
+        """Get the users that are being edited in the request."""
+        # This form only creates new users
+        if self.create_new_users:
             return None, None
+
         if self.request_user_only:
+            # This form only permits editing of the logged-in user
             user = request.user
         else:
+            # This form edits any user
             user = get_object_or_404(models.User.objects, pk=kwargs.get('pk'))
         return user, user.profile
 
     def get(self, request, **kwargs):
+        """Load the forms for managing a user account."""
         user, profile = self.get_instances(request, **kwargs)
         user_form = self.user_form_class(instance=user, request=request)
         profile_form = self.profile_form_class(instance=profile)
 
         return render(request, "staff/editor.html", {
             "forms": (user_form, profile_form),
-            "editing": "User"
+            "editing": "Account"
         })
 
     def post(self, request, **kwargs):
+        """Process an edit to a user account by validating data."""
         user, profile = self.get_instances(request, **kwargs)
         user_form = self.user_form_class(request.POST, request.FILES, request=request, instance=user)
         profile_form = self.profile_form_class(request.POST, request.FILES, instance=profile)
@@ -416,31 +432,34 @@ class UserChangeView(LoginRequiredMixin, EditorMixin, View):
 
         return render(request, "staff/editor.html", {
             "forms": [user_form, profile_form],
-            "editing": "User"
+            "editing": "Account"
         })
 
 
 class UserCreateView(UserChangeView):
+    """View for creating new users, only available to privileged users."""
     user_form_class = forms.UserManageForm
     profile_form_class = forms.ProfileManageForm
     redirect_url = "staff:users:list"
-    update_existing_users = False
+    create_new_users = True
     request_user_only = False
 
 
 class UserManageView(UserChangeView):
+    """View for managing all information about all users, only available to privileged users."""
     user_form_class = forms.UserManageForm
     profile_form_class = forms.ProfileManageForm
     redirect_url = "staff:users:list"
-    update_existing_users = True
+    create_new_users = False
     request_user_only = False
 
 
 class UserSelfManageView(UserChangeView):
+    """View for managing a limited subset of one's own information, available to all users."""
     user_form_class = forms.UserSelfManageForm
     profile_form_class = forms.ProfileSelfManageForm
     redirect_url = "staff:dashboard"
-    update_existing_users = True
+    create_new_users = False
     request_user_only = True
 
 
