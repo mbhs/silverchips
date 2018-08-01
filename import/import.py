@@ -17,7 +17,7 @@ setup()
 from core.models import Section, Story, Profile, Image, Content, User, Tag
 from django.contrib.auth.models import Group
 
-with open("import/data/silverchips.xml", 'r', encoding="latin-1", errors="replace") as xml_file:
+with open("import/data/silverchips.xml", 'r', encoding="utf-8", errors="replace") as xml_file:
     xml_data = xml_file.read()
 
 # Eliminate special characters (except the newline)
@@ -35,6 +35,8 @@ xml_data = xml_data.replace("&amp;#39;", "'")
 xml_data = xml_data.replace("&amp;#34;", "\"")
 xml_data = xml_data.replace("\x96", "–")
 xml_data = xml_data.replace("\x97", "—")
+xml_data = xml_data.replace("’", "'")
+xml_data = xml_data.replace("“", "\"")
 
 print("Sanitized control characters.")
 
@@ -74,6 +76,7 @@ if ask_reimport("users"):
                     username=get_field(old_user, "uname", "") + "_old" + str(user_id),
                     first_name=get_field(old_user, "fname", ""),
                     last_name=get_field(old_user, "lname", ""),
+                    email=get_field(old_user, "email", ""),
                     is_active=2000 + int(get_field(old_user, "gradyear", -2001)) > 2018)
         user.save()
 
@@ -98,6 +101,7 @@ if ask_reimport("user roles"):
             user = User.objects.get(pk=user_id)
             if role == 2:
                 user.groups.add(eics)
+                user.is_staff = True
                 user.is_superuser = True
                 user.save()
             if role == 3:
@@ -134,8 +138,8 @@ if ask_reimport("pictures"):
             pic_id = get_field(old_pic, "id")
             date = read_date(get_field(old_pic, "date"))
             pic = Image(legacy_id=get_field(old_pic, "id"),
-                        title=get_field(old_pic, "title", "(no title)"),
-                        description=get_field(old_pic, "caption", "(no caption)"),
+                        title=get_field(old_pic, "title", ""),
+                        description=get_field(old_pic, "caption", ""),
                         created=date,
                         modified=date,
                         visibility=Content.PUBLISHED)
@@ -182,14 +186,14 @@ if ask_reimport("stories"):
 
             # Switch over old embedded content to new system
             # Replace the old picture ID with the new content ID corresponding to that picture
-            text = re.sub("<sco:picture id=(\d+)>",
-                          lambda match: "<sco:embed id={}/>".format(Image.objects.get(legacy_id=match.group(1)).pk), text)
-
             cover = re.match("<sco:picture id=(\d+)", text)
             if cover:
                 cover_image = Image.objects.get(legacy_id=cover.group(1))
             else:
                 cover_image = None
+
+            text = re.sub("<sco:picture id=(\d+)>",
+                          lambda match: "<div class=\"content-embed\" data-content-id={}/>".format(Image.objects.get(legacy_id=match.group(1)).pk), text)
 
             text = linebreaks(text)
 
@@ -209,7 +213,7 @@ if ask_reimport("stories"):
 
 
 if ask_reimport("story tags"):
-    tags = read_table("tags")
+    tags = read_table("story_tag")
     for old_tag in tags:
         try:
             tag_name = get_field(old_tag, "name")
@@ -219,17 +223,6 @@ if ask_reimport("story tags"):
                 story.tags.add(tag)
         except:
             pass
-
-
-if ask_reimport("user avatars"):
-    users = read_table("user")
-    for i, old_user in enumerate(users):
-        try:
-            profile = User.objects.get(pk=int(get_field(old_user, "id"))).profile
-            profile.avatar = Image.objects.get(pk=int(get_field(old_user, "pid")))
-            profile.save()
-        except:
-            print("Failed to import user avatar {}/{}".format(i, len(users)))
 
 
 if ask_reimport("authors"):

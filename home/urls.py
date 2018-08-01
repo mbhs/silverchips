@@ -15,7 +15,7 @@ app_name = "home"
 
 about_urlpatterns = ([
     path("", views.about, name="index"),
-    path("about/", views.staff, name="staff")
+    path("staff/", views.staff, name="staff")
 ], "about")
 
 urlpatterns = [

@@ -166,7 +166,7 @@ class UserManageForm(VerticalMixin, forms.ModelForm):
 
     class Meta:
         model = models.User
-        fields = ['username', 'first_name', 'last_name', 'email', 'groups', 'is_active', 'is_superuser']
+        fields = ['username', 'first_name', 'last_name', 'email', 'groups', 'is_active', 'is_staff', 'is_superuser']
         widgets = {
             'groups': forms.CheckboxSelectMultiple()
         }

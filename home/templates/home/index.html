@@ -104,7 +104,7 @@
     {% for section in list_sections %}
       <h1 class="display-4 mb-4 py-2 text-center text-uppercase section-header"><a href="{{ section.get_absolute_url }}">{{ section.title }}</a></h1>
 
-      {% reserve_content section.all_content 12 %}
+      {% reserve_content section.all_content 5 %}
       {% for content in new_content %}
         <div class="row">
           <div class="col-2">

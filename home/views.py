@@ -133,7 +133,7 @@ class TaggedContentList(ListView):
 
 def about(request):
     """Render the about page for the newspaper."""
-    eics = User.objects.filter(groups__name="editors-in-chief")
+    eics = User.objects.filter(groups__name="editors-in-chief", is_active=True)
     return render(request, "home/about/about.html", {
         "eics": eics,
     })
@@ -141,8 +141,8 @@ def about(request):
 
 def staff(request):
     """Display a list of all of the newspaper's staff."""
-    active_users = User.objects.filter(is_active=True).order_by('profile__graduation_year')
-    inactive_users = User.objects.filter(is_active=False).order_by('profile__graduation_year')
+    active_users = User.objects.filter(is_active=True).order_by('last_name')
+    inactive_users = User.objects.filter(is_active=False).order_by('-profile__graduation_year', 'last_name')
     return render(request, "home/about/staff.html", {
         "active_users": active_users,
         "inactive_users": inactive_users

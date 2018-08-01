@@ -16,13 +16,13 @@
       {% if new_content.count > 0 %}
         <div class="row">
           <div class="col-md-2">
-            <h5>
+            <h3>
               {% if subsection %}
-                <a class="solid-link" href="{% url "home:view_section" subsection.name %}">{{ subsection.title }}</a>
+                <a class="solid-link" href="{% url "home:view_section" subsection.name %}">{{ subsection.title }} &raquo;</a>
               {% else %}
                 Top Content
               {% endif %}
-            </h5>
+            </h3>
           </div>
           <div class="col-md-10">
             {% for content in new_content %}

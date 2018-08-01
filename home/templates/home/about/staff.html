@@ -19,8 +19,8 @@
     <ul>
       {% for user in inactive_users %}
         <li>
-          <a href="{% url 'home:view_profile' user.profile.pk %}"> {{ user.get_full_name }}</a>, {{ user.profile.position }}
-          (graduated {{ user.profile.graduation_year }})
+          <a href="{% url 'home:view_profile' user.profile.pk %}"> {{ user.get_full_name }}</a>{% if user.profile.position %}, {{ user.profile.position }}{% endif %}
+          {% if user.profile.graduation_year > 0 %}(graduated {{ user.profile.graduation_year }}){% endif %}
         </li>
       {% endfor %}
     </ul>

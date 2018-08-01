@@ -171,7 +171,8 @@ class Content(PolymorphicModel):
 
     def get_absolute_url(self):
         """Find the URL through which this Content can be accessed."""
-        return reverse('home:view_content', args=[self.slug, self.pk])
+        print(self.title, self.slug, self.pk)
+        return reverse('home:view_content', args=[self.slug, self.pk] if self.slug else [self.pk])
 
 
 # Section names should be pretty
