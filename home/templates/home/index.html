@@ -97,12 +97,12 @@
       {% reserve_content section.all_content 5 %}
       {% for content in new_content %}
         <div class="row">
-          <div class="col-2">
+          <div class="col-md-2">
             {% if content|preview_image %}
               <img class="img-fluid" src="{{ content|preview_image }}"/>
             {% endif %}
           </div>
-          <div class="col-10">
+          <div class="col-md-10">
             {% include "home/content/summary.html" with content=content %}
           </div>
         </div>
