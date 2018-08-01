@@ -11,9 +11,11 @@ from django.utils.html import linebreaks
 
 import os
 import re
+import sys
 from xml.etree import ElementTree as et
 from datetime import datetime
 
+sys.path.insert(0,'.')
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "silverchips.settings")
 setup()
 

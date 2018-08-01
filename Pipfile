@@ -1,11 +1,14 @@
 [[source]]
+
 url = "https://pypi.python.org/simple"
 verify_ssl = true
 name = "pypi"
 
+
 [packages]
+
 django = "*"
-django-autocomplete-light = "*"
+django-autocomplete-light = ">=3.0.0rc6"
 django-forms-bootstrap = "*"
 django-static-precompiler = "*"
 six = "*"
@@ -15,9 +18,11 @@ django-polymorphic = "*"
 gunicorn = "*"
 django-crispy-forms = "*"
 django-ordered-model = "*"
-bs4 = "*"
+"bs4" = "*"
+
 
 [dev-packages]
+
 ipython = "*"
 pylint = "*"
 "flake8" = "*"

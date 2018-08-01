@@ -3,7 +3,7 @@
     {% include content.template %}
   </div>
 
-  {% if not content.hide_caption %}
+  {% if not content.hide_caption and content.description %}
     <p class="text-muted text-center"><small>{{ content.descriptor }}: {{ content.description|safe }}</small></p>
   {% endif %}
 {% else %}
