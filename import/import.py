@@ -142,7 +142,6 @@ if ask_reimport("pictures"):
                         description=get_field(old_pic, "caption", ""),
                         created=date,
                         modified=date,
-                        authors=[User.objects.get(pk=get_field(old_pic, "authorId"))],
                         guest_authors=get_field(old_pic, "altAuthor", ""),
                         visibility=Content.PUBLISHED)
 
