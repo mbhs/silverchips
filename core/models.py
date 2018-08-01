@@ -9,6 +9,8 @@ from django.urls import reverse
 from ordered_model.models import OrderedModel
 from polymorphic.models import PolymorphicModel
 
+import PIL.Image, PIL.ExifTags
+
 
 class Profile(models.Model):
     """The profile model provides non-authentication/identification information about users.
@@ -117,7 +119,7 @@ class Content(PolymorphicModel):
     guest_authors = models.CharField(max_length=64, default="", blank=True)  # Authors who aren't in the database
 
     # Tracking information
-    section = models.ForeignKey("Section", related_name="content", null=True, on_delete=models.SET_NULL)
+    section = models.ForeignKey("Section", related_name="content", null=True, blank=True, on_delete=models.SET_NULL)
     views = models.IntegerField(default=0)
 
     # Whether this content should show up by itself
@@ -250,7 +252,16 @@ class Image(Content):
     source = models.ImageField(upload_to="images/%Y/%m/%d/")
 
     template = "home/content/image.html"
+    sidebar_template = "home/content/sidebars/image.html"
     descriptor = "Photo"
+
+    def exif_data(self):
+        _image = PIL.Image.open(self.source.file)
+        return {
+            PIL.ExifTags.TAGS[exif_tag]: value
+            for exif_tag, value in _image._getexif().items()
+            if exif_tag in PIL.ExifTags.TAGS
+        }
 
 
 class Video(Content):
