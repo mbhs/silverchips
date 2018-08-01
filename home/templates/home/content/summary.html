@@ -1,7 +1,7 @@
 {% load home %}
 
 <h4 class="title"><a href="{{ content.get_absolute_url }}" class="solid-link">{{ content|qualified_title }}</a></h4>
-<h6 class="authors"><span class="text-muted">By</span> {% include "home/utils/authors.html" with content=content %} <span class="text-muted">|</span>
+<h6 class="authors"><span class="text-muted">By</span> {% include "home/utils/authors.html" %} <span class="text-muted">|</span>
 {{ content.created }}
-{% if content.section %}<span class="text-muted">| In</span> <a href="{% url "home:view_section" content.section.name %}" class="solid-link">{{ content.section.title }} &raquo;</a>{% endif %}</h6>
+{% if content.section and content.section != section %}<span class="text-muted">| In</span> <a href="{% url "home:view_section" content.section.name %}" class="solid-link">{{ content.section.title }} &raquo;</a>{% endif %}</h6>
 <p>{{ content.description|safe }}</p>

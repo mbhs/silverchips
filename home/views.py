@@ -46,7 +46,7 @@ def view_section(request, name):
     section = get_object_or_404(models.Section, name=name)
 
     # First load the top stories in the entire section, and then in each subsection
-    subsections = [(None, section.all_content())]
+    subsections = [(section, section.all_content())]
     for subsection in section.subsections.filter(visible=True):
         subsections.append((subsection, subsection.all_content()))
 

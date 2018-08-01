@@ -36,7 +36,7 @@
       <div class="col-md-9">
             <span class="h5">
                 <span class="text-muted">{% if content.authors.count > 0 %}By</span>
-                  {% include "home/utils/authors.html" with content=content %}
+                  {% include "home/utils/authors.html" %}
                   <span class="text-muted">| {% endif %}{{ content.created }} | {{ content.created|naturaltime }}</span>
             </span>
       </div>
