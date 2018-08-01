@@ -120,7 +120,7 @@
             <div class="card-body row">
               <div class="col-3 pr-0">
                 {% if content|preview_image %}
-                  <img class="img-fluid" src="{% static "home/images/chair.jpg" %}"/>
+                  <img class="img-fluid" src="{{ content|preview_image }}"/>
                 {% endif %}
               </div>
               <div class="col-9">
@@ -139,8 +139,11 @@
           <div class="card-header">
             <h4 class="text-center text-uppercase section-header"><a href="{% url "home:view_section" section.name %}">{{ section.title }}</a></h4>
           </div>
+          {% reserve_content section.all_content 5 %}
+          {% if new_content|first|preview_image %}
+            <img class="card-img-top" src="{{ new_content|first|preview_image }}" alt="Card image cap">
+          {% endif %}
           <ul class="list-group list-group-flush">
-            {% reserve_content section.all_content 5 %}
             {% for content in new_content %}
               <li class="list-group-item">
                 <a class="solid-link h6" href="{{ content.get_absolute_url }}">{{ content|qualified_title }}</a>
