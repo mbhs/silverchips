@@ -17,7 +17,7 @@ def preview_image(content):
     The particular URL selected depends on the type of Content.
     """
     if isinstance(content, models.Story) and content.cover:
-        return content.cover.url
+        return content.cover.source.url
     if isinstance(content, models.Image):
         return content.source.url
     if isinstance(content, models.Gallery) and content.entries.count() > 0:

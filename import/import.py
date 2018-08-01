@@ -220,11 +220,11 @@ if ask_reimport("story tags"):
         try:
             tag_name = get_field(old_tag, "name")
             if tag_name:
-                tag = Tag.objects.get_or_create(name=tag_name)
-                story = Story.objects.get(pk=int(get_field(old_tag, "sid")))
+                tag, _ = Tag.objects.get_or_create(name=tag_name)
+                story = Story.objects.get(legacy_id=int(get_field(old_tag, "sid")))
                 story.tags.add(tag)
-        except:
-            pass
+        except Exception as e:
+            print(e)
 
 
 if ask_reimport("authors"):
