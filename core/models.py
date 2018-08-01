@@ -24,7 +24,7 @@ class Profile(models.Model):
     # Personal information
     biography = models.TextField(help_text="A short biography, often including likes and dislikes, accomplishments,"
                                            " etc. Should be several sentences minimum.")
-    avatar = models.ImageField(null=True)
+    avatar = models.ImageField(blank=True, null=True)
     position = models.TextField()
     graduation_year = models.IntegerField(default=timezone.now().year+4)
 
