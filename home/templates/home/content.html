@@ -3,11 +3,25 @@
 {% load humanize %}
 {% load home %}
 {% load core %}
+{% load static %}
 
 {% block title %}{{ content|qualified_title }}{% endblock %}
 
 {% block content %}
-  <div class="container">
+  <div class="modal fade modal-lightbox" tabindex="-1" role="dialog" id="lightboxModal">
+    <div class="modal-dialog modal-dialog-centered" role="document" id="lightboxModalDialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="lightboxModalTitle"></h5>
+        </div>
+        <div class="modal-body" id="lightboxModalBody">
+        </div>
+        <div class="modal-footer" id="lightboxModalFooter"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="medium-container">
     <h1>
       {{ content|qualified_title }}
       {% if request.user %}
@@ -84,7 +98,7 @@
       <div class="col-md-3">
         <div class="card latest-stories">
           <div class="card-header mb-3">
-            <h4 class="card-title mb-0">Latest Stories</h4>
+            <h4 class="card-title mb-0">Latest Content</h4>
           </div>
 
           <ul class="list-group list-group-flush">
@@ -101,4 +115,6 @@
       </div>
     </div>
   </div>
+
+  <script defer src="{% static "home/scripts/content.js" %}"></script>
 {% endblock %}

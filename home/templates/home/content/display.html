@@ -1,10 +1,10 @@
 {% if content %}
-  {% if not content.embed_only and content.embedding %}<a href="{% url "home:view_content" content.pk %}">{% endif %}
-  {% include content.template %}
-  {% if not content.embed_only and content.embedding %}</a>{% endif %}
+  <div id="content-{{ content.pk }}">
+    {% include content.template %}
+  </div>
 
   {% if not content.hide_caption %}
-    <p class="text-muted text-center"><small>{{ content.descriptor }}: {{ content.description }}</small></p>
+    <p class="text-muted text-center"><small>{{ content.descriptor }}: {{ content.description|safe }}</small></p>
   {% endif %}
 {% else %}
   <div class="alert alert-danger" role="alert">

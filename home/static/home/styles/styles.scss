@@ -352,3 +352,30 @@ html {
 .story-text:first-letter {
   /* initial-letter: 2; */
 }
+
+.lightbox-source {
+  &:hover {
+    cursor: zoom-in;
+  }
+}
+
+.modal-lightbox {
+  .modal-content {
+    background-color: #1115;
+    color: white;
+  }
+
+  .modal-title, .modal-header {
+    background-color: #222;
+    color: white;
+  }
+
+  .modal-body {
+    padding: 0;
+  }
+
+  .modal-footer {
+    text-align: center;
+    display: block;
+  }
+}

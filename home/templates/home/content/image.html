@@ -1,3 +1,13 @@
 {% with image=content %}
-  <img src="{{ image.source.url }}" style="max-width: 80%; height: auto;" class="mx-auto d-block mb-2">
+  <img src="{{ image.source.url }}" style="max-width: 80%; height: auto;" class="mx-auto d-block mb-2 lightbox-source" onclick="javascript:lightboxShow({{ image.pk }});">
+
+  <div style="display: none;" id="lightboxTitle-{{ image.pk }}">
+    {{ image.title|safe }}
+  </div>
+  <div style="display: none;" id="lightboxContent-{{ image.pk }}">
+    <img src="{{ image.source.url }}" style="max-width: 60vw; max-height: 60vh; padding: 10px;">
+  </div>
+  <div style="display: none;" id="lightboxCaption-{{ image.pk }}">
+    {{ image.descriptor }}: {{ image.description|safe }}
+  </div>
 {% endwith %}

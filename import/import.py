@@ -193,7 +193,7 @@ if ask_reimport("stories"):
                 cover_image = None
 
             text = re.sub("<sco:picture id=(\d+)>",
-                          lambda match: "<div class=\"content-embed\" data-content-id=\"{}\"/>".format(Image.objects.get(legacy_id=match.group(1)).pk), text)
+                          lambda match: "<div class=\"content-embed\" data-content-id=\"{}\"></div>".format(Image.objects.get(legacy_id=match.group(1)).pk), text)
 
             text = linebreaks(text)
 

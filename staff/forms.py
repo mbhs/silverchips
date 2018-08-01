@@ -59,7 +59,6 @@ class ContentForm(VerticalMixin, forms.ModelForm):
         fields = ['title', 'authors', 'guest_authors', 'description', 'embed_only', 'tags', 'section']
         widgets = {
             'title': forms.widgets.TextInput(),
-            'description': RichTextWidget(short=True),
             'authors': autocomplete.ModelSelect2Multiple(url="staff:autocomplete:users"),
             'tags': autocomplete.ModelSelect2Multiple(url="staff:autocomplete:tags"),
             'section': autocomplete.ModelSelect2(url="staff:autocomplete:section")
