@@ -186,14 +186,14 @@ if ask_reimport("stories"):
 
             # Switch over old embedded content to new system
             # Replace the old picture ID with the new content ID corresponding to that picture
-            cover = re.match("<sco:picture id=(\d+)", text)
+            cover = re.search("<sco:picture id=(\d+)>", text)
             if cover:
                 cover_image = Image.objects.get(legacy_id=cover.group(1))
             else:
                 cover_image = None
 
             text = re.sub("<sco:picture id=(\d+)>",
-                          lambda match: "<div class=\"content-embed\" data-content-id={}/>".format(Image.objects.get(legacy_id=match.group(1)).pk), text)
+                          lambda match: "<div class=\"content-embed\" data-content-id=\"{}\"/>".format(Image.objects.get(legacy_id=match.group(1)).pk), text)
 
             text = linebreaks(text)
 

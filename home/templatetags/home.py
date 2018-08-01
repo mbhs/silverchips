@@ -5,16 +5,33 @@ from django import template
 from django.utils.html import mark_safe
 import re
 
-from core.models import Content
-from core import permissions
+from core import permissions, models
 
 register = template.Library()
 
 
 @register.filter
-def tags(content):
-    """Simple filter to display all the tags associated with a given Content."""
-    return ", ".join(map(str, content.tags.all()))
+def preview_image(content):
+    """A filter to return the URL of an image used to preview a Content.
+
+    The particular URL selected depends on the type of Content.
+    """
+    if isinstance(content, models.Story) and content.cover:
+        return content.cover.url
+    if isinstance(content, models.Image):
+        return content.source.url
+    if isinstance(content, models.Gallery) and content.entries.count() > 0:
+        return preview_image(content.entries_in_order()[0])
+    return None
+
+
+@register.filter
+def qualified_title(content):
+    """A filter to qualify non-story Content with a descriptive prefix (e.g. Photo:)."""
+    if isinstance(content, models.Story):
+        return mark_safe(content.title)
+    else:
+        return mark_safe("{}: {}".format(content.descriptor, content.title))
 
 
 @register.simple_tag
@@ -44,10 +61,11 @@ def expand_embeds(text, user):
     for div in soup.findAll('div'):
         if "content-embed" in div["class"]:
             # Try and load the content corresponding to data-contend-id on each div
+            print(div)
             pk = int(div["data-content-id"])
             try:
-                content = Content.objects.get(pk=pk)
-            except Content.DoesNotExist:
+                content = models.Content.objects.get(pk=pk)
+            except models.Content.DoesNotExist:
                 content = None
             # Render that content for the particular user
             html = render_content(user, content)

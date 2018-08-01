@@ -4,14 +4,12 @@
 {% load home %}
 {% load core %}
 
-{% block title %}
-  {{ content.title|safe }}
-{% endblock %}
+{% block title %}{{ content|qualified_title }}{% endblock %}
 
 {% block content %}
   <div class="container">
     <h1>
-      {{ content.title|safe }}
+      {{ content|qualified_title }}
       {% if request.user %}
         {% if content.visibility != content.PUBLISHED %}
           <span class="badge badge-warning">{{ content.get_visibility_display|lower }}</span>

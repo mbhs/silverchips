@@ -2,7 +2,7 @@
 
 {% block title %}Home{% endblock %}
 {% load home %}
-{% load static %} <!-- FOR TESTING - IMAGES -->
+{% load static %}
 
 {% block content %}
   {% include "home/includes/index-sm-sidebar.html" %}
@@ -15,35 +15,31 @@
       <div class="row mb-4">
         <div class="col-md-9">
           <div class="row section-featured-0 mb-2">
-            <img class="featured-img" src="{% static "home/images/bird.jpg" %}" alt="img not found">
+            {% if new_content|preview_image %}
+              <img class="featured-img" src="{{ new_content|preview_image }}" alt="img not found">
+            {% endif %}
             <div class="content">
-              <h2 class="text-center mt-4 feature-title"><a href="{{ new_content.get_absolute_url }}">{{ new_content.title|safe }}</a></h2>
+              <h2 class="text-center mt-4 feature-title"><a href="{{ new_content.get_absolute_url }}">{{ new_content|qualified_title }}</a></h2>
               <h6 class="text-center py-2">{% include "home/utils/authors.html" with content=new_content %} | {{ new_content.created }}</h6>
             </div>
           </div>
 
           <div class="row">
-            {% reserve_content section.all_content 4 %}
+            {% reserve_content section.all_content 6 %}
             {% for content in new_content %}
               {% if not forloop.counter|divisibleby:"2" %}<div class="col-md-6 px-0">{% endif %}
-            <div class="card mb-2 rounded-0 section-card-0">
-              <div class="img-wrapper">
-                <img class="card-img-top mx-auto rounded-0 d--block" src="{% if forloop.counter|divisibleby:"4"  %}
-                                                {% static "home/images/img_4.jpg" %}
-                                                {% elif forloop.counter|divisibleby:"3" %}
-                                                {% static "home/images/iceberg.jpg" %}
-                                                {% elif forloop.counter|divisibleby:"2"  %}
-                                                {% static "home/images/img_5.jpg" %}
-                                                {% else %}
-                                                {% static "home/images/img_2.jpg" %}
-                                                {% endif %}"  alt="featurette-img"/>
+              <div class="card mb-2 rounded-0 section-card-0">
+                <div class="img-wrapper">
+                  {% if content|preview_image %}
+                    <img class="card-img-top mx-auto rounded-0 d-block" src="{{ content|preview_image }}" alt="featurette-img"/>
+                  {% endif %}
+                </div>
+                <div class="card-body">
+                  <h6 class="authors d-inline-block">{% include "home/utils/authors.html" with content=content %}</h6>
+                  <h6 class="d-inline-block w-auto text-left">{{ content.created }}</h6>
+                  <h4 class="card-title"><a href="{% url "home:view_content" content.pk %}" class="solid-link">{{ content|qualified_title }}</a></h4>
+                </div>
               </div>
-              <div class="card-body">
-                <h6 class="authors d-inline-block">{% include "home/utils/authors.html" with content=content %}</h6>
-                <h6 class="d-inline-block w-auto text-left">{{ content.created }}</h6>
-                <h4 class="card-title"><a href="{% url "home:view_content" content.pk %}" class="solid-link">{{ content.title|safe }}</a></h4>
-              </div>
-            </div>
             {% if forloop.counter|divisibleby:"2" %}</div>{% endif %}
             {% endfor %}
           </div>
@@ -54,7 +50,7 @@
           {% reserve_content section.all_content 7 %}
           {% for content in new_content %}
             <div>
-              <h4 class="title"><a href="{% url "home:view_content" content.pk %}">{{ content.title|safe }}</a></h4>
+              <h4 class="title"><a href="{% url "home:view_content" content.pk %}">{{ content|qualified_title }}</a></h4>
               <p class="in-section"><a href="{% url "home:view_section" content.section.name %}" class="solid-link">{{ content.section.title }}</a> | {{ content.created }}</p>
               <hr>
             </div>
@@ -71,15 +67,9 @@
         {% for content in new_content %}
           <div class="card align-middle rounded-0 mb-4 section-card-1">
             <div class="img-wrapper">
-              <img class="card-img-top mx-auto rounded-0 d-block" src="{% if forloop.counter|divisibleby:"4"  %}
-                                                    {% static "home/images/img_4.jpg" %}
-                                                 {% elif forloop.counter|divisibleby:"3" %}
-                                                    {% static "home/images/bird.jpg" %}
-                                                 {% elif forloop.counter|divisibleby:"2"  %}
-                                                    {% static "home/images/chair.jpg" %}
-                                                 {% else %}
-                                                    {% static "home/images/grass.jpg" %}
-                                                 {% endif %}"  alt="featurette-img"/>
+              {% if content|preview_image %}
+                <img class="card-img-top mx-auto rounded-0 d-block" src="{{ content|preview_image }}" alt="featurette-img"/>
+              {% endif %}
             </div>
             {% if section != content.section %}
               <div class="in-section">
@@ -89,7 +79,7 @@
             <div class="card-body">
               <h6 class="authors font-weight-bold">{% include "home/utils/authors.html" with content=content %}</h6>
               <p class="story-created">{{ content.created }}</p>
-              <h4 class="card-title"><a href="{{ content.get_absolute_url }}" class="solid-link">{{ content.title|safe }}</a></h4>
+              <h4 class="card-title"><a href="{{ content.get_absolute_url }}" class="solid-link">{{ content|qualified_title }}</a></h4>
               <p>
                 {{ content.description|safe }}
               </p>
@@ -108,7 +98,9 @@
       {% for content in new_content %}
         <div class="row">
           <div class="col-2">
-            <img class="img-fluid" src="{% static "home/images/chair.jpg" %}"/>
+            {% if content|preview_image %}
+              <img class="img-fluid" src="{{ content|preview_image }}"/>
+            {% endif %}
           </div>
           <div class="col-10">
             {% include "home/content/summary.html" with content=content %}
@@ -127,10 +119,12 @@
           <div class="card">
             <div class="card-body row">
               <div class="col-3 pr-0">
-                <img class="img-fluid" src="{% static "home/images/chair.jpg" %}"/>
+                {% if content|preview_image %}
+                  <img class="img-fluid" src="{% static "home/images/chair.jpg" %}"/>
+                {% endif %}
               </div>
               <div class="col-9">
-                <a class="h5" href="{{ content.get_absolute_url }}">{{ content.title }}</a>
+                <a class="h5" href="{{ content.get_absolute_url }}">{{ content|qualified_title }}</a>
                 <h6><span class="text-muted">By</span> {% include "home/utils/authors.html" with content=content %}</h6>
               </div>
             </div>
@@ -149,7 +143,7 @@
             {% reserve_content section.all_content 5 %}
             {% for content in new_content %}
               <li class="list-group-item">
-                <a class="solid-link h6" href="{{ content.get_absolute_url }}">{{ content.title }}</a>
+                <a class="solid-link h6" href="{{ content.get_absolute_url }}">{{ content|qualified_title }}</a>
               </li>
             {% endfor %}
           </ul>

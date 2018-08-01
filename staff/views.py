@@ -233,20 +233,14 @@ def gallery_insert(request, pk):
 def gallery_swap(request, pk):
     gallery = get_object_or_404(models.Gallery, pk=pk)
 
-    print(gallery.entry_links.all())
-
     try:
         link1 = gallery.entry_links.all()[int(request.POST['index1'])]
         link2 = gallery.entry_links.all()[int(request.POST['index2'])]
     except (IndexError, ValueError):
         return HttpResponse(status=400)
 
-    print(link1, link2)
-
     link1.swap(link2)
     link1.save()
-
-    print(gallery.entry_links.all())
 
     return render(request, "staff/content/gallery/entry_list.html", {
         'gallery': gallery
@@ -257,14 +251,11 @@ def gallery_remove(request, pk):
     gallery = get_object_or_404(models.Gallery, pk=pk)
 
     try:
-        print(request.body)
         link = gallery.entry_links.all()[int(request.POST['index'])]
-        print("here")
     except (IndexError, ValueError):
         return HttpResponse(status=400)
 
     link.delete()
-    print("HIEY")
 
     return render(request, "staff/content/gallery/entry_list.html", {
         'gallery': gallery
