@@ -35,9 +35,9 @@ and *templates*, which render view results to HTML. For more information, see th
 
 This code is organized into three main Django apps and a number of auxiliary scripts. The apps are:
 
-* `core`: Shared functionality between all aspects of SilverChips Online. Models live here.
+* `core`: Shared functionality between all aspects of Silver Chips Online. Models live here.
 * `home`: Public-facing functionality that any user can see when they load the site.
-* `staff`: Private functionality that only SilverChips staff accesses to administer the newspaper.
+* `staff`: Private functionality that only Silver Chips staff accesses to administer the newspaper.
 
 
 ## Advanced

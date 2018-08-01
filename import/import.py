@@ -14,7 +14,8 @@ from datetime import datetime
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "silverchips.settings")
 setup()
 
-from core.models import Section, Story, User, Profile, Image, Content
+from core.models import Section, Story, Profile, Image, Content
+from django.contrib.auth.models import User, Group
 
 with open("import/data/silverchips.xml", 'r', encoding="latin-1", errors="replace") as xml_file:
     xml_data = xml_file.read()
@@ -71,16 +72,45 @@ if ask_reimport("users"):
         user_id = int(get_field(old_user, "id"))
         user = User(id=user_id,
                     username=get_field(old_user, "uname", "") + "_old" + str(user_id),
-                    first_name=get_field(old_user, "fname", "(no first name)"),
-                    last_name=get_field(old_user, "lname", "(no last name)"))
+                    first_name=get_field(old_user, "fname", ""),
+                    last_name=get_field(old_user, "lname", ""),
+                    is_active=2000 + int(get_field(old_user, "gradyear", -2001)) > 2018)
         user.save()
 
         profile = Profile(id=user_id,
                           user=user,
-                          biography=get_field(old_user, "bio", "(no biography)"),
-                          position=get_field(old_user, "position", "(no position)"),
+                          biography=get_field(old_user, "bio", ""),
+                          position=get_field(old_user, "position", ""),
                           graduation_year=2000 + int(get_field(old_user, "gradyear", -2001)))
         profile.save()
+
+if ask_reimport("user roles"):
+    roles = read_table("user_role")
+    writers, _ = Group.objects.get_or_create(name="writers")
+    editors, _ = Group.objects.get_or_create(name="editors")
+    eics, _ = Group.objects.get_or_create(name="editors-in-chief")
+    sponsors, _ = Group.objects.get_or_create(name="sponsors")
+
+    for old_role in roles:
+        user_id = int(get_field(old_role, "id"))
+        role = int(get_field(old_role, "roleId"))
+        try:
+            user = User.objects.get(pk=user_id)
+            if role == 2:
+                user.groups.add(eics)
+                user.is_superuser = True
+                user.save()
+            if role == 3:
+                user.groups.add(editors)
+            if 4 <= role <= 10:
+                user.groups.add(writers)
+            if role == 12:
+                user.groups.add(sponsors)
+                user.is_superuser = True
+                user.save()
+        except Exception as e:
+            print(e)
+
 
 if ask_reimport("categories"):
     Section.objects.all().delete()
@@ -138,6 +168,7 @@ if ask_reimport("user avatars"):
         except:
             pass
 
+
 if ask_reimport("stories"):
     Story.objects.all().delete()
     stories = read_table("story")
@@ -146,18 +177,26 @@ if ask_reimport("stories"):
         try:
             category_id = int(get_field(old_story, "cid"))
             date = read_date(get_field(old_story, "date"))
-            text = get_field(old_story, "text", "(no text").strip()
+            text = get_field(old_story, "text", "").strip()
 
             # Switch over old embedded content to new system
             # Replace the old picture ID with the new content ID corresponding to that picture
             text = re.sub("<sco:picture id=(\d+)>",
                           lambda match: "<sco:embed id={}/>".format(Image.objects.get(legacy_id=match.group(1)).pk), text)
+
+            cover = re.match("<sco:picture id=(\d+)", text)
+            if cover:
+                cover_image = Image.objects.get(legacy_id=cover.group(1))
+            else:
+                cover_image = None
+
             text = linebreaks(text)
 
             story = Story(legacy_id=get_field(old_story, "sid"),
-                          title=get_field(old_story, "headline", "(no title)"),
-                          description=get_field(old_story, "secdeck", "(no description)").strip(),
-                          lead=get_field(old_story, "lead", "(no lead)").strip(),
+                          title=get_field(old_story, "headline", ""),
+                          second_deck=get_field(old_story, "secdeck", "").strip(),
+                          description=get_field(old_story, "lead", "").strip(),
+                          cover=cover_image,
                           text=text,
                           section=(Section.objects.get(id=category_id) if category_id > 0 else None),
                           created=date,

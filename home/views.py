@@ -28,7 +28,7 @@ def load_context(request):
 
 
 def index(request):
-    """Render the index page of the SilverChips site."""
+    """Render the index page of the Silver Chips site."""
     return render(request, "home/index.html", {
         "dense_sections": models.Section.objects.filter(index_display=models.Section.DENSE),
         "compact_sections": models.Section.objects.filter(index_display=models.Section.COMPACT),

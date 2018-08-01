@@ -1,4 +1,4 @@
-"""Core models for the SilverChips platform."""
+"""Core models for the Silver Chips platform."""
 
 from django.db import models
 import django.contrib.auth.models as auth
