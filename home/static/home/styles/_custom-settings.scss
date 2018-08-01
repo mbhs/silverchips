@@ -41,7 +41,7 @@ $grid-breakpoints: (
 );
 
 /* CUSTOM BOOTSTRAP CONTAINER */
-.large-container {
+.container {
   padding-right: 15px;
   padding-left: 15px;
   margin-right: auto;
@@ -54,7 +54,7 @@ $grid-breakpoints: (
     margin-left: auto;
 }
 @media (min-width: 768px) {
-  .large-container {
+  .container {
     max-width: calc(100vw - 100px);
   }
   .medium-container {
@@ -62,7 +62,7 @@ $grid-breakpoints: (
   }
 }
 @media (min-width: 992px) {
-  .large-container {
+  .container {
     max-width: calc(100vw - 160px);
   }
   .medium-container {
@@ -70,7 +70,7 @@ $grid-breakpoints: (
   }
 }
 @media (min-width: 1280px) {
-  .large-container {
+  .container {
     max-width: calc(100vw - 200px);
   }
   .medium-container {
