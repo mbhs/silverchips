@@ -100,7 +100,7 @@
         <div class="row">
           <div class="col-md-2">
             {% if content|thumb %}
-              {% generateimage "home:large_thumbnail" source=content|thumb -- class="img-fluid" %}
+              {% generateimage "home:medium_thumbnail" source=content|thumb -- class="img-fluid" %}
             {% endif %}
           </div>
           <div class="col-md-10">
@@ -142,7 +142,7 @@
           </div>
           {% reserve_content section.all_content 5 %}
           {% if new_content|first|thumb %}
-            {% generateimage "home:huge_thumbnail" source=new_content|first|thumb -- class="card-img-top" %}
+            {% generateimage "home:large_thumbnail" source=new_content|first|thumb -- class="card-img-top" %}
           {% endif %}
           <ul class="list-group list-group-flush">
             {% for content in new_content %}

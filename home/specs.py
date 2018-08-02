@@ -1,29 +1,21 @@
 from imagekit import ImageSpec, register
-from imagekit.processors import ResizeToFill
+from imagekit.processors import ResizeToFit
 
 
 class SmallThumbnail(ImageSpec):
-    processors = [ResizeToFill(100, 100)]
-    format = 'JPEG'
-    options = {'quality': 60}
+    processors = [ResizeToFit(100, 100)]
 
 
 class MediumThumbnail(ImageSpec):
-    processors = [ResizeToFill(300, 300)]
-    format = 'JPEG'
-    options = {'quality': 60}
+    processors = [ResizeToFit(250, 250)]
 
 
 class LargeThumbnail(ImageSpec):
-    processors = [ResizeToFill(600, 600)]
-    format = 'JPEG'
-    options = {'quality': 70}
+    processors = [ResizeToFit(500, 500)]
 
 
 class HugeThumbnail(ImageSpec):
-    processors = [ResizeToFill(800, 800)]
-    format = 'JPEG'
-    options = {'quality': 80}
+    processors = [ResizeToFit(800, 800)]
 
 
 register.generator("home:small_thumbnail", SmallThumbnail)
