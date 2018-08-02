@@ -32,7 +32,7 @@ def thumb(content, thumb_type=None):
 
     klass = {'small': SmallThumbnail, 'medium': MediumThumbnail, 'large': LargeThumbnail, 'huge': HugeThumbnail}[thumb_type]
     generator = klass(source=image)
-    return ImageCacheFile(generator.generate()).url
+    return ImageCacheFile(generator).url
 
 
 @register.filter
