@@ -141,7 +141,7 @@
           </div>
           {% reserve_content section.all_content 5 %}
           {% if new_content|first|thumb %}
-            <img class="card-img-top" src="{{ content|thumb:"small" }}"/>
+            <img class="card-img-top" src="{{ new_content|first|thumb:"large" }}"/>
           {% endif %}
           <ul class="list-group list-group-flush">
             {% for content in new_content %}

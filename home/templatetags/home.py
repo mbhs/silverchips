@@ -34,10 +34,13 @@ def thumb(content, thumb_type=None):
     klass = {'small': SmallThumbnail, 'medium': MediumThumbnail, 'large': LargeThumbnail, 'huge': HugeThumbnail}[thumb_type]
 
     # Make the thumbnail generator and cache the result
-    generator = klass(source=image)
-    cached_file = ImageCacheFile(generator)
-    cached_file.generate()  # This seems to be necessary to save the file
-    return cached_file.url
+    try:
+        generator = klass(source=image)
+        cached_file = ImageCacheFile(generator)
+        cached_file.generate()  # This seems to be necessary to save the file
+        return cached_file.url
+    except FileNotFoundError:
+        return None
 
 
 @register.filter
