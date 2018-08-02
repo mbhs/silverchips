@@ -15,12 +15,12 @@ def thumb(content, thumb_type=None):
 
     The particular image selected depends on the type of Content.
     """
-    image = None
+    image = None  # The ImageField that we're using as a source for the thumbnail
 
     if isinstance(content, models.Story) and content.cover:
-        image = content.cover.source.file
+        image = content.cover.source
     elif isinstance(content, models.Image):
-        image = content.source.file
+        image = content.source
     elif isinstance(content, models.Gallery) and content.entries.count() > 0:
         image = thumb(content.entries_in_order()[0])
 
@@ -30,9 +30,14 @@ def thumb(content, thumb_type=None):
     if thumb_type is None:
         return True
 
+    # Check which thumbnail generator we're using
     klass = {'small': SmallThumbnail, 'medium': MediumThumbnail, 'large': LargeThumbnail, 'huge': HugeThumbnail}[thumb_type]
+
+    # Make the thumbnail generator and cache the result
     generator = klass(source=image)
-    return ImageCacheFile(generator).url
+    cached_file = ImageCacheFile(generator)
+    cached_file.generate()  # This seems to be necessary to save the file
+    return cached_file.url
 
 
 @register.filter
