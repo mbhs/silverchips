@@ -9,7 +9,8 @@ from django.urls import reverse
 from ordered_model.models import OrderedModel
 from polymorphic.models import PolymorphicModel
 
-import PIL.Image, PIL.ExifTags
+import PIL.Image
+import PIL.ExifTags
 
 
 class Profile(models.Model):

@@ -7,7 +7,7 @@ Included directly under the root of the site.
 from django.urls import path, include
 
 # Local imports
-from home import views
+from home import views, specs
 from core import models
 
 app_name = "home"
