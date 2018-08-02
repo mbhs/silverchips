@@ -1,25 +1,38 @@
 from bs4 import BeautifulSoup
 from django import template
 from django.utils.html import mark_safe
+from imagekit.cachefiles import ImageCacheFile
 
 from core import permissions, models
+from home.imagegenerators import SmallThumbnail, MediumThumbnail, LargeThumbnail, HugeThumbnail
 
 register = template.Library()
 
 
 @register.filter
-def thumb(content):
+def thumb(content, _type=None):
     """A filter to return an image file used to preview a Content as a thumbnail.
 
     The particular image selected depends on the type of Content.
     """
+    image = None
+
     if isinstance(content, models.Story) and content.cover:
-        return content.cover.source
-    if isinstance(content, models.Image):
-        return content.source
-    if isinstance(content, models.Gallery) and content.entries.count() > 0:
-        return thumb(content.entries_in_order()[0])
-    return None
+        image = content.cover.source
+    elif isinstance(content, models.Image):
+        image = content.source
+    elif isinstance(content, models.Gallery) and content.entries.count() > 0:
+        image = thumb(content.entries_in_order()[0])
+
+    if image is None:
+        return None
+
+    if _type is None:
+        return True
+
+    klass = {'small': SmallThumbnail, 'medium': MediumThumbnail, 'large': LargeThumbnail, 'huge': HugeThumbnail}[_type]
+    generator = klass(source=image)
+    return ImageCacheFile(generator.generate()).url
 
 
 @register.filter

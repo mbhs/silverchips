@@ -3,7 +3,6 @@
 {% block title %}Home{% endblock %}
 {% load home %}
 {% load static %}
-{% load imagekit %}
 
 {% block content %}
   {% include "home/includes/index-sm-sidebar.html" %}
@@ -17,7 +16,7 @@
         <div class="col-md-9">
           <div class="row section-featured-0 mb-2">
             {% if new_content|thumb %}
-              {% generateimage "home:huge_thumbnail" source=new_content|thumb -- class="featured-img" %}
+              <img class="featured-img" src="{{ new_content|thumb:"huge" }}"/>
             {% endif %}
             <div class="content">
               <h2 class="text-center mt-4 feature-title"><a href="{{ new_content.get_absolute_url }}">{{ new_content|qualified_title }}</a></h2>
@@ -32,7 +31,7 @@
               <div class="card mb-2 rounded-0 section-card-0">
                 <div class="img-wrapper">
                   {% if content|thumb %}
-                    {% generateimage "home:huge_thumbnail" source=content|thumb -- class="card-img-top mx-auto rounded-0 d-block" %}
+                    <img class="card-img-top mx-auto rounded-0 d-block" src="{{ content|thumb:"huge" }}"/>
                   {% endif %}
                 </div>
                 <div class="card-body">
@@ -69,7 +68,7 @@
           <div class="card align-middle rounded-0 mb-4 section-card-1">
             <div class="img-wrapper">
               {% if content|thumb %}
-                {% generateimage "home:huge_thumbnail" source=content|thumb -- class="card-img-top mx-auto rounded-0 d-block" %}
+                <img class="card-img-top mx-auto rounded-0 d-block" src="{{ content|thumb:"huge" }}"/>
               {% endif %}
             </div>
             {% if section != content.section %}
@@ -100,7 +99,7 @@
         <div class="row">
           <div class="col-md-2">
             {% if content|thumb %}
-              {% generateimage "home:medium_thumbnail" source=content|thumb -- class="img-fluid" %}
+              <img class="img-fluid" src="{{ content|thumb:"medium" }}"/>
             {% endif %}
           </div>
           <div class="col-md-10">
@@ -121,7 +120,7 @@
             <div class="card-body row">
               <div class="col-3 pr-0">
                 {% if content|thumb %}
-                  {% generateimage "home:medium_thumbnail" source=content|thumb -- class="img-fluid" %}
+                  <img class="img-fluid" src="{{ content|thumb:"small" }}"/>
                 {% endif %}
               </div>
               <div class="col-9">
@@ -142,7 +141,7 @@
           </div>
           {% reserve_content section.all_content 5 %}
           {% if new_content|first|thumb %}
-            {% generateimage "home:large_thumbnail" source=new_content|first|thumb -- class="card-img-top" %}
+            <img class="card-img-top" src="{{ content|thumb:"small" }}"/>
           {% endif %}
           <ul class="list-group list-group-flush">
             {% for content in new_content %}

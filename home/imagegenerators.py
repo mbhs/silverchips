@@ -16,9 +16,3 @@ class LargeThumbnail(ImageSpec):
 
 class HugeThumbnail(ImageSpec):
     processors = [ResizeToFit(800, 800)]
-
-
-register.generator("home:small_thumbnail", SmallThumbnail)
-register.generator("home:medium_thumbnail", MediumThumbnail)
-register.generator("home:large_thumbnail", LargeThumbnail)
-register.generator("home:huge_thumbnail", HugeThumbnail)
