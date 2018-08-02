@@ -256,12 +256,15 @@ class Image(Content):
     descriptor = "Photo"
 
     def exif_data(self):
-        _image = PIL.Image.open(self.source.file)
-        return {
-            PIL.ExifTags.TAGS[exif_tag]: value
-            for exif_tag, value in _image._getexif().items()
-            if exif_tag in PIL.ExifTags.TAGS
-        }
+        try:
+            _image = PIL.Image.open(self.source.file)
+            return {
+                PIL.ExifTags.TAGS[exif_tag]: value
+                for exif_tag, value in _image._getexif().items()
+                if exif_tag in PIL.ExifTags.TAGS
+            }
+        except FileNotFoundError:
+            return None
 
 
 class Video(Content):

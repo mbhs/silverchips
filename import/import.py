@@ -174,10 +174,10 @@ if ask_reimport("user avatars"):
     for i, old_user in enumerate(users):
         try:
             profile = User.objects.get(pk=int(get_field(old_user, "id"))).profile
-            profile.avatar = Image.objects.get(pk=int(get_field(old_user, "pid")))
+            profile.avatar.name = Image.objects.get(legacy_id=int(get_field(old_user, "pid"))).source.name
             profile.save()
-        except:
-            pass
+        except Exception as e:
+            print(e)
 
 
 if ask_reimport("stories"):
