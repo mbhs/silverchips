@@ -18,9 +18,9 @@ def thumb(content, thumb_type=None):
     image = None
 
     if isinstance(content, models.Story) and content.cover:
-        image = content.cover
+        image = content.cover.source.file
     elif isinstance(content, models.Image):
-        image = content
+        image = content.source.file
     elif isinstance(content, models.Gallery) and content.entries.count() > 0:
         image = thumb(content.entries_in_order()[0])
 
