@@ -10,7 +10,7 @@ register = template.Library()
 
 
 @register.filter
-def thumb(content, _type=None):
+def thumb(content, thumb_type=None):
     """A filter to return an image file used to preview a Content as a thumbnail.
 
     The particular image selected depends on the type of Content.
@@ -27,10 +27,10 @@ def thumb(content, _type=None):
     if image is None:
         return None
 
-    if _type is None:
+    if thumb_type is None:
         return True
 
-    klass = {'small': SmallThumbnail, 'medium': MediumThumbnail, 'large': LargeThumbnail, 'huge': HugeThumbnail}[_type]
+    klass = {'small': SmallThumbnail, 'medium': MediumThumbnail, 'large': LargeThumbnail, 'huge': HugeThumbnail}[thumb_type]
     generator = klass(source=image)
     return ImageCacheFile(generator.generate()).url
 
