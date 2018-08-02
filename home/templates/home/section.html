@@ -1,6 +1,7 @@
 {% extends "home/base.html" %}
 {% load static %}
 {% load home %}
+{% load imagekit %}
 
 {% block title %}
   {{ section.title }}
@@ -19,7 +20,7 @@
         {% for content in new_content %}
           <div class="row">
             <div class="col-md-3">
-              {% if content|preview_image %}<img class="img-fluid" src="{{ content|preview_image }}"/>{% endif %}
+              {% if content|thumb %}{% generateimage "home:large_thumbnail" source=content|thumb -- class="img-fluid" %}{% endif %}
             </div>
             <div class="col-md-9">
               {% include "home/content/summary.html" with section=subsection %}

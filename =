@@ -1,9 +1,0 @@
-Installing django-autocomplete-light…
-Looking in indexes: https://pypi.python.org/simple
-Requirement already satisfied: django-autocomplete-light in /home/noah/.local/share/virtualenvs/silverchips-y_ArIlik/lib/python3.6/site-packages (3.2.10)
-
-Adding django-autocomplete-light to Pipfile's [packages]…
-Installing 3.3.0…
-Looking in indexes: https://pypi.python.org/simple
-Collecting 3.3.0
-

@@ -1,9 +1,6 @@
-import time
-
 from bs4 import BeautifulSoup
 from django import template
 from django.utils.html import mark_safe
-import re
 
 from core import permissions, models
 
@@ -11,17 +8,17 @@ register = template.Library()
 
 
 @register.filter
-def preview_image(content):
-    """A filter to return the URL of an image used to preview a Content.
+def thumb(content):
+    """A filter to return an image file used to preview a Content as a thumbnail.
 
-    The particular URL selected depends on the type of Content.
+    The particular image selected depends on the type of Content.
     """
     if isinstance(content, models.Story) and content.cover:
-        return content.cover.source.url
+        return content.cover.source
     if isinstance(content, models.Image):
-        return content.source.url
+        return content.source
     if isinstance(content, models.Gallery) and content.entries.count() > 0:
-        return preview_image(content.entries_in_order()[0])
+        return thumb(content.entries_in_order()[0])
     return None
 
 
