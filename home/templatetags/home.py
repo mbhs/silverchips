@@ -41,7 +41,7 @@ def thumb(content, thumb_type=None):
         return cached_file.url
     except FileNotFoundError:
         return None
-    except OSError:  # Error actually parsing the file
+    except (IOError, SyntaxError):  # Error actually parsing the file
         return image.url
 
 
