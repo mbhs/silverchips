@@ -1,0 +1,19 @@
+{% with image=content %}
+  {% with exif=image.exif_data %}
+    {% if exif %}
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title mb-0"><i class="fas fa-drafting-compass"></i> Technical Details</h5>
+        </div>
+        <ul class="list-group list-group-flush">
+          {% if exif.Model %}<li class="list-group-item"><i class="fas fa-camera"></i> <strong>Camera:</strong> {{ exif.Model }}</li>{% endif %}
+          {% if exif.LensModel %}<li class="list-group-item"><i class="fas fa-search"></i> <strong>Lens:</strong> {{ exif.LensModel }}</li>{% endif %}
+          {#            <li class="list-group-item"><i class="fas fa-circle"></i> <strong>Aperture:</strong></li>#}
+          {#            <li class="list-group-item"><i class="fas fa-clock"></i> <strong>Shutter:</strong></li>#}
+          {% if exif.ISOSpeedRatings %}<li class="list-group-item"><i class="fas fa-film"></i> <strong>ISO speed:</strong> {{ exif.ISOSpeedRatings }}</li>{% endif %}
+          {% if exif.FocalLength %}<li class="list-group-item"><i class="fas fa-ruler"></i> <strong>Focal length:</strong> {{ exif.FocalLength|first }} mm</li>{% endif %}
+        </ul>
+      </div>
+    {% endif %}
+  {% endwith %}
+{% endwith %}

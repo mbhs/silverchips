@@ -1,66 +1,159 @@
 {% extends "home/base.html" %}
 
 {% block title %}Home{% endblock %}
+{% load home %}
+{% load static %}
 
 {% block content %}
-    <div class="container">
-            {% load static %} <!-- FOR TESTING - IMAGES -->
-            <h1 class="display-4 text-center text-uppercase">Featured</h1>
-            <hr class="my-4" />
-            <div class="row featured mb-5">
-                <div class="col-md-6 featured-col">
-                    <img class="img-fluid featured-img" src="{% static 'home/images/img_5.jpg' %}" alt="">
-                    <div class="featured-content ml-3">
-                        <a class="featured-title" href="#">Featured Story Title</a>
-                        <p class="featured-info">
-                            <i class="far fa-user mr-1"></i><a href="#">Author</a>
-                             <i class="far fa-clock mx-1"></i><a href="#">Time Stamp</a>
-                        </p>
-                    </div>
-                </div>
-                <div class="col-md-6 featured-col">
-                    <img class="img-fluid featured-img" src="{% static 'home/images/img_5.jpg' %}" alt="">
-                    <div class="featured-content ml-3">
-                        <a class="featured-title" href="#">Featured Story Title</a>
-                        <p class="featured-info">
-                            <i class="far fa-user mr-1"></i><a href="#">Author</a>
-                             <i class="far fa-clock mx-1"></i><a href="#">Time Stamp</a>
-                        </p>
-                    </div>
-                </div>
-            </div>
-            {% for section in section_roots %}
-                <div id="{{ section.title }}" class="container">
-                    <h1 class="section-header display-4 text-center text-uppercase">
-                        <a href="{% url "home:view_section" section.name %}">{{ section.title }}</a>
-                    </h1>
-                    <hr class="my-4">
+  {% include "home/includes/index-sm-sidebar.html" %}
 
-                    {{ section.all_stories.count     }}
-                    {% for story in section.all_stories.all|slice:"3" %}
-                        <div class="row mb-3">
-                            <div class="col-md-4">
-                                <img class="img-fluid mx-auto"
-                                src="{% if forloop.counter|divisibleby:"3" %}
-                                        {% static "home/images/img_2.jpg" %}
-                                    {% elif forloop.counter|divisibleby:"2"  %}
-                                        {% static "home/images/work_5.jpg" %}
-                                    {% else %}
-                                        {% static "home/images/img_4.jpg" %}
-                                    {% endif %}"
-                                alt="featurette-img">
-                            </div>
-                            <div class="col-md-8">
-                                {% include "home/utils/story_summary.html" %}
-                            </div>
-                        </div>
-                        {% if forloop.last %}
-                            <hr class="section-separator">
-                        {% else %}
-                            <hr class="story-separator">
-                        {% endif %}
-                    {% endfor %}
+  <div class="medium-container">
+    {% for section in main_sections %}
+      <h1 class="display-4 mb-4 py-2 text-center text-uppercase section-header"><a href="{% url "home:view_section" section.name %}">{{ section.title }}</a></h1>
+
+      {% reserve_content section.all_content 1 %}
+      <div class="row mb-4">
+        <div class="col-md-9">
+          <div class="row section-featured-0 mb-2">
+            {% if new_content|thumb %}
+              <img class="featured-img" src="{{ new_content|thumb:"huge" }}"/>
+            {% endif %}
+            <div class="content">
+              <h2 class="text-center mt-4 feature-title"><a href="{{ new_content.get_absolute_url }}">{{ new_content|qualified_title }}</a></h2>
+              <h6 class="text-center py-2">{% include "home/utils/authors.html" with content=new_content %} | {{ new_content.created }}</h6>
+            </div>
+          </div>
+
+          <div class="row">
+            {% reserve_content section.all_content 6 %}
+            {% for content in new_content %}
+              {% if not forloop.counter|divisibleby:"2" %}<div class="col-md-6 px-0">{% endif %}
+              <div class="card mb-2 rounded-0 section-card-0">
+                <div class="img-wrapper">
+                  {% if content|thumb %}
+                    <img class="card-img-top mx-auto rounded-0 d-block" src="{{ content|thumb:"huge" }}"/>
+                  {% endif %}
                 </div>
+                <div class="card-body">
+                  <h6 class="authors d-inline-block">{% include "home/utils/authors.html" %}</h6>
+                  <h6 class="d-inline-block w-auto text-left">{{ content.created }}</h6>
+                  <h4 class="card-title"><a href="{{ content.get_absolute_url }}" class="solid-link">{{ content|qualified_title }}</a></h4>
+                </div>
+              </div>
+            {% if forloop.counter|divisibleby:"2" %}</div>{% endif %}
             {% endfor %}
+          </div>
+        </div>
+        <div class="col-md-3 section-recently-0 pl-5">
+          <h1 class="recently">Latest</h1>
+          <hr>
+          {% reserve_content section.all_content 7 %}
+          {% for content in new_content %}
+            <div>
+              <h4 class="title"><a href="{% url "home:view_content" content.pk %}">{{ content|qualified_title }}</a></h4>
+              <p class="in-section"><a href="{% url "home:view_section" content.section.name %}" class="solid-link">{{ content.section.title }}</a> | {{ content.created }}</p>
+              <hr>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    {% endfor %}
+
+    {% for section in feature_sections %}
+      <h1 class="display-4 mb-4 py-2 text-center text-uppercase section-header"><a href="{{ section.get_absolute_url }}">{{ section.title }}</a></h1>
+
+      {% reserve_content section.all_content 6 %}
+      <div class="card-columns">
+        {% for content in new_content %}
+          <div class="card align-middle rounded-0 mb-4 section-card-1">
+            <div class="img-wrapper">
+              {% if content|thumb %}
+                <img class="card-img-top mx-auto rounded-0 d-block" src="{{ content|thumb:"huge" }}"/>
+              {% endif %}
+            </div>
+            {% if section != content.section %}
+              <div class="in-section">
+                <a href="{{ content.section.get_absolute_url }}" class="solid-link"> In {{ content.section.title }} </a>
+              </div>
+            {% endif %}
+            <div class="card-body">
+              <h6 class="authors font-weight-bold">{% include "home/utils/authors.html" %}</h6>
+              <p class="story-created">{{ content.created }}</p>
+              <h4 class="card-title"><a href="{{ content.get_absolute_url }}" class="solid-link">{{ content|qualified_title }}</a></h4>
+              <p>
+                {{ content.description|safe }}
+              </p>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+
+      <hr class="mt-3 mb-5" />
+    {% endfor %}
+
+    {% for section in list_sections %}
+      <h1 class="display-4 mb-4 py-2 text-center text-uppercase section-header"><a href="{{ section.get_absolute_url }}">{{ section.title }}</a></h1>
+
+      {% reserve_content section.all_content 5 %}
+      {% for content in new_content %}
+        <div class="row">
+          <div class="col-md-2">
+            {% if content|thumb %}
+              <img class="img-fluid" src="{{ content|thumb:"medium" }}"/>
+            {% endif %}
+          </div>
+          <div class="col-md-10">
+            {% include "home/content/summary.html" %}
+          </div>
+        </div>
+        {% if not forloop.last %}<hr/>{% endif %}
+      {% endfor %}
+    {% endfor %}
+
+    {% for section in compact_sections %}
+      <h1 class="display-4 mb-4 py-2 text-center text-uppercase section-header"><a href="{{ section.get_absolute_url }}">{{ section.title }}</a></h1>
+
+      <div class="card-columns card-columns-compact">
+        {% reserve_content section.all_content 12 %}
+        {% for content in new_content %}
+          <div class="card">
+            <div class="card-body row">
+              <div class="col-3 pr-0">
+                {% if content|thumb %}
+                  <img class="img-fluid" src="{{ content|thumb:"small" }}"/>
+                {% endif %}
+              </div>
+              <div class="col-9">
+                <a class="h5" href="{{ content.get_absolute_url }}">{{ content|qualified_title }}</a>
+                <h6><span class="text-muted">By</span> {% include "home/utils/authors.html" %}</h6>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% endfor %}
+
+    <div class="card-columns card-columns-dense">
+      {% for section in dense_sections %}
+        <div class="card">
+          <div class="card-header">
+            <h4 class="text-center text-uppercase section-header"><a href="{% url "home:view_section" section.name %}">{{ section.title }}</a></h4>
+          </div>
+          {% reserve_content section.all_content 5 %}
+          {% if new_content|first|thumb %}
+            <img class="card-img-top" src="{{ new_content|first|thumb:"large" }}"/>
+          {% endif %}
+          <ul class="list-group list-group-flush">
+            {% for content in new_content %}
+              <li class="list-group-item">
+                <a class="solid-link h6" href="{{ content.get_absolute_url }}">{{ content|qualified_title }}</a>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endfor %}
     </div>
+  </div>
+
+  <script src="{% static "home/scripts/index.js" %}"></script>
 {% endblock %}

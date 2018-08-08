@@ -1,0 +1,5 @@
+{% extends "staff/editor.html" %}
+
+{% block subeditor %}
+  {% include "staff/includes/richtext_embed_modal.html" with form=content_embed_form %}
+{% endblock %}

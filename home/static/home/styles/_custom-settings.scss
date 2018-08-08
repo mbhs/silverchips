@@ -1,38 +1,86 @@
 /* FONTS */
-@import url('https://fonts.googleapis.com/css?family=Oswald|Open+Sans|Playfair+Display');
+@import url('https://fonts.googleapis.com/css?family=Oswald|Open+Sans|Playfair+Display|Fugaz+One');
+$site-header-font: "Oswald", serif;
+$site-paragraph-font: "Open Sans", sans-serif;
+$playfair-display: "Playfair Display", sans-serif;
+$fugaz-one: "Fugaz One", serif;
 
 /* COLORS */
-$background: #ffffff; //WHITE
-$font: #373737; //CHARCOAL
+$site-gray: #373737;
+$site-white: #ffffff;
+$site-red: #c54c3a;
+$site-light-red: lighten($site-red, 10);
 
-$navbar: #ffffff;
-$navbar-header-background:#ffffff;
-$navbar-active: #c54c3a;
-$navbar-unactive: #000000;
+$site-background: $site-white;
+$site-header: $site-gray;
+$site-paragraph: $site-gray;
 
-$section-header: #373737;
-$solid-link: #373737;
+$navbar-background: $site-background;
+$navbar-active-link: $site-red;
+$navbar-unactive-link: $site-paragraph;
 
-$story-title: #373737;
-$author: #373737;
+$card-header-bg: $site-gray;
+$card-title-color: $site-white;
 
-$card-header-bg: #373737;
-$card-title-color: #ffffff;
 
 /* MASTHEAD/FOOTER BACKGROUND IMAGE */
 $background-image: url("../images/footer_lodyas.png");
 
-/* MIXINS */
-$breakpoints: (            //   Bootstrap equivalents
-    "phone":        576px, //           sm
-    "tablet":       768px, //           md
-    "desktop":      992px, //           lg
-    "desktop-wide": 1200px //           xl
+/* CUSTOM BOOTSTRAP BREAKPOINTS */
+$grid-breakpoints: (
+  // Extra small screen / phone
+  xs: 0,
+  // Small screen / phone
+  sm: 576px,
+  // Medium screen / tablet
+  md: 768px,
+  // Large screen / desktop
+  lg: 992px,
+  // Extra large screen / wide desktop
+  xl: 1280px
 );
 
+/* CUSTOM BOOTSTRAP CONTAINER */
+.large-container {
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+}
+.medium-container {
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
+@media (min-width: 768px) {
+  .large-container {
+    max-width: calc(100vw - 100px);
+  }
+  .medium-container {
+    max-width: calc(100vw - 200px);
+  }
+}
+@media (min-width: 992px) {
+  .large-container {
+    max-width: calc(100vw - 160px);
+  }
+  .medium-container {
+    max-width: calc(100vw - 240px);
+  }
+}
+@media (min-width: 1280px) {
+  .large-container {
+    max-width: calc(100vw - 200px);
+  }
+  .medium-container {
+    max-width: calc(100vw - 280px);
+  }
+}
+
 @mixin mq($width, $type: min) {
-    @if map_has_key($breakpoints, $width) {
-        $width: map_get($breakpoints, $width);
+    @if map_has_key($grid-breakpoints, $width) {
+        $width: map_get($grid-breakpoints, $width);
         @if $type == max {
             $width: $width - 1px;
         }
@@ -50,3 +98,37 @@ $breakpoints: (            //   Bootstrap equivalents
         @return null;
     }
 }
+
+@function set-text-color($color) {
+    @if (lightness($color) > 50) {
+        @return $site-gray;
+    } @else {
+        @return $site-white;
+    }
+}
+
+
+
+//.card-columns-compact {
+//  @include media-breakpoint-only(xs) {
+//    column-count: 1;
+//  }
+//  @include media-breakpoint-only(md) {
+//    column-count: 2;
+//  }
+//  @include media-breakpoint-only(lg) {
+//    column-count: 3;
+//  }
+//}
+//
+//.card-columns-dense {
+//  @include media-breakpoint-only(xs) {
+//    column-count: 1;
+//  }
+//  @include media-breakpoint-only(md) {
+//    column-count: 3;
+//  }
+//  @include media-breakpoint-only(lg) {
+//    column-count: 5;
+//  }
+//}

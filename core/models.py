@@ -1,4 +1,4 @@
-"""Core models for the SilverChips platform."""
+"""Core models for the Silver Chips platform."""
 
 from django.db import models
 import django.contrib.auth.models as auth
@@ -6,7 +6,11 @@ from django.utils import timezone
 from django.utils.text import slugify
 from django.core.validators import RegexValidator
 from django.urls import reverse
+from ordered_model.models import OrderedModel
 from polymorphic.models import PolymorphicModel
+
+import PIL.Image
+import PIL.ExifTags
 
 
 class Profile(models.Model):
@@ -21,8 +25,9 @@ class Profile(models.Model):
     user = models.OneToOneField("User", related_name="profile", on_delete=models.CASCADE)
 
     # Personal information
-    biography = models.TextField()
-    avatar = models.ImageField(null=True)
+    biography = models.TextField(help_text="A short biography, often including likes and dislikes, accomplishments,"
+                                           " etc. Should be several sentences minimum.")
+    avatar = models.ImageField(blank=True, null=True)
     position = models.TextField()
     graduation_year = models.IntegerField(default=timezone.now().year+4)
 
@@ -67,7 +72,6 @@ class User(auth.User):
 
     def __repr__(self):
         """Represent the user as a string."""
-
         return "User[{}]".format(self.get_full_name())
 
     class Meta:
@@ -80,7 +84,15 @@ class User(auth.User):
 class Tag(models.Model):
     """Basic tag model for content."""
 
-    name = models.CharField(max_length=32)
+    name = models.CharField(max_length=32, unique=True)
+
+    def __str__(self):
+        """Represent the tag as a string.
+
+        This is the value Django Autocomplete Light displays in the
+        form element when a tag is selected.
+        """
+        return self.name
 
 
 class Content(PolymorphicModel):
@@ -89,13 +101,14 @@ class Content(PolymorphicModel):
     This container provides the metaclass for all types of media,
     including stories, images, videos, galleries, and podcasts. Each
     subclass should be capable of rendering itself to HTML so that it
-    can be generically displayed or embedded.
+    can be generically displayed or embedded. States pertaining to editing and publishing
+    status are also stored.
     """
 
     # Basic identification information
     title = models.TextField()
     description = models.TextField()
-    tags = models.ManyToManyField(Tag)
+    tags = models.ManyToManyField(Tag, blank=True)
     legacy_id = models.IntegerField(null=True)
 
     # Time information
@@ -103,15 +116,19 @@ class Content(PolymorphicModel):
     modified = models.DateTimeField(default=timezone.now)
 
     # Authorship information
-    authors = models.ManyToManyField(User, related_name="%(class)s_authored")  # user.image_authored
+    authors = models.ManyToManyField(User, related_name="%(class)s_authored", blank=True)  # user.images_authored
     guest_authors = models.CharField(max_length=64, default="", blank=True)  # Authors who aren't in the database
 
     # Tracking information
-    section = models.ForeignKey("Section", related_name="content", null=True, on_delete=models.SET_NULL)
+    section = models.ForeignKey("Section", related_name="content", null=True, blank=True, on_delete=models.SET_NULL)
     views = models.IntegerField(default=0)
 
     # Whether this content should show up by itself
-    embed_only = models.BooleanField(default=False)
+    embed_only = models.BooleanField(default=False, help_text="Whether this content should be used only in the context"
+                                     " of embedding into other content (especially stories), or whether it should"
+                                     " appear independently on the site. You will often mark content as embed only"
+                                     " when it is not original or when it is meaningless outside of some"
+                                     " broader story.")
 
     # Content visibility workflow constants
     DRAFT = 1
@@ -135,9 +152,8 @@ class Content(PolymorphicModel):
         """Return a slugified version of this Content's title for use in URLs."""
         return slugify(self.title)
 
-    def __str__(self):
+    def __repr__(self):
         """Represent this Content as a string."""
-
         return "Content[{}:{}]".format(self.type, self.title)
 
     def has_tag(self, name):
@@ -158,7 +174,7 @@ class Content(PolymorphicModel):
 
     def get_absolute_url(self):
         """Find the URL through which this Content can be accessed."""
-        return reverse('home:view_content', args=[self.slug, self.pk])
+        return reverse('home:view_content', args=[self.slug, self.pk] if self.slug else [self.pk])
 
 
 # Section names should be pretty
@@ -172,11 +188,27 @@ class Section(models.Model):
 
     name = models.CharField(max_length=32, unique=True)  # Internal tracking name (used in URLs)
     title = models.CharField(max_length=64)  # External name for display
-    active = models.BooleanField(default=True)
+
+    visible = models.BooleanField(default=True)  # Whether this section should show up on the site
+
+    NONE = -1
+    DENSE = 0
+    COMPACT = 1
+    LIST = 2
+    FEATURES = 3
+    MAIN = 4
+
+    index_display = models.IntegerField(default=NONE, choices=(
+        (NONE, "-1"),
+        (DENSE, "dense"),
+        (COMPACT, "compact"),
+        (LIST, "list"),
+        (FEATURES, "features"),
+        (MAIN, "main")))
 
     def __str__(self):
         """Represent this Section as a string."""
-        return 'Section[{}]'.format(self.title)
+        return self.title
 
     def get_ancestors(self):
         """Get all Sections that are ancestors of this Section."""
@@ -199,63 +231,21 @@ class Section(models.Model):
 
         return descendants
 
-    def all_stories(self):
-        """Get all the Stories that belong to this Section for display in section templates."""
-        return Story.objects.filter(visibility=Content.PUBLISHED, embed_only=False, section__in=self.get_descendants())
+    def all_content(self):
+        """Get all the Content that belongs to this Section for display in section templates."""
+        return Content.objects.filter(visibility=Content.PUBLISHED, embed_only=False,
+                                      section__in=self.get_descendants())
 
     def is_root(self):
         """Check whether this Section is a root Section."""
         return self.parent is None
 
+    def get_absolute_url(self):
+        """Find the URL through which this Section can be accessed."""
+        return reverse('home:view_section', args=[self.name])
+
     class Meta:
         verbose_name_plural = "sections"
-
-
-# class Section(models.Model):
-#     """All stories are categorized by sections.
-#
-#     To avoid using a recursive system, sections have an identifying
-#     string and absolute path. The absolute path is set when the
-#     """
-#
-#     id = models.CharField(max_length=16, validators=[alphanumeric])
-#     _path = models.CharField(max_length=64, unique=True, primary_key=True)
-#
-#     name = models.CharField(max_length=32)
-#     title = models.CharField(max_length=64)
-#     active = models.BooleanField(default=True)
-#
-#     def assign(self, section: "Section"=None):
-#         """Assign this section under another section."""
-#
-#         if not self.id:
-#             raise RuntimeError("Section ID is not set.")
-#         if section is None:
-#             self._path = "/" + self.id
-#         else:
-#             self._path = posixpath.join(section.path, self.id)
-#
-#     def save(self, *args, **kwargs):
-#         """Save the section model.
-#
-#         If the path is not set, the section is automatically assigned
-#         to the root path.
-#         """
-#
-#         if not self._path:
-#             self.assign()
-#         super().save(*args, **kwargs)
-#
-#     @property
-#     def path(self):
-#         """Get the path to the section."""
-#
-#         return self._path
-#
-#     def __str__(self):
-#         """Represent the section as a string."""
-#
-#         return "Sections[{}]".format(self.title)
 
 
 class Image(Content):
@@ -263,7 +253,19 @@ class Image(Content):
     source = models.ImageField(upload_to="images/%Y/%m/%d/")
 
     template = "home/content/image.html"
+    sidebar_template = "home/content/sidebars/image.html"
     descriptor = "Photo"
+
+    def exif_data(self):
+        try:
+            _image = PIL.Image.open(self.source.file)
+            return {
+                PIL.ExifTags.TAGS[exif_tag]: value
+                for exif_tag, value in _image._getexif().items()
+                if exif_tag in PIL.ExifTags.TAGS
+            }
+        except FileNotFoundError:
+            return None
 
 
 class Video(Content):
@@ -283,18 +285,12 @@ class Audio(Content):
 
 
 class Poll(Content):
-    pass # STUB_POLL
+    pass  # STUB_POLL
 
 
 class Story(Content):
-    """The main story model.
-
-    Stories are the backbone of a news site, and are one of the most
-    important models. In addition to storing information relating to
-    the written contents, states pertaining to editing and publishing
-    status are also stored.
-    """
-    lead = models.TextField()  # Lead paragraph
+    """The main story model."""
+    second_deck = models.TextField()  # Second deck
     text = models.TextField()  # Full text
     cover = models.ForeignKey(Image, null=True, on_delete=models.SET_NULL)  # Cover photo
 
@@ -306,5 +302,26 @@ class Story(Content):
         verbose_name_plural = "stories"
 
 
+class Gallery(Content):
+    """A model representing an ordered gallery of other Content."""
+    entries = models.ManyToManyField(Content, through='core.GalleryEntryLink', related_name="containing_galleries")
+
+    template = "home/content/gallery.html"
+    descriptor = "Gallery"
+    hide_caption = True
+
+    def entries_in_order(self):
+        return self.entries.order_by("gallery_links")
+
+
+class GalleryEntryLink(OrderedModel):
+    gallery = models.ForeignKey(Gallery, on_delete=models.CASCADE, related_name="entry_links")
+    entry = models.ForeignKey(Content, on_delete=models.CASCADE, related_name="gallery_links")
+    order_with_respect_to = 'gallery'
+
+    class Meta:
+        ordering = ('gallery', 'order')
+
+
 class Comment(models.Model):
-    pass # STUB_COMMENT
+    pass  # STUB_COMMENT

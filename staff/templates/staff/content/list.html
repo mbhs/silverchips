@@ -3,141 +3,147 @@
 {% load staff %}
 {% load crispy_forms_tags %}
 
-{% block title %}Content List{% endblock %}
+{% block title %}Manage Content{% endblock %}
 
 {% block content %}
-{% csrf_token %}
-<h1>Content</h1>
+  {% csrf_token %}
+  <h1>Manage Content</h1>
 
-{% if user|can:"core.create_content" %}
-<div class="row">
-    <div class="col-lg-3 col-sm-6 col-xs-12">
-        <a class="btn btn-primary btn btn-block my-3" href="{% url "staff:content:create:story" %}">Create Story <i class="fas fa-book"></i></a>
+  {% if user|can:"core.create_content" %}
+    <div class="row">
+      <div class="col-lg-3 col-sm-6">
+        <a class="btn btn-primary btn-lg btn-block my-3" href="{% url "staff:content:create:story" %}">Create Story <i class="fas fa-book"></i></a>
+      </div>
+      <div class="col-lg-3 col-sm-6">
+        <a class="btn btn-primary btn-lg btn-block my-3" href="{% url "staff:content:create:gallery" %}">Create Gallery <i class="fas fa-images"></i></a>
+      </div>
+      <div class="col-lg-3 col-sm-6">
+        <a class="btn btn-primary btn-lg btn-block my-3" href="{% url "staff:content:create:image" %}">Create Image <i class="fas fa-camera"></i></a>
+      </div>
+      <div class="col-lg-3 col-sm-6">
+        <a class="btn btn-primary btn-lg btn-block my-3" href="{% url "staff:content:create:video" %}">Create Video <i class="fas fa-video"></i></a>
+      </div>
+      <div class="col-lg-3 col-sm-6">
+        <a class="btn btn-primary btn-lg btn-block my-3" href="{% url "staff:content:create:audio" %}">Create Audio <i class="fas fa-microphone"></i></a>
+      </div>
+      {# STUB_POLL #}
     </div>
-    <div class="col-lg-3 col-sm-6 col-xs-12">
-        <a class="btn btn-primary btn btn-block my-3" href="{% url "staff:content:create:image" %}">Create Image <i class="fas fa-camera"></i></a>
-    </div>
-    <div class="col-lg-3 col-sm-6 col-xs-12">
-        <a class="btn btn-primary btn btn-block my-3" href="{% url "staff:content:create:video" %}">Create Video <i class="fas fa-camera"></i></a>
-    </div>
-    <div class="col-lg-3 col-sm-6 col-xs-12">
-        <a class="btn btn-primary btn btn-block my-3" href="{% url "staff:content:create:audio" %}">Create Audio <i class="fas fa-camera"></i></a>
-    </div>
-{# STUB_POLL #}
-</div>
 
-<hr/>
-{% endif %}
+    <hr/>
+  {% endif %}
 
-<div class="card">
+  <div class="card">
+    <h5 class="card-header">Search content</h5>
     <div class="card-body">
-        <form method="get">
-            <div class="form-inline">
-                {% crispy form form.helper %}
-            </div>
-            <br/>
-            <button type="submit" class="btn btn-success">Search <i class="fas fa-search"></i></button>
-        </form>
+      <form method="get">
+        <div class="form-inline">
+          {% crispy form form.helper %}
+        </div>
+        <br/>
+        <button type="submit" class="btn btn-success">Search <i class="fas fa-search"></i></button>
+      </form>
     </div>
-</div>
-<br/>
+  </div>
+  <br/>
 
-<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="deleteModalLabel">Delete content</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+  <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deleteModalLabel">Delete content</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true"><i class="fas fa-times"></i></span>
-        </button>
-      </div>
-      <div class="modal-body">
-        Are you sure you want to delete content <code id="deleteTitle"></code>?
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Nevermind <i class="fas fa-times"></i></button>
-        <button type="button" class="btn btn-danger" id="deleteButton">Delete <i class="fas fa-trash-alt"></i></button>
+          </button>
+        </div>
+        <div class="modal-body">
+          Are you sure you want to delete content <code id="deleteTitle"></code>?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Nevermind <i class="fas fa-times"></i></button>
+          <button type="button" class="btn btn-danger" id="deleteButton">Delete <i class="fas fa-trash-alt"></i></button>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-<script>
-$('#deleteModal').on('show.bs.modal', function (event) {
-  var button = $(event.relatedTarget);
-  var recipient = button.data('title');
-  var modal = $(this);
-  modal.find('#deleteTitle').text(recipient);
-  $('#deleteButton').on('click', () => doApi(button.data('href'), button.data('verb')));
-});
+  <script>
+    $('#deleteModal').on('show.bs.modal', function (event) {
+      let button = $(event.relatedTarget);
+      let recipient = button.data('title');
+      let modal = $(this);
+      modal.find('#deleteTitle').text(recipient);
+      $('#deleteButton').on('click', () => doApi(button.data('href'), button.data('verb')));
+    });
 
-function doApi(url, verb) {
-  $.ajax({
-    url: url,
-    method: verb,
-    headers: {'X-CSRFToken': $("[name=csrfmiddlewaretoken]").val()},
-  }).done(() => location.reload());
-}
-</script>
+    function doApi(url, verb) {
+      $.ajax({
+        url: url,
+        method: verb,
+        headers: {'X-CSRFToken': $("[name=csrfmiddlewaretoken]").val()},
+      }).done(() => location.reload());
+    }
+  </script>
 
-<div class="table-responsive">
+  <div class="table-responsive">
     <table class="table table-striped">
-        <thead>
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">Type</th>
-            <th scope="col">Title</th>
-            <th scope="col">Modified</th>
-            <th scope="col">Authors</th>
-            <th scope="col">Embed Only</th>
-            <th scope="col">Visibility</th>
-            <th scope="col">Actions</th>
-        </tr>
-        </thead>
+      <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Type</th>
+        <th scope="col">Title</th>
+        <th scope="col">Modified</th>
+        <th scope="col">Authors</th>
+        <th scope="col">Tags</th>
+        <th scope="col">Embed Only</th>
+        <th scope="col">Visibility</th>
+        <th scope="col">Actions</th>
+      </tr>
+      </thead>
 
-        <tbody>
-        {% for content in content_list %}
+      <tbody>
+      {% for content in content_list %}
         <tr>
-            <th scope="row">{{ content.pk }}</th>
-            <td>{{ content.type }}</td>
-            <td>{{ content.title|safe }}</td>
-            <td>{{ content.modified|date:"SHORT_DATETIME_FORMAT" }}</td>
-            <td>{{ content|names }}</td>
-            <td><i class="fas fa-{{ content.embed_only|yesno:"check,times" }}"></i></td>
-            <td>{{ content.get_visibility_display|capfirst }}</td>
-            <td>
-                <div class="dropdown">
-                    <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink{{ forloop.counter }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+          <th scope="row">{{ content.pk }}</th>
+          <td>{{ content.type }}</td>
+          <td>{{ content.title|safe }}</td>
+          <td>{{ content.modified|date:"SHORT_DATETIME_FORMAT" }}</td>
+          <td>{{ content|names }}</td>
+          <td>{{ content|tags }}</td>
+          <td><i class="fas fa-{{ content.embed_only|yesno:"check,times" }}"></i></td>
+          <td>{{ content.get_visibility_display|capfirst }}</td>
+          <td>
+            <div class="dropdown">
+              <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink{{ forloop.counter }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
 
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink{{ foorloop.counter }}">
-                        {% if request.user|can_read_content:content %}
-                        <a class="dropdown-item" href="{% url "home:view_content" content.pk %}" target="_blank">View <i class="fas fa-external-link-alt"></i></a>
-                        {% endif %}
-                        {% if request.user|can_edit_content:content %}
-                        <a class="dropdown-item" href="{% url "staff:content:edit" content.pk %}">Edit <i class="fas fa-edit"></i></a>
-                        {% endif %}
-                        <div class="dropdown-divider"></div>
-                        {% if request.user|can_pend_content:content %}
-                        <a class="dropdown-item" href='javascript:doApi("{% url "staff:content:set_visibility" content.pk content.PENDING %}", "patch");'>Pend <i class="fas fa-thumbs-up"></i></a>
-                        {% endif %}
-                        {% if request.user|can_publish_content:content %}
-                        <a class="dropdown-item" href='javascript:doApi("{% url "staff:content:set_visibility" content.pk content.PUBLISHED %}", "patch");'>Publish <i class="fas fa-paper-plane"></i></a>
-                        {% endif %}
-                        {% if request.user|can_hide_content:content %}
-                        <a class="dropdown-item" href='javascript:doApi("{% url "staff:content:set_visibility" content.pk content.HIDDEN %}", "patch");'>Hide <i class="fas fa-eye-slash"></i></a>
-                        {% endif %}
-                        {% if request.user|can_delete_content:content %}
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="" data-pk={{ content.pk }} data-toggle="modal" data-target="#deleteModal" data-title="{{ content.title|safe }}" data-verb="delete" data-href="{% url "staff:content:delete" content.pk %}" style="color: #f55;">Delete <i class="fas fa-trash-alt"></i></a>
-                        {% endif %}
-                    </div>
-                </div>
-            </td>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuLink{{ foorloop.counter }}">
+                {% if request.user|can_read_content:content %}
+                  <a class="dropdown-item" href="{% url "home:view_content" content.pk %}" target="_blank">View <i class="fas fa-external-link-alt"></i></a>
+                {% endif %}
+                {% if request.user|can_edit_content:content %}
+                  <a class="dropdown-item" href="{% url "staff:content:edit" content.pk %}">Edit <i class="fas fa-edit"></i></a>
+                {% endif %}
+                <div class="dropdown-divider"></div>
+                {% if request.user|can_pend_content:content %}
+                  <a class="dropdown-item" href='javascript:doApi("{% url "staff:content:set_visibility" content.pk content.PENDING %}", "patch");'>Pend <i class="fas fa-thumbs-up"></i></a>
+                {% endif %}
+                {% if request.user|can_publish_content:content %}
+                  <a class="dropdown-item" href='javascript:doApi("{% url "staff:content:set_visibility" content.pk content.PUBLISHED %}", "patch");'>Publish <i class="fas fa-paper-plane"></i></a>
+                {% endif %}
+                {% if request.user|can_hide_content:content %}
+                  <a class="dropdown-item" href='javascript:doApi("{% url "staff:content:set_visibility" content.pk content.HIDDEN %}", "patch");'>Hide <i class="fas fa-eye-slash"></i></a>
+                {% endif %}
+                {% if request.user|can_delete_content:content %}
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="" data-pk={{ content.pk }} data-toggle="modal" data-target="#deleteModal" data-title="{{ content.title|safe }}" data-verb="delete" data-href="{% url "staff:content:delete" content.pk %}" style="color: #f55;">Delete <i class="fas fa-trash-alt"></i></a>
+                {% endif %}
+              </div>
+            </div>
+          </td>
         </tr>
-        {% endfor %}
-        </tbody>
+      {% endfor %}
+      </tbody>
     </table>
-</div>
+  </div>
 
-{% include "staff/utils/paginator.html" %}
+  {% include "home/utils/paginator.html" %}
 {% endblock %}

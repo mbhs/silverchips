@@ -1,0 +1,27 @@
+.col-form-label {
+  font-weight: bold;
+}
+
+.asteriskField {
+  color: red;
+  font-weight: bold;
+
+  &::before {
+      content: " ";
+  }
+}
+
+body {
+  margin-bottom: 1em;
+}
+
+.form-inline {
+  .col-form-label, .form-group {
+    margin-right: 1em;
+  }
+}
+
+// not sure why this is necessary but crispy forms doesn't appear to be working properly
+.invalid-feedback {
+  display: block;
+}

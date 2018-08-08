@@ -1,14 +1,19 @@
+{% load crispy_forms_tags %}
+
 <div
-        id="{{ widget.name }}-editor"
-        {% if widget.attrs.short %}style="height: 100px;"{% endif %}>
-    {{ widget.value|default_if_none:""|safe }}</div>
+    id="{{ widget.name }}-editor"
+    {% if widget.attrs.short %}style="height: 100px;"{% endif %}>
+  {{ widget.value|default_if_none:""|safe }}
+</div>
 <input id="{{ widget.name }}" name="{{ widget.name }}" type="hidden">
 <script>
-    $(window).on("load", function() {
-        var editor = quill("#{{ widget.name }}-editor", {{ widget.attrs.short|yesno:"true,false" }}, {{ widget.attrs.embed|yesno:"true,false" }});
-        var form = document.getElementById("{{ widget.name }}").form;
-        form.addEventListener("submit", function() {
-            form.{{ widget.name }}.value = editor.root.innerHTML;
-        })
-    });
+  $(window).on("load", function() {
+    let editor = quill("{{ widget.name }}", {{ widget.attrs.short|yesno:"true,false" }}, {{ widget.attrs.embed|yesno:"true,false" }});
+    preview_embeds();
+    let form = document.getElementById("{{ widget.name }}").form;
+    form.addEventListener("submit", function() {
+      unpreview_embeds();
+      form.{{ widget.name }}.value = editor.root.innerHTML;
+    })
+  });
 </script>

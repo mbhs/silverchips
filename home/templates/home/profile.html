@@ -1,73 +1,79 @@
 {% extends "home/base.html" %}
 
 {% block title %}
-    {{ user.get_full_name }}
+  {{ user.get_full_name }}
 {% endblock %}
 
 {% block content %}
+  <div class="container">
     <h1>{{ user.get_full_name }}</h1>
     <hr/>
 
     <div class="row">
-        <div class="col-md-3">
-            {% if user.profile.avatar %}
-                <img class="square mx-auto d-block rounded-circle" src="{{ user.profile.avatar.source.url }}">
+      <div class="col-md-3">
+        {% if user.profile.avatar %}
+          <img class="square img-fluid mx-auto d-block rounded-circle" src="{{ user.profile.avatar.url }}">
+          <br/><br/>
+        {% endif %}
 
-                <br/><br/>
-            {% endif %}
+        <strong>Name</strong>: {{ user.get_full_name }} <br/>
+        <strong>Position</strong>: {{ user.profile.position }} <br/>
+        <strong>Graduation Year</strong>: {{ user.profile.graduation_year }}
+      </div>
 
-            <strong>Name</strong>: {{ user.get_full_name }} <br/>
-            <strong>Position</strong>: {{ user.profile.position }} <br/>
-            <strong>Graduation Year</strong>: {{ user.profile.graduation_year }}
-        </div>
-        <div class="col-md-9">
-            {{ user.profile.biography|safe }}
-        </div>
+      <div class="col-md-9">
+        {{ user.profile.biography|safe }}
+      </div>
     </div>
 
     {% if stories.count > 0 %}
-        <br/><br/>
-        <h2>Stories ({{ stories.count }})</h2>
-        <hr/>
+      <br/><br/>
+      <h2>Stories ({{ stories.count }})</h2>
+      <hr/>
 
-        {% for story in stories %}
-            {% include "home/utils/story_summary.html" with story=story %}
-        {% endfor %}
+      {% for story in stories %}
+        {% include "home/content/summary.html" with content=story %}
+      {% endfor %}
     {% endif %}
 
     {% if images.count > 0 %}
-        <br/><br/>
-        <h2>Images ({{ images.count }})</h2>
-        <hr/>
+      <br/><br/>
+      <h2>Images ({{ images.count }})</h2>
+      <hr/>
 
-        {% for image in images %}
-            <h4><a href="{% url "home:view_image" image.pk %}" class="solid-link">{{ image.title|safe }}</a></h4>
-            {{ image.created }}
-            <p class="text-muted">{{ image.description|safe }}</p>
-        {% endfor %}
+      {% for image in images %}
+        {% include "home/content/summary.html" with content=image %}
+      {% endfor %}
     {% endif %}
 
     {% if videos.count > 0 %}
-        <br/><br/>
-        <h2>Images ({{ videos.count }})</h2>
-        <hr/>
+      <br/><br/>
+      <h2>Videos ({{ videos.count }})</h2>
+      <hr/>
 
-        {% for video in videos %}
-            <h4><a href="{% url "home:view_video" audio.pk %}" class="solid-link">{{ video.title|safe }}</a></h4>
-            {{ video.created }}
-            <p class="text-muted">{{ video.description|safe }}</p>
-        {% endfor %}
+      {% for video in videos %}
+        {% include "home/content/summary.html" with content=video %}
+      {% endfor %}
     {% endif %}
 
     {% if audios.count > 0 %}
-        <br/><br/>
-        <h2>Images ({{ audios.count }})</h2>
-        <hr/>
+      <br/><br/>
+      <h2>Audios ({{ audios.count }})</h2>
+      <hr/>
 
-        {% for audio in audios %}
-            <h4><a href="{% url "home:view_audio" audio.pk %}" class="solid-link">{{ audio.title|safe }}</a></h4>
-            {{ audio.created }}
-            <p class="text-muted">{{ audio.description|safe }}</p>
-        {% endfor %}
+      {% for audio in audios %}
+        {% include "home/content/summary.html" with content=audio %}
+      {% endfor %}
     {% endif %}
+
+    {% if galleries.count > 0 %}
+      <br/><br/>
+      <h2>Images ({{ audios.count }})</h2>
+      <hr/>
+
+      {% for gallery in galleries %}
+        {% include "home/content/summary.html" with content=gallery %}
+      {% endfor %}
+    {% endif %}
+  </div>
 {% endblock %}

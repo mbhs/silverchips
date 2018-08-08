@@ -1,1 +1,28 @@
-STUB_ABOUT
+{% extends "home/base.html" %}
+
+{% block title %}Staff{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <h1>Silver Chips Online Staff</h1>
+
+    <ul>
+      {% for user in active_users %}
+        <li>
+          <a href="{% url 'home:view_profile' user.profile.pk %}"> {{ user.get_full_name }}</a>, {{ user.profile.position }}
+          {% if user.email %}&mdash; <a href="mailto:{{ user.email }}">{{ user.email }}</a>{% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+
+    <h3>Past Staff</h3>
+    <ul>
+      {% for user in inactive_users %}
+        <li>
+          <a href="{% url 'home:view_profile' user.profile.pk %}"> {{ user.get_full_name }}</a>{% if user.profile.position %}, {{ user.profile.position }}{% endif %}
+          {% if user.profile.graduation_year > 0 %}(graduated {{ user.profile.graduation_year }}){% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endblock %}

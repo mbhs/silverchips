@@ -7,23 +7,35 @@ of everything a normal user would see while visiting the website.
 # Django imports
 from django.views.generic import CreateView, ListView
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponseForbidden
+from django.http import HttpResponseForbidden, HttpResponse
+from django.contrib.auth.models import User
 
 # News imports
 from core import models
-from core.permissions import user_can
+from core.permissions import can, user_can
+
+from django.utils import timezone
+
+from home.templatetags.home import render_content
 
 
 def load_context(request):
     return {
-        "section_roots": models.Section.objects.filter(parent=None),  # For navigation bar
-        "stories": models.Story.objects.filter(visibility=models.Content.PUBLISHED, embed_only=False)  # For sidebar
+        "section_roots": models.Section.objects.filter(parent=None, visible=True),  # For navigation bar
+        "now": timezone.now(),  # For navigation bar
+        "top_content": models.Content.objects.filter(visibility=models.Content.PUBLISHED, embed_only=False)  # For sidebar
     }
 
 
 def index(request):
-    """Render the index page of the SilverChips site."""
-    return render(request, "home/index.html")
+    """Render the index page of the Silver Chips site."""
+    return render(request, "home/index.html", {
+        "dense_sections": models.Section.objects.filter(index_display=models.Section.DENSE),
+        "compact_sections": models.Section.objects.filter(index_display=models.Section.COMPACT),
+        "list_sections": models.Section.objects.filter(index_display=models.Section.LIST),
+        "feature_sections": models.Section.objects.filter(index_display=models.Section.FEATURES),
+        "main_sections": models.Section.objects.filter(index_display=models.Section.MAIN)
+    })
 
 
 STORY_COUNT = 3
@@ -33,19 +45,22 @@ def view_section(request, name):
     """Render a section of the newspaper."""
     section = get_object_or_404(models.Section, name=name)
 
-    # Get the top STORY_COUNT stories in the section
-    top_stories = section.all_stories()[:STORY_COUNT]
-    subsections = [(None, top_stories)]
-
-    for subsection in section.subsections.all():
-        subsections.append((subsection,
-                            subsection.all_stories().filter(visibility=models.Content.PUBLISHED)
-                            .exclude(id__in=top_stories.values_list('id', flat=True))))  # Exclude our top stories
+    # First load the top stories in the entire section, and then in each subsection
+    subsections = [(section, section.all_content())]
+    for subsection in section.subsections.filter(visible=True):
+        subsections.append((subsection, subsection.all_content()))
 
     return render(request, "home/section.html", {
         "section": section,
         "subsections": subsections
     })
+
+
+@user_can('content.read')
+def preview_content(request, pk):
+    """Render specific content in the newspaper."""
+    content = get_object_or_404(models.Content, pk=pk)
+    return HttpResponse(render_content(request.user, content))
 
 
 @user_can('content.read')
@@ -58,9 +73,9 @@ def view_content(request, pk, slug=None):
     if content.slug != slug:
         return redirect("home:view_content", content.slug, content.pk)
 
-    if not content.publishable:
+    if content.embed_only and not can(request.user, 'content.edit', content):
         # This content shouldn't have it's own page!
-        return HttpResponseForbidden("This content is not publishable.")
+        return HttpResponseForbidden("This content is for embedding only.")
 
     # Mark another view for the content
     content.views += 1
@@ -73,21 +88,22 @@ def view_content(request, pk, slug=None):
 
 def view_profile(request, pk):
     """Render the profile of a given staff member."""
-
     user = get_object_or_404(models.User, id=pk)
 
     # Find all the content that this user authored
-    stories = models.Story.objects.filter(authors__in=[user], visibility=models.Content.PUBLISHED, embed_only=True)
-    images = models.Image.objects.filter(authors__in=[user], visibility=models.Content.PUBLISHED, embed_only=True)
-    videos = models.Video.objects.filter(authors__in=[user], visibility=models.Content.PUBLISHED, embed_only=True)
-    audios = models.Audio.objects.filter(authors__in=[user], visibility=models.Content.PUBLISHED, embed_only=True)
+    stories = models.Story.objects.filter(authors__in=[user], visibility=models.Content.PUBLISHED, embed_only=False)
+    images = models.Image.objects.filter(authors__in=[user], visibility=models.Content.PUBLISHED, embed_only=False)
+    videos = models.Video.objects.filter(authors__in=[user], visibility=models.Content.PUBLISHED, embed_only=False)
+    audios = models.Audio.objects.filter(authors__in=[user], visibility=models.Content.PUBLISHED, embed_only=False)
+    galleries = models.Gallery.objects.filter(authors__in=[user], visibility=models.Content.PUBLISHED, embed_only=False)
 
     return render(request, "home/profile.html", {
         "user": user,
         "stories": stories,
         "images": images,
         "videos": videos,
-        "audios": audios
+        "audios": audios,
+        "galleries": galleries
     })
 
 
@@ -100,26 +116,44 @@ def legacy(klass):
 
 
 class TaggedContentList(ListView):
-    pass # STUB_TAG
+    """The content list view that supports pagination."""
+    template_name = "home/tag.html"
+    context_object_name = "content_list"
+    paginate_by = 25
+
+    def get_queryset(self):
+        """Return a list of all the tags we're looking at, filtered by search criteria."""
+        return models.Content.objects.filter(tags__name=self.kwargs["tag"])
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["tag"] = self.kwargs["tag"]
+        return context
 
 
-# STUB_ABOUT
 def about(request):
     """Render the about page for the newspaper."""
-    return render(request, "home/about/about.html")
+    eics = User.objects.filter(groups__name="editors-in-chief", is_active=True)
+    return render(request, "home/about/about.html", {
+        "eics": eics,
+    })
 
 
-# STUB_ABOUT
 def staff(request):
     """Display a list of all of the newspaper's staff."""
-    return render(request, "home/about/staff.html")
+    active_users = User.objects.filter(is_active=True).order_by('last_name')
+    inactive_users = User.objects.filter(is_active=False).order_by('-profile__graduation_year', 'last_name')
+    return render(request, "home/about/staff.html", {
+        "active_users": active_users,
+        "inactive_users": inactive_users
+    })
 
 
 # Content interaction views
 def vote(request):
     """Vote in a poll."""
-    pass # STUB_POLL
+    pass  # STUB_POLL
 
 
 class CommentSubmitView(CreateView):
-    pass # STUB_COMMENT
+    pass  # STUB_COMMENT

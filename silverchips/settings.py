@@ -35,10 +35,10 @@ INSTALLED_APPS = [
     'core',
     'home',
     'staff',
-
     'dal',
     'dal_select2',
     'polymorphic',
+    'imagekit',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.sessions',

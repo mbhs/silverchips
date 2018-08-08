@@ -1,0 +1,27 @@
+{% load home %}
+
+{% with gallery=content %}
+  <div id="gallery-{{ gallery.pk }}" data-total-entries="{{ gallery.entries.count }}">
+    <div class="row justify-content-center">
+      <div class="col-md-2 col-xs-3">
+        <a class="btn btn-lg btn-info btn-block gallery-left-button" href="javascript:galleryMove({{ gallery.pk }}, -1)"><i class="fas fa-arrow-circle-left"></i></a>
+      </div>
+      <div class="col">
+        <div class="text-muted text-center">Item <span class="gallery-item-counter"></span>/{{ gallery.entries.count }}</div>
+      </div>
+      <div class="col-md-2 col-xs-3">
+        <a class="btn btn-lg btn-info btn-block gallery-right-button" href="javascript:galleryMove({{ gallery.pk }}, 1)"><i class="fas fa-arrow-circle-right"></i></a>
+      </div>
+    </div>
+    {% for entry in gallery.entries_in_order.all %}
+      <div class="gallery-entry" data-gallery-entry-index="{{ forloop.counter }}" style="display: none;">
+        {% render_content request.user entry False %}
+      </div>
+    {% endfor %}
+  </div>
+
+  <script>
+    galleryShow({{ gallery.pk }}, 1);
+  </script>
+{% endwith %}
+

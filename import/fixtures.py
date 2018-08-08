@@ -11,7 +11,7 @@ setup()
 from core.models import Section, Story, User, Profile, Image, Content
 from django.contrib.auth.models import Group
 
-OBJ_COUNT = 50
+OBJ_COUNT = 100
 PASSWORD = "abc123"
 
 Story.objects.filter(authors=None).delete()
@@ -47,3 +47,10 @@ User.objects.get(pk=909).groups.add(Group.objects.get(name='editors'))
 User.objects.get(pk=909).groups.add(Group.objects.get(name='editors-in-chief'))
 User.objects.get(pk=908).groups.add(Group.objects.get(name='editors'))
 
+for name, level in [('news', Section.MAIN), ('lifestyle/features', Section.FEATURES),
+                       ('opinions', Section.LIST), ('sports', Section.LIST),
+                       ('lifestyle', Section.COMPACT), ('news/local', Section.DENSE),
+                       ('sports/blair', Section.DENSE), ('lifestyle/entertainment', Section.DENSE)]:
+    section = Section.objects.get(name=name)
+    section.index_display = level
+    section.save()

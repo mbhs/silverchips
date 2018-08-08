@@ -1,36 +1,35 @@
 {% extends "home/base.html" %}
 {% load static %}
+{% load home %}
+{% load imagekit %}
+
 {% block title %}
-    {{ section.title }}
+  {{ section.title }}
 {% endblock %}
 
 {% block content %}
-    <div class="container">
-        <section class="section-header">
-            <h1 class="section-title">{{section.title}}</h1>
-        </section>
-        <hr class="section-separator">
-        {% for subsection, stories in subsections %}
-            {% if stories.count > 0 %}
-                <div class="row">
-                    <div class="col-md-2">
-                        <h5>
-                        {% if subsection %}
-                            <a class="solid-link" href="{% url "home:view_section" subsection.name %}">{{ subsection.title }}</a>
-                        {% else %}
-                            Top Stories
-                        {% endif %}
-                        </h5>
-                    </div>
-                    <div class="col-md-10">
-                        {% for story in stories.all|slice:":5" %}
-                            {% include "home/utils/story_summary.html" with story=story %}
-                            <hr/>
-                        {% endfor %}
-                    </div>
-                </div>
-                <br/>
-            {% endif %}
+  <div class="container">
+    <h1 class="container rounded display-3 mb-4 py-2 text-center text-uppercase section-header">{{ section.title }}</h1>
+
+    {% for subsection, content in subsections %}
+      {% reserve_content content 5 %}
+      {% if new_content.count > 0 %}
+        {% if subsection != section %}
+          <h1 class="display-4 mb-4 py-2 text-center text-uppercase section-header"><a href="{{ section.get_absolute_url }}">{{ subsection.title }}</a></h1>
+        {% endif %}
+        {% for content in new_content %}
+          <div class="row">
+            <div class="col-md-3">
+              {% if content|thumb %}<img class="img-fluid" src="{{ content|thumb:"large" }}"/>{% endif %}
+            </div>
+            <div class="col-md-9">
+              {% include "home/content/summary.html" with section=subsection %}
+            </div>
+          </div>
+          {% if not forloop.last %}<hr/>{% endif %}
         {% endfor %}
-    </div>
+        <br/>
+      {% endif %}
+    {% endfor %}
+  </div>
 {% endblock %}
