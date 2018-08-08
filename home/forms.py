@@ -18,15 +18,10 @@ class TagSearchForm(forms.Form):
     tags = None  # STUB_TAG
 
 
-class CommentForm(forms.ModelForm):
+class CommentForm(forms.Form):
     """A short form to submit comments."""
     name = forms.CharField(label="Name:", required=True, max_length=32)
-    authors = forms.ModelMultipleChoiceField(label="Authors:", queryset=models.User.objects.all(),
-                                             required=False,
-                                             widget=autocomplete.ModelSelect2Multiple(url="staff:autocomplete:users"))
-    tags = forms.ModelMultipleChoiceField(label="Tags:", queryset=models.Tag.objects.all(),
-                                          required=False,
-                                          widget=autocomplete.ModelSelect2Multiple(url="staff:autocomplete:tags"))
+    text = forms.CharField(label="Text:", required=True, max_length=400)
 
     helper = FormHelper()
     helper.form_tag = False

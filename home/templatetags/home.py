@@ -66,6 +66,11 @@ def render_content(user, content, embedding=True):
         "embedding": embedding
     })
 
+@register.simple_tag
+def render_comment(comment):
+    return template.loader.get_template("home/content/comment.html").render({
+        "comment": comment
+    })
 
 @register.filter
 def expand_embeds(text, user):

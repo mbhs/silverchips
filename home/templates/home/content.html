@@ -94,7 +94,11 @@
           </div>
         {% endfor %}
 
-        {# STUB_COMMENT #}
+        {% for comment in content.comments.all %}
+            {% render_comment comment %}
+        {% endfor %}
+
+        {% crispy commentform commentform.helper %}
       </div>
 
       <div class="col-md-3">

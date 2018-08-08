@@ -82,7 +82,8 @@ def view_content(request, pk, slug=None):
     content.save()
 
     return render(request, "home/content.html", {
-        "content": content
+        "content": content,
+        "form": CommentSubmitView
     })
 
 
