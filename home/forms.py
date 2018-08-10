@@ -18,6 +18,11 @@ class TagSearchForm(forms.Form):
     tags = None  # STUB_TAG
 
 
-class CommentForm(forms.ModelForm):
+class CommentForm(forms.Form):
     """A short form to submit comments."""
-    pass  # STUB_COMMENT
+    name = forms.CharField(label="Name:", required=True, max_length=32)
+    text = forms.CharField(label="Text:", required=True, max_length=400)
+
+    helper = FormHelper()
+    helper.form_tag = False
+    helper.disable_csrf = True

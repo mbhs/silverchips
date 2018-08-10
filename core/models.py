@@ -324,4 +324,5 @@ class GalleryEntryLink(OrderedModel):
 
 
 class Comment(models.Model):
-    pass  # STUB_COMMENT
+    name = models.CharField(max_length=32)
+    text = models.CharField(max_length=400)

@@ -94,7 +94,11 @@
           </div>
         {% endfor %}
 
-        {# STUB_COMMENT #}
+        {% for comment in content.comments.all %}
+            {% render_comment comment %}
+        {% endfor %}
+
+        <a href="{% url "home:submit_comment" content.pk %}" class="solid-link">Comment</a>
       </div>
 
       <div class="col-md-3">
