@@ -12,9 +12,9 @@
     <style>
         .comment {
             background-color: #ffffff;
-            padding: 2px;
+            padding: 5px;
             color: #000000;
-            border: 2px solid black;
+            border: 1px solid black;
         }
     </style>
 
@@ -114,7 +114,7 @@
           </div>
         {% endfor %}
 
-        {% if content.comment_set %}
+        {% if content.comment_set.all %}
             {% for comment in content.comment_set.all %}
                 {% render_comment comment %}
             {% endfor %}

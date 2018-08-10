@@ -163,8 +163,5 @@ def comment(request, pk):
     if not request.POST.get("name"):
         return render(request, "home/content.html", {'content': content, 'form': form})
     else:
-        name = request.POST.get("name")
-        text = request.POST.get("text")
-        comment = Comment(name=name, text=text, content=content)
-        comment.save()
-        return render(request, "home/content.html", {'content': content, 'form': form})
+        Comment(name=request.POST.get("name"), text=request.POST.get("text"), content=content).save()
+        return render(request, "home/content.html", {'content': content, 'form': None})
