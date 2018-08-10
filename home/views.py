@@ -83,7 +83,7 @@ def view_content(request, pk, slug=None):
 
     return render(request, "home/content.html", {
         "content": content,
-        "form": CommentSubmitView
+        "form": None
     })
 
 
@@ -151,13 +151,20 @@ def staff(request):
 
 
 # Content interaction views
-def vote(request):
+def vote(request, pk):
     """Vote in a poll."""
-    pass  # STUB_POLL
+    poll = models.Poll.objects.get(pk=pk)
+    form = PollVoteForm(poll)
+    choice = request.GET.get("choice")
+    if choice:
+        poll.vote(int(choice))
+        #TODO: Render something
+    else:
+        return render(request, "home/polls/vote.html", {'poll': poll, 'form': form})
 
 
-class CommentSubmitView(CreateView):
-    """Create a comment."""
-    model = models.Comment
-    form = forms.CommentForm
-    editing = "Comment"
+def comment(request, pk):
+    """Comment on a piece of content."""
+    content = models.Content.objects.get(pk=pk)
+    form = forms.CommentForm()
+    return render(request, "home/content.html", {'content': content, 'form': form})

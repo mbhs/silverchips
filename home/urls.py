@@ -32,7 +32,7 @@ urlpatterns = [
     path("about/", include(about_urlpatterns, "about")),
 
     path("vote/<int:pk>/<int:choice>/", views.vote, name="vote"),
-    path("comment/submit/<int:pk>/", views.CommentSubmitView, name="submit_comment"),
+    path("comment/submit/<int:pk>/", views.comment, name="submit_comment"),
 
     # Legacy URLs to make sure old links work
     path("story/<int:pk>/", views.legacy(models.Story)),

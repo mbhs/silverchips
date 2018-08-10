@@ -325,4 +325,4 @@ class GalleryEntryLink(OrderedModel):
 
 class Comment(models.Model):
     name = models.CharField(max_length=32)
-    text = models.CharField(max_length=400)
+    text = models.TextField()
