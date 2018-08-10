@@ -94,7 +94,6 @@ class Tag(models.Model):
         """
         return self.name
 
-
 class Content(PolymorphicModel):
     """A generic content model.
 
@@ -322,7 +321,7 @@ class GalleryEntryLink(OrderedModel):
     class Meta:
         ordering = ('gallery', 'order')
 
-
 class Comment(models.Model):
     name = models.CharField(max_length=32)
     text = models.TextField()
+    content = models.ForeignKey(Content, on_delete=models.CASCADE, null=True)

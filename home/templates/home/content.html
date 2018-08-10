@@ -9,6 +9,15 @@
 {% block title %}{{ content|qualified_title }}{% endblock %}
 
 {% block content %}
+    <style>
+        .comment {
+            background-color: #ffffff;
+            padding: 2px;
+            color: #000000;
+            border: 2px solid black;
+        }
+    </style>
+
   <div class="modal fade modal-lightbox" tabindex="-1" role="dialog" id="lightboxModal">
     <div class="modal-dialog modal-dialog-centered" role="document" id="lightboxModalDialog">
       <div class="modal-content">
@@ -64,7 +73,13 @@
     </div>
 
     {% if form %}
-        {% crispy form form.helper %}
+        <h1>Adding a Comment</h1>
+        <h3>Please make sure all comments are mature and responsible; they will go through moderation.</h3>
+        <form method="post">
+            {% csrf_token %}
+            {% crispy form form.helper %}
+            <input type="submit" value="Submit" />
+        </form>
     {% endif %}
 
     <div class="row">
@@ -99,9 +114,13 @@
           </div>
         {% endfor %}
 
-        {% for comment in content.comments.all %}
-            {% render_comment comment %}
-        {% endfor %}
+        {% if content.comment_set %}
+            {% for comment in content.comment_set.all %}
+                {% render_comment comment %}
+            {% endfor %}
+        {% else %}
+            <p> No Comments. </p>
+        {% endif %}
 
         {% if not form %}
             <a href="{% url "home:submit_comment" content.pk %}" class="solid-link">Add Comment</a>

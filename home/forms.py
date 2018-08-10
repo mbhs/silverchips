@@ -18,11 +18,19 @@ class TagSearchForm(forms.Form):
     tags = None  # STUB_TAG
 
 
-class CommentForm(forms.Form):
+class HorizontalMixin:
+    """A mixin that makes a form display as an inline crispy form."""
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_tag = False
+        self.helper.disable_csrf = True
+
+
+class CommentForm(forms.Form, HorizontalMixin):
     """A short form to submit comments."""
     name = forms.CharField(label="Name:", required=True, max_length=32)
     text = forms.CharField(label="Text:", required=True, max_length=400)
-
     helper = FormHelper()
     helper.form_tag = False
     helper.disable_csrf = True

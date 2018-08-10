@@ -12,6 +12,7 @@ from django.contrib.auth.models import User
 
 # News imports
 from core import models
+from core.models import Comment
 from core.permissions import can, user_can
 
 from django.utils import timezone
@@ -153,18 +154,17 @@ def staff(request):
 # Content interaction views
 def vote(request, pk):
     """Vote in a poll."""
-    poll = models.Poll.objects.get(pk=pk)
-    form = PollVoteForm(poll)
-    choice = request.GET.get("choice")
-    if choice:
-        poll.vote(int(choice))
-        #TODO: Render something
-    else:
-        return render(request, "home/polls/vote.html", {'poll': poll, 'form': form})
-
+    pass
 
 def comment(request, pk):
     """Comment on a piece of content."""
     content = models.Content.objects.get(pk=pk)
     form = forms.CommentForm()
-    return render(request, "home/content.html", {'content': content, 'form': form})
+    if not request.POST.get("name"):
+        return render(request, "home/content.html", {'content': content, 'form': form})
+    else:
+        name = request.POST.get("name")
+        text = request.POST.get("text")
+        comment = Comment(name=name, text=text, content=content)
+        comment.save()
+        return render(request, "home/content.html", {'content': content, 'form': form})
