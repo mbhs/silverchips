@@ -17,7 +17,7 @@ from core.permissions import can, user_can
 from django.utils import timezone
 
 from home.templatetags.home import render_content
-
+from home import forms
 
 def load_context(request):
     return {
@@ -157,4 +157,7 @@ def vote(request):
 
 
 class CommentSubmitView(CreateView):
-    pass  # STUB_COMMENT
+    """Create a comment."""
+    model = models.Comment
+    form = forms.CommentForm
+    editing = "Comment"

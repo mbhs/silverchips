@@ -98,7 +98,7 @@
             {% render_comment comment %}
         {% endfor %}
 
-        {% crispy commentform commentform.helper %}
+        <a href="{% url "home:submit_comment" content.pk %}" class="solid-link">Comment</a>
       </div>
 
       <div class="col-md-3">
