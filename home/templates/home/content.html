@@ -63,6 +63,10 @@
       </div>
     </div>
 
+    {% if form %}
+        {% crispy form form.helper %}
+    {% endif %}
+
     <div class="row">
       <div class="col-md-9">
         {% render_content request.user content False %}
@@ -99,10 +103,8 @@
             {% render_comment comment %}
         {% endfor %}
 
-        {% if form %}
-            {% crispy form form.helper %}
-        {% else %}
-            <a href="{% url "home:submit_comment" content.pk %}" class="solid-link">Comment</a>
+        {% if not form %}
+            <a href="{% url "home:submit_comment" content.pk %}" class="solid-link">Add Comment</a>
         {% endif %}
       </div>
 
