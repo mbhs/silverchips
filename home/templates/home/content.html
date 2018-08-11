@@ -78,7 +78,7 @@
         <form method="post">
             {% csrf_token %}
             {% crispy form form.helper %}
-            <input type="submit" value="Submit" />
+            <button type="submit" class="btn btn-lg btn-success btn-block">Comment <i class="fas fa-comment"></i></button>
         </form>
     {% endif %}
 
@@ -115,6 +115,7 @@
         {% endfor %}
 
         {% if content.comment_set.all %}
+            <h1>Comments</h1>
             {% for comment in content.comment_set.all %}
                 {% render_comment comment %}
             {% endfor %}
