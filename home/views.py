@@ -162,6 +162,5 @@ def comment(request, pk):
     form = forms.CommentForm()
     if not request.POST.get("name"):
         return render(request, "home/content.html", {'content': content, 'form': form})
-    else:
-        Comment(name=request.POST.get("name"), text=request.POST.get("text"), content=content).save()
-        return render(request, "home/content.html", {'content': content, 'form': None})
+    Comment(name=request.POST.get("name"), text=request.POST.get("text"), content=content).save()
+    return render(request, "home/content.html", {'content': content, 'form': None})
