@@ -2,6 +2,9 @@
 # This is a development-mode sample; all values must be updated in production
 
 
+import os
+from .settings import BASE_DIR
+
 SECRET_KEY = 'phm=9oy0g*dn!e_5_gz^*anehn)w(5x$d-3e0_-$pec6xcy2_x'
 
 DEBUG = True
