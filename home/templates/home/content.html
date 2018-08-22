@@ -4,10 +4,20 @@
 {% load home %}
 {% load core %}
 {% load static %}
+{% load crispy_forms_tags %}
 
 {% block title %}{{ content|qualified_title }}{% endblock %}
 
 {% block content %}
+    <style>
+        .comment {
+            background-color: #ffffff;
+            padding: 5px;
+            color: #000000;
+            border: 1px solid black;
+        }
+    </style>
+
   <div class="modal fade modal-lightbox" tabindex="-1" role="dialog" id="lightboxModal">
     <div class="modal-dialog modal-dialog-centered" role="document" id="lightboxModalDialog">
       <div class="modal-content">
@@ -62,6 +72,16 @@
       </div>
     </div>
 
+    {% if form %}
+        <h1>Adding a Comment</h1>
+        <h3>Please make sure all comments are mature and responsible; they will go through moderation.</h3>
+        <form method="post">
+            {% csrf_token %}
+            {% crispy form form.helper %}
+            <button type="submit" class="btn btn-lg btn-success btn-block">Comment <i class="fas fa-comment"></i></button>
+        </form>
+    {% endif %}
+
     <div class="row">
       <div class="col-md-9">
         {% render_content request.user content False %}
@@ -94,7 +114,18 @@
           </div>
         {% endfor %}
 
-        {# STUB_COMMENT #}
+        {% if content.comment_set.all %}
+            <h1>Comments</h1>
+            {% for comment in content.comment_set.all %}
+                {% render_comment comment %}
+            {% endfor %}
+        {% else %}
+            <p> No Comments. </p>
+        {% endif %}
+
+        {% if not form %}
+            <a href="{% url "home:submit_comment" content.pk %}" class="solid-link">Add Comment</a>
+        {% endif %}
       </div>
 
       <div class="col-md-3">

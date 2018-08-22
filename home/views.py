@@ -12,12 +12,13 @@ from django.contrib.auth.models import User
 
 # News imports
 from core import models
+from core.models import Comment
 from core.permissions import can, user_can
 
 from django.utils import timezone
 
 from home.templatetags.home import render_content
-
+from home import forms
 
 def load_context(request):
     return {
@@ -82,7 +83,8 @@ def view_content(request, pk, slug=None):
     content.save()
 
     return render(request, "home/content.html", {
-        "content": content
+        "content": content,
+        "form": None
     })
 
 
@@ -150,10 +152,15 @@ def staff(request):
 
 
 # Content interaction views
-def vote(request):
+def vote(request, pk):
     """Vote in a poll."""
-    pass  # STUB_POLL
+    pass
 
-
-class CommentSubmitView(CreateView):
-    pass  # STUB_COMMENT
+def comment(request, pk):
+    """Comment on a piece of content."""
+    content = models.Content.objects.get(pk=pk)
+    form = forms.CommentForm()
+    if not request.POST.get("name"):
+        return render(request, "home/content.html", {'content': content, 'form': form})
+    Comment(name=request.POST.get("name"), text=request.POST.get("text"), content=content).save()
+    return render(request, "home/content.html", {'content': content, 'form': None})
