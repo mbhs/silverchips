@@ -7,7 +7,25 @@
     <h1>Silver Chips Online Staff</h1>
 
     <ul>
-      {% for user in active_users %}
+      {% for user in active_eic %}
+        <li>
+          <a href="{% url 'home:view_profile' user.profile.pk %}"> {{ user.get_full_name }}</a>, {{ user.profile.position }}
+          {% if user.email %}&mdash; <a href="mailto:{{ user.email }}">{{ user.email }}</a>{% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+
+    <ul>
+      {% for user in active_editor %}
+        <li>
+          <a href="{% url 'home:view_profile' user.profile.pk %}"> {{ user.get_full_name }}</a>, {{ user.profile.position }}
+          {% if user.email %}&mdash; <a href="mailto:{{ user.email }}">{{ user.email }}</a>{% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+
+    <ul>
+      {% for user in active_other %}
         <li>
           <a href="{% url 'home:view_profile' user.profile.pk %}"> {{ user.get_full_name }}</a>, {{ user.profile.position }}
           {% if user.email %}&mdash; <a href="mailto:{{ user.email }}">{{ user.email }}</a>{% endif %}
