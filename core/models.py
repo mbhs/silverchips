@@ -79,6 +79,7 @@ class User(auth.User):
         permissions = (
             ('manage_users', "Can manage user data and privileges"),
         )
+        ordering = ('-profile__graduation_year', 'last_name')
 
 
 class Tag(models.Model):

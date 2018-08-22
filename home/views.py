@@ -141,8 +141,8 @@ def about(request):
 
 def staff(request):
     """Display a list of all of the newspaper's staff."""
-    active_users = User.objects.filter(is_active=True).order_by('last_name')
-    inactive_users = User.objects.filter(is_active=False).order_by('-profile__graduation_year', 'last_name')
+    active_users = User.objects.filter(is_active=True)
+    inactive_users = User.objects.filter(is_active=False)
     return render(request, "home/about/staff.html", {
         "active_users": active_users,
         "inactive_users": inactive_users
