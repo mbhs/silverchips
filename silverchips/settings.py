@@ -16,19 +16,6 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'phm=9oy0g*dn!e_5_gz^*anehn)w(5x$d-3e0_-$pec6xcy2_x'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-# SECURITY WARNING
-ALLOWED_HOSTS = ["*"]
-
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -82,17 +69,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'silverchips.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/1.9/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
 
 
 # Password validation
