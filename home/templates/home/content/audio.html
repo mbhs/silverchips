@@ -1,6 +1,6 @@
 {% with audio=content %}
   <audio controls style="max-width: 80%; height: auto;" class="mx-auto d-block">
-    <source src="{{ audio.url }}">
+    <source src="{{ audio.source.url }}">
     Your browser does not support the audio tag.
   </audio>
 {% endwith %}
