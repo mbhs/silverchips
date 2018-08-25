@@ -265,7 +265,7 @@ class Image(Content):
                 for exif_tag, value in _image._getexif().items()
                 if exif_tag in PIL.ExifTags.TAGS
             }
-        except FileNotFoundError:
+        except (FileNotFoundError, AttributeError) as e:
             return None
 
 
