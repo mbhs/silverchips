@@ -417,8 +417,10 @@ class UserChangeView(LoginRequiredMixin, EditorMixin, View):
             if user_form.cleaned_data['new_password']:
                 user_form.instance.set_password(user_form.cleaned_data['new_password'])
 
-            user_form.save()
-            profile_form.save()
+            user = user_form.save()
+            profile = profile_form.save(commit=False)
+            profile.user = user
+            profile.save()
             return redirect(self.redirect_url)
 
         return render(request, "staff/editor.html", {
