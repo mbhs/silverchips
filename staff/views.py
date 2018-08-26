@@ -451,7 +451,7 @@ class UserSelfManageView(UserChangeView):
     """View for managing a limited subset of one's own information, available to all users."""
     user_form_class = forms.UserSelfManageForm
     profile_form_class = forms.ProfileSelfManageForm
-    redirect_url = "staff:dashboard"
+    redirect_url = "staff:index"
     create_new_users = False
     request_user_only = True
 
