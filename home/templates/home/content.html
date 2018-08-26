@@ -8,6 +8,8 @@
 {% block title %}{{ content|qualified_title }}{% endblock %}
 
 {% block content %}
+  <script defer src="{% static "home/scripts/content.js" %}"></script>
+  
   <div class="modal fade modal-lightbox" tabindex="-1" role="dialog" id="lightboxModal">
     <div class="modal-dialog modal-dialog-centered" role="document" id="lightboxModalDialog">
       <div class="modal-content">
@@ -123,5 +125,4 @@
     </div>
   </div>
 
-  <script defer src="{% static "home/scripts/content.js" %}"></script>
 {% endblock %}
