@@ -20,4 +20,10 @@ class TagSearchForm(forms.Form):
 
 class CommentForm(forms.ModelForm):
     """A short form to submit comments."""
-    pass  # STUB_COMMENT
+    class Meta:
+        model = models.Comment
+        fields = ['name', 'text']
+
+    helper = FormHelper()
+    helper.form_tag = False
+    helper.disable_csrf = True

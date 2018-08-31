@@ -4,6 +4,7 @@
 {% load home %}
 {% load core %}
 {% load static %}
+{% load crispy_forms_tags %}
 
 {% block title %}{{ content|qualified_title }}{% endblock %}
 
@@ -96,7 +97,34 @@
           </div>
         {% endfor %}
 
-        {# STUB_COMMENT #}
+        <a class="btn btn-info" data-toggle="collapse" href="#commentCollapse">
+          Show comments <i class="fas fa-comments"></i>
+        </a>
+
+        <div class="collapse" id="commentCollapse">
+          <br/><br/>
+          <h2>Comments</h2>
+          {% for comment in content.comments.all %}
+            <hr/>
+            <h5>{{ comment.name }} <span class="text-muted">&mdash; {{ comment.date|naturaltime }}</span></h5>
+            <p class="comment-body-text">{{ comment.text }}</p>
+          {% empty %}
+            <p>No comments.</p>
+          {% endfor %}
+
+          <hr/>
+
+          <div class="card">
+            <div class="card-body pb-0">
+              <p><em>Please ensure that all comments are mature and responsible; they will go through moderation.</em></p>
+              <form method="post" action="{% url "home:submit_comment" content.pk %}">
+                {% csrf_token %}
+                {% crispy form form.helper %}
+                <button type="submit" class="btn btn-success btn-block">Comment <i class="fas fa-comment"></i></button>
+              </form>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="col-md-3">

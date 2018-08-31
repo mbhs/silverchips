@@ -81,7 +81,6 @@ def expand_embeds(text, user):
     for div in soup.findAll('div'):
         if "content-embed" in div["class"]:
             # Try and load the content corresponding to data-contend-id on each div
-            print(div)
             pk = int(div["data-content-id"])
             try:
                 content = models.Content.objects.get(pk=pk)
