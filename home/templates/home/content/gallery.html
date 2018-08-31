@@ -13,6 +13,7 @@
         <a class="btn btn-lg btn-info btn-block gallery-right-button" href="javascript:galleryMove({{ gallery.pk }}, 1)"><i class="fas fa-arrow-circle-right"></i></a>
       </div>
     </div>
+    <br>
     {% for entry in gallery.entries_in_order.all %}
       <div class="gallery-entry" data-gallery-entry-index="{{ forloop.counter }}" style="display: none;">
         {% render_content request.user entry False %}

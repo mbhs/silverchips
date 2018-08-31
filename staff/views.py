@@ -417,8 +417,10 @@ class UserChangeView(LoginRequiredMixin, EditorMixin, View):
             if user_form.cleaned_data['new_password']:
                 user_form.instance.set_password(user_form.cleaned_data['new_password'])
 
-            user_form.save()
-            profile_form.save()
+            user = user_form.save()
+            profile = profile_form.save(commit=False)
+            profile.user = user
+            profile.save()
             return redirect(self.redirect_url)
 
         return render(request, "staff/editor.html", {
@@ -449,7 +451,7 @@ class UserSelfManageView(UserChangeView):
     """View for managing a limited subset of one's own information, available to all users."""
     user_form_class = forms.UserSelfManageForm
     profile_form_class = forms.ProfileSelfManageForm
-    redirect_url = "staff:dashboard"
+    redirect_url = "staff:index"
     create_new_users = False
     request_user_only = True
 

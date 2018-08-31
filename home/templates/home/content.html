@@ -8,6 +8,8 @@
 {% block title %}{{ content|qualified_title }}{% endblock %}
 
 {% block content %}
+  <script src="{% static "home/scripts/content.js" %}"></script>
+
   <div class="modal fade modal-lightbox" tabindex="-1" role="dialog" id="lightboxModal">
     <div class="modal-dialog modal-dialog-centered" role="document" id="lightboxModalDialog">
       <div class="modal-content">
@@ -49,9 +51,9 @@
     <div class="row mb-3">
       <div class="col-md-9">
             <span class="h5">
-                <span class="text-muted">{% if content.authors.count > 0 %}By</span>
+                <span class="text-muted"> {{ content.created }} | {% if content.authors.count > 0 %}By</span>
                   {% include "home/utils/authors.html" %}
-                  <span class="text-muted">| {% endif %}{{ content.created }} | {{ content.created|naturaltime }}</span>
+                  <span class="text-muted">| {% endif %} {{ content.created|naturaltime }}</span>
             </span>
       </div>
       <div class="col-md-3 text-right">
@@ -123,5 +125,4 @@
     </div>
   </div>
 
-  <script defer src="{% static "home/scripts/content.js" %}"></script>
 {% endblock %}

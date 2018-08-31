@@ -12,7 +12,9 @@
     <div class="row">
       <div class="col-md-3">
         {% if user.profile.avatar %}
-          <img class="square img-fluid mx-auto d-block rounded-circle" src="{{ user.profile.avatar.url }}">
+          <div class="image-cropper" style="width: 200px; height: 200px; position: relative; overflow: hidden; border-radius: 50%;">
+            <img class="profile-pic" src="{{ user.profile.avatar.url }}" style="display: inline; margin: 0 auto; margin-left: -25%; height: 100%; width: auto;">
+          </div>
           <br/><br/>
         {% endif %}
 
