@@ -9,15 +9,6 @@
 {% block title %}{{ content|qualified_title }}{% endblock %}
 
 {% block content %}
-    <style>
-        .comment {
-            background-color: #ffffff;
-            padding: 5px;
-            color: #000000;
-            border: 1px solid black;
-        }
-    </style>
-
   <div class="modal fade modal-lightbox" tabindex="-1" role="dialog" id="lightboxModal">
     <div class="modal-dialog modal-dialog-centered" role="document" id="lightboxModalDialog">
       <div class="modal-content">
@@ -72,16 +63,6 @@
       </div>
     </div>
 
-    {% if form %}
-        <h1>Adding a Comment</h1>
-        <h3>Please make sure all comments are mature and responsible; they will go through moderation.</h3>
-        <form method="post">
-            {% csrf_token %}
-            {% crispy form form.helper %}
-            <button type="submit" class="btn btn-lg btn-success btn-block">Comment <i class="fas fa-comment"></i></button>
-        </form>
-    {% endif %}
-
     <div class="row">
       <div class="col-md-9">
         {% render_content request.user content False %}
@@ -114,18 +95,34 @@
           </div>
         {% endfor %}
 
-        {% if content.comment_set.all %}
-            <h1>Comments</h1>
-            {% for comment in content.comment_set.all %}
-                {% render_comment comment %}
-            {% endfor %}
-        {% else %}
-            <p> No Comments. </p>
-        {% endif %}
+        <a class="btn btn-info" data-toggle="collapse" href="#commentCollapse">
+          Show comments <i class="fas fa-comments"></i>
+        </a>
 
-        {% if not form %}
-            <a href="{% url "home:submit_comment" content.pk %}" class="solid-link">Add Comment</a>
-        {% endif %}
+        <div class="collapse" id="commentCollapse">
+          <br/><br/>
+          <h2>Comments</h2>
+          {% for comment in content.comments.all %}
+            <hr/>
+            <h5>{{ comment.name }} <span class="text-muted">&mdash; {{ comment.date|naturaltime }}</span></h5>
+            <p class="comment-body-text">{{ comment.text }}</p>
+          {% empty %}
+            <p>No comments.</p>
+          {% endfor %}
+
+          <hr/>
+
+          <div class="card">
+            <div class="card-body pb-0">
+              <p><em>Please ensure that all comments are mature and responsible; they will go through moderation.</em></p>
+              <form method="post" action="{% url "home:submit_comment" content.pk %}">
+                {% csrf_token %}
+                {% crispy form form.helper %}
+                <button type="submit" class="btn btn-success btn-block">Comment <i class="fas fa-comment"></i></button>
+              </form>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="col-md-3">

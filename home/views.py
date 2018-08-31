@@ -20,6 +20,7 @@ from django.utils import timezone
 from home.templatetags.home import render_content
 from home import forms
 
+
 def load_context(request):
     return {
         "section_roots": models.Section.objects.filter(parent=None, visible=True),  # For navigation bar
@@ -84,7 +85,7 @@ def view_content(request, pk, slug=None):
 
     return render(request, "home/content.html", {
         "content": content,
-        "form": None
+        "form": forms.CommentForm()
     })
 
 
@@ -156,11 +157,16 @@ def vote(request, pk):
     """Vote in a poll."""
     pass
 
+
 def comment(request, pk):
     """Comment on a piece of content."""
-    content = models.Content.objects.get(pk=pk)
-    form = forms.CommentForm()
-    if not request.POST.get("name"):
+    content = get_object_or_404(models.Content.objects, pk=pk)
+    form = forms.CommentForm(request.POST)
+
+    print(form)
+
+    if form.is_valid():
+        Comment(name=form.data["name"], text=form.data["text"], content=content).save()
+        return redirect("home:view_content", pk)
+    else:
         return render(request, "home/content.html", {'content': content, 'form': form})
-    Comment(name=request.POST.get("name"), text=request.POST.get("text"), content=content).save()
-    return render(request, "home/content.html", {'content': content, 'form': None})

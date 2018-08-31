@@ -66,11 +66,6 @@ def render_content(user, content, embedding=True):
         "embedding": embedding
     })
 
-@register.simple_tag
-def render_comment(comment):
-    return template.loader.get_template("home/content/comment.html").render({
-        "comment": comment
-    })
 
 @register.filter
 def expand_embeds(text, user):
@@ -86,7 +81,6 @@ def expand_embeds(text, user):
     for div in soup.findAll('div'):
         if "content-embed" in div["class"]:
             # Try and load the content corresponding to data-contend-id on each div
-            print(div)
             pk = int(div["data-content-id"])
             try:
                 content = models.Content.objects.get(pk=pk)

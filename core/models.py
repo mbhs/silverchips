@@ -13,6 +13,10 @@ import PIL.Image
 import PIL.ExifTags
 
 
+def new_student_grad_year():
+    return timezone.now().year + 4
+
+
 class Profile(models.Model):
     """The profile model provides non-authentication/identification information about users.
 
@@ -29,7 +33,7 @@ class Profile(models.Model):
                                            " etc. Should be several sentences minimum.")
     avatar = models.ImageField(blank=True, null=True)
     position = models.TextField()
-    graduation_year = models.IntegerField(default=timezone.now().year+4)
+    graduation_year = models.IntegerField(default=new_student_grad_year)  # force recalculation
 
     def __str__(self):
         """Represent the profile as a string."""
@@ -94,6 +98,7 @@ class Tag(models.Model):
         form element when a tag is selected.
         """
         return self.name
+
 
 class Content(PolymorphicModel):
     """A generic content model.
@@ -322,7 +327,9 @@ class GalleryEntryLink(OrderedModel):
     class Meta:
         ordering = ('gallery', 'order')
 
+
 class Comment(models.Model):
     name = models.CharField(max_length=32)
     text = models.TextField()
-    content = models.ForeignKey(Content, on_delete=models.CASCADE, null=True)
+    content = models.ForeignKey(Content, on_delete=models.CASCADE, null=True, related_name="comments")
+    date = models.DateTimeField(default=timezone.now)
