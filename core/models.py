@@ -329,7 +329,10 @@ class GalleryEntryLink(OrderedModel):
 
 
 class Comment(models.Model):
-    name = models.CharField(max_length=32)
+    name = models.CharField(max_length=64)
     text = models.TextField()
     content = models.ForeignKey(Content, on_delete=models.CASCADE, null=True, related_name="comments")
     date = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        ordering = ('-date',)

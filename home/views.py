@@ -167,10 +167,10 @@ def comment(request, pk):
     content = get_object_or_404(models.Content.objects, pk=pk)
     form = forms.CommentForm(request.POST)
 
-    print(form)
-
     if form.is_valid():
-        Comment(name=form.data["name"], text=form.data["text"], content=content).save()
+        comment = form.save(commit=False)
+        comment.content = content
+        comment.save()
         return redirect("home:view_content", pk)
     else:
         return render(request, "home/content.html", {'content': content, 'form': form})
