@@ -22,7 +22,9 @@ def thumb(content, thumb_type=None):
     elif isinstance(content, models.Image):
         image = content.source
     elif isinstance(content, models.Gallery) and content.entries.count() > 0:
-        image = thumb(content.entries_in_order()[0])
+        #Gallery cache currently messed up, so no thumbnail for now
+        #image = thumb(content.entries_in_order()[0])
+        return content.entries_in_order()[0].source.url
 
     if image is None:
         return None
