@@ -127,18 +127,10 @@
 
     <h5>Email</h5>
     <p>
-      The Silver Chips Online editors, {% for eic in eics %} {% if loop.index == 1 %}<i>and</i>{% endif %} {{ eic.get_full_name }}{% endfor %}, can be reached at <a href="mailto:editors.sco@gmail.com">editors.sco@gmail.com</a>.
+      The Silver Chips Online editors, {% for eic in eics %} {% if loop.index %}and{% endif %} {{ eic.get_full_name }}{% endfor %}, can be reached at <a href="mailto:editors.sco@gmail.com">editors.sco@gmail.com</a>.
       Our staff sponsor, Michelle Elie, can be reached at
       <a href="mailto:Michelle_L_Edwards@mcpsmd.org">Michelle_L_Edwards@mcpsmd.org</a>.
     </p>
-
-    <p>The current editors-in-chief can also be reached individually at:</p>
-
-    <ul>
-    {% for eic in eics %}
-      <li>{{ eic.get_full_name }} &mdash; <a href="mailto:{{ eic.email }}">{{ eic.email }}</a></li>
-    {% endfor %}
-    </ul>
 
     <p>To contact other staff members individually, please visit our <a href="{% url 'home:about:staff' %}">staff page</a>.</p>
   </div>
