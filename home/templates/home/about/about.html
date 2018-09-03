@@ -113,8 +113,8 @@
     </p><p>Starting in 2016, Silver Chips Online collaborated with the Montgomery Blair Sysops to completely redevelop
       and redesign its website. The effort was undertaken with an eye on future maintenance and flexibility,
       promoting content visibility and accessibility, and a freshened, modern, streamlined user experience and look-and-feel.
-      A team of Sysops, led by Noah Singer ('18) and including Mark Jung ('17), Noah Kim ('18), Simon Chervenak ('16),
-      and Liam DeVoe ('16), replaced the old PHP website with a completely new, open source, Python/Django platform.
+      A team of Sysops, led by Noah Singer ('18) and including Ian Rackow ('19), Mark Jung ('19), Noah Kim ('18), Simon Chervenak ('20),
+      and Liam DeVoe ('20), replaced the old PHP website with a completely new, open source, Python/Django platform.
       They worked with editors-in-chief Mehana Daftary and Amy Forbsacka (2017-18) and Nobline Yoo and Rebecca Wessel
       (2018-19), who hope that the new website will help them restructure Silver Chips Online to better serve the Blair community.
   </p>
@@ -127,7 +127,7 @@
 
     <h5>Email</h5>
     <p>
-      The Silver Chips Online editors can be reached at <a href="mailto:editors.sco@gmail.com">editors.sco@gmail.com</a>.
+      The Silver Chips Online editors, {{ eics[0].get_full_name}} {% if eics|length > 1 %} and {{ eics[1].get_full_name}} {% endif %}, can be reached at <a href="mailto:editors.sco@gmail.com">editors.sco@gmail.com</a>.
       Our staff sponsor, Michelle Elie, can be reached at
       <a href="mailto:Michelle_L_Edwards@mcpsmd.org">Michelle_L_Edwards@mcpsmd.org</a>.
     </p>
