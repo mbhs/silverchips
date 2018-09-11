@@ -333,6 +333,7 @@ class Comment(models.Model):
     text = models.TextField()
     content = models.ForeignKey(Content, on_delete=models.CASCADE, null=True, related_name="comments")
     date = models.DateTimeField(default=timezone.now)
+    approved = models.BooleanField(default=False)
 
     class Meta:
-        ordering = ('-date',)
+        ordering = ('date',)

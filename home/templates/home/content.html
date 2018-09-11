@@ -105,9 +105,11 @@
           <br/><br/>
           <h2>Comments</h2>
           {% for comment in content.comments.all %}
+          {% if comment.approved %}
             <hr/>
             <h5>{{ comment.name }} <span class="text-muted">&mdash; {{ comment.date|naturaltime }}</span></h5>
             <p class="comment-body-text">{{ comment.text }}</p>
+          {% endif %}
           {% empty %}
             <p>No comments.</p>
           {% endfor %}
@@ -120,7 +122,7 @@
               <form method="post" action="{% url "home:submit_comment" content.pk %}">
                 {% csrf_token %}
                 {% crispy form form.helper %}
-                <button type="submit" class="btn btn-success btn-block">Comment <i class="fas fa-comment"></i></button>
+                <button type="submit" class="btn btn-success btn-block">Submit Comment For Approval<i class="fas fa-comment"></i></button>
               </form>
             </div>
           </div>
