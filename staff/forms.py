@@ -70,8 +70,8 @@ class StoryForm(ContentForm):
     """The story editor form."""
     class Meta(ContentForm.Meta):
         model = models.Story
-        fields = ContentForm.Meta.fields + ['second_deck', 'text']
-        widgets = dict(ContentForm.Meta.widgets, text=RichTextWidget(embed=True), lead=RichTextWidget(short=True))
+        fields = ContentForm.Meta.fields + ['cover', 'second_deck', 'text']
+        widgets = dict(ContentForm.Meta.widgets, text=RichTextWidget(embed=True), lead=RichTextWidget(short=True), cover=autocomplete.ModelSelect2(url='staff:autocomplete:content'))
 
 
 class GalleryForm(ContentForm):
