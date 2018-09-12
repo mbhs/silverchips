@@ -41,5 +41,6 @@ class Command(BaseCommand):
             group.permissions.add(Permission.objects.get(content_type=content, codename='hide_content'))
             group.permissions.add(Permission.objects.get(content_type=content, codename='delete_content'))
             group.permissions.add(Permission.objects.get(content_type=user, codename='manage_users'))
+            group.permissions.add(Permission.objects.get(content_type=content, codename='comment'))
 
         # STUB_COMMENT

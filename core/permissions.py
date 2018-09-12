@@ -26,7 +26,7 @@ def can(user, action, obj):
         assert isinstance(obj, Content) or isinstance(obj, Comment)
 
         if action == 'comment':
-            return user.has_perm('comment')
+            return user.has_perm('core.comment')
         # This is the only action that can take place without any authentication
         if action == 'read':
             return obj and (obj.visibility == Content.PUBLISHED or user is not None and user.has_perm('core.read_content'))
