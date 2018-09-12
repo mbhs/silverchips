@@ -68,7 +68,7 @@
           <div class="card align-middle rounded-0 mb-4 section-card-1">
             <div class="img-wrapper">
               {% if content|thumb %}
-                <img class="card-img-top mx-auto rounded-0 d-block" style="width:100%; height: auto" src="{{ content|thumb:"huge" }}"/>
+                <img class="card-img-top mx-auto rounded-0 d-block" style="width:auto; max-height: 400px" src="{{ content|thumb:"huge" }}"/>
               {% endif %}
             </div>
             {% if section != content.section %}
