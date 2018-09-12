@@ -25,9 +25,9 @@
           </div>
 
           <div class="row">
-            {% reserve_content section.all_content 6 %}
+            {% reserve_content section.all_content 2 %}
             {% for content in new_content %}
-              {% if not forloop.counter|divisibleby:"2" %}<div class="col-md-6 px-0">{% endif %}
+              <div class="col-md-6 px-0">
               <div class="card mb-2 rounded-0 section-card-0">
                 <div class="img-wrapper">
                   {% if content|thumb %}
@@ -40,7 +40,45 @@
                   <h4 class="card-title"><a href="{{ content.get_absolute_url }}" class="solid-link">{{ content|qualified_title }}</a></h4>
                 </div>
               </div>
-            {% if forloop.counter|divisibleby:"2" %}</div>{% endif %}
+              </div>
+            {% endfor %}
+          </div>
+          <div class="row">
+            {% reserve_content section.all_content 2 %}
+            {% for content in new_content %}
+              <div class="col-md-6 px-0">
+              <div class="card mb-2 rounded-0 section-card-0">
+                <div class="img-wrapper">
+                  {% if content|thumb %}
+                    <img class="card-img-top mx-auto rounded-0 d-block" src="{{ content|thumb:"huge" }}"/>
+                  {% endif %}
+                </div>
+                <div class="card-body">
+                  <h6 class="authors d-inline-block">{% include "home/utils/authors.html" %}</h6>
+                  <h6 class="d-inline-block w-auto text-left">{{ content.created }}</h6>
+                  <h4 class="card-title"><a href="{{ content.get_absolute_url }}" class="solid-link">{{ content|qualified_title }}</a></h4>
+                </div>
+              </div>
+              </div>
+            {% endfor %}
+          </div>
+          <div class="row">
+            {% reserve_content section.all_content 2 %}
+            {% for content in new_content %}
+              <div class="col-md-6 px-0">
+              <div class="card mb-2 rounded-0 section-card-0">
+                <div class="img-wrapper">
+                  {% if content|thumb %}
+                    <img class="card-img-top mx-auto rounded-0 d-block" src="{{ content|thumb:"huge" }}"/>
+                  {% endif %}
+                </div>
+                <div class="card-body">
+                  <h6 class="authors d-inline-block">{% include "home/utils/authors.html" %}</h6>
+                  <h6 class="d-inline-block w-auto text-left">{{ content.created }}</h6>
+                  <h4 class="card-title"><a href="{{ content.get_absolute_url }}" class="solid-link">{{ content|qualified_title }}</a></h4>
+                </div>
+              </div>
+              </div>
             {% endfor %}
           </div>
         </div>
