@@ -175,6 +175,7 @@ class Content(PolymorphicModel):
             ('publish_content', "Can publish content"),
             ('hide_content', "Can hide content"),
             ('create_content', "Can create content"),
+            ('editown_content', "Can edit self-authored content"),
             ('comment', "Can manage comments")
         )
 

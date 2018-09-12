@@ -39,7 +39,7 @@ def can(user, action, obj):
                 'core.draft_content') \
                    or (
                                Content.DRAFT <= obj.visibility or obj.visibility == Content.HIDDEN and user.has_perm(
-                                'hide_content')) and user.has_perm('core.edit_content')
+                                'hide_content')) and (user.has_perm('core.edit_content') or (user.has_perm('core.editown_content') and user in obj.authors.all()))
         if action == 'delete':
             return (obj.visibility == Content.DRAFT and user in obj.authors.all() and user.has_perm(
                 'core.draft_content')) or user.has_perm('core.delete_content')

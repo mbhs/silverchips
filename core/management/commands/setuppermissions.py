@@ -27,14 +27,15 @@ class Command(BaseCommand):
         sponsor, _ = Group.objects.get_or_create(name="sponsors")
 
         for group in writers, editors, eics, sponsor:
-            writers.permissions.add(Permission.objects.get(content_type=content, codename='draft_content'))
-            writers.permissions.add(Permission.objects.get(content_type=content, codename='create_content'))
-            writers.permissions.add(Permission.objects.get(content_type=profile, codename='edit_profile'))
-            writers.permissions.add(Permission.objects.get(content_type=tag, codename='add_tag'))
+            group.permissions.add(Permission.objects.get(content_type=content, codename='draft_content'))
+            group.permissions.add(Permission.objects.get(content_type=content, codename='create_content'))
+            group.permissions.add(Permission.objects.get(content_type=profile, codename='edit_profile'))
+            group.permissions.add(Permission.objects.get(content_type=tag, codename='add_tag'))
+            group.permissions.add(Permission.objects.get(content_type=content, codename='editown_content'))
 
         for group in editors, eics, sponsor:
-            editors.permissions.add(Permission.objects.get(content_type=content, codename='read_content'))
-            editors.permissions.add(Permission.objects.get(content_type=content, codename='edit_content'))
+            group.permissions.add(Permission.objects.get(content_type=content, codename='read_content'))
+            group.permissions.add(Permission.objects.get(content_type=content, codename='edit_content'))
 
         for group in eics, sponsor:
             group.permissions.add(Permission.objects.get(content_type=content, codename='publish_content'))

@@ -22,7 +22,7 @@
   </div>
   <br/>
 
-  {% if user|can:"core.manage-users" %}
+  {% if user|can:"auth.manage_users" %}
     <a class="btn btn-primary btn-lg btn-block my-3" href="{% url "staff:users:create" %}">Create User <i class="fas fa-user-plus"></i></a>
   {% endif %}
 
