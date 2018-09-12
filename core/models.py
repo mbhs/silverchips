@@ -174,7 +174,8 @@ class Content(PolymorphicModel):
             ('read_content', "Can read all content"),
             ('publish_content', "Can publish content"),
             ('hide_content', "Can hide content"),
-            ('create_content', "Can create content")
+            ('create_content', "Can create content"),
+            ('comment', "Can manage comments")
         )
 
     def get_absolute_url(self):
@@ -334,6 +335,9 @@ class Comment(models.Model):
     content = models.ForeignKey(Content, on_delete=models.CASCADE, null=True, related_name="comments")
     date = models.DateTimeField(default=timezone.now)
     approved = models.BooleanField(default=False)
+
+    VISIBLE = 2
+    HIDDEN = 3
 
     class Meta:
         ordering = ('date',)

@@ -1,0 +1,104 @@
+{% extends "staff/base.html" %}
+{% load core %}
+{% load staff %}
+{% load home %}
+{% load crispy_forms_tags %}
+
+{% block title %}Manage Content{% endblock %}
+
+{% block content %}
+  {% csrf_token %}
+  <h1>Manage Comments</h1>
+
+
+  <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deleteModalLabel">Delete content</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true"><i class="fas fa-times"></i></span>
+          </button>
+        </div>
+        <div class="modal-body">
+          Are you sure you want to delete comment <code id="deleteTitle"></code>?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Nevermind <i class="fas fa-times"></i></button>
+          <button type="button" class="btn btn-danger" id="deleteButton">Delete <i class="fas fa-trash-alt"></i></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    $('#deleteModal').on('show.bs.modal', function (event) {
+      let button = $(event.relatedTarget);
+      let recipient = button.data('title');
+      let modal = $(this);
+      modal.find('#deleteTitle').text(recipient);
+      $('#deleteButton').on('click', () => doApi(button.data('href'), button.data('verb')));
+    });
+
+    function doApi(url, verb) {
+      $.ajax({
+        url: url,
+        method: verb,
+        headers: {'X-CSRFToken': $("[name=csrfmiddlewaretoken]").val()},
+      }).done(() => location.reload());
+    }
+  </script>
+
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Content Type</th>
+        <th scope="col">Content Name</th>
+        <th scope="col">Submission Time</th>
+        <th scope="col">Commentor Name</th>
+        <th scope="col">Comment Text</th>
+        <th scope="col">Approved?</th>
+        <th scope="col">Actions</th>
+      </tr>
+      </thead>
+
+      <tbody>
+      {% for comment in comment_list %}
+        <tr>
+          <th scope="row">{{ comment.pk }}</th>
+          <td>{{ comment.content.type }}</td>
+          <td>{{ comment.content.title|safe }}</td>
+          <td>{{ comment.date|date:"SHORT_DATETIME_FORMAT" }}</td>
+          <td>{{ comment.name }}</td>
+          <td>{{ comment.text }}</td>
+          <td><i class="fas fa-{{ comment.approved|yesno:"check,times" }}"></i></td>
+          <td>
+            <div class="dropdown">
+              <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink{{ forloop.counter }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuLink{{ foorloop.counter }}">
+                {% if request.user|can_read_content:comment.content %}
+                  <a class="dropdown-item" href="{% url "home:view_content" comment.content.pk %}" target="_blank">View <i class="fas fa-external-link-alt"></i></a>
+                {% endif %}
+                {% if request.user|can_comment and not comment.approved%}
+                  <a class="dropdown-item" href='javascript:doApi("{% url "staff:comment:set_approval" comment.pk comment.VISIBLE %}", "patch");'>Approve <i class="fas fa-thumbs-up"></i></a>
+                {% elif request.user|can_comment %}
+                  <a class="dropdown-item" href='javascript:doApi("{% url "staff:comment:set_approval" comment.pk comment.HIDDEN %}", "patch");'>Hide <i class="fas fa-eye-slash"></i></a>
+                {% endif %}
+                {% if request.user|can_delete_content:comment.content %}
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="" data-pk={{ comment.pk }} data-toggle="modal" data-target="#deleteModal" data-title="{{ comment.text|safe }}" data-verb="delete" data-href="{% url "staff:comment:delete_comment" comment.pk %}" style="color: #f55;">Delete <i class="fas fa-trash-alt"></i></a>
+                {% endif %}
+              </div>
+            </div>
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  {% include "home/utils/paginator.html" %}
+{% endblock %}

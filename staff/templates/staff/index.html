@@ -12,6 +12,11 @@
     <div class="col-sm-6 col-xs-12">
       <a class="btn btn-info btn-lg btn-block my-3" href="{% url "staff:content:list" %}">Manage Content <i class="fas fa-file-alt"></i></a>
     </div>
+    {% if user|can:"core.publish_content" %}
+      <div class="col-sm-6 col-xs-12">
+        <a class="btn btn-secondary btn-lg btn-block my-3" href="{% url "staff:comment:list" %}">Moderate Comments <i class="fas fa-user"></i></a>
+      </div>
+    {% endif %}
     {% if user|can:"core.edit_profile" %}
       <div class="col-sm-6 col-xs-12">
         <a class="btn btn-secondary btn-lg btn-block my-3" href="{% url "staff:users:self_manage" %}">Manage Account <i class="fas fa-user"></i></a>

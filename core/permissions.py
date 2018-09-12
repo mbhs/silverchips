@@ -1,4 +1,4 @@
-from core.models import Content, User
+from core.models import Content, User, Comment
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.mixins import AccessMixin
 
@@ -23,8 +23,10 @@ def can(user, action, obj):
     _type, action = action.split('.')
 
     if _type == 'content':
-        assert isinstance(obj, Content)
+        assert isinstance(obj, Content) or isinstance(obj, Comment)
 
+        if action == 'comment':
+            return user.has_perm('comment')
         # This is the only action that can take place without any authentication
         if action == 'read':
             return obj and (obj.visibility == Content.PUBLISHED or user is not None and user.has_perm('core.read_content'))
@@ -72,7 +74,10 @@ def check_permission(user, action, pk):
     """
     t, _ = action.split('.')
     if t == 'content':
-        obj = Content.objects.get(pk=pk)
+        if _ == 'comment':
+            obj = Comment.objects.get(pk=pk)
+        else:
+            obj = Content.objects.get(pk=pk)
     if t == 'users':
         obj = User.objects.get(pk=pk)
     return can(user, action, obj)

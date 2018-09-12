@@ -17,3 +17,7 @@ for action in permissions.CONTENT_ACTIONS:
 def can(user, permission):
     """A filter that checks whether a user has a given permission in Django's permission scheme."""
     return user.has_perm(permission)
+
+@register.filter("can_comment")
+def can(user):
+    return user.has_perm("core.comment")

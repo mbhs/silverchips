@@ -40,6 +40,12 @@ content_urlpatterns = ([
     path("gallery/", include(gallery_urlpatterns, "gallery"))
 ], "content")
 
+comment_urlpatterns = ([
+    path("list/", views.CommentListView.as_view(), name="list"),
+    path("<int:pk>/set-approval/<int:level>/", views.set_comment_approval, name="set_approval"),
+    path("<int:pk>/delete/", views.delete_comment, name="delete_comment"),
+], "comment")
+
 user_urlpatterns = ([
     path("<int:pk>/manage/", views.UserManageView.as_view(), name="manage"),
     path("create/", views.UserCreateView.as_view(), name="create"),
@@ -59,6 +65,7 @@ urlpatterns = [
     path("login/", views.login, name="login"),
     path("logout/", views.logout, name="logout"),
     path("content/", include(content_urlpatterns, "content")),
+    path("comment/", include(comment_urlpatterns, "comment")),
     path("autocomplete/", include(autocomplete_urlpatterns, "autocomplete")),
     path("users/", include(user_urlpatterns, "user"))
 ]

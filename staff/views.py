@@ -458,12 +458,46 @@ class UserSelfManageView(UserChangeView):
 
 # Comment views
 class CommentListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
-    pass # STUB_COMMENT
+
+    model = models.Comment
+    paginate_by = 25
+    permission_required = 'core.publish_content'
+
+    template_name = "staff/comment/list.html"
+    context_object_name = "comment_list"
+    ordering = ['-pk']
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+
+@login_required
+@csrf_protect
+@require_http_methods(["PATCH"])
+def set_comment_approval(request, pk, level):
+    """View to change the approval of a comment."""
+    comment = get_object_or_404(models.Comment, pk=pk)
+
+    # Check whether the requesting user has permission to change the comment's visibility to the given level
+    if not can(request.user, 'content.comment', comment):
+        raise PermissionDenied
+
+    if level == 2:
+        comment.approved = True
+    if level == 3:
+        comment.approved = False
+    comment.save()
+
+    return HttpResponse(status=200)
 
 
 @login_required
 @csrf_protect
-@permission_required("") # STUB_COMMENT
-@require_http_methods(["PATCH"])
-def approve_comment(request, pk, approved):
-    pass # STUB_COMMENT
+@user_can('content.comment')
+@require_http_methods(["DELETE"])
+def delete_comment(request, pk):
+    """View to delete comment."""
+    comment = get_object_or_404(models.Comment, pk=pk)
+    comment.delete()
+
+    return HttpResponse(status=200)
