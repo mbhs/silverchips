@@ -36,5 +36,8 @@ urlpatterns = [
 
     # Legacy URLs to make sure old links work
     path("story/<int:pk>/", views.legacy(models.Story)),
-    path("picture/<int:pk>/", views.legacy(models.Image))
+    path("picture/<int:pk>/", views.legacy(models.Image)),
+
+    # mbhs.edu homepage needs carousel query
+    path("carousel/", views.carousel, name="carousel")
 ]
