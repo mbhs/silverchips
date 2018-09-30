@@ -14,6 +14,7 @@ from django.contrib.auth.models import User
 from core import models
 from core.models import Comment
 from core.permissions import can, user_can
+from core.decorators import check_recaptcha
 
 from django.utils import timezone
 
@@ -161,13 +162,13 @@ def vote(request, pk):
     """Vote in a poll."""
     pass
 
-
+@check_recaptcha
 def comment(request, pk):
     """Comment on a piece of content."""
     content = get_object_or_404(models.Content.objects, pk=pk)
     form = forms.CommentForm(request.POST)
 
-    if form.is_valid():
+    if form.is_valid() and request.recaptcha_is_valid:
         comment = form.save(commit=False)
         comment.content = content
         comment.save()

@@ -18,6 +18,7 @@ django-ordered-model = "*"
 "bs4" = "*"
 django-imagekit = "*"
 django-model-utils = "*"
+requests = "*"
 
 [dev-packages]
 ipython = "*"
