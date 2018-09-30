@@ -5,6 +5,8 @@ from django.contrib import messages
 
 import requests
 
+
+# Adapted from https://simpleisbetterthancomplex.com/tutorial/2017/02/21/how-to-add-recaptcha-to-django-site.html 
 def check_recaptcha(view_func):
     @wraps(view_func)
     def _wrapped_view(request, *args, **kwargs):
