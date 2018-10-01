@@ -122,6 +122,8 @@
               <form method="post" action="{% url "home:submit_comment" content.pk %}">
                 {% csrf_token %}
                 {% crispy form form.helper %}
+                <script src='https://www.google.com/recaptcha/api.js'></script>
+                <div class="g-recaptcha" data-sitekey="6Ldd2nIUAAAAAFiXT-1hjt2Y3LSmA437PZ-we4XK"></div>
                 <button type="submit" class="btn btn-success btn-block">Submit Comment For Approval<i class="fas fa-comment"></i></button>
               </form>
             </div>
