@@ -9,6 +9,17 @@
  }
 
 //LOGO
+/* IE HACK USING INVALID SELECTOR */
+*::-ms-backdrop, :root .navbar-wrapper-header .logo,
+:root .navbar .logo {
+    position: relative;
+    height: 70px;
+    & svg {
+        position: absolute;
+        top: 0;
+        padding: 1rem 0;
+    }
+}
 .navbar-wrapper-header .logo svg g { fill: $site-header; }
 .navbar .logo svg g { fill: $site-header; }
 
@@ -55,7 +66,6 @@
     z-index: 1;
 }
 #search button {
-    height: 100%;
     border: none;
 
     display: inline;
