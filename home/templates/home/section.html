@@ -18,7 +18,7 @@
         {% if subsection != section %}
           <h1 class="display-4 mb-4 py-2 text-center text-uppercase section-header"><a href="{{ subsection.get_absolute_url }}">{{ subsection.title }}</a></h1>
         {% endif %}
-        {% paginate 2,5 new_content as paginated_content %}
+        {% paginate 3 new_content as paginated_content %}
         {% for content in paginated_content %}
           <div class="row">
             <div class="col-md-3">
@@ -31,7 +31,7 @@
           {% if not forloop.last %}<hr/>{% endif %}
         {% endfor %}
         {% if subsection != section %}
-          <h4 class="title display-5 mb-4 py-2 text-center title"><a href="{{ subsection.get_absolute_url }}">See more {{ subsection.title }} {{ section.title }}</a></h1>
+          <h4 class="title display-5 mb-4 py-2 text-center title"><a href="{{ subsection.get_absolute_url }}">See more {{ subsection.title }}</a></h1>
         {% else %}
         {% show_pages %}
         {% endif %}
