@@ -19,6 +19,7 @@ django-ordered-model = "*"
 django-imagekit = "*"
 django-model-utils = "*"
 requests = "*"
+django-el-pagination = "*"
 
 [dev-packages]
 ipython = "*"

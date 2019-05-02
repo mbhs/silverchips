@@ -9,6 +9,7 @@ from django.views.generic import CreateView, ListView
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponseForbidden, HttpResponse
 from django.contrib.auth.models import User
+from el_pagination.decorators import page_template
 
 # News imports
 from core import models
@@ -182,3 +183,4 @@ def carousel(request):
     return render(request, "home/mbhs_carousel.html", {
         "stories": stories
     })
+

@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'static_precompiler',
     'django.contrib.contenttypes',
+    'el_pagination',
 ]
 
 MIDDLEWARE = [
@@ -65,7 +66,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'home.views.load_context'
+                'home.views.load_context',
+                'django.template.context_processors.request'
             ],
         },
     },
@@ -135,3 +137,10 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 # Login
 
 LOGIN_URL = '/staff/login/'
+
+
+# EL Pagination settings
+EL_PAGINATION_PER_PAGE = 10
+EL_PAGINATION_CALLABLE_ARROWS = True
+EL_PAGINATION_PAGE_OUT_OF_RANGE_404 = True
+
