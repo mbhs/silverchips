@@ -1,0 +1,134 @@
+/* FONTS */
+@import url('https://fonts.googleapis.com/css?family=Oswald|Open+Sans|Playfair+Display|Fugaz+One|Roboto');
+$site-header-font: "Playfair Display", serif;
+$site-paragraph-font: "Roboto", sans-serif;
+$playfair-display: "Playfair Display", sans-serif;
+$fugaz-one: "Fugaz One", serif;
+
+/* COLORS */
+$site-gray: #373737;
+$site-white: #ffffff;
+$site-red: #c54c3a;
+$site-light-red: lighten($site-red, 10);
+
+$site-background: $site-white;
+$site-header: $site-gray;
+$site-paragraph: $site-gray;
+
+$navbar-background: $site-background;
+$navbar-active-link: $site-red;
+$navbar-unactive-link: $site-paragraph;
+
+$card-header-bg: $site-gray;
+$card-title-color: $site-white;
+
+
+/* MASTHEAD/FOOTER BACKGROUND IMAGE */
+$background-image: url("../images/footer_lodyas.png");
+
+/* CUSTOM BOOTSTRAP BREAKPOINTS */
+$grid-breakpoints: (
+  // Extra small screen / phone
+  xs: 0,
+  // Small screen / phone
+  sm: 576px,
+  // Medium screen / tablet
+  md: 768px,
+  // Large screen / desktop
+  lg: 992px,
+  // Extra large screen / wide desktop
+  xl: 1280px
+);
+
+/* CUSTOM BOOTSTRAP CONTAINER */
+.large-container {
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+}
+.medium-container {
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
+@media (min-width: 768px) {
+  .large-container {
+    max-width: calc(100vw - 100px);
+  }
+  .medium-container {
+    max-width: calc(100vw - 200px);
+  }
+}
+@media (min-width: 992px) {
+  .large-container {
+    max-width: calc(100vw - 160px);
+  }
+  .medium-container {
+    max-width: calc(100vw - 240px);
+  }
+}
+@media (min-width: 1280px) {
+  .large-container {
+    max-width: calc(100vw - 200px);
+  }
+  .medium-container {
+    max-width: calc(100vw - 280px);
+  }
+}
+
+@mixin mq($width, $type: min) {
+    @if map_has_key($grid-breakpoints, $width) {
+        $width: map_get($grid-breakpoints, $width);
+        @if $type == max {
+            $width: $width - 1px;
+        }
+        @media only screen and (#{$type}-width: $width) {
+            @content;
+        }
+    }
+}
+
+@function z($name) {
+    @if index($z-indexes, $name) {
+        @return (length($z-indexes) - index($z-indexes, $name)) + 1;
+    } @else {
+        @warn 'There is no item "#{$name}" in this list; choose one of: #{$z-indexes}';
+        @return null;
+    }
+}
+
+@function set-text-color($color) {
+    @if (lightness($color) > 50) {
+        @return $site-gray;
+    } @else {
+        @return $site-white;
+    }
+}
+
+
+
+//.card-columns-compact {
+//  @include media-breakpoint-only(xs) {
+//    column-count: 1;
+//  }
+//  @include media-breakpoint-only(md) {
+//    column-count: 2;
+//  }
+//  @include media-breakpoint-only(lg) {
+//    column-count: 3;
+//  }
+//}
+//
+//.card-columns-dense {
+//  @include media-breakpoint-only(xs) {
+//    column-count: 1;
+//  }
+//  @include media-breakpoint-only(md) {
+//    column-count: 3;
+//  }
+//  @include media-breakpoint-only(lg) {
+//    column-count: 5;
+//  }
+//}

@@ -1,0 +1,17 @@
+.col-form-label {
+  font-weight: bold; }
+
+.asteriskField {
+  color: red;
+  font-weight: bold; }
+  .asteriskField::before {
+    content: " "; }
+
+body {
+  margin-bottom: 1em; }
+
+.form-inline .col-form-label, .form-inline .form-group {
+  margin-right: 1em; }
+
+.invalid-feedback {
+  display: block; }

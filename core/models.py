@@ -240,8 +240,10 @@ class Section(models.Model):
 
     def all_content(self):
         """Get all the Content that belongs to this Section for display in section templates."""
-        return Content.objects.filter(visibility=Content.PUBLISHED, embed_only=False,
+        return Content.objects.all().filter(visibility=Content.PUBLISHED, embed_only=False,
                                       section__in=self.get_descendants())
+#        return Content.objects.filter(visibility=Content.PUBLISHED, embed_only=False,
+#                                      section__in=self.get_descendants())
 
     def is_root(self):
         """Check whether this Section is a root Section."""
