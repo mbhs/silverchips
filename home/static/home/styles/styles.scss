@@ -193,6 +193,7 @@ html {
     }
 
     .card-body {
+	position: relative;
         .story-created { font-size: 0.75rem; }
         h4 a { font-family: $playfair-display; }
     }
