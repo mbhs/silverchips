@@ -129,6 +129,8 @@ STATIC_PRECOMPILER_OUTPUT_DIR = "compiled"
 MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
 MEDIA_URL = '/uploads/'
 
+FILE_UPLOAD_PERMISSIONS = 0o644
+
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 
