@@ -2,6 +2,7 @@
 {% load static %}
 {% load home %}
 {% load imagekit %}
+{% load el_pagination_tags %}
 
 {% block title %}
   {{ section.title }}
@@ -10,6 +11,18 @@
 {% block content %}
   <div class="container">
     <h1 class="container rounded display-3 mb-4 py-2 text-center text-uppercase section-header">{{ section.title }}</h1>
+    {% for article in content %}
+      <div class="row">
+        {% if article|thumb %}<img class="img-fluid" src="{{ content|thumb:"large" }}"/>{% endif %}
+      </div>
+      <div class="col-md-9">
+        {% include "home/content/summary.html" with section=article.section %}
+      </div>
+      {% if not forloop.last %}<hr/>{% endif %}
+    {% endfor %}
+  </div>
+{% endblock %}
+
 
     {% for subsection, content in subsections %}
       {% reserve_content content 5 %}

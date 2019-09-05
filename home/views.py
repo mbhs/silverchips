@@ -44,6 +44,16 @@ def index(request):
 STORY_COUNT = 3
 
 
+def all_section(request, name):
+    """Render a section of the newspaper with pagination, containing all the content sorted by date."""
+    section = get_object_or_404(models.Section, name=name)
+
+    all_content = section.sorted_content()
+
+    return render(request, "home/general_section.html", {
+        "content": all_content,
+    })
+
 def view_section(request, name):
     """Render a section of the newspaper."""
     section = get_object_or_404(models.Section, name=name)

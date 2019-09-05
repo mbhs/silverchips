@@ -28,6 +28,7 @@ urlpatterns = [
     path("tagged/<path:tag>/", views.TaggedContentList.as_view(), name="tagged"),  # path guarantees we can have tags with slashes
 
     path("profile/<int:pk>/", views.view_profile, name="view_profile"),
+    path("section/<path:name>/all/", views.all_section, name="all_section"),
     path("section/<path:name>/", views.view_section, name="view_section"),
     path("about/", include(about_urlpatterns, "about")),
 
