@@ -108,3 +108,8 @@ Pipfile.lock
 
 .vscode/
 setup.cfg
+
+# mounted/macos stuff
+shell/*
+*.DS_Store
+._*
