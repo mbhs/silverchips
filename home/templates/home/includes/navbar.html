@@ -1,4 +1,5 @@
 {% load staticfiles %}
+{% load crispy_forms_tags %}
 
 <div class="navbar-wrapper fixed-top not-scrolled">
   <header class="navbar-wrapper-header w-100">
@@ -42,11 +43,11 @@
     <div class="modal-content">
       <div class="modal-body">
         <button type="button" id="modal-close-btn" class="fas fa-times"></button>
-        <form class="modal-search-form">
-          <input class="modal-search-input" type="search" placeholder="Search...">
-          <button class="modal-search-submit" type="submit">
-            <i class="fa fa-search"></i>
-          </button>
+        <form method="get" action="{% url "home:search_content" %}">
+            <input name="q" type="text" placeholder="Search...">
+            <button class="modal-search-submit" type="submit">
+              <i class="fa fa-search"></i>
+            </button>
         </form>
       </div>
     </div>

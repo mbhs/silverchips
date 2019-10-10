@@ -27,3 +27,12 @@ class CommentForm(forms.ModelForm):
     helper = FormHelper()
     helper.form_tag = False
     helper.disable_csrf = True
+
+class ContentSearchForm(forms.ModelForm):
+    class Meta:
+        model = models.Search
+        fields = ["search"]
+    
+    helper = FormHelper()
+    helper.form_tag = False
+    helper.disable_csrf = True

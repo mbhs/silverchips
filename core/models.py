@@ -342,3 +342,7 @@ class Comment(models.Model):
 
     class Meta:
         ordering = ('date',)
+
+class Search(models.Model):
+    search = models.CharField(max_length=200)
+    text = models.TextField()

@@ -21,12 +21,13 @@ from django.utils import timezone
 from home.templatetags.home import render_content
 from home import forms
 
+from django.db.models import Q
 
 def load_context(request):
     return {
         "section_roots": models.Section.objects.filter(parent=None, visible=True),  # For navigation bar
         "now": timezone.now(),  # For navigation bar
-        "top_content": models.Content.objects.filter(visibility=models.Content.PUBLISHED, embed_only=False)  # For sidebar
+        "top_content": models.Content.objects.filter(visibility=models.Content.PUBLISHED, embed_only=False),  # For sidebar
     }
 
 
@@ -134,6 +135,43 @@ class TaggedContentList(ListView):
         context["tag"] = self.kwargs["tag"]
         return context
 
+class SearchListView(ListView):
+    """The content list view that supports pagination."""
+    template_name = "home/search.html"
+    context_object_name = "content_list"
+    paginate_by = 25
+    model = models.Content
+
+    def get_queryset(self):
+        """Return a list of all the content we're looking at, filtered by search criteria."""
+
+        form = forms.ContentSearchForm(self.request.GET)
+
+        if form.is_valid():
+            #search in title, description, text
+            # Filter the content by certain criteria
+            query = Q()
+            query &= Q(title__contains=form.data['title'])
+            # if form.data.get("title"):
+                
+            # if form.data.get("id"):
+            #     query &= Q(pk=int(form.data['id']))
+            # if form.data.get("after"):
+            #     query &= Q(created__gt=form.data['after'])
+            # if form.data.get("before"):
+            #     query &= Q(created__lt=form.data['before'])
+            # if form.data.get("authors"):
+            #     query &= Q(authors=form.data['authors'])
+            # if form.data.get("tags"):
+            #     query &= Q(tags=form.data['tags'])
+            # content = content.filter(query)
+            return models.Content.objects.filter(query).order_by('-modified')
+        return []
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = forms.ContentSearchForm(self.request.GET)
+        return context
 
 def about(request):
     """Render the about page for the newspaper."""
@@ -182,3 +220,4 @@ def carousel(request):
     return render(request, "home/mbhs_carousel.html", {
         "stories": stories
     })
+
