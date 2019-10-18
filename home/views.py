@@ -145,7 +145,8 @@ class SearchListView(ListView):
     def get_queryset(self):
         """Return a list of all the content we're looking at, filtered by search criteria."""
 
-        query = Q(title__contains=self.request.GET.get('q'))
+        query = Q(title__icontains=self.request.GET.get('q'))
+
         return models.Content.objects.filter(query, visibility=models.Content.PUBLISHED, embed_only=False, not_instance_of=models.Image).order_by('-modified')
     
     def get_context_data(self, **kwargs):
