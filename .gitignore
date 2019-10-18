@@ -113,3 +113,6 @@ setup.cfg
 shell/*
 *.DS_Store
 ._*
+
+# Postgres stuff
+*.psql

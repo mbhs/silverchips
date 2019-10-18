@@ -1,0 +1,19 @@
+{% extends "home/base.html" %}
+{% load static %}
+{% block title %}
+  Search: {{ search }}
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <h1>Search: {{ search }}</h1>
+    <hr/>
+
+    {% for content in content_list %}
+      {% include "home/content/summary.html" %}
+        <hr/>
+    {% endfor %}
+
+    {% include "home/utils/paginator.html" %}
+  </div>
+{% endblock %}

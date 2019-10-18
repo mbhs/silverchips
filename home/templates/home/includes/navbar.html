@@ -43,8 +43,8 @@
     <div class="modal-content">
       <div class="modal-body">
         <button type="button" id="modal-close-btn" class="fas fa-times"></button>
-        <form method="get" action="{% url "home:search_content" %}">
-            <input name="q" type="text" placeholder="Search...">
+        <form method="get" class="modal-search-form" action="{% url "home:search_content" %}">
+          <input name="q" type="text" class="modal-search-input" placeholder="Search...">
             <button class="modal-search-submit" type="submit">
               <i class="fa fa-search"></i>
             </button>
