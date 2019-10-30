@@ -140,14 +140,20 @@ class SearchListView(ListView):
     template_name = "home/search.html"
     context_object_name = "content_list"
     paginate_by = 25
-    model = models.Content
+    
 
     def get_queryset(self):
         """Return a list of all the content we're looking at, filtered by search criteria."""
+        content = models.Content
+        tags = models.Tag
 
-        query = Q(title__icontains=self.request.GET.get('q'))
+        content_query = Q(title__icontains=self.request.GET.get('q'))
+        users_query = Q(first_name__iexact=self.request.GET.get('q')) | Q(last_name__iexact=self.request.GET.get('q'))
+        users = list(models.User.objects.filter(users_query).values_list('pk', flat=True))
 
-        return models.Content.objects.filter(query, visibility=models.Content.PUBLISHED, embed_only=False, not_instance_of=models.Image).order_by('-modified')
+        if users is not None:
+            content_query |= Q(authors__in=users)
+        return content.objects.filter(content_query, visibility=models.Content.PUBLISHED, embed_only=False, not_instance_of=models.Image).order_by('-modified')
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
