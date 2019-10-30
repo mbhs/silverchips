@@ -54,10 +54,27 @@ def view_section(request, name):
     for subsection in section.subsections.filter(visible=True):
         subsections.append((subsection, subsection.all_content()))
 
+    content
     return render(request, "home/section.html", {
         "section": section,
         "subsections": subsections
     })
+
+class ContentList(ListView):
+    """The content list view that supports pagination."""
+    template_name = "home/section.html"
+    context_object_name = "content_list"
+    paginate_by = 25
+
+    def get_queryset(self):
+        section = get_object_or_404(models.Section, name=self.kwargs["name"])
+        """Return a list of all the tags we're looking at, filtered by search criteria."""
+        return section.all_content()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["section"] = self.kwargs["name"]
+        return context
 
 
 @user_can('content.read')

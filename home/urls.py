@@ -30,7 +30,7 @@ urlpatterns = [
     path("search/", views.SearchListView.as_view(), name="search_content"),
 
     path("profile/<int:pk>/", views.view_profile, name="view_profile"),
-    path("section/<path:name>/", views.view_section, name="view_section"),
+    path("section/<path:name>/", views.ContentList.as_view(), name="view_section"),
     path("about/", include(about_urlpatterns, "about")),
 
     path("vote/<int:pk>/<int:choice>/", views.vote, name="vote"),

@@ -4,11 +4,30 @@
 {% load imagekit %}
 
 {% block title %}
-  {{ section.title }}
+  {{ section }}
 {% endblock %}
 
 {% block content %}
   <div class="container">
+    <h1 class="container rounded display-3 mb-4 py-2 text-center text-uppercase section-header">{{ section}}</h1>
+    <hr/>
+
+
+    {% for content in content_list %}
+          <div class="row">
+            <div class="col-md-3">
+              {% if content|thumb %}<img class="img-fluid" src="{{ content|thumb:"large" }}"/>{% endif %}
+            </div>
+            <div class="col-md-9">
+              {% include "home/content/summary.html" %}
+            </div>
+          </div>
+          {% if not forloop.last %}<hr/>{% endif %}
+        {% endfor %}
+
+    {% include "home/utils/paginator.html" %}
+  </div>
+  <!-- <div class="container">
     <h1 class="container rounded display-3 mb-4 py-2 text-center text-uppercase section-header">{{ section.title }}</h1>
 
     {% for subsection, content in subsections %}
@@ -31,5 +50,5 @@
         <br/>
       {% endif %}
     {% endfor %}
-  </div>
+  </div> -->
 {% endblock %}
