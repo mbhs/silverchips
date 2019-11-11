@@ -8,6 +8,32 @@
   {% include "home/includes/index-sm-sidebar.html" %}
 
   <div class="medium-container">
+      <h1 class="display-4 mb-4 py-2 text-center text-uppercase section-header">Latest</a></h1>
+      <div class="card-columns">
+        {% for content in top_content|slice:":6" %}
+          <div class="card align-middle rounded-0 mb-4 section-card-1">
+            <div class="img-wrapper">
+              {% if content|thumb %}
+                <img class="card-img-top mx-auto rounded-0 d-block" style="overflow: hidden" src="{{ content|thumb:"huge" }}"/>
+              {% endif %}
+            </div>
+            {% if section != content.section %}
+              <div class="in-section">
+                <a href="{{ content.section.get_absolute_url }}" class="solid-link"> In {{ content.section.title }} </a>
+              </div>
+            {% endif %}
+            <div class="card-body">
+              <h6 class="authors font-weight-bold">{% include "home/utils/authors.html" %}</h6>
+              <p class="story-created">{{ content.created }}</p>
+              <h4 class="card-title"><a href="{{ content.get_absolute_url }}" class="solid-link">{{ content|qualified_title }}</a></h4>
+              <p>
+                {{ content.description|safe }}
+              </p>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    
     {% for section in main_sections %}
       <h1 class="display-4 mb-4 py-2 text-center text-uppercase section-header"><a href="{% url "home:view_section" section.name %}">{{ section.title }}</a></h1>
 
