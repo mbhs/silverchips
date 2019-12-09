@@ -60,17 +60,18 @@
 }
 
 //SEARCH BUTTON
-#search.d-lg-block {    //only applies to button on desktops
-    position: absolute; //also fix this; repeated buttons were only to save time
-    right: 0;           //use js or something
-    z-index: 1;
-}
-#search button {
+// #search.d-lg-block {    //only applies to button on desktops
+//     position: absolute; //also fix this; repeated buttons were only to save time
+//     right: 0;           //use js or something
+//     z-index: 1;
+// }
+
+#search {
     height: 100%;
     border: none;
 
     display: inline;
-    padding: 0 10% 0 10px;
+    padding: 0 10% 0 15px;
 
     text-transform: uppercase;
     font: bold 1.25rem $site-header-font;

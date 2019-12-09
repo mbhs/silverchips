@@ -5,10 +5,8 @@
   <header class="navbar-wrapper-header w-100">
     {# logo for desktop #}
     <a class="logo mx-auto py-3 d-none d-lg-block" href="{% url "home:index" %}"> {% include "home/includes/_logo-svg.html" %} </a>
+    
 
-    <li id="search" class="d-none d-lg-block">
-      <button class="nav-link d-inline-block mx-4" data-toggle="modal" data-target="#searchModal"><i class="fa fa-search"></i></button>
-    </li>
     <h6 class="lead text-center d-none d-lg-block">
       Montgomery Blair High School's Online Student Newspaper <span class="text-muted">&mdash;&mdash; {{ now|date:"l, F j, Y" }}</span>
     </h6>
@@ -30,8 +28,10 @@
             <a class="nav-link" href="{% url "home:view_section" root_section.name %}">{{ root_section.title }}</a>
           </li>
         {% endfor %}
-        <li id="search" class="nav-item d-lg-none">
-          <button type="button" class="py-2 w-100 s-0" data-toggle="modal" data-target="#searchModal">Search <i class="fa fa-search"></i></button>
+        <li id="search" class="nav-item px-0">
+          <a type="button" class="nav-link" data-toggle="modal" data-target="#searchModal" style="font-size: 13px;">
+            <i class="fa fa-search fa-lg py-1"></i>
+          </a>
         </li>
       </ul>
     </div>
