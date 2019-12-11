@@ -23,9 +23,16 @@ from home import forms
 
 from django.db.models import Q
 
+from collections import OrderedDict 
+
 def load_context(request):
+    section_roots = models.Section.objects.filter(parent=None, visible=True),  # For navigation bar
+    sections = OrderedDict()
+    for section in section_roots:
+        sections[section] = section.subsections.filter(visible=True)
     return {
-        "section_roots": models.Section.objects.filter(parent=None, visible=True),  # For navigation bar
+        "section_roots": section_roots,
+        "sections": sections,
         "now": timezone.now(),  # For navigation bar
         "top_content": models.Content.objects.filter(visibility=models.Content.PUBLISHED, embed_only=False, not_instance_of=models.Image),  # For sidebar
     }
