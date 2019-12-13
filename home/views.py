@@ -52,20 +52,20 @@ def index(request):
 STORY_COUNT = 3
 
 
-def view_section(request, name):
-    """Render a section of the newspaper."""
-    section = get_object_or_404(models.Section, name=name)
-
-    # First load the top stories in the entire section, and then in each subsection
-    subsections = [(section, section.all_content())]
-    for subsection in section.subsections.filter(visible=True):
-        subsections.append((subsection, subsection.all_content()))
+# def view_section(request, name):
+#     """Render a section of the newspaper."""
+#     section = get_object_or_404(models.Section, name=name)
+    
+#     # First load the top stories in the entire section, and then in each subsection
+#     subsections = [(section, section.all_content())]
+#     for subsection in section.subsections.filter(visible=True):
+#         subsections.append((subsection, subsection.all_content()))
 
  
-    return render(request, "home/section.html", {
-        "section": section,
-        "subsections": subsections
-    })
+#     return render(request, "home/section.html", {
+#         "section": section,
+#         "subsections": subssections
+#     })
 
 class ContentList(ListView):
     """The content list view that supports pagination."""

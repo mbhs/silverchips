@@ -26,11 +26,11 @@
         {% for root_section, subsections in sections.items %}
           <li class="nav-item {% if root_section.name == section.name %} active {% endif %}">
             <a class="nav-link" href="{% url "home:view_section" root_section.name %}">{{ root_section.title }}</a>
-            <ul>
+            <ul class="sub-link">
               {% for subsection in subsections %}
-              <li><a class="nav-link" href="{% url "home:view_section" subsection.name %}">{{ subsection.title }}</a></li>
+              <a class="nav-link" href="{% url "home:view_section" subsection.name %}">{{ subsection.title }}</a>
               {% endfor %}
-          </ul>
+            </ul>
           </li>
         {% endfor %}
         <li id="search" class="nav-item px-0">

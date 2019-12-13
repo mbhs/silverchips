@@ -23,6 +23,10 @@
 .navbar-wrapper-header .logo svg g { fill: $site-header; }
 .navbar .logo svg g { fill: $site-header; }
 
+.navbar .sub-link {
+    padding-inline-start: 0px;
+}
+
 //NAV-LINKS
 .navbar .nav-link {
     text-decoration: none;
