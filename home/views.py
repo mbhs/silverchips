@@ -28,10 +28,10 @@ from collections import OrderedDict
 def load_context(request):
     section_roots = models.Section.objects.filter(parent=None, visible=True),  # For navigation bar
     sections = OrderedDict()
-    for section in section_roots:
+    for section in section_roots[0]:
         sections[section] = section.subsections.filter(visible=True)
     return {
-        "section_roots": section_roots,
+        "section_roots": section_roots[0],
         "sections": sections,
         "now": timezone.now(),  # For navigation bar
         "top_content": models.Content.objects.filter(visibility=models.Content.PUBLISHED, embed_only=False, not_instance_of=models.Image),  # For sidebar
@@ -61,7 +61,7 @@ def view_section(request, name):
     for subsection in section.subsections.filter(visible=True):
         subsections.append((subsection, subsection.all_content()))
 
-    content
+ 
     return render(request, "home/section.html", {
         "section": section,
         "subsections": subsections
