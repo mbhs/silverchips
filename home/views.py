@@ -61,7 +61,6 @@ STORY_COUNT = 3
 #     for subsection in section.subsections.filter(visible=True):
 #         subsections.append((subsection, subsection.all_content()))
 
- 
 #     return render(request, "home/section.html", {
 #         "section": section,
 #         "subsections": subssections
@@ -80,7 +79,7 @@ class ContentList(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["section"] = self.kwargs["name"]
+        context["section"] = self.kwargs["name"].replace("/", " » ")
         return context
 
 
