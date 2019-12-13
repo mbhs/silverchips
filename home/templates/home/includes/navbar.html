@@ -28,13 +28,13 @@
             <a class="nav-link" href="{% url "home:view_section" root_section.name %}">{{ root_section.title }}</a>
             <ul class="sub-link">
               {% for subsection in subsections %}
-              <a class="nav-link" href="{% url "home:view_section" subsection.name %}">{{ subsection.title }}</a>
+              <a class="sub-nav-link" href="{% url "home:view_section" subsection.name %}">{{ subsection.title }}</a>
               {% endfor %}
             </ul>
           </li>
         {% endfor %}
         <li id="search" class="nav-item px-0">
-          <a class="nav-link" data-toggle="modal" data-target="#searchModal" style="font-size: 13px;">
+          <a class="sub-nav-link" data-toggle="modal" data-target="#searchModal" style="font-size: 13px;">
             <i class="fa fa-search fa-lg py-1"></i>
           </a>
         </li>

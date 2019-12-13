@@ -27,6 +27,21 @@
     padding-inline-start: 0px;
 }
 
+.navbar .sub-nav-link {
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.125rem;
+    display: block;
+
+    font: bold 0.9rem $site-header-font;
+    color: $navbar-unactive-link;
+    
+
+    &:hover{
+        background: $navbar-active-link;
+        color: $site-white !important; }
+}
+
 //NAV-LINKS
 .navbar .nav-link {
     text-decoration: none;
@@ -40,10 +55,10 @@
         background: $navbar-active-link;
         color: $site-white !important; }
 }
-.navbar .active .nav-link { color: $navbar-active-link; }
+.navbar .active .nav-link .sub-nav-link { color: $navbar-active-link; }
 
 // NAVBAR ANIMATION
-.logo, .lead, .navbar .nav-link { transition: all 0.3s ease; }
+.logo, .lead, .navbar .nav-link .sub-nav-link { transition: all 0.3s ease; }
 .not-scrolled {
     .logo { width: 50%; }
     .lead {
@@ -52,6 +67,9 @@
     .navbar .nav-link {
         padding: 10px .7vw;
         border-bottom: 2px solid gray; }
+    .sub-nav-link {
+        padding: 10px .7vw;
+    }
 }
 .scrolled {
     box-shadow: 0 0 10px 2px rgba(0,0,0,.4);
@@ -61,8 +79,10 @@
         margin-bottom: 0; }
     .navbar { border-bottom: 2px solid gray; }
     .navbar .nav-link { padding: 4px .7vw; }
+    .sub-nav-link {
+        padding: 4px .7vw;
+    }
 }
-
 //SEARCH BUTTON
 // #search.d-lg-block {    //only applies to button on desktops
 //     position: absolute; //also fix this; repeated buttons were only to save time
