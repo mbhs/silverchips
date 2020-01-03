@@ -24,17 +24,20 @@
           <a class="nav-link" href="{% url "home:index" %}">Home</a>
         </li>
         {% for root_section, subsections in sections.items %}
-          <li class="nav-item {% if root_section.name == section.name %} active {% endif %}">
+          <li class="nav-item {% if root_section.name == section.name %}active{% endif %} {% if subsections %}dropdown{% endif %}">
             <a class="nav-link" href="{% url "home:view_section" root_section.name %}">{{ root_section.title }}</a>
-            <ul class="sub-link">
-              {% for subsection in subsections %}
-              <a class="sub-nav-link" href="{% url "home:view_section" subsection.name %}">{{ subsection.title }}</a>
-              {% endfor %}
-            </ul>
+            {% if subsections %}
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                {% for subsection in subsections %}
+                <a class="dropdown-item" href="{% url "home:view_section" subsection.name %}">{{ subsection.title }}</a>
+                {% endfor %}
+              </div>
+            {% endif %}
           </li>
         {% endfor %}
+
         <li id="search" class="nav-item px-0">
-          <a class="sub-nav-link" data-toggle="modal" data-target="#searchModal" style="font-size: 13px;">
+          <a class="nav-link" data-toggle="modal" data-target="#searchModal" style="font-size: 13px;">
             <i class="fa fa-search fa-lg py-1"></i>
           </a>
         </li>
