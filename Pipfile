@@ -4,7 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-django = "~2.2"
+django = "~=2.2"
 django-autocomplete-light = "*"
 django-forms-bootstrap = "*"
 django-static-precompiler = "*"
