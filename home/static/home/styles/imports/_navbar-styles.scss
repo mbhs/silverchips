@@ -39,7 +39,8 @@
 
     &:hover{
         background: $navbar-active-link;
-        color: $site-white !important; }
+        color: $site-white !important;
+    }
 }
 
 //NAV-LINKS
@@ -53,7 +54,8 @@
 
     &:hover{
         background: $navbar-active-link;
-        color: $site-white !important; }
+        color: $site-white !important;
+    }
 }
 .navbar .active .nav-link .dropdown-item { color: $navbar-active-link; }
 
@@ -80,10 +82,13 @@
     .logo { width: 50%; }
     .lead {
         height: auto;
-        margin-bottom: 0.75rem; }
+        margin-bottom: 0.75rem;
+    }
     .navbar .nav-link {
         padding: 10px .7vw;
-        border-bottom: 2px solid gray; }
+        border-bottom: 2px solid gray;
+        height: 100%;
+    }
     .dropdown-item {
         padding: 10px .7vw;
     }
@@ -93,7 +98,8 @@
     .logo { width: 30%; }
     .lead {
         height: 0px;
-        margin-bottom: 0; }
+        margin-bottom: 0;
+    }
     .navbar { border-bottom: 2px solid gray; }
     .navbar .nav-link { padding: 4px .7vw; }
     .dropdown-item {
