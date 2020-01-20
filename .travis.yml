@@ -7,9 +7,9 @@ python:
 install:
   - pip install pipenv
   - pipenv install
+  - mv $TRAVIS_BUILD_DIR/silverchips/secure_settings.py.example $TRAVIS_BUILD_DIR/silverchips/secure_settings.py
   - python manage.py makemigrations core
   - python manage.py migrate
-  - mv $TRAVIS_BUILD_DIR/silverchips/secure_settings.py.example $TRAVIS_BUILD_DIR/silverchips/secure_settings.py
 script:
   - coverage run manage.py test
 after_success:
