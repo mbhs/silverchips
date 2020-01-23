@@ -52,7 +52,7 @@
     <div class="row mb-3">
       <div class="col-md-9">
             <span class="h5">
-                <span class="text-muted"> {{ content.created }} | {% if content.authors.count > 0 %}By</span>
+                <span class="text-muted"> {{ content.created }} | {% if content.authors.count > 0 or content.guest_authors %}By</span>
                   {% include "home/utils/authors.html" %}
                   <span class="text-muted">| {% endif %} {{ content.created|naturaltime }}</span>
             </span>
