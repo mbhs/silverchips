@@ -135,6 +135,9 @@ class Content(PolymorphicModel):
                                      " when it is not original or when it is meaningless outside of some"
                                      " broader story.")
 
+    # Whether we need to link to another piece of content
+    linked = models.ForeignKey("Section", related_name="linked_with", null=True, blank=True, on_delete=models.SET_NULL)
+    
     # Content visibility workflow constants
     DRAFT = 1
     PENDING = 2
