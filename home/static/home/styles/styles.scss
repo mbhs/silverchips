@@ -16,6 +16,13 @@ html {
     }
 }
 
+html,body {
+    width: 100%;
+    margin: 0px;
+    padding: 0px;
+    overflow-x: hidden;
+}
+
 /* Separate, pseudo-bootstrapian styles */
 @import "imports/_navbar-styles";
 @import "imports/_footer-styles";
