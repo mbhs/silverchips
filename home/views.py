@@ -206,9 +206,13 @@ def staff(request):
 
 
 # Content interaction views
-def vote(request, pk):
+def vote(request, pk, choice):
     """Vote in a poll."""
-    pass
+    question = get_object_or_404(models.PollQuestion, pk=pk)
+    choice = get_object_or_404(models.PollChoice, pk=choice)
+    return render(request, "home/about/about.html", {
+        "eics": User.objects.filter(groups__name="editors-in-chief", is_active=True)
+    })
 
 @check_recaptcha
 def comment(request, pk):

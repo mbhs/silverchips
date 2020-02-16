@@ -128,6 +128,9 @@ class Content(PolymorphicModel):
     section = models.ForeignKey("Section", related_name="content", null=True, blank=True, on_delete=models.SET_NULL)
     views = models.IntegerField(default=0)
 
+    # Polls
+    poll = models.ForeignKey("PollQuestion", related_name="content", null=True, blank=True, on_delete=models.SET_NULL)
+
     # Whether this content should show up by itself
     embed_only = models.BooleanField(default=False, help_text="Whether this content should be used only in the context"
                                      " of embedding into other content (especially stories), or whether it should"
@@ -290,11 +293,6 @@ class Audio(Content):
     template = "home/content/audio.html"
     descriptor = "Audio"
 
-
-class Poll(Content):
-    pass  # STUB_POLL
-
-
 class Story(Content):
     """The main story model."""
     second_deck = models.TextField()  # Second deck
@@ -346,3 +344,11 @@ class Comment(models.Model):
 class Search(models.Model):
     search = models.CharField(max_length=200)
     text = models.TextField()
+
+class PollQuestion(models.Model):
+    text = models.CharField(max_length=300)
+
+class PollChoice(models.Model):
+    question = models.ForeignKey(PollQuestion, on_delete=models.CASCADE, related_name="choices")
+    text = models.CharField(max_length=300)
+    votes = models.IntegerField(default=0)

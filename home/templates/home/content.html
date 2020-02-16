@@ -137,6 +137,10 @@
           <br/>
         {% endif %}
 
+        {% if content.poll %}
+          {% include "home/content/poll.html" %}
+        {% endif %}
+
         <div class="card latest-stories">
           <div class="card-header mb-3">
             <h4 class="card-title mb-0">Latest Content</h4>

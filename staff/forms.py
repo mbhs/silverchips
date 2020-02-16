@@ -83,6 +83,15 @@ class GalleryForm(ContentForm):
     class Meta(ContentForm.Meta):
         model = models.Gallery
 
+class PollForm(VerticalMixin, forms.ModelForm):
+    """The poll editor form."""
+    class Meta:
+        model = models.PollQuestion
+        fields = ['text']
+        widgets = {
+            'text': forms.widgets.TextInput()
+        }
+
 
 class ContentInsertionForm(HorizontalMixin, forms.Form):
     """A small form for selecting content to add into a gallery."""
