@@ -226,6 +226,7 @@ html,body {
     }
 }
 
+
 /* Social Media Sidebar */
 .social-media-sidebar {
     z-index: 1000;
@@ -340,6 +341,10 @@ html,body {
 /* Latest Stories Card */
 .latest-stories {
     border-left: 2px solid $card-header-bg;
+    width: fit-content;
+    @media (min-width: 768px) {
+        margin-top: 40px;
+    }
     .list-group:last-child .list-group-item:last-child {border-radius: 0;}
     .card-header .card-title {
         text-transform: uppercase;
@@ -389,3 +394,4 @@ html,body {
     display: block;
   }
 }
+

@@ -135,6 +135,9 @@ class Content(PolymorphicModel):
                                      " when it is not original or when it is meaningless outside of some"
                                      " broader story.")
 
+    # Linked content
+    linked = models.ManyToManyField("Content", blank=True)
+
     # Content visibility workflow constants
     DRAFT = 1
     PENDING = 2
