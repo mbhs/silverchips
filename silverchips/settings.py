@@ -137,3 +137,5 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 # Login
 
 LOGIN_URL = '/staff/login/'
+
+ADMINS = [("Matthew Shu", "matthewshu88@gmail.com")]
