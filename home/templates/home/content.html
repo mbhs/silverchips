@@ -146,7 +146,7 @@
               {% for content_item in content.linked.all %}
                 <li class="list-group-item {% if not forloop.last %}mb-1{% else %}mb-3{% endif %} ml-3">
                   <div class="row">
-                    <div class="col-lg-2 text-uppercase"><strong>{{ content_item.type }}:</strong></div>
+                    <div class="col-lg-10 text-uppercase"><strong>{{ content_item.type }}:</strong></div>
                     <div class="col"><a href="{{ content_item.get_absolute_url }}" class="solid-link">{{ content_item.title|safe }}</a></div>
                   </div>
                 </li>
