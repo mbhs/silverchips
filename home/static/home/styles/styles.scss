@@ -395,3 +395,16 @@ html,body {
   }
 }
 
+/* Add Breaking */
+.breaking-banner {
+    border-radius: 0;
+    background-color: $site-red;
+    text-align: center;
+    padding: 10px 0;
+    a {
+        color: white;
+        &:hover {
+        color: $site-gray;
+        }
+    }
+}
