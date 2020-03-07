@@ -37,7 +37,8 @@ content_urlpatterns = ([
     path("<int:pk>/delete/", views.delete_content, name="delete"),
     path("<int:pk>/edit/", views.content_edit_view, name="edit"),
     path("create/", include(create_urlpatterns, "create")),
-    path("gallery/", include(gallery_urlpatterns, "gallery"))
+    path("gallery/", include(gallery_urlpatterns, "gallery")),
+    path("breaking/", views.BreakingView.as_view(), name="breaking")
 ], "content")
 
 comment_urlpatterns = ([

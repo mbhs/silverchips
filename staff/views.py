@@ -193,6 +193,12 @@ class ContentEditView(ContentChangeMixin, UserCanMixin, EditorMixin, UpdateView)
     action = 'content.edit'
 
 
+class BreakingView(ContentCreateView):
+    model = models.Breaking
+    form_class = forms.BreakingForm
+    editing = "Breaking"
+
+
 class StoryEditView(ContentEditView):
     """View for editing stories."""
     model = models.Story

@@ -349,3 +349,6 @@ class Comment(models.Model):
 class Search(models.Model):
     search = models.CharField(max_length=200)
     text = models.TextField()
+
+class Breaking(models.Model):
+    content = models.ForeignKey("Content", related_name="breaking_content", null=True, blank=True, on_delete=models.SET_NULL)
