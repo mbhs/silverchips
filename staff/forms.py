@@ -122,6 +122,16 @@ class PollForm(ContentForm):
     # STUB_POLL
 
 
+class BreakingForm(VerticalMixin, forms.ModelForm):
+    """Form for Breaking News creation."""
+    class Meta:
+        model = models.Breaking
+        fields = ['content']
+        widgets = {
+            'content': autocomplete.ModelSelect2(url="staff:autocomplete:content")
+        }
+
+
 class UserSearchForm(HorizontalMixin, forms.Form):
     """Form for searching through content."""
     id = forms.IntegerField(label="ID:", required=False)

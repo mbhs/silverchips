@@ -183,6 +183,15 @@ class AudioCreateView(ContentCreateView):
     editing = "Audio"
 
 
+class BreakingView(ContentCreateView):
+    """Base view for editing content."""
+    model = models.Breaking
+    form_class = forms.BreakingForm
+    editing = "Breaking"
+
+    def get_success_url(self):
+        return reverse("staff:content:list")
+
 class PollCreateView(ContentCreateView):
     """View for uploading a new poll."""
     pass # STUB_POLL
