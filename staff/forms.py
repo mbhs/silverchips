@@ -123,6 +123,7 @@ class PollForm(ContentForm):
 
 
 class BreakingForm(VerticalMixin, forms.ModelForm):
+    """Form for Breaking News creation."""
     class Meta:
         model = models.Breaking
         fields = ['content']

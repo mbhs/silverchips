@@ -8,11 +8,10 @@
   {% include "home/includes/index-sm-sidebar.html" %}
 
   <div class="medium-container">
-      <div class="breaking-banner"><a href="content/breaking-three-coronavirus-cases-confirmed-in-montgomery-county-32744/">BREAKING: Three Coronavirus Cases Confirmed in Montgomery County</a></div>
-      {% if breaking %}
+      {% if breaking is not None and breaking.0.content.title is not None %}
         <div class="breaking-banner"><a href="{{ breaking.0.content.get_absolute_url }}">{{ breaking.0.content.title }}</a></div>
       {% endif %}
-      <h1 class="display-4 mb-4 py-2 text-center text-uppercase section-header">Latest</a></h1>
+      <h1 class="display-4 mb-4 py-2 text-center text-uppercase section-header">Latest</h1>
       <div class="card-columns">
         {% for content in top_content|slice:":6" %}
           <div class="card align-middle rounded-0 mb-4 section-card-1">

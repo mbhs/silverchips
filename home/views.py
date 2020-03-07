@@ -27,7 +27,7 @@ from collections import OrderedDict
 
 def load_context(request):
     section_roots = models.Section.objects.filter(parent=None, visible=True),  # For navigation bar
-    breaking = models.Breaking.objects.all()
+    breaking = models.Breaking.objects.all().order_by("-pk")
     sections = OrderedDict()
     for section in section_roots[0]:
         sections[section] = section.subsections.filter(visible=True)

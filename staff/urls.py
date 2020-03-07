@@ -28,7 +28,8 @@ create_urlpatterns = ([
     path("image/", views.ImageCreateView.as_view(), name="image"),
     path("video/", views.VideoCreateView.as_view(), name="video"),
     path("audio/", views.AudioCreateView.as_view(), name="audio"),
-    path("poll/", views.PollCreateView.as_view(), name="poll")
+    path("poll/", views.PollCreateView.as_view(), name="poll"),
+    path("breaking/", views.BreakingView.as_view(), name="breaking")
 ], "create")
 
 content_urlpatterns = ([
@@ -38,7 +39,6 @@ content_urlpatterns = ([
     path("<int:pk>/edit/", views.content_edit_view, name="edit"),
     path("create/", include(create_urlpatterns, "create")),
     path("gallery/", include(gallery_urlpatterns, "gallery")),
-    path("breaking/", views.BreakingView.as_view(), name="breaking")
 ], "content")
 
 comment_urlpatterns = ([
