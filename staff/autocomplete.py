@@ -36,7 +36,7 @@ class ContentAutocomplete(autocomplete.Select2QuerySetView):
         return models.Content.objects.filter(Q(title__icontains=self.q) |
                                       Q(authors__first_name__icontains=self.q) |
                                       Q(authors__last_name__icontains=self.q) |
-                                      Q(pk=self.q if self.q.isdigit() else None)).order_by("pk")
+                                      Q(pk=self.q if self.q.isdigit() else None)).order_by("-modified")
 
 
 class SectionAutocomplete(autocomplete.Select2QuerySetView):
