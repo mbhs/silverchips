@@ -21,7 +21,7 @@ from django.utils import timezone
 from home.templatetags.home import render_content
 from home import forms
 
-from django.db.models import Q
+from django.db.models import Q, Value, IntegerField
 
 from collections import OrderedDict 
 
@@ -110,9 +110,31 @@ def view_content(request, pk, slug=None):
     content.views += 1
     content.save()
 
+    linked_content = content.linked.annotate(qs_order=Value(0, IntegerField()))
+
+    tags = content.tags.all()
+    if len(tags) > 0:
+        tag_content = (models.Content.objects.filter(tags__name=tags[0].name)
+                       .exclude(pk=content.pk)
+                       .order_by('-modified')[:8]
+                       .annotate(qs_order=Value(1, IntegerField())))
+        for each_tag in tags[1:]:
+            if len(tag_content) < 9:
+                new_tag_content = (models.Content.objects
+                                  .filter(tags__name=each_tag.name, visibility=models.Content.PUBLISHED)
+                                  .exclude(pk=content.pk)
+                                  .order_by('-modified')[:9-len(tag_content)]
+                                  .annotate(qs_order=Value(1, IntegerField())))
+                tag_content = tag_content.union(new_tag_content)
+
+        related_content = linked_content.union(tag_content).order_by('qs_order', '-modified')
+    else:
+        related_content = linked_content
+
     return render(request, "home/content.html", {
         "content": content,
-        "form": forms.CommentForm()
+        "form": forms.CommentForm(),
+        "related_content": related_content
     })
 
 

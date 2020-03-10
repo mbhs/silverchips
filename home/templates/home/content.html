@@ -138,12 +138,12 @@
         {% endif %}
 
         <div class="card latest-stories">
-          {% if content.linked.count > 0 %}
+          {% if related_content.count > 0 %}
             <div class="card-header mb-3">
               <h4 class="card-title mb-0">Related Content</h4>
             </div>
             <ul class="list-group list-group-flush">
-              {% for content_item in content.linked.all %}
+              {% for content_item in related_content.all %}
                 <li class="list-group-item {% if not forloop.last %}mb-1{% else %}mb-3{% endif %} ml-3">
                   <div class="row">
                     <div class="col-lg-10 text-uppercase"><strong>{{ content_item.type }}:</strong></div>
