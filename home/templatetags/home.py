@@ -93,7 +93,7 @@ def expand_embeds(text, user):
             # Insert the rendered html into the div
             div.insert(0, BeautifulSoup(html, "html.parser"))
 
-    return mark_safe(soup.prettify())
+    return mark_safe(str(soup))
 
 
 class ReserveContentNode(template.Node):
