@@ -27,9 +27,7 @@ schema_view = get_schema_view(
     openapi.Info(
         title="Silver Chips Online API",
         default_version='v1',
-        description="Test description",
-        contact=openapi.Contact(email="contact@snippets.local"),
-        license=openapi.License(name="BSD License"),
+        description="REST API for Montgomery Blair High School's Silver Chips Online",
     ),
     url='https://sco.derekthesnake.me/api/',
     public=True,
