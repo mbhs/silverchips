@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     'core',
     'home',
     'staff',
+    'api.apps.ApiConfig',
     'dal',
     'dal_select2',
     'polymorphic',
@@ -38,6 +39,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'static_precompiler',
     'django.contrib.contenttypes',
+    'rest_framework'
 ]
 
 MIDDLEWARE = [
@@ -138,4 +140,11 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 LOGIN_URL = '/staff/login/'
 
-ADMINS = [("Matthew Shu", "matthewshu88@gmail.com")]
+# Rest Framework
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ]
+}

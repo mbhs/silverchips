@@ -19,6 +19,10 @@ django-ordered-model = "*"
 django-imagekit = "*"
 django-model-utils = "*"
 requests = "*"
+djangorestframework = "*"
+django-filter = "*"
+drf-yasg = "*"
+django-rest-polymorphic = "*"
 
 [dev-packages]
 ipython = "*"
