@@ -15,6 +15,13 @@ router = DefaultRouter()
 router.register(r'content', views.ContentViewSet)
 router.register(r'stories', views.StoryViewSet)
 router.register(r'tags', views.TagViewSet)
+router.register(r'users', views.UserViewSet)
+router.register(r'sections', views.SectionViewSet)
+router.register(r'images', views.ImageViewSet)
+router.register(r'contenttypes', views.ContentTypeViewSet)
+router.register(r'profiles', views.ProfileViewSet)
+router.register(r'groups', views.GroupViewSet)
+router.register(r'permissions', views.PermissionViewSet)
 
 
 urlpatterns = [
