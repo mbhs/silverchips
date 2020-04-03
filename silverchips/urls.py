@@ -29,7 +29,7 @@ schema_view = get_schema_view(
         default_version='v1',
         description="REST API for Montgomery Blair High School's Silver Chips Online",
     ),
-    url='https://sco.derekthesnake.me/api/',
+    url='https://silverchips.mbhs/api/',
     public=True,
     permission_classes=(permissions.AllowAny,),
 )
