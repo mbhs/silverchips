@@ -12,8 +12,9 @@ from api import views
 
 
 router = DefaultRouter()
-router.register(r'snippets', views.ContentViewSet)
-router.register(r'users', views.StoryViewSet)
+router.register(r'content', views.ContentViewSet)
+router.register(r'stories', views.StoryViewSet)
+router.register(r'tags', views.TagViewSet)
 
 
 urlpatterns = [

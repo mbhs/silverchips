@@ -7,41 +7,38 @@ from rest_polymorphic.serializers import PolymorphicSerializer
 # , Image, Video, Audio, Story, Gallery
 
 
-class TagSerializer(serializers.HyperlinkedReadOnlyModelSerializer):
+class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
-        fields = ('url', 'name')
+        fields = '__all__'
 
 
-class UserSerializer(serializers.HyperlinkedModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('url', 'name')
+        fields = '__all__'
 
 
-class SectionSerializer(serializers.HyperlinkedModelSerializer):
+class SectionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Section
-        fields = ('url', 'name')
+        fields = '__all__'
 
 
-class ContentSerializer(serializers.HyperlinkedModelSerializer):
+class ContentSerializer(serializers.ModelSerializer):
     # tags = TagSerializer(read_only=True, many=True)
     class Meta:
         model = Content
-        fields = ('url', 'title', 'description', 'tags', 'legacy_id', 'created', 'modified',
-                  'authors', 'guest_authors', 'section', 'views', 'embed_only', 'linked')
+        fields = '__all__'
 
 
-class StorySerializer(serializers.HyperlinkedModelSerializer):
+class StorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Story
-        fields = ('url', 'title', 'description', 'tags', 'legacy_id', 'created', 'modified',
-                  'authors', 'guest_authors', 'section', 'views', 'embed_only', 'linked',
-                  'second_deck', 'text', 'cover', 'template', 'descriptor', 'hide_caption')
+        fields = '__all__'
 
 
-class ProjectPolymorphicSerializer(PolymorphicSerializer):
+class ContentPolymorphicSerializer(PolymorphicSerializer):
     model_serializer_mapping = {
         Content: ContentSerializer,
         Story: StorySerializer

@@ -7,13 +7,17 @@ from rest_framework.response import Response
 
 from rest_framework import viewsets
 from core.models import *
-from .serializers import ProjectPolymorphicSerializer
+from .serializers import *
 
 
 class ContentViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Content.objects.all()
-    serializer_class = ProjectPolymorphicSerializer
+    serializer_class = ContentPolymorphicSerializer
 
 class StoryViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Content.objects.all()
-    serializer_class = ProjectPolymorphicSerializer
+    queryset = Story.objects.all()
+    serializer_class = ContentPolymorphicSerializer
+
+class TagViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Tag.objects.all()
+    serializer_class = TagSerializer
