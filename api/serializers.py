@@ -46,7 +46,6 @@ class RecursiveField(serializers.Serializer):
         serializer = self.parent.parent.__class__(value, context=self.context)
         return serializer.data
 
-#subsections = RecursiveField(many=True)
 
 class SectionSerializer(serializers.HyperlinkedModelSerializer):
     subsections = RecursiveField(many=True)
@@ -73,34 +72,45 @@ class ContentTypeSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class ContentSerializer(serializers.HyperlinkedModelSerializer):
-    section = serializers.ReadOnlyField(source='section.title')
+    section = SectionSerializer(required=False)
     tags = TagSerializer(required=False, many=True)
+    authors = UserSerializer(required=False, many=True)
+    share_url = SerializerMethodField()
 
     class Meta:
         model = Content
         fields = ('url', 'title', 'description', 'tags', 'created', 'modified',
-                  'authors', 'guest_authors', 'section', 'views', 'embed_only', 'linked')
+                  'authors', 'guest_authors', 'section', 'views', 'embed_only', 'linked', 'share_url')
 
+    def get_share_url(self, obj):
+        return obj.get_absolute_url()
+
+class ImageSerializer(serializers.HyperlinkedModelSerializer):
+    share_url = SerializerMethodField()
+
+    class Meta:
+        model = Image
+        fields = ('url', 'title', 'description', 'tags', 'created', 'modified',
+                  'authors', 'guest_authors', 'section', 'views', 'embed_only', 'linked', 'descriptor', 'share_url')
+
+    def get_share_url(self, obj):
+        return obj.get_absolute_url()
 
 class StorySerializer(serializers.HyperlinkedModelSerializer):
     section = SectionSerializer(required=False)
     tags = TagSerializer(required=False, many=True)
     authors = UserSerializer(required=False, many=True)
+    share_url = SerializerMethodField()
+    cover = ImageSerializer(required=False)
 
     class Meta:
         model = Story
         fields = ('url', 'title', 'description', 'tags', 'created', 'modified',
                   'authors', 'guest_authors', 'section', 'views', 'embed_only', 'linked',
-                  'second_deck', 'text', 'cover', 'template', 'descriptor', 'hide_caption')
+                  'second_deck', 'text', 'cover', 'template', 'hide_caption', 'descriptor', 'share_url')
 
-
-class ImageSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Image
-        fields = '__all__'
-        extra_kwargs = {
-            'url': {'view_name': 'content-detail', 'lookup_field': 'pk'},
-        }
+    def get_share_url(self, obj):
+        return obj.get_absolute_url()
 
 
 class ContentPolymorphicSerializer(PolymorphicSerializer):

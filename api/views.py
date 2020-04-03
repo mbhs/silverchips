@@ -9,18 +9,23 @@ from rest_framework import viewsets
 from core.models import *
 from .serializers import *
 from django.contrib.contenttypes.models import ContentType
+from django_filters import rest_framework as filters
 
 
 class ContentViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Content.objects.all()
+    queryset = Content.objects.filter(visibility=Content.PUBLISHED, embed_only=False, not_instance_of=Image)
+    filterset_fields = ['section', 'tags', 'authors']
     serializer_class = ContentPolymorphicSerializer
 
+
 class StoryViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Story.objects.all()
+    queryset = Story.objects.filter(visibility=Content.PUBLISHED, embed_only=False)
+    filterset_fields = ['section', 'tags', 'authors']
     serializer_class = ContentPolymorphicSerializer
 
 class ImageViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Image.objects.all()
+    queryset = Image.objects.filter(visibility=Content.PUBLISHED)
+    filterset_fields = ['section', 'tags', 'authors']
     serializer_class = ContentPolymorphicSerializer
 
 class TagViewSet(viewsets.ReadOnlyModelViewSet):
