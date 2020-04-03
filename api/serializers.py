@@ -14,18 +14,6 @@ class TagSerializer(serializers.HyperlinkedModelSerializer):
         model = Tag
         fields = ('url', 'name')
 
-class GroupSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Group
-        fields = '__all__'
-
-
-class PermissionSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Permission
-        fields = '__all__'
-
-
 class ProfileSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Profile
@@ -53,22 +41,6 @@ class SectionSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Section
         fields = ('url', 'parent', 'title', 'subsections')
-
-    # def get_fields(self):
-    #     fields = super(SectionSerializer, self).get_fields()
-    #     fields['subcategories'] = SectionSerializer(many=True)
-    #     return fields
-    # def get_parent(self, obj):
-    #     if obj.parent is not None:
-    #         return SectionSerializer(obj.parent, context=self.context).data
-    #     else:
-    #         return None
-
-
-class ContentTypeSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = ContentType
-        fields = '__all__'
 
 
 class ContentSerializer(serializers.HyperlinkedModelSerializer):
