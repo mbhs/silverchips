@@ -51,24 +51,24 @@ class ContentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Content
-        fields = ('url', 'title', 'description', 'tags', 'created', 'modified',
+        fields = ('id', 'title', 'description', 'tags', 'created', 'modified',
                   'authors', 'guest_authors', 'section', 'views', 'embed_only', 'linked', 'share_url')
 
     def get_share_url(self, obj):
         return obj.get_absolute_url()
 
-class ImageSerializer(serializers.HyperlinkedModelSerializer):
+class ImageSerializer(serializers.ModelSerializer):
     share_url = SerializerMethodField()
 
     class Meta:
         model = Image
-        fields = ('url', 'title', 'description', 'tags', 'created', 'modified',
+        fields = ('id', 'title', 'description', 'tags', 'created', 'modified',
                   'authors', 'guest_authors', 'section', 'views', 'embed_only', 'linked', 'descriptor', 'share_url')
 
     def get_share_url(self, obj):
         return obj.get_absolute_url()
 
-class StorySerializer(serializers.HyperlinkedModelSerializer):
+class StorySerializer(serializers.ModelSerializer):
     section = SectionSerializer(required=False)
     tags = TagSerializer(required=False, many=True)
     authors = UserSerializer(required=False, many=True)
@@ -77,7 +77,7 @@ class StorySerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Story
-        fields = ('url', 'title', 'description', 'tags', 'created', 'modified',
+        fields = ('id', 'title', 'description', 'tags', 'created', 'modified',
                   'authors', 'guest_authors', 'section', 'views', 'embed_only', 'linked',
                   'second_deck', 'text', 'cover', 'descriptor', 'share_url')
 
