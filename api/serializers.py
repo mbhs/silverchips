@@ -79,7 +79,7 @@ class StorySerializer(serializers.HyperlinkedModelSerializer):
         model = Story
         fields = ('url', 'title', 'description', 'tags', 'created', 'modified',
                   'authors', 'guest_authors', 'section', 'views', 'embed_only', 'linked',
-                  'second_deck', 'text', 'cover', 'template', 'hide_caption', 'descriptor', 'share_url')
+                  'second_deck', 'text', 'cover', 'descriptor', 'share_url')
 
     def get_share_url(self, obj):
         return obj.get_absolute_url()
