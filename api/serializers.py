@@ -58,6 +58,9 @@ class ContentSerializer(serializers.ModelSerializer):
         return obj.get_absolute_url()
 
 class ImageSerializer(serializers.ModelSerializer):
+    section = SectionSerializer(required=False)
+    tags = TagSerializer(required=False, many=True)
+    authors = UserSerializer(required=False, many=True)
     share_url = SerializerMethodField()
 
     class Meta:
