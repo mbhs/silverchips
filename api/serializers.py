@@ -43,7 +43,7 @@ class SectionSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('url', 'parent', 'title', 'subsections')
 
 
-class ContentSerializer(serializers.HyperlinkedModelSerializer):
+class ContentSerializer(serializers.ModelSerializer):
     section = SectionSerializer(required=False)
     tags = TagSerializer(required=False, many=True)
     authors = UserSerializer(required=False, many=True)
