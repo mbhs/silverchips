@@ -43,3 +43,7 @@ class SectionViewSet(viewsets.ReadOnlyModelViewSet):
 class ProfileViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
+
+class GalleryViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Profile.objects.all()
+    serializer_class = GallerySerializer

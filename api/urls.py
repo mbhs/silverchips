@@ -19,6 +19,7 @@ router.register(r'users', views.UserViewSet)
 router.register(r'sections', views.SectionViewSet)
 router.register(r'images', views.ImageViewSet)
 router.register(r'profiles', views.ProfileViewSet)
+router.register(r'galleries', views.GalleryViewSet)
 
 
 urlpatterns = [

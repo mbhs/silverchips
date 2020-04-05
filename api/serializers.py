@@ -73,6 +73,21 @@ class ImageSerializer(serializers.ModelSerializer):
         return obj.get_absolute_url()
 
 
+class GallerySerializer(serializers.ModelSerializer):
+    section = SectionSerializer(required=False)
+    tags = TagSerializer(required=False, many=True)
+    authors = UserSerializer(required=False, many=True)
+    share_url = SerializerMethodField()
+
+    class Meta:
+        model = Image
+        fields = ('id', 'title', 'description', 'tags', 'created', 'modified',
+                  'authors', 'guest_authors', 'section', 'views', 'embed_only', 'linked', 'descriptor', 'share_url')
+
+    def get_share_url(self, obj):
+        return obj.get_absolute_url()
+
+
 class StorySerializer(serializers.ModelSerializer):
     section = SectionSerializer(required=False)
     tags = TagSerializer(required=False, many=True)
