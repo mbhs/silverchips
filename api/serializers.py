@@ -52,7 +52,7 @@ class ContentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Content
         fields = ('id', 'title', 'description', 'tags', 'created', 'modified',
-                  'authors', 'guest_authors', 'section', 'views', 'embed_only', 'descriptor', 'linked', 'share_url')
+                  'authors', 'guest_authors', 'section', 'views', 'embed_only', 'linked', 'share_url')
 
     def get_share_url(self, obj):
         return obj.get_absolute_url()
