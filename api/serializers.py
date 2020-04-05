@@ -9,23 +9,23 @@ from django.contrib.contenttypes.models import ContentType
 # , Image, Video, Audio, Story, Gallery
 
 
-class TagSerializer(serializers.HyperlinkedModelSerializer):
+class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
-        fields = ('url', 'name')
+        fields = ('id', 'name')
 
-class ProfileSerializer(serializers.HyperlinkedModelSerializer):
+class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
-        fields = ('url', 'biography', 'avatar', 'position', 'graduation_year', 'user')
+        fields = ('id', 'biography', 'avatar', 'position', 'graduation_year', 'user')
 
-class UserSerializer(serializers.HyperlinkedModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
     profile = ProfileSerializer()
     name = serializers.CharField(source="__str__")
 
     class Meta:
         model = User
-        fields = ('url', 'name', 'profile')
+        fields = ('id', 'name', 'profile')
 
 # For self-referencing objects
 # https://stackoverflow.com/questions/13376894/django-rest-framework-nested-self-referential-objects
@@ -35,12 +35,12 @@ class RecursiveField(serializers.Serializer):
         return serializer.data
 
 
-class SectionSerializer(serializers.HyperlinkedModelSerializer):
+class SectionSerializer(serializers.ModelSerializer):
     subsections = RecursiveField(many=True)
 
     class Meta:
         model = Section
-        fields = ('url', 'parent', 'title', 'subsections')
+        fields = ('id', 'parent', 'title', 'subsections')
 
 
 class ContentSerializer(serializers.ModelSerializer):
@@ -57,6 +57,7 @@ class ContentSerializer(serializers.ModelSerializer):
     def get_share_url(self, obj):
         return obj.get_absolute_url()
 
+
 class ImageSerializer(serializers.ModelSerializer):
     section = SectionSerializer(required=False)
     tags = TagSerializer(required=False, many=True)
@@ -70,6 +71,7 @@ class ImageSerializer(serializers.ModelSerializer):
 
     def get_share_url(self, obj):
         return obj.get_absolute_url()
+
 
 class StorySerializer(serializers.ModelSerializer):
     section = SectionSerializer(required=False)
