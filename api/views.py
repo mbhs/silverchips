@@ -46,4 +46,4 @@ class ProfileViewSet(viewsets.ReadOnlyModelViewSet):
 
 class GalleryViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Profile.objects.all()
-    serializer_class = GallerySerializer
+    serializer_class = ContentPolymorphicSerializer

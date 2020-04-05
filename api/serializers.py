@@ -109,5 +109,6 @@ class ContentPolymorphicSerializer(PolymorphicSerializer):
     model_serializer_mapping = {
         Content: ContentSerializer,
         Story: StorySerializer,
-        Image: ImageSerializer
+        Image: ImageSerializer,
+        Gallery: GallerySerializer
     }
