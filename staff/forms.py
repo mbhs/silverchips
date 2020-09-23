@@ -107,7 +107,8 @@ class VideoForm(ContentForm):
     """Form for video creation."""
     class Meta(ContentForm.Meta):
         model = models.Video
-        fields = ContentForm.Meta.fields + ['source']
+        fields = ContentForm.Meta.fields + ['source', 'cover']
+        widgets = dict(ContentForm.Meta.widgets, cover=autocomplete.ModelSelect2(url='staff:autocomplete:content'))
 
 
 class AudioForm(ContentForm):

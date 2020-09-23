@@ -281,6 +281,7 @@ class Image(Content):
 class Video(Content):
     """Video subclass for the Content model."""
     source = models.FileField(upload_to="videos/%Y/%m/%d/")
+    cover = models.ForeignKey(Image, null=True, on_delete=models.SET_NULL)  # Cover photo
 
     template = "home/content/video.html"
     descriptor = "Video"

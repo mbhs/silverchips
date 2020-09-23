@@ -17,7 +17,7 @@ def thumb(content, thumb_type=None):
     """
     image = None  # The ImageField that we're using as a source for the thumbnail
 
-    if isinstance(content, models.Story) and content.cover:
+    if (isinstance(content, models.Story) or isinstance(content, models.Video)) and content.cover:
         image = content.cover.source
     elif isinstance(content, models.Image):
         image = content.source
