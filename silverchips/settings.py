@@ -35,7 +35,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.humanize',
     'crispy_forms',
-    'static_precompiler',
+    'sass_processor',
     'django.contrib.contenttypes',
     'rest_framework',
     'drf_yasg',
@@ -116,13 +116,13 @@ USE_TZ = True
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    'static_precompiler.finders.StaticPrecompilerFinder',
+    'sass_processor.finders.CssFinder',
 )
 
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 STATIC_URL = '/static/'
 
-STATIC_PRECOMPILER_OUTPUT_DIR = "compiled"
+SASS_PROCESSOR_AUTO_INCLUDE = False
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
 MEDIA_URL = '/uploads/'

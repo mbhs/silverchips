@@ -1,11 +1,11 @@
-{% load compile_static %}
+{% load sass_tags %}
 {% load static %}
 
 <html>
     <head>
         <title>Staff Login</title>
         {% include "staff/includes/bootstrap.html" %}
-        <link rel="stylesheet" href="{% static "staff/styles/_login.scss"|compile %}"/>
+        <link rel="stylesheet" href="{% sass_src "staff/styles/_login.scss" %}"/>
     </head>
     <body>
         <div>

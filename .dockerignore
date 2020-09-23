@@ -113,3 +113,7 @@ shell/*
 
 # Postgres stuff
 *.psql
+
+# secret settings
+/silverchips/secure_settings.py
+/.git

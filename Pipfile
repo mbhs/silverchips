@@ -4,10 +4,9 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-django = "~=2.2"
+django = "~=3.1"
 django-autocomplete-light = "*"
 django-forms-bootstrap = "*"
-django-static-precompiler = "*"
 six = "*"
 pillow = "*"
 django-polymorphic = "*"
@@ -23,6 +22,9 @@ djangorestframework = "*"
 django-filter = "*"
 drf-yasg = "*"
 django-rest-polymorphic = "*"
+libsass = "*"
+django-compressor = "*"
+django-sass-processor = "*"
 
 [dev-packages]
 ipython = "*"

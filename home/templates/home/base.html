@@ -1,4 +1,4 @@
-{% load compile_static %}
+{% load sass_tags %}
 {% load static %}
 
 <html>
@@ -7,10 +7,9 @@
         <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
         <title>{% block title %}{% endblock %} | Silver Chips</title>
 
-        {% load staticfiles %}
         <link rel="shortcut icon" href="{% static "favicon.ico" %}">
         {% include "home/includes/head.html" %}
-        <link type="text/css" rel="stylesheet" href="{% static "home/styles/styles.scss"|compile %}">
+        <link type="text/css" rel="stylesheet" href="{% sass_src "home/styles/styles.scss" %}">
 
         <!-- Global site tag (gtag.js) - Google Analytics -->
         <script async src="https://www.googletagmanager.com/gtag/js?id=UA-128708283-1"></script>

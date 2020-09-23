@@ -1,10 +1,10 @@
-{% load compile_static %}
+{% load sass_tags %}
 {% load static %}
 
 <html>
     <head>
         {% include "staff/includes/bootstrap.html" %}
-        <link type="text/css" rel="stylesheet" href="{% static 'staff/styles/staff.scss'|compile %}">
+        <link type="text/css" rel="stylesheet" href="{% sass_src 'staff/styles/staff.scss' %}">
         <title>{% block title %}Staff Site{% endblock %}</title>
         {% block head %}{% endblock %}
     </head>
