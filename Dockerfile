@@ -17,7 +17,7 @@ RUN touch core/migrations/__init__.py
 RUN python manage.py collectstatic
 RUN python manage.py makemigrations
 RUN python manage.py migrate
-RUN python manage.py loaddata core/fixtures/recent.json
+RUN python manage.py loaddata core/fixtures/testing.json
 
 EXPOSE 8080
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8080"]

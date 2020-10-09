@@ -1,5 +1,6 @@
 {% load sass_tags %}
 {% load static %}
+{% load home %}
 
 <html>
     <head>
@@ -28,6 +29,7 @@
         {% block content %}
         {% endblock %}
 
+        {% email_deobfuscator %}
         {% include "home/includes/footer.html" %}
     </body>
 </html>

@@ -1,10 +1,11 @@
 from bs4 import BeautifulSoup
 from django import template
-from django.utils.html import mark_safe
+from django.utils.html import mark_safe, format_html
 from imagekit.cachefiles import ImageCacheFile
 
 from core import permissions, models
 from home.imagegenerators import SmallThumbnail, MediumThumbnail, LargeThumbnail, HugeThumbnail
+from silverchips.settings import STATIC_URL
 
 register = template.Library()
 
@@ -146,3 +147,42 @@ def reserve_content(parser, token):
     See ReserveContentNode for details."""
     tag_name, content, count = token.split_contents()
     return ReserveContentNode(content, count)
+
+class ObfuscatedEmailNode(template.Node):
+    """Template tag node to represent an obfuscated email to avoid automated scrapers.
+
+    This tag works by forcing a hidden variable called `_has_obfuscated_emails` into the entire template context stack."""
+    def __init__(self, email):
+        self.email = template.Variable(email)
+
+    def render(self, context):
+        # Force setting as global variable by placing variable in all levels of context stack
+        for context_dict in context.dicts:
+            context_dict['_has_obfuscated_emails'] = True
+
+        return format_html(
+            '<a data-email="{}" class="obfuscated-email" href="loading">loading...</a>',
+            "".join(chr(ord(x) ^ 1) for x in self.email.resolve(context))
+        )
+
+class EmailDeobfuscatorNode(template.Node):
+    """Template tag node to render the script that deobfuscates obfuscated emails.
+
+    A script tag will only be rendered if the `_has_obfuscated_emails` variable has been set."""
+    def __init__(self):
+        pass
+
+    def render(self, context):
+        if context.get("_has_obfuscated_emails") == True:
+            return format_html('<script async defer src="{}"></script>', STATIC_URL + "home/scripts/emails.js")
+        return ""
+
+@register.tag
+def obfuscated_email(parser, token):
+    tag_name, email = token.split_contents()
+    return ObfuscatedEmailNode(email)
+
+@register.tag
+def email_deobfuscator(parser, token):
+    tag_name, = token.split_contents()
+    return EmailDeobfuscatorNode()
