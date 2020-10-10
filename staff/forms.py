@@ -3,6 +3,7 @@ from django import forms
 from django.contrib import auth
 from dal import autocomplete
 from crispy_forms.helper import FormHelper
+from django.utils import timezone
 
 from core import models
 from staff.widgets import RichTextWidget
@@ -56,13 +57,14 @@ class ContentForm(VerticalMixin, forms.ModelForm):
     """A generic editor for any kind of content."""
     class Meta:
         model = models.Content
-        fields = ['title', 'authors', 'guest_authors', 'description', 'embed_only', 'tags', 'section', 'linked']
+        fields = ['title', 'authors', 'guest_authors', 'description', 'embed_only', 'tags', 'section', 'linked', 'created']
         widgets = {
             'title': forms.widgets.TextInput(),
             'authors': autocomplete.ModelSelect2Multiple(url="staff:autocomplete:users"),
             'tags': autocomplete.ModelSelect2Multiple(url="staff:autocomplete:tags"),
             'section': autocomplete.ModelSelect2(url="staff:autocomplete:section"),
-            'linked': autocomplete.ModelSelect2Multiple(url="staff:autocomplete:content")
+            'linked': autocomplete.ModelSelect2Multiple(url="staff:autocomplete:content"),
+            'created': forms.widgets.DateTimeInput()
         }
         abstract = True
 
