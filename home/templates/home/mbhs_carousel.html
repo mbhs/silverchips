@@ -19,9 +19,9 @@
 <div id="silverchips">
 
 {% for story in stories %}
-    <a class="scopos" pos="{{ forloop.counter }}" href="https://silverchips.mbhs.edu/content/{{ story.pk }}" cap="{{ story.title }}">
+    <a class="scopos" pos="{{ forloop.counter }}" href="https://silverchips.mbhs.edu/content/{{ story.pk }}" cap="{{ story.title|striptags }}">
         <div class="sco-thumb">
-            <img src="https://silverchips.mbhs.edu{{ story.cover.source.url }}" id="image{{ forloop.counter }}" alt="{{ story.title }}" class="sco"/>
+            <img src="https://silverchips.mbhs.edu{{ story.cover.source.url }}" id="image{{ forloop.counter }}" alt="{{ story.title|striptags }}" class="sco"/>
         </div>
     </a>
 {% endfor %}
