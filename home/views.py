@@ -250,7 +250,7 @@ def comment(request, pk):
 
 
 def carousel(request):
-    stories = models.Story.objects.filter(visibility=models.Content.PUBLISHED).exclude(cover=None).order_by("pk")[:4]
+    stories = models.Story.objects.filter(visibility=models.Content.PUBLISHED).exclude(cover=None).order_by("-created")[:4]
     return render(request, "home/mbhs_carousel.html", {
         "stories": stories
     })
