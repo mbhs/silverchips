@@ -2,10 +2,17 @@
 {% load static %}
 {% load home %}
 
-<html>
+<!DOCTYPE html>
+<html lang="en-US">
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+        <meta charset="utf-8">
+        <meta property="og:type" content="website">
+        <meta property="og:title" content="Silver Chips Online">
+        <meta property="og:description" content="An award-winning newsletter run by students at Montgomery Blair High School.">
+        <meta property="og:url" content="https://silverchips.mbhs.edu">
+        <meta property="og:image" content="/static/blurb.png"/>
+        <meta name="theme-color" content="#ffffff">
         <title>{% block title %}{% endblock %} | Silver Chips</title>
 
         <link rel="shortcut icon" href="{% static "favicon.ico" %}">

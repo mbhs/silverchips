@@ -17,6 +17,7 @@ class LoginForm(forms.Form):
 
 class VerticalMixin:
     """A mixin that makes a form display as a vertically organized crispy form."""
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
@@ -28,6 +29,7 @@ class VerticalMixin:
 
 class HorizontalMixin:
     """A mixin that makes a form display as an inline crispy form."""
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
@@ -39,8 +41,10 @@ class ContentSearchForm(HorizontalMixin, forms.Form):
     """Form for searching through content."""
     id = forms.IntegerField(label="ID:", required=False)
     title = forms.CharField(label="Title:", required=False, max_length=100)
-    after = forms.DateField(label="Created After:", required=False, widget=forms.TextInput(attrs={'type': 'date'}))
-    before = forms.DateField(label="Created Before:", required=False, widget=forms.TextInput(attrs={'type': 'date'}))
+    after = forms.DateField(label="Created After:", required=False,
+                            widget=forms.TextInput(attrs={'type': 'date'}))
+    before = forms.DateField(label="Created Before:", required=False,
+                             widget=forms.TextInput(attrs={'type': 'date'}))
     authors = forms.ModelMultipleChoiceField(label="Authors:", queryset=models.User.objects.all(),
                                              required=False,
                                              widget=autocomplete.ModelSelect2Multiple(url="staff:autocomplete:users"))
@@ -55,16 +59,18 @@ class ContentSearchForm(HorizontalMixin, forms.Form):
 
 class ContentForm(VerticalMixin, forms.ModelForm):
     """A generic editor for any kind of content."""
+    created = forms.DateTimeField(required=False)
+
     class Meta:
         model = models.Content
-        fields = ['title', 'authors', 'guest_authors', 'description', 'embed_only', 'tags', 'section', 'linked', 'created']
+        fields = ['title', 'authors', 'guest_authors', 'description',
+                  'embed_only', 'tags', 'section', 'linked', 'created']
         widgets = {
             'title': forms.widgets.TextInput(),
             'authors': autocomplete.ModelSelect2Multiple(url="staff:autocomplete:users"),
             'tags': autocomplete.ModelSelect2Multiple(url="staff:autocomplete:tags"),
             'section': autocomplete.ModelSelect2(url="staff:autocomplete:section"),
-            'linked': autocomplete.ModelSelect2Multiple(url="staff:autocomplete:content"),
-            'created': forms.widgets.DateTimeInput()
+            'linked': autocomplete.ModelSelect2Multiple(url="staff:autocomplete:content")
         }
         abstract = True
 
@@ -74,7 +80,8 @@ class StoryForm(ContentForm):
     class Meta(ContentForm.Meta):
         model = models.Story
         fields = ContentForm.Meta.fields + ['cover', 'second_deck', 'text']
-        widgets = dict(ContentForm.Meta.widgets, text=RichTextWidget(embed=True), lead=RichTextWidget(short=True), cover=autocomplete.ModelSelect2(url='staff:autocomplete:content'))
+        widgets = dict(ContentForm.Meta.widgets, text=RichTextWidget(embed=True), lead=RichTextWidget(
+            short=True), cover=autocomplete.ModelSelect2(url='staff:autocomplete:content'))
 
 
 class GalleryForm(ContentForm):
@@ -110,7 +117,8 @@ class VideoForm(ContentForm):
     class Meta(ContentForm.Meta):
         model = models.Video
         fields = ContentForm.Meta.fields + ['source', 'cover']
-        widgets = dict(ContentForm.Meta.widgets, cover=autocomplete.ModelSelect2(url='staff:autocomplete:content'))
+        widgets = dict(ContentForm.Meta.widgets, cover=autocomplete.ModelSelect2(
+            url='staff:autocomplete:content'))
 
 
 class AudioForm(ContentForm):
@@ -138,10 +146,13 @@ class BreakingForm(VerticalMixin, forms.ModelForm):
 class UserSearchForm(HorizontalMixin, forms.Form):
     """Form for searching through content."""
     id = forms.IntegerField(label="ID:", required=False)
-    first_name = forms.CharField(label="First Name:", required=False, max_length=100)
-    last_name = forms.CharField(label="Last Name:", required=False, max_length=100)
+    first_name = forms.CharField(
+        label="First Name:", required=False, max_length=100)
+    last_name = forms.CharField(
+        label="Last Name:", required=False, max_length=100)
     active = forms.BooleanField(label="Active", required=False)
-    graduation_year = forms.IntegerField(label="Graduation Year:", required=False)
+    graduation_year = forms.IntegerField(
+        label="Graduation Year:", required=False)
 
 
 class UserManageForm(VerticalMixin, forms.ModelForm):
@@ -159,7 +170,8 @@ class UserManageForm(VerticalMixin, forms.ModelForm):
                                        required=False)
 
     def __init__(self, *args, **kwargs):
-        self.request = kwargs.pop('request', None)  # save the request so we can check against request.user later
+        # save the request so we can check against request.user later
+        self.request = kwargs.pop('request', None)
         super().__init__(*args, **kwargs)
 
     def is_valid(self):
@@ -167,7 +179,8 @@ class UserManageForm(VerticalMixin, forms.ModelForm):
 
         # Authenticate the user to make sure form submission is authorized
         if not auth.authenticate(username=self.request.user.username, password=self.cleaned_data['verify_password']):
-            self._errors['verify_password'] = ["Unauthorized; password is incorrect"]
+            self._errors['verify_password'] = [
+                "Unauthorized; password is incorrect"]
             valid = False
         # Check that passwords match if passwords are being updated
         if (self.cleaned_data['new_password'] or self.cleaned_data['confirm_password']) and \
@@ -179,7 +192,8 @@ class UserManageForm(VerticalMixin, forms.ModelForm):
 
     class Meta:
         model = models.User
-        fields = ['username', 'first_name', 'last_name', 'email', 'groups', 'is_active', 'is_staff', 'is_superuser']
+        fields = ['username', 'first_name', 'last_name', 'email',
+                  'groups', 'is_active', 'is_staff', 'is_superuser']
         widgets = {
             'groups': forms.CheckboxSelectMultiple()
         }
