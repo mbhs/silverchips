@@ -2,12 +2,13 @@ FROM archlinux:latest
 
 WORKDIR /app
 
-RUN pacman --noconfirm -Sy base-devel npm python python-pip postgresql-libs
+RUN pacman --noconfirm -Sy base-devel npm python python-pip postgresql-libs icu
 RUN npm install -g sass
 RUN pip install pipenv
 
 COPY Pipfile .
 COPY Pipfile.lock .
+RUN pipenv lock
 RUN pipenv --three install --system --deploy --ignore-pipfile
 
 COPY . .
