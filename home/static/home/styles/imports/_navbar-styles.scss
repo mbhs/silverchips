@@ -68,6 +68,10 @@
 //    display: none;
 //}
 
+.nav-item.dropdown > .dropdown-menu {
+    margin-top: 0;   
+}
+
 @media (min-width: 992px) {
     .nav-item:hover > .dropdown-menu {
         display: block;
