@@ -97,6 +97,16 @@ def expand_embeds(text, user):
     return mark_safe(str(soup))
 
 
+@register.filter
+def first_or_self(val):
+    """A filter that returns the first element of the value if it's a list, otherwise it returns the value itself.
+
+    For example, [1, 2, 3] becomes 1, while 1 remains 1.
+    """
+    if isinstance(val, list) or isinstance(val, tuple):
+        return val[0]
+    return val
+
 class ReserveContentNode(template.Node):
     """Template tag node to mark content objects as already seen and therefore "reserved" on a particular page.
 

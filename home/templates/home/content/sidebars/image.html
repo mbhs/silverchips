@@ -1,3 +1,5 @@
+{% load home %}
+
 {% with image=content %}
   {% with exif=image.exif_data %}
     {% if exif %}
@@ -11,7 +13,7 @@
           {#            <li class="list-group-item"><i class="fas fa-circle"></i> <strong>Aperture:</strong></li>#}
           {#            <li class="list-group-item"><i class="fas fa-clock"></i> <strong>Shutter:</strong></li>#}
           {% if exif.ISOSpeedRatings %}<li class="list-group-item"><i class="fas fa-film"></i> <strong>ISO speed:</strong> {{ exif.ISOSpeedRatings }}</li>{% endif %}
-          {% if exif.FocalLength %}<li class="list-group-item"><i class="fas fa-ruler"></i> <strong>Focal length:</strong> {{ exif.FocalLength|first }} mm</li>{% endif %}
+          {% if exif.FocalLength %}<li class="list-group-item"><i class="fas fa-ruler"></i> <strong>Focal length:</strong> {{ exif.FocalLength|first_or_self }} mm</li>{% endif %}
         </ul>
       </div>
     {% endif %}

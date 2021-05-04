@@ -269,11 +269,12 @@ class Image(Content):
     def exif_data(self):
         try:
             _image = PIL.Image.open(self.source.file)
-            return {
+            exif = {
                 PIL.ExifTags.TAGS[exif_tag]: value
                 for exif_tag, value in _image._getexif().items()
                 if exif_tag in PIL.ExifTags.TAGS
             }
+            return exif
         except (FileNotFoundError, AttributeError) as e:
             return None
 
