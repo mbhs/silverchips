@@ -275,7 +275,8 @@ class Image(Content):
                 if exif_tag in PIL.ExifTags.TAGS
             }
             return exif
-        except (FileNotFoundError, AttributeError) as e:
+        # SyntaxError is for corrupted images
+        except (FileNotFoundError, AttributeError, SyntaxError) as e:
             return None
 
 
