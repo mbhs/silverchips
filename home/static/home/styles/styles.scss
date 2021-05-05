@@ -8,7 +8,18 @@ html {
         font-family: $site-paragraph-font;
         background-color: $site-background;
         color: $site-paragraph;
-        h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6 {
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        .h1,
+        .h2,
+        .h3,
+        .h4,
+        .h5,
+        .h6 {
             color: $site-header;
             font-family: $site-header-font;
             font-weight: 500;
@@ -16,7 +27,8 @@ html {
     }
 }
 
-html,body {
+html,
+body {
     width: 100%;
     margin: 0px;
     padding: 0px;
@@ -37,7 +49,6 @@ html,body {
 
 .section-recently-0 {
     .recently {
-
     }
     .title a {
         @extend .solid-link;
@@ -46,7 +57,9 @@ html,body {
         font-size: 0.85rem;
         font-weight: bold;
         color: lighten($site-gray, 20);
-        a { color: $site-red; }
+        a {
+            color: $site-red;
+        }
     }
 }
 
@@ -66,7 +79,7 @@ html,body {
 
     .featured-img {
         position: absolute;
-        top:0;
+        top: 0;
         left: 0;
         width: 100%;
         height: auto;
@@ -79,7 +92,9 @@ html,body {
         left: 0;
         right: 0;
 
-        .feature-title a, .lead, a {
+        .feature-title a,
+        .lead,
+        a {
             display: inline-block;
             font-family: $playfair-display;
             color: $site-white;
@@ -108,12 +123,26 @@ html,body {
         left: 0;
         right: 0;
 
-        background: -moz-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(17,5,5,0.25) 100%);
-        background: -webkit-linear-gradient(top, rgba(255,255,255,0) 0%,rgba(17,5,5,0.25) 100%);
-        background: linear-gradient(to bottom, rgba(255,255,255,0) 0%,rgba(17,5,5,0.25) 100%);
+        background: -moz-linear-gradient(
+            top,
+            rgba(255, 255, 255, 0) 0%,
+            rgba(17, 5, 5, 0.25) 100%
+        );
+        background: -webkit-linear-gradient(
+            top,
+            rgba(255, 255, 255, 0) 0%,
+            rgba(17, 5, 5, 0.25) 100%
+        );
+        background: linear-gradient(
+            to bottom,
+            rgba(255, 255, 255, 0) 0%,
+            rgba(17, 5, 5, 0.25) 100%
+        );
         filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', endColorstr='#40110505',GradientType=0 );
 
-        .feature-title a, .lead, a {
+        .feature-title a,
+        .lead,
+        a {
             display: inline-block;
             font-family: $playfair-display;
             color: $site-white;
@@ -147,7 +176,9 @@ html,body {
         left: 0;
         right: 0;
 
-        .feature-title a, .lead, a {
+        .feature-title a,
+        .lead,
+        a {
             display: inline-block;
             font-family: $playfair-display;
             color: $site-gray;
@@ -157,11 +188,15 @@ html,body {
 
 .section-card-1 {
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    /* For some reason without this, chrome hides box shadows on cards during thumbnail animations
+       See also: https://stackoverflow.com/q/18529381
+    */
+    transform: translate3d(0, 0, 0);
 
     .img-wrapper {
         overflow: hidden;
-	position: relative;
-	max-height: 250px;
+        position: relative;
+        max-height: 250px;
     }
 
     .card-img-top {
@@ -200,9 +235,13 @@ html,body {
     }
 
     .card-body {
-	position: relative;
-        .story-created { font-size: 0.75rem; }
-        h4 a { font-family: $playfair-display; }
+        position: relative;
+        .story-created {
+            font-size: 0.75rem;
+        }
+        h4 a {
+            font-family: $playfair-display;
+        }
     }
 }
 
@@ -210,8 +249,12 @@ html,body {
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 
     .card-body {
-        .story-created { font-size: 0.75rem; }
-        h4 a { font-family: $playfair-display; }
+        .story-created {
+            font-size: 0.75rem;
+        }
+        h4 a {
+            font-family: $playfair-display;
+        }
     }
 }
 
@@ -226,7 +269,6 @@ html,body {
     }
 }
 
-
 /* Social Media Sidebar */
 .social-media-sidebar {
     z-index: 1000;
@@ -239,9 +281,15 @@ html,body {
     padding: 0;
 
     li {
-        &:nth-child(1):hover a { background: #3b5998; }
-        &:nth-child(2):hover a { background: #1DA1F2; }
-        &:nth-child(3):hover a { background: #ea4c89; }
+        &:nth-child(1):hover a {
+            background: #3b5998;
+        }
+        &:nth-child(2):hover a {
+            background: #1da1f2;
+        }
+        &:nth-child(3):hover a {
+            background: #ea4c89;
+        }
     }
 }
 
@@ -256,7 +304,7 @@ html,body {
     color: $site-white;
     text-align: center;
 
-    transition: background 0.5s ease .3ms;
+    transition: background 0.5s ease 0.3ms;
 
     &:hover span {
         visibility: visible;
@@ -267,7 +315,7 @@ html,body {
 
 .social-media-sidebar li a i {
     position: absolute;
-    right:0;
+    right: 0;
     width: 100%;
     margin-top: 30%;
 
@@ -289,7 +337,7 @@ html,body {
 
     transform-origin: right;
     transform: rotateY(45deg);
-    transition: all 0.5s ease .3ms;
+    transition: all 0.5s ease 0.3ms;
 }
 
 /* Index Section */
@@ -309,7 +357,7 @@ html,body {
         position: absolute;
         left: 50%;
         transform: translate(-50%);
-        content:"";
+        content: "";
         display: block;
         width: 0;
         height: 2px;
@@ -320,14 +368,15 @@ html,body {
         position: absolute;
         left: 50%;
         transform: translate(-50%);
-        content:"";
+        content: "";
         display: block;
         width: 0;
         height: 2px;
         background: $site-header;
         transition: width 0.3s;
     }
-    a:hover:after, a:hover:before {
+    a:hover:after,
+    a:hover:before {
         width: 100%;
     }
 }
@@ -335,7 +384,11 @@ html,body {
 .breadcrumb {
     border-radius: 0;
     background-color: $site-gray;
-    .breadcrumb-item a, .breadcrumb:after, .breadcrumb-item:before {color: $card-title-color; }
+    .breadcrumb-item a,
+    .breadcrumb:after,
+    .breadcrumb-item:before {
+        color: $card-title-color;
+    }
 }
 
 /* Latest Stories Card */
@@ -345,7 +398,9 @@ html,body {
     @media (min-width: 768px) {
         margin-top: 40px;
     }
-    .list-group:last-child .list-group-item:last-child {border-radius: 0;}
+    .list-group:last-child .list-group-item:last-child {
+        border-radius: 0;
+    }
     .card-header .card-title {
         text-transform: uppercase;
         font-family: "Oswald", sans-serif;
@@ -354,7 +409,8 @@ html,body {
     .list-group-item {
         border: none;
         background-color: $card-header-bg;
-        a, strong {
+        a,
+        strong {
             color: white;
             line-height: 1.4rem;
             font-size: 0.9rem;
@@ -364,35 +420,36 @@ html,body {
 }
 
 .story-text:first-letter {
-  /* initial-letter: 2; */
+    /* initial-letter: 2; */
 }
 
 .lightbox-source {
-  &:hover {
-    cursor: zoom-in;
-  }
+    &:hover {
+        cursor: zoom-in;
+    }
 }
 
 .modal-lightbox {
-  .modal-content {
-    background-color: #1115;
-    color: white;
-  }
+    .modal-content {
+        background-color: #1115;
+        color: white;
+    }
 
-  .modal-title, .modal-header {
-    background-color: #222;
-    color: white;
-  }
+    .modal-title,
+    .modal-header {
+        background-color: #222;
+        color: white;
+    }
 
-  .modal-body {
-    padding: 0;
-  }
+    .modal-body {
+        padding: 0;
+    }
 
-  .modal-footer {
-    background-color: #111d;
-    text-align: center;
-    display: block;
-  }
+    .modal-footer {
+        background-color: #111d;
+        text-align: center;
+        display: block;
+    }
 }
 
 /* Add Breaking */
@@ -404,7 +461,7 @@ html,body {
     a {
         color: white;
         &:hover {
-        color: $site-gray;
+            color: $site-gray;
         }
     }
 }
