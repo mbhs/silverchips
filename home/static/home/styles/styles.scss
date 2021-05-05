@@ -189,8 +189,7 @@ body {
 .section-card-1 {
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     /* For some reason without this, chrome hides box shadows on cards during thumbnail animations
-       See also: https://stackoverflow.com/q/18529381
-    */
+       See also: https://stackoverflow.com/q/18529381 */
     transform: translate3d(0, 0, 0);
 
     .img-wrapper {
