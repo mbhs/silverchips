@@ -15,6 +15,7 @@ COPY . .
 COPY ./silverchips/secure_settings.py.example ./silverchips/secure_settings.py
 RUN rm core/migrations/*
 RUN touch core/migrations/__init__.py
+RUN python manage.py compilescss
 RUN python manage.py collectstatic
 RUN python manage.py makemigrations
 RUN python manage.py migrate
