@@ -235,11 +235,19 @@ body {
 
     .card-body {
         position: relative;
+
         .story-created {
             font-size: 0.75rem;
         }
         h4 a {
             font-family: $playfair-display;
+        }
+        
+        p {
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 5;
+            -webkit-box-orient: vertical;
         }
     }
 }
