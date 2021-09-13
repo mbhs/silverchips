@@ -13,33 +13,31 @@ from core import models
 app_name = "home"
 
 
-about_urlpatterns = ([
-    path("", views.about, name="index"),
-    path("staff/", views.staff, name="staff")
-], "about")
+about_urlpatterns = (
+    [path("", views.about, name="index"), path("staff/", views.staff, name="staff")],
+    "about",
+)
 
 urlpatterns = [
     path("", views.index, name="index"),
-
-    path("c/<int:pk>/", views.view_content, name="view_content"),  # Short URLs for content
+    path(
+        "c/<int:pk>/", views.view_content, name="view_content"
+    ),  # Short URLs for content
     path("content/<int:pk>/", views.view_content, name="view_content"),
     path("content/<slug:slug>-<int:pk>/", views.view_content, name="view_content"),
     path("content/preview/<int:pk>/", views.preview_content, name="embed_content"),
-    path("tagged/<path:tag>/", views.TaggedContentList.as_view(), name="tagged"),  # path guarantees we can have tags with slashes
-
+    path(
+        "tagged/<path:tag>/", views.TaggedContentList.as_view(), name="tagged"
+    ),  # path guarantees we can have tags with slashes
     path("search/", views.SearchListView.as_view(), name="search_content"),
-
     path("profile/<int:pk>/", views.view_profile, name="view_profile"),
     path("section/<path:name>/", views.ContentList.as_view(), name="view_section"),
     path("about/", include(about_urlpatterns, "about")),
-
     path("vote/<int:pk>/<int:choice>/", views.vote, name="vote"),
     path("comment/submit/<int:pk>/", views.comment, name="submit_comment"),
-
     # Legacy URLs to make sure old links work
     path("story/<int:pk>/", views.legacy(models.Story)),
     path("picture/<int:pk>/", views.legacy(models.Image)),
-
     # mbhs.edu homepage needs carousel query
-    path("carousel/", views.carousel, name="carousel")
+    path("carousel/", views.carousel, name="carousel"),
 ]

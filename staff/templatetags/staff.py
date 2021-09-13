@@ -6,7 +6,12 @@ register = template.Library()
 @register.filter
 def names(content):
     """A filter that returns the full names and IDs, joined by commas, of all the authors of a particular Content."""
-    return ", ".join(map(lambda user: "{} (#{})".format(user.get_full_name(), user.pk), content.authors.all()))
+    return ", ".join(
+        map(
+            lambda user: "{} (#{})".format(user.get_full_name(), user.pk),
+            content.authors.all(),
+        )
+    )
 
 
 @register.filter
@@ -14,7 +19,7 @@ def tags(content):
     return ", ".join(map(str, content.tags.all()))
 
 
-@register.simple_tag(name='range')
+@register.simple_tag(name="range")
 def do_range(start, end, step):
     """A template tag that can be used to assign a range-list to a variable.
 

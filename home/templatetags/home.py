@@ -4,7 +4,12 @@ from django.utils.html import mark_safe, format_html
 from imagekit.cachefiles import ImageCacheFile
 
 from core import permissions, models
-from home.imagegenerators import SmallThumbnail, MediumThumbnail, LargeThumbnail, HugeThumbnail
+from home.imagegenerators import (
+    SmallThumbnail,
+    MediumThumbnail,
+    LargeThumbnail,
+    HugeThumbnail,
+)
 from silverchips.settings import STATIC_URL
 
 register = template.Library()
@@ -18,13 +23,15 @@ def thumb(content, thumb_type=None):
     """
     image = None  # The ImageField that we're using as a source for the thumbnail
 
-    if (isinstance(content, models.Story) or isinstance(content, models.Video)) and content.cover:
+    if (
+        isinstance(content, models.Story) or isinstance(content, models.Video)
+    ) and content.cover:
         image = content.cover.source
     elif isinstance(content, models.Image):
         image = content.source
     elif isinstance(content, models.Gallery) and content.entries.count() > 0:
-        #Gallery cache currently messed up, so no thumbnail for now
-        #image = thumb(content.entries_in_order()[0])
+        # Gallery cache currently messed up, so no thumbnail for now
+        # image = thumb(content.entries_in_order()[0])
         return content.entries_in_order()[0].source.url
 
     if image is None:
@@ -34,7 +41,12 @@ def thumb(content, thumb_type=None):
         return True
 
     # Check which thumbnail generator we're using
-    klass = {'small': SmallThumbnail, 'medium': MediumThumbnail, 'large': LargeThumbnail, 'huge': HugeThumbnail}[thumb_type]
+    klass = {
+        "small": SmallThumbnail,
+        "medium": MediumThumbnail,
+        "large": LargeThumbnail,
+        "huge": HugeThumbnail,
+    }[thumb_type]
 
     # Make the thumbnail generator and cache the result
     try:
@@ -63,11 +75,15 @@ def render_content(user, content, embedding=True):
 
     Only works when user has read permissions on the content object.
     """
-    return template.loader.get_template("home/content/display.html").render({
-        "content": content if content and permissions.can(user, 'content.read', content) else None,
-        "user": user,
-        "embedding": embedding
-    })
+    return template.loader.get_template("home/content/display.html").render(
+        {
+            "content": content
+            if content and permissions.can(user, "content.read", content)
+            else None,
+            "user": user,
+            "embedding": embedding,
+        }
+    )
 
 
 @register.filter
@@ -81,7 +97,7 @@ def expand_embeds(text, user):
     soup = BeautifulSoup(text, "html.parser")
 
     # Find all <div class="content-embed">s
-    for div in soup.findAll('div'):
+    for div in soup.findAll("div"):
         if div.has_attr("class") and "content-embed" in div["class"]:
             # Try and load the content corresponding to data-contend-id on each div
             pk = int(div["data-content-id"])
@@ -107,6 +123,7 @@ def first_or_self(val):
         return val[0]
     return val
 
+
 class ReserveContentNode(template.Node):
     """Template tag node to mark content objects as already seen and therefore "reserved" on a particular page.
 
@@ -117,6 +134,7 @@ class ReserveContentNode(template.Node):
 
     This tag works by forcing a hidden variable called `_reserved_content` into the entire template context stack.
     The freshly reserved content is available in the variable `new_content`."""
+
     def __init__(self, content, count):
         self.content = template.Variable(content)
         self.count = int(count)
@@ -125,22 +143,22 @@ class ReserveContentNode(template.Node):
         content = self.content.resolve(context)
 
         # The content that's already been reserved, or an empty set if none has been reserved
-        reserved_content = context.get('_reserved_content', set())
+        reserved_content = context.get("_reserved_content", set())
 
         # Load new, non-reserved content from the database
-        new_content = content.exclude(pk__in=reserved_content)[:self.count]
+        new_content = content.exclude(pk__in=reserved_content)[: self.count]
 
         # Reserve the content we just loaded
-        reserved_content.update(new_content.values_list('pk', flat=True))
+        reserved_content.update(new_content.values_list("pk", flat=True))
 
         if len(new_content) == self.count == 1:
             new_content = new_content[0]
 
-        context['new_content'] = new_content
+        context["new_content"] = new_content
 
         # Force setting as global variable by placing variable in all levels of context stack
         for context_dict in context.dicts:
-            context_dict['_reserved_content'] = reserved_content
+            context_dict["_reserved_content"] = reserved_content
 
         return ""
 
@@ -158,41 +176,50 @@ def reserve_content(parser, token):
     tag_name, content, count = token.split_contents()
     return ReserveContentNode(content, count)
 
+
 class ObfuscatedEmailNode(template.Node):
     """Template tag node to represent an obfuscated email to avoid automated scrapers.
 
     This tag works by forcing a hidden variable called `_has_obfuscated_emails` into the entire template context stack."""
+
     def __init__(self, email):
         self.email = template.Variable(email)
 
     def render(self, context):
         # Force setting as global variable by placing variable in all levels of context stack
         for context_dict in context.dicts:
-            context_dict['_has_obfuscated_emails'] = True
+            context_dict["_has_obfuscated_emails"] = True
 
         return format_html(
             '<a data-email="{}" class="obfuscated-email" href="loading">loading...</a>',
-            "".join(chr(ord(x) ^ 1) for x in self.email.resolve(context))
+            "".join(chr(ord(x) ^ 1) for x in self.email.resolve(context)),
         )
+
 
 class EmailDeobfuscatorNode(template.Node):
     """Template tag node to render the script that deobfuscates obfuscated emails.
 
     A script tag will only be rendered if the `_has_obfuscated_emails` variable has been set."""
+
     def __init__(self):
         pass
 
     def render(self, context):
         if context.get("_has_obfuscated_emails") == True:
-            return format_html('<script async defer src="{}"></script>', STATIC_URL + "home/scripts/emails.js")
+            return format_html(
+                '<script async defer src="{}"></script>',
+                STATIC_URL + "home/scripts/emails.js",
+            )
         return ""
+
 
 @register.tag
 def obfuscated_email(parser, token):
     tag_name, email = token.split_contents()
     return ObfuscatedEmailNode(email)
 
+
 @register.tag
 def email_deobfuscator(parser, token):
-    tag_name, = token.split_contents()
+    (tag_name,) = token.split_contents()
     return EmailDeobfuscatorNode()

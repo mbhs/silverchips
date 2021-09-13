@@ -7,18 +7,22 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0013_breaking'),
+        ("core", "0013_breaking"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='video',
-            name='cover',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='core.image'),
+            model_name="video",
+            name="cover",
+            field=models.ForeignKey(
+                null=True, on_delete=django.db.models.deletion.SET_NULL, to="core.image"
+            ),
         ),
         migrations.AlterField(
-            model_name='galleryentrylink',
-            name='order',
-            field=models.PositiveIntegerField(db_index=True, editable=False, verbose_name='order'),
+            model_name="galleryentrylink",
+            name="order",
+            field=models.PositiveIntegerField(
+                db_index=True, editable=False, verbose_name="order"
+            ),
         ),
     ]

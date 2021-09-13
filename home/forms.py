@@ -9,6 +9,7 @@ from crispy_forms.helper import FormHelper
 
 class TagSearchForm(forms.Form):
     """Form for searching through tags."""
+
     name = forms.CharField(label="Name:", required=True, max_length=32)
     helper = FormHelper()
 
@@ -20,19 +21,21 @@ class TagSearchForm(forms.Form):
 
 class CommentForm(forms.ModelForm):
     """A short form to submit comments."""
+
     class Meta:
         model = models.Comment
-        fields = ['name', 'text']
+        fields = ["name", "text"]
 
     helper = FormHelper()
     helper.form_tag = False
     helper.disable_csrf = True
 
+
 class ContentSearchForm(forms.ModelForm):
     class Meta:
         model = models.Search
         fields = ["search"]
-    
+
     helper = FormHelper()
     helper.form_tag = False
     helper.disable_csrf = True

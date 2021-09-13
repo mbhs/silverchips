@@ -6,18 +6,21 @@ from core.models import *
 
 from rest_polymorphic.serializers import PolymorphicSerializer
 from django.contrib.contenttypes.models import ContentType
+
 # , Image, Video, Audio, Story, Gallery
 
 
 class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
-        fields = ('id', 'name')
+        fields = ("id", "name")
+
 
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
-        fields = ('id', 'biography', 'avatar', 'position', 'graduation_year', 'user')
+        fields = ("id", "biography", "avatar", "position", "graduation_year", "user")
+
 
 class UserSerializer(serializers.ModelSerializer):
     profile = ProfileSerializer()
@@ -25,7 +28,8 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'name', 'profile')
+        fields = ("id", "name", "profile")
+
 
 # For self-referencing objects
 # https://stackoverflow.com/questions/13376894/django-rest-framework-nested-self-referential-objects
@@ -40,7 +44,7 @@ class SectionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Section
-        fields = ('id', 'parent', 'title', 'subsections')
+        fields = ("id", "parent", "title", "subsections")
 
 
 class ContentSerializer(serializers.ModelSerializer):
@@ -51,8 +55,21 @@ class ContentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Content
-        fields = ('id', 'title', 'description', 'tags', 'created', 'modified',
-                  'authors', 'guest_authors', 'section', 'views', 'embed_only', 'linked', 'share_url')
+        fields = (
+            "id",
+            "title",
+            "description",
+            "tags",
+            "created",
+            "modified",
+            "authors",
+            "guest_authors",
+            "section",
+            "views",
+            "embed_only",
+            "linked",
+            "share_url",
+        )
 
     def get_share_url(self, obj):
         return obj.get_absolute_url()
@@ -66,8 +83,22 @@ class ImageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Image
-        fields = ('id', 'title', 'description', 'tags', 'created', 'modified',
-                  'authors', 'guest_authors', 'section', 'views', 'embed_only', 'linked', 'descriptor', 'share_url')
+        fields = (
+            "id",
+            "title",
+            "description",
+            "tags",
+            "created",
+            "modified",
+            "authors",
+            "guest_authors",
+            "section",
+            "views",
+            "embed_only",
+            "linked",
+            "descriptor",
+            "share_url",
+        )
 
     def get_share_url(self, obj):
         return obj.get_absolute_url()
@@ -81,8 +112,22 @@ class GallerySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Image
-        fields = ('id', 'title', 'description', 'tags', 'created', 'modified',
-                  'authors', 'guest_authors', 'section', 'views', 'embed_only', 'linked', 'descriptor', 'share_url')
+        fields = (
+            "id",
+            "title",
+            "description",
+            "tags",
+            "created",
+            "modified",
+            "authors",
+            "guest_authors",
+            "section",
+            "views",
+            "embed_only",
+            "linked",
+            "descriptor",
+            "share_url",
+        )
 
     def get_share_url(self, obj):
         return obj.get_absolute_url()
@@ -97,9 +142,25 @@ class StorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Story
-        fields = ('id', 'title', 'description', 'tags', 'created', 'modified',
-                  'authors', 'guest_authors', 'section', 'views', 'embed_only', 'linked',
-                  'second_deck', 'text', 'cover', 'descriptor', 'share_url')
+        fields = (
+            "id",
+            "title",
+            "description",
+            "tags",
+            "created",
+            "modified",
+            "authors",
+            "guest_authors",
+            "section",
+            "views",
+            "embed_only",
+            "linked",
+            "second_deck",
+            "text",
+            "cover",
+            "descriptor",
+            "share_url",
+        )
 
     def get_share_url(self, obj):
         return obj.get_absolute_url()
@@ -110,5 +171,5 @@ class ContentPolymorphicSerializer(PolymorphicSerializer):
         Content: ContentSerializer,
         Story: StorySerializer,
         Image: ImageSerializer,
-        Gallery: GallerySerializer
+        Gallery: GallerySerializer,
     }

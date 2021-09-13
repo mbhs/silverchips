@@ -9,39 +9,44 @@ import django.utils.timezone
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0004_auto_20180822_1204'),
+        ("core", "0004_auto_20180822_1204"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='comment',
-            options={'ordering': ('-date',)},
+            name="comment",
+            options={"ordering": ("-date",)},
         ),
         migrations.AddField(
-            model_name='comment',
-            name='content',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='comments', to='core.Content'),
+            model_name="comment",
+            name="content",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="comments",
+                to="core.Content",
+            ),
         ),
         migrations.AddField(
-            model_name='comment',
-            name='date',
+            model_name="comment",
+            name="date",
             field=models.DateTimeField(default=django.utils.timezone.now),
         ),
         migrations.AddField(
-            model_name='comment',
-            name='name',
-            field=models.CharField(default='None', max_length=64),
+            model_name="comment",
+            name="name",
+            field=models.CharField(default="None", max_length=64),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='comment',
-            name='text',
-            field=models.TextField(default='None'),
+            model_name="comment",
+            name="text",
+            field=models.TextField(default="None"),
             preserve_default=False,
         ),
         migrations.AlterField(
-            model_name='profile',
-            name='graduation_year',
+            model_name="profile",
+            name="graduation_year",
             field=models.IntegerField(default=core.models.new_student_grad_year),
         ),
     ]

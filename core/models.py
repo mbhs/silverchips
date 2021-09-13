@@ -40,7 +40,9 @@ class Profile(models.Model):
     graduation_year = models.IntegerField(
         default=new_student_grad_year
     )  # force recalculation
-    is_hidden = models.BooleanField(default=False, help_text="Whether or not to hide this user from /about/staff")
+    is_hidden = models.BooleanField(
+        default=False, help_text="Whether or not to hide this user from /about/staff"
+    )
 
     def __str__(self):
         """Represent the profile as a string."""

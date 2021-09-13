@@ -19,7 +19,7 @@ Image.objects.filter(authors=None).delete()
 
 # Only keep the last 50 stories
 stories = Story.objects.order_by("-content_ptr__pk")
-stories.filter(pk__lt=stories[OBJ_COUNT-1].pk).delete()
+stories.filter(pk__lt=stories[OBJ_COUNT - 1].pk).delete()
 
 for story in Story.objects.all():
     story.visibility = Content.PUBLISHED
@@ -27,7 +27,7 @@ for story in Story.objects.all():
 
 # Only keep the last 50 images
 images = Image.objects.order_by("-content_ptr__pk")
-images.filter(pk__lt=images[3*OBJ_COUNT-1].pk).delete()
+images.filter(pk__lt=images[3 * OBJ_COUNT - 1].pk).delete()
 
 # Delete all users with no content
 User.objects.filter(content_authored=None).delete()
@@ -41,16 +41,22 @@ for user in User.objects.all():
         user.save()
 
 for user in User.objects.all():
-    user.groups.add(Group.objects.get(name='writers'))
+    user.groups.add(Group.objects.get(name="writers"))
 
-User.objects.get(pk=909).groups.add(Group.objects.get(name='editors'))
-User.objects.get(pk=909).groups.add(Group.objects.get(name='editors-in-chief'))
-User.objects.get(pk=908).groups.add(Group.objects.get(name='editors'))
+User.objects.get(pk=909).groups.add(Group.objects.get(name="editors"))
+User.objects.get(pk=909).groups.add(Group.objects.get(name="editors-in-chief"))
+User.objects.get(pk=908).groups.add(Group.objects.get(name="editors"))
 
-for name, level in [('news', Section.MAIN), ('lifestyle/features', Section.FEATURES),
-                       ('opinions', Section.LIST), ('sports', Section.LIST),
-                       ('lifestyle', Section.COMPACT), ('news/local', Section.DENSE),
-                       ('sports/blair', Section.DENSE), ('lifestyle/entertainment', Section.DENSE)]:
+for name, level in [
+    ("news", Section.MAIN),
+    ("lifestyle/features", Section.FEATURES),
+    ("opinions", Section.LIST),
+    ("sports", Section.LIST),
+    ("lifestyle", Section.COMPACT),
+    ("news/local", Section.DENSE),
+    ("sports/blair", Section.DENSE),
+    ("lifestyle/entertainment", Section.DENSE),
+]:
     section = Section.objects.get(name=name)
     section.index_display = level
     section.save()

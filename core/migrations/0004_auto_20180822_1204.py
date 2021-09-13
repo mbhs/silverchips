@@ -6,12 +6,17 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0003_auto_20180801_2211'),
+        ("core", "0003_auto_20180801_2211"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='user',
-            options={'ordering': ('-profile__graduation_year', 'last_name'), 'permissions': (('manage_users', 'Can manage user data and privileges'),)},
+            name="user",
+            options={
+                "ordering": ("-profile__graduation_year", "last_name"),
+                "permissions": (
+                    ("manage_users", "Can manage user data and privileges"),
+                ),
+            },
         ),
     ]

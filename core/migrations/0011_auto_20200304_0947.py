@@ -6,17 +6,17 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0010_auto_20200303_1919'),
+        ("core", "0010_auto_20200303_1919"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='content',
-            name='linked',
+            model_name="content",
+            name="linked",
         ),
         migrations.AddField(
-            model_name='content',
-            name='linked',
-            field=models.ManyToManyField(blank=True, to='core.Content'),
+            model_name="content",
+            name="linked",
+            field=models.ManyToManyField(blank=True, to="core.Content"),
         ),
     ]

@@ -38,8 +38,10 @@ def login(request):
         form = forms.LoginForm(request.POST)
         if form.is_valid():
             # Attempt to authenticate the user
-            user = auth.authenticate(username=form.cleaned_data["username"],
-                                     password=form.cleaned_data["password"])
+            user = auth.authenticate(
+                username=form.cleaned_data["username"],
+                password=form.cleaned_data["password"],
+            )
 
             # Check if password wrong
             if not user:
@@ -75,24 +77,26 @@ def index(request):
 
 class EditorMixin(View):
     """Simple mixin that allows various forms to use our generic editor template instead of using separate templates."""
+
     template_name = "staff/editor.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['editing'] = self.editing
+        context["editing"] = self.editing
         return context
 
 
 # Content views
 class ContentListView(LoginRequiredMixin, ListView):
     """The content list view that supports pagination."""
+
     template_name = "staff/content/list.html"
     context_object_name = "content_list"
     paginate_by = 25
 
     def get_queryset(self):
         """Return a list of all the content we're looking at, filtered by search criteria."""
-        if self.request.user.has_perm('core.read_content'):
+        if self.request.user.has_perm("core.read_content"):
             content = models.Content.objects.all()
         else:
             content = models.Content.objects.filter(authors=self.request.user).all()
@@ -104,29 +108,30 @@ class ContentListView(LoginRequiredMixin, ListView):
             query = Q()
 
             if form.data.get("title"):
-                query &= Q(title__contains=form.data['title'])
+                query &= Q(title__contains=form.data["title"])
             if form.data.get("id"):
-                query &= Q(pk=int(form.data['id']))
+                query &= Q(pk=int(form.data["id"]))
             if form.data.get("after"):
-                query &= Q(created__gt=form.data['after'])
+                query &= Q(created__gt=form.data["after"])
             if form.data.get("before"):
-                query &= Q(created__lt=form.data['before'])
+                query &= Q(created__lt=form.data["before"])
             if form.data.get("authors"):
-                query &= Q(authors=form.data['authors'])
+                query &= Q(authors=form.data["authors"])
             if form.data.get("tags"):
-                query &= Q(tags=form.data['tags'])
+                query &= Q(tags=form.data["tags"])
             content = content.filter(query)
 
-        return content.order_by('-modified')
+        return content.order_by("-modified")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['form'] = forms.ContentSearchForm(self.request.GET)
+        context["form"] = forms.ContentSearchForm(self.request.GET)
         return context
 
 
 class ContentChangeMixin(LoginRequiredMixin):
     """Mixin that organizes shared functionality across various content creation and editing views."""
+
     def get_success_url(self):
         return reverse("staff:content:list")
 
@@ -136,19 +141,23 @@ class ContentChangeMixin(LoginRequiredMixin):
         return super().form_valid(form)
 
 
-class ContentCreateView(ContentChangeMixin, PermissionRequiredMixin, EditorMixin, CreateView):
+class ContentCreateView(
+    ContentChangeMixin, PermissionRequiredMixin, EditorMixin, CreateView
+):
     """Base view for uploading new content."""
-    permission_required = 'core.create_content'
+
+    permission_required = "core.create_content"
 
     def get_initial(self):
         return dict(super().get_initial(), authors=[self.request.user])
 
     def get_success_url(self):
-        return reverse("staff:content:edit", kwargs={'pk': self.object.pk})
+        return reverse("staff:content:edit", kwargs={"pk": self.object.pk})
 
 
 class StoryCreateView(ContentCreateView):
     """View for uploading a new story."""
+
     model = models.Story
     form_class = forms.StoryForm
     editing = "Story"
@@ -156,6 +165,7 @@ class StoryCreateView(ContentCreateView):
 
 class GalleryCreateView(ContentCreateView):
     """View for creating a new gallery."""
+
     model = models.Gallery
     form_class = forms.GalleryForm
     editing = "Gallery"
@@ -164,6 +174,7 @@ class GalleryCreateView(ContentCreateView):
 
 class ImageCreateView(ContentCreateView):
     """View for uploading a new image."""
+
     model = models.Image
     form_class = forms.ImageForm
     editing = "Image"
@@ -171,6 +182,7 @@ class ImageCreateView(ContentCreateView):
 
 class VideoCreateView(ContentCreateView):
     """View for uploading a new video."""
+
     model = models.Video
     form_class = forms.VideoForm
     editing = "Video"
@@ -178,6 +190,7 @@ class VideoCreateView(ContentCreateView):
 
 class AudioCreateView(ContentCreateView):
     """View for uploading new audio."""
+
     model = models.Audio
     form_class = forms.AudioForm
     editing = "Audio"
@@ -185,6 +198,7 @@ class AudioCreateView(ContentCreateView):
 
 class BreakingView(ContentCreateView):
     """Base view for editing content."""
+
     model = models.Breaking
     form_class = forms.BreakingForm
     editing = "Breaking"
@@ -192,18 +206,22 @@ class BreakingView(ContentCreateView):
     def get_success_url(self):
         return reverse("staff:content:list")
 
+
 class PollCreateView(ContentCreateView):
     """View for uploading a new poll."""
-    pass # STUB_POLL
+
+    pass  # STUB_POLL
 
 
 class ContentEditView(ContentChangeMixin, UserCanMixin, EditorMixin, UpdateView):
     """Base view for editing content."""
-    action = 'content.edit'
+
+    action = "content.edit"
 
 
 class StoryEditView(ContentEditView):
     """View for editing stories."""
+
     model = models.Story
     form_class = forms.StoryForm
     editing = "Story"
@@ -211,12 +229,13 @@ class StoryEditView(ContentEditView):
 
     def get_context_data(self, *args, **kwargs):
         data = super().get_context_data(*args, **kwargs)
-        data['content_embed_form'] = forms.ContentInsertionForm()
+        data["content_embed_form"] = forms.ContentInsertionForm()
         return data
 
 
 class GalleryEditView(ContentEditView):
     """View for editing galleries."""
+
     model = models.Gallery
     form_class = forms.GalleryForm
     editing = "Gallery"
@@ -224,7 +243,7 @@ class GalleryEditView(ContentEditView):
 
     def get_context_data(self, *args, **kwargs):
         data = super().get_context_data(*args, **kwargs)
-        data['insertion_form'] = forms.ContentInsertionForm()
+        data["insertion_form"] = forms.ContentInsertionForm()
         return data
 
 
@@ -234,45 +253,46 @@ def gallery_insert(request, pk):
     link = models.GalleryEntryLink(gallery=gallery, entry=entry)
     link.save()
 
-    return render(request, "staff/content/gallery/entry_list.html", {
-        'gallery': gallery
-    })
+    return render(
+        request, "staff/content/gallery/entry_list.html", {"gallery": gallery}
+    )
 
 
 def gallery_swap(request, pk):
     gallery = get_object_or_404(models.Gallery, pk=pk)
 
     try:
-        link1 = gallery.entry_links.all()[int(request.POST['index1'])]
-        link2 = gallery.entry_links.all()[int(request.POST['index2'])]
+        link1 = gallery.entry_links.all()[int(request.POST["index1"])]
+        link2 = gallery.entry_links.all()[int(request.POST["index2"])]
     except (IndexError, ValueError):
         return HttpResponse(status=400)
 
     link1.swap(link2)
     link1.save()
 
-    return render(request, "staff/content/gallery/entry_list.html", {
-        'gallery': gallery
-    })
+    return render(
+        request, "staff/content/gallery/entry_list.html", {"gallery": gallery}
+    )
 
 
 def gallery_remove(request, pk):
     gallery = get_object_or_404(models.Gallery, pk=pk)
 
     try:
-        link = gallery.entry_links.all()[int(request.POST['index'])]
+        link = gallery.entry_links.all()[int(request.POST["index"])]
     except (IndexError, ValueError):
         return HttpResponse(status=400)
 
     link.delete()
 
-    return render(request, "staff/content/gallery/entry_list.html", {
-        'gallery': gallery
-    })
+    return render(
+        request, "staff/content/gallery/entry_list.html", {"gallery": gallery}
+    )
 
 
 class ImageEditView(ContentEditView):
     """View for editing images."""
+
     model = models.Image
     form_class = forms.ImageForm
     editing = "Image"
@@ -280,6 +300,7 @@ class ImageEditView(ContentEditView):
 
 class VideoEditView(ContentEditView):
     """View for editing videos."""
+
     model = models.Video
     form_class = forms.VideoForm
     editing = "Video"
@@ -287,6 +308,7 @@ class VideoEditView(ContentEditView):
 
 class AudioEditView(ContentEditView):
     """View for editing audio."""
+
     model = models.Audio
     form_class = forms.AudioForm
     editing = "Audio"
@@ -294,7 +316,8 @@ class AudioEditView(ContentEditView):
 
 class PollEditView(ContentEditView):
     """View for editing polls."""
-    pass # STUB_POLL
+
+    pass  # STUB_POLL
 
 
 def content_edit_view(request, pk):
@@ -303,12 +326,12 @@ def content_edit_view(request, pk):
 
     # Switch which view gets received based on the kind of content
     return {
-        'Story': StoryEditView,
-        'Gallery': GalleryEditView,
-        'Image': ImageEditView,
-        'Video': VideoEditView,
-        'Audio': AudioEditView,
-        'Poll': PollEditView
+        "Story": StoryEditView,
+        "Gallery": GalleryEditView,
+        "Image": ImageEditView,
+        "Video": VideoEditView,
+        "Audio": AudioEditView,
+        "Poll": PollEditView,
     }[content.type].as_view()(request, pk=pk)
 
 
@@ -331,7 +354,7 @@ def set_content_visibility(request, pk, level):
 
 @login_required
 @csrf_protect
-@user_can('content.delete')
+@user_can("content.delete")
 @require_http_methods(["DELETE"])
 def delete_content(request, pk):
     """View to delete content."""
@@ -344,7 +367,8 @@ def delete_content(request, pk):
 # User views
 class UserListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
     """The content list view that supports pagination."""
-    permission_required = 'auth.manage_users'
+
+    permission_required = "auth.manage_users"
 
     template_name = "staff/users/list.html"
     context_object_name = "user_list"
@@ -359,24 +383,24 @@ class UserListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
             # Filter the users by certain criteria
             query = Q()
 
-            if 'id' in form.data and form.data['id']:
-                query &= Q(pk=int(form.data['id']))
-            if 'first_name' in form.data and form.data['first_name']:
-                query &= Q(first_name__contains=form.data['first_name'])
-            if 'last_name' in form.data and form.data['last_name']:
-                query &= Q(last_name__contains=form.data['last_name'])
-            if 'graduation_year' in form.data and form.data['graduation_year']:
-                query &= Q(profile__graduation_year=form.data['graduation_year'])
+            if "id" in form.data and form.data["id"]:
+                query &= Q(pk=int(form.data["id"]))
+            if "first_name" in form.data and form.data["first_name"]:
+                query &= Q(first_name__contains=form.data["first_name"])
+            if "last_name" in form.data and form.data["last_name"]:
+                query &= Q(last_name__contains=form.data["last_name"])
+            if "graduation_year" in form.data and form.data["graduation_year"]:
+                query &= Q(profile__graduation_year=form.data["graduation_year"])
             # if 'active' in form.data and form.data['active']:
             #     query &= Q(active=form.data['active'])
 
             users = users.filter(query)
 
-        return users.order_by('-pk')
+        return users.order_by("-pk")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['form'] = forms.UserSearchForm(self.request.GET)
+        context["form"] = forms.UserSearchForm(self.request.GET)
         return context
 
 
@@ -390,6 +414,7 @@ class UserChangeView(LoginRequiredMixin, EditorMixin, View):
     and `profile_form_class` must point to ModelForms for editing Users and Profiles, respectively; typically,
     they will be instances or subinstances of UserManageForm and ProfileManageForm, respectively.
     """
+
     def get_instances(self, request, **kwargs):
         """Get the users that are being edited in the request."""
         # This form only creates new users
@@ -401,7 +426,7 @@ class UserChangeView(LoginRequiredMixin, EditorMixin, View):
             user = request.user
         else:
             # This form edits any user
-            user = get_object_or_404(models.User.objects, pk=kwargs.get('pk'))
+            user = get_object_or_404(models.User.objects, pk=kwargs.get("pk"))
         return user, user.profile
 
     def get(self, request, **kwargs):
@@ -410,21 +435,26 @@ class UserChangeView(LoginRequiredMixin, EditorMixin, View):
         user_form = self.user_form_class(instance=user, request=request)
         profile_form = self.profile_form_class(instance=profile)
 
-        return render(request, "staff/editor.html", {
-            "forms": (user_form, profile_form),
-            "editing": "Account"
-        })
+        return render(
+            request,
+            "staff/editor.html",
+            {"forms": (user_form, profile_form), "editing": "Account"},
+        )
 
     def post(self, request, **kwargs):
         """Process an edit to a user account by validating data."""
         user, profile = self.get_instances(request, **kwargs)
-        user_form = self.user_form_class(request.POST, request.FILES, request=request, instance=user)
-        profile_form = self.profile_form_class(request.POST, request.FILES, instance=profile)
+        user_form = self.user_form_class(
+            request.POST, request.FILES, request=request, instance=user
+        )
+        profile_form = self.profile_form_class(
+            request.POST, request.FILES, instance=profile
+        )
 
         if user_form.is_valid() and profile_form.is_valid():
             # Check if they set a new password
-            if user_form.cleaned_data['new_password']:
-                user_form.instance.set_password(user_form.cleaned_data['new_password'])
+            if user_form.cleaned_data["new_password"]:
+                user_form.instance.set_password(user_form.cleaned_data["new_password"])
 
             user = user_form.save()
             profile = profile_form.save(commit=False)
@@ -432,14 +462,16 @@ class UserChangeView(LoginRequiredMixin, EditorMixin, View):
             profile.save()
             return redirect(self.redirect_url)
 
-        return render(request, "staff/editor.html", {
-            "forms": [user_form, profile_form],
-            "editing": "Account"
-        })
+        return render(
+            request,
+            "staff/editor.html",
+            {"forms": [user_form, profile_form], "editing": "Account"},
+        )
 
 
 class UserCreateView(UserChangeView):
     """View for creating new users, only available to privileged users."""
+
     user_form_class = forms.UserManageForm
     profile_form_class = forms.ProfileManageForm
     redirect_url = "staff:users:list"
@@ -449,6 +481,7 @@ class UserCreateView(UserChangeView):
 
 class UserManageView(UserChangeView):
     """View for managing all information about all users, only available to privileged users."""
+
     user_form_class = forms.UserManageForm
     profile_form_class = forms.ProfileManageForm
     redirect_url = "staff:users:list"
@@ -458,6 +491,7 @@ class UserManageView(UserChangeView):
 
 class UserSelfManageView(UserChangeView):
     """View for managing a limited subset of one's own information, available to all users."""
+
     user_form_class = forms.UserSelfManageForm
     profile_form_class = forms.ProfileSelfManageForm
     redirect_url = "staff:index"
@@ -470,15 +504,16 @@ class CommentListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
 
     model = models.Comment
     paginate_by = 25
-    permission_required = 'core.publish_content'
+    permission_required = "core.publish_content"
 
     template_name = "staff/comment/list.html"
     context_object_name = "comment_list"
-    ordering = ['-pk']
+    ordering = ["-pk"]
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         return context
+
 
 @login_required
 @csrf_protect
@@ -488,7 +523,7 @@ def set_comment_approval(request, pk, level):
     comment = get_object_or_404(models.Comment, pk=pk)
 
     # Check whether the requesting user has permission to change the comment's visibility to the given level
-    if not can(request.user, 'content.comment', comment):
+    if not can(request.user, "content.comment", comment):
         raise PermissionDenied
 
     if level == 2:
@@ -502,7 +537,7 @@ def set_comment_approval(request, pk, level):
 
 @login_required
 @csrf_protect
-@user_can('content.comment')
+@user_can("content.comment")
 @require_http_methods(["DELETE"])
 def delete_comment(request, pk):
     """View to delete comment."""
