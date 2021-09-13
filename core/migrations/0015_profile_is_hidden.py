@@ -6,13 +6,16 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0014_auto_20201009_1243'),
+        ("core", "0014_auto_20201009_1243"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='profile',
-            name='is_hidden',
-            field=models.BooleanField(default=False, help_text='Whether or not to hide this user from /about/staff'),
+            model_name="profile",
+            name="is_hidden",
+            field=models.BooleanField(
+                default=False,
+                help_text="Whether or not to hide this user from /about/staff",
+            ),
         ),
     ]
