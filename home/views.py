@@ -217,10 +217,10 @@ def about(request):
 
 def staff(request):
     """Display a list of all of the newspaper's staff."""
-    active_eic = User.objects.filter(groups__name="editors-in-chief", is_active=True)
-    active_editor = User.objects.filter(groups__name="editors", is_active=True).exclude(groups__name="editors-in-chief")
-    active_other = User.objects.filter(is_active=True).exclude(groups__name="editors-in-chief").exclude(groups__name="editors")
-    inactive_users = User.objects.filter(is_active=False)
+    active_eic = User.objects.filter(groups__name="editors-in-chief", is_active=True, profile__is_hidden=False)
+    active_editor = User.objects.filter(groups__name="editors", is_active=True, profile__is_hidden=False).exclude(groups__name="editors-in-chief")
+    active_other = User.objects.filter(is_active=True, profile__is_hidden=False).exclude(groups__name="editors-in-chief").exclude(groups__name="editors")
+    inactive_users = User.objects.filter(is_active=False, profile__is_hidden=False)
     return render(request, "home/about/staff.html", {
         "active_eic": active_eic,
         "active_editor": active_editor,

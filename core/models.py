@@ -26,14 +26,21 @@ class Profile(models.Model):
     """
 
     # Associate this Profile with a particular User
-    user = models.OneToOneField("User", related_name="profile", on_delete=models.CASCADE)
+    user = models.OneToOneField(
+        "User", related_name="profile", on_delete=models.CASCADE
+    )
 
     # Personal information
-    biography = models.TextField(help_text="A short biography, often including likes and dislikes, accomplishments,"
-                                           " etc. Should be several sentences minimum.")
+    biography = models.TextField(
+        help_text="A short biography, often including likes and dislikes, accomplishments,"
+        " etc. Should be several sentences minimum."
+    )
     avatar = models.ImageField(blank=True, null=True)
     position = models.TextField()
-    graduation_year = models.IntegerField(default=new_student_grad_year)  # force recalculation
+    graduation_year = models.IntegerField(
+        default=new_student_grad_year
+    )  # force recalculation
+    is_hidden = models.BooleanField(default=False, help_text="Whether or not to hide this user from /about/staff")
 
     def __str__(self):
         """Represent the profile as a string."""
@@ -42,9 +49,7 @@ class Profile(models.Model):
 
     class Meta:
         # Create permissions for Profile objects
-        permissions = (
-            ('edit_profile', "Can edit one's own user profile"),
-        )
+        permissions = (("edit_profile", "Can edit one's own user profile"),)
 
 
 class ProfileUserManager(auth.UserManager):
@@ -80,10 +85,8 @@ class User(auth.User):
 
     class Meta:
         proxy = True
-        permissions = (
-            ('manage_users', "Can manage user data and privileges"),
-        )
-        ordering = ('-profile__graduation_year', 'last_name')
+        permissions = (("manage_users", "Can manage user data and privileges"),)
+        ordering = ("-profile__graduation_year", "last_name")
 
 
 class Tag(models.Model):
@@ -121,19 +124,32 @@ class Content(PolymorphicModel):
     modified = models.DateTimeField(default=timezone.now)
 
     # Authorship information
-    authors = models.ManyToManyField(User, related_name="%(class)s_authored", blank=True)  # user.images_authored
-    guest_authors = models.CharField(max_length=64, default="", blank=True)  # Authors who aren't in the database
+    authors = models.ManyToManyField(
+        User, related_name="%(class)s_authored", blank=True
+    )  # user.images_authored
+    guest_authors = models.CharField(
+        max_length=64, default="", blank=True
+    )  # Authors who aren't in the database
 
     # Tracking information
-    section = models.ForeignKey("Section", related_name="content", null=True, blank=True, on_delete=models.SET_NULL)
+    section = models.ForeignKey(
+        "Section",
+        related_name="content",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+    )
     views = models.IntegerField(default=0)
 
     # Whether this content should show up by itself
-    embed_only = models.BooleanField(default=False, help_text="Whether this content should be used only in the context"
-                                     " of embedding into other content (especially stories), or whether it should"
-                                     " appear independently on the site. You will often mark content as embed only"
-                                     " when it is not original or when it is meaningless outside of some"
-                                     " broader story.")
+    embed_only = models.BooleanField(
+        default=False,
+        help_text="Whether this content should be used only in the context"
+        " of embedding into other content (especially stories), or whether it should"
+        " appear independently on the site. You will often mark content as embed only"
+        " when it is not original or when it is meaningless outside of some"
+        " broader story.",
+    )
 
     # Linked content
     linked = models.ManyToManyField("Content", blank=True)
@@ -144,11 +160,15 @@ class Content(PolymorphicModel):
     PUBLISHED = 3
     HIDDEN = 0
 
-    visibility = models.IntegerField(default=DRAFT, choices=(
-        (DRAFT, "draft"),
-        (PENDING, "pending"),
-        (PUBLISHED, "published"),
-        (HIDDEN, "hidden")))
+    visibility = models.IntegerField(
+        default=DRAFT,
+        choices=(
+            (DRAFT, "draft"),
+            (PENDING, "pending"),
+            (PUBLISHED, "published"),
+            (HIDDEN, "hidden"),
+        ),
+    )
 
     @property
     def type(self):
@@ -170,36 +190,50 @@ class Content(PolymorphicModel):
         return self.tags.filter(name=name).exists()
 
     class Meta:
-        ordering = ['-created']
+        ordering = ["-created"]
         permissions = (
-            ('draft_content', "Can draft content"),
-            ('edit_content', "Can edit content"),
-            ('read_content', "Can read all content"),
-            ('publish_content', "Can publish content"),
-            ('hide_content', "Can hide content"),
-            ('create_content', "Can create content"),
-            ('editown_content', "Can edit self-authored content"),
-            ('comment', "Can manage comments")
+            ("draft_content", "Can draft content"),
+            ("edit_content", "Can edit content"),
+            ("read_content", "Can read all content"),
+            ("publish_content", "Can publish content"),
+            ("hide_content", "Can hide content"),
+            ("create_content", "Can create content"),
+            ("editown_content", "Can edit self-authored content"),
+            ("comment", "Can manage comments"),
         )
 
     def get_absolute_url(self):
         """Find the URL through which this Content can be accessed."""
-        return reverse('home:view_content', args=[self.slug, self.pk] if self.slug else [self.pk])
+        return reverse(
+            "home:view_content", args=[self.slug, self.pk] if self.slug else [self.pk]
+        )
 
 
 # Section names should be pretty
-alphanumeric = RegexValidator(r"^[a-zA-Z0-9_]*$", "Only alphanumeric characters and underscore are allowed.")
+alphanumeric = RegexValidator(
+    r"^[a-zA-Z0-9_]*$", "Only alphanumeric characters and underscore are allowed."
+)
 
 
 class Section(models.Model):
     """A Content category under which Content can be organized."""
 
-    parent = models.ForeignKey("self", related_name="subsections", null=True, blank=True, on_delete=models.SET_NULL)
+    parent = models.ForeignKey(
+        "self",
+        related_name="subsections",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+    )
 
-    name = models.CharField(max_length=32, unique=True)  # Internal tracking name (used in URLs)
+    name = models.CharField(
+        max_length=32, unique=True
+    )  # Internal tracking name (used in URLs)
     title = models.CharField(max_length=64)  # External name for display
 
-    visible = models.BooleanField(default=True)  # Whether this section should show up on the site
+    visible = models.BooleanField(
+        default=True
+    )  # Whether this section should show up on the site
 
     NONE = -1
     DENSE = 0
@@ -208,13 +242,17 @@ class Section(models.Model):
     FEATURES = 3
     MAIN = 4
 
-    index_display = models.IntegerField(default=NONE, choices=(
-        (NONE, "-1"),
-        (DENSE, "dense"),
-        (COMPACT, "compact"),
-        (LIST, "list"),
-        (FEATURES, "features"),
-        (MAIN, "main")))
+    index_display = models.IntegerField(
+        default=NONE,
+        choices=(
+            (NONE, "-1"),
+            (DENSE, "dense"),
+            (COMPACT, "compact"),
+            (LIST, "list"),
+            (FEATURES, "features"),
+            (MAIN, "main"),
+        ),
+    )
 
     def __str__(self):
         """Represent this Section as a string."""
@@ -243,8 +281,11 @@ class Section(models.Model):
 
     def all_content(self):
         """Get all the Content that belongs to this Section for display in section templates."""
-        return Content.objects.filter(visibility=Content.PUBLISHED, embed_only=False,
-                                      section__in=self.get_descendants())
+        return Content.objects.filter(
+            visibility=Content.PUBLISHED,
+            embed_only=False,
+            section__in=self.get_descendants(),
+        )
 
     def is_root(self):
         """Check whether this Section is a root Section."""
@@ -252,7 +293,7 @@ class Section(models.Model):
 
     def get_absolute_url(self):
         """Find the URL through which this Section can be accessed."""
-        return reverse('home:view_section', args=[self.name])
+        return reverse("home:view_section", args=[self.name])
 
     class Meta:
         verbose_name_plural = "sections"
@@ -260,6 +301,7 @@ class Section(models.Model):
 
 class Image(Content):
     """Image subclass for the Content model."""
+
     source = models.ImageField(upload_to="images/%Y/%m/%d/")
 
     template = "home/content/image.html"
@@ -282,8 +324,11 @@ class Image(Content):
 
 class Video(Content):
     """Video subclass for the Content model."""
+
     source = models.FileField(upload_to="videos/%Y/%m/%d/")
-    cover = models.ForeignKey(Image, null=True, on_delete=models.SET_NULL)  # Cover photo
+    cover = models.ForeignKey(
+        Image, null=True, on_delete=models.SET_NULL
+    )  # Cover photo
 
     template = "home/content/video.html"
     descriptor = "Video"
@@ -291,6 +336,7 @@ class Video(Content):
 
 class Audio(Content):
     """Audio subclass for the Content model."""
+
     source = models.FileField(upload_to="audio/%Y/%m/%d/")
 
     template = "home/content/audio.html"
@@ -303,9 +349,12 @@ class Poll(Content):
 
 class Story(Content):
     """The main story model."""
+
     second_deck = models.TextField()  # Second deck
     text = models.TextField()  # Full text
-    cover = models.ForeignKey(Image, null=True, on_delete=models.SET_NULL)  # Cover photo
+    cover = models.ForeignKey(
+        Image, null=True, on_delete=models.SET_NULL
+    )  # Cover photo
 
     template = "home/content/story.html"
     descriptor = "Story"
@@ -317,7 +366,10 @@ class Story(Content):
 
 class Gallery(Content):
     """A model representing an ordered gallery of other Content."""
-    entries = models.ManyToManyField(Content, through='core.GalleryEntryLink', related_name="containing_galleries")
+
+    entries = models.ManyToManyField(
+        Content, through="core.GalleryEntryLink", related_name="containing_galleries"
+    )
 
     template = "home/content/gallery.html"
     descriptor = "Gallery"
@@ -328,18 +380,24 @@ class Gallery(Content):
 
 
 class GalleryEntryLink(OrderedModel):
-    gallery = models.ForeignKey(Gallery, on_delete=models.CASCADE, related_name="entry_links")
-    entry = models.ForeignKey(Content, on_delete=models.CASCADE, related_name="gallery_links")
-    order_with_respect_to = 'gallery'
+    gallery = models.ForeignKey(
+        Gallery, on_delete=models.CASCADE, related_name="entry_links"
+    )
+    entry = models.ForeignKey(
+        Content, on_delete=models.CASCADE, related_name="gallery_links"
+    )
+    order_with_respect_to = "gallery"
 
     class Meta:
-        ordering = ('gallery', 'order')
+        ordering = ("gallery", "order")
 
 
 class Comment(models.Model):
     name = models.CharField(max_length=64)
     text = models.TextField()
-    content = models.ForeignKey(Content, on_delete=models.CASCADE, null=True, related_name="comments")
+    content = models.ForeignKey(
+        Content, on_delete=models.CASCADE, null=True, related_name="comments"
+    )
     date = models.DateTimeField(default=timezone.now)
     approved = models.BooleanField(default=False)
 
@@ -347,11 +405,19 @@ class Comment(models.Model):
     HIDDEN = 3
 
     class Meta:
-        ordering = ('date',)
+        ordering = ("date",)
+
 
 class Search(models.Model):
     search = models.CharField(max_length=200)
     text = models.TextField()
 
+
 class Breaking(models.Model):
-    content = models.ForeignKey("Content", related_name="breaking_content", null=True, blank=True, on_delete=models.SET_NULL)
+    content = models.ForeignKey(
+        "Content",
+        related_name="breaking_content",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+    )
