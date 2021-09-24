@@ -1,1 +1,11 @@
-STUB_POLL
+{% load home %}
+{% with question=content.poll %}
+  <div class="poll-body">
+    <p>{{ question.text }}</p>
+    <form method="post" action="/vote/{{ choice.pk }}">
+      {% for choice in question.choices %}
+        <input type="radio" name="choice" value="{{ choice.pk }}"/>{{ choice.text }}
+      {% endfor %}
+    </form>
+  </div>
+{% endwith %}
