@@ -31,6 +31,7 @@ def load_context(request):
         models.Section.objects.filter(parent=None, visible=True),
     )  # For navigation bar
     breaking = models.Breaking.objects.all().order_by("-pk")
+    banners = models.Banner.objects.all().order_by("priority", "-pk")
     sections = OrderedDict()
     for section in section_roots[0]:
         sections[section] = section.subsections.filter(visible=True)
@@ -38,6 +39,7 @@ def load_context(request):
         "section_roots": section_roots[0],
         "sections": sections,
         "breaking": breaking,
+        "banners": banners,
         "now": timezone.now(),  # For navigation bar
         "top_content": models.Content.objects.filter(
             visibility=models.Content.PUBLISHED,
@@ -335,3 +337,7 @@ def carousel(request):
         .order_by("-created")[:4]
     )
     return render(request, "home/mbhs_carousel.html", {"stories": stories})
+
+
+def newsletter(request):
+    return render(request, "home/newsletter.html")

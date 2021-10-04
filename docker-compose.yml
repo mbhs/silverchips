@@ -1,0 +1,22 @@
+version: "3.9"
+services:
+    site:
+        build: .
+        container_name: silverchips_site
+        depends_on:
+            - db
+        expose:
+            - "8080"
+        ports:
+            - "8080:8080"
+        stop_grace_period: 3s
+
+    db:
+        image: postgres
+        container_name: silverchips_db
+        environment:
+            POSTGRES_USER: silverchips
+            POSTGRES_PASSWORD: silverchips
+        expose:
+            - "5432"
+        stop_grace_period: 3s

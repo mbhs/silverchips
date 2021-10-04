@@ -423,3 +423,8 @@ class Breaking(models.Model):
         blank=True,
         on_delete=models.SET_NULL,
     )
+
+class Banner(models.Model):
+    priority = models.PositiveSmallIntegerField()
+    url = models.CharField(max_length=2048)
+    text = models.CharField(max_length=500)

@@ -11,6 +11,9 @@
       {% if breaking is not None and breaking.0.content.title is not None %}
         <div class="breaking-banner"><a href="{{ breaking.0.content.get_absolute_url }}">{{ breaking.0.content.title }}</a></div>
       {% endif %}
+      {% for banner in banners %}
+        <div class="banner"><a href="{{ banner.url }}">{{ banner.text }}</a></div>
+      {% endfor %}
       <h1 class="display-4 mb-4 py-2 text-center text-uppercase section-header">Latest</h1>
       <div class="card-columns">
         {% for content in top_content|slice:":6" %}

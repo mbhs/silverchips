@@ -1,25 +1,20 @@
-FROM archlinux:latest
+FROM ubuntu:20.04
 
 WORKDIR /app
-
-RUN pacman --noconfirm -Sy base-devel npm python python-pip postgresql-libs icu
+RUN apt-get update -y && DEBIAN_FRONTEND=noninteractive apt-get install -y nodejs npm python3 python3-pip postgresql-server-dev-12
 RUN npm install -g sass
-RUN pip install pipenv
+RUN pip3 install pipenv
 
-COPY Pipfile .
-COPY Pipfile.lock .
-RUN pipenv lock
+COPY Pipfile Pipfile.lock ./
+RUN pipenv lock --pre --clear
 RUN pipenv --three install --system --deploy --ignore-pipfile
 
 COPY . .
-COPY ./silverchips/secure_settings.py.example ./silverchips/secure_settings.py
+COPY ./silverchips/secure_settings.py.postgres_example ./silverchips/secure_settings.py
 RUN rm core/migrations/*
 RUN touch core/migrations/__init__.py
-RUN python manage.py makemigrations
-RUN python manage.py migrate
-RUN python manage.py loaddata core/fixtures/testing.json
-RUN python manage.py compilescss
-RUN python manage.py collectstatic
+
+RUN chmod +x /app/entrypoint.sh
 
 EXPOSE 8080
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8080"]
+CMD ["/app/entrypoint.sh"]

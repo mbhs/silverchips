@@ -44,3 +44,7 @@ This code is organized into three main Django apps and a number of auxiliary scr
 ### Creating Fixtures
 
 Simply run the command `python manage.py dumpdata --natural-foreign --natural-primary -e contenttypes.contenttype -e auth.permission > core/fixtures/recent.json`.
+
+### Development Notes
+
+The `core/fixtures/testing.json` fixture has a superuser with username `admin` and password `password`.
