@@ -112,7 +112,7 @@ class StoryForm(ContentForm):
             ContentForm.Meta.widgets,
             text=RichTextWidget(embed=True),
             lead=RichTextWidget(short=True),
-            cover=autocomplete.ModelSelect2(url="staff:autocomplete:content"),
+            cover=autocomplete.ModelSelect2(url="staff:autocomplete:image"),
         )
 
 
@@ -132,7 +132,7 @@ class ContentInsertionForm(HorizontalMixin, forms.Form):
 
     content = forms.ModelChoiceField(
         queryset=models.Content.objects.all(),
-        widget=autocomplete.ModelSelect2(url="staff:autocomplete:content"),
+        widget=autocomplete.ModelSelect2(url="staff:autocomplete:image"),
     )
 
     class Meta:
@@ -155,7 +155,7 @@ class VideoForm(ContentForm):
         fields = ContentForm.Meta.fields + ["source", "cover"]
         widgets = dict(
             ContentForm.Meta.widgets,
-            cover=autocomplete.ModelSelect2(url="staff:autocomplete:content"),
+            cover=autocomplete.ModelSelect2(url="staff:autocomplete:image"),
         )
 
 

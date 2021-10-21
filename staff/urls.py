@@ -86,6 +86,7 @@ autocomplete_urlpatterns = (
             name="tags",
         ),
         path("content/", autocomplete.ContentAutocomplete.as_view(), name="content"),
+        path("image/", autocomplete.ImageAutocomplete.as_view(), name="image"),
         path("section/", autocomplete.SectionAutocomplete.as_view(), name="section"),
     ],
     "autocomplete",

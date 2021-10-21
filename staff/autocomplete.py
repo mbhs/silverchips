@@ -25,6 +25,8 @@ class TagAutocomplete(autocomplete.Select2QuerySetView):
 
 
 class ContentAutocomplete(autocomplete.Select2QuerySetView):
+    content_class = models.Content
+
     def get_result_label(self, item):
         if item:
             return "{}: {} ({}, #{})".format(
@@ -38,12 +40,16 @@ class ContentAutocomplete(autocomplete.Select2QuerySetView):
 
     def get_queryset(self):
         """Get the list of tags."""
-        return models.Content.objects.filter(
+        return self.content_class.objects.filter(
             Q(title__icontains=self.q)
             | Q(authors__first_name__icontains=self.q)
             | Q(authors__last_name__icontains=self.q)
             | Q(pk=self.q if self.q.isdigit() else None)
         ).order_by("-modified")
+
+
+class ImageAutocomplete(ContentAutocomplete):
+    content_class = models.Image
 
 
 class SectionAutocomplete(autocomplete.Select2QuerySetView):

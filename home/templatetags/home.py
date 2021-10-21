@@ -78,7 +78,7 @@ def render_content(user, content, embedding=True):
     return template.loader.get_template("home/content/display.html").render(
         {
             "content": content
-            if content and permissions.can(user, "content.read", content)
+            if user and content and permissions.can(user, "content.read", content)
             else None,
             "user": user,
             "embedding": embedding,
