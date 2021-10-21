@@ -119,7 +119,7 @@ class Content(PolymorphicModel):
     title = models.TextField()
     description = models.TextField()
     tags = models.ManyToManyField(Tag, blank=True)
-    legacy_id = models.IntegerField(null=True)
+    legacy_id = models.IntegerField(null=True, blank=True)
 
     # Time information
     created = models.DateTimeField(default=timezone.now)
