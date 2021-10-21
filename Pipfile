@@ -4,7 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-django = "~=3.1"
+django = "~=3.2"
 django-autocomplete-light = "*"
 django-forms-bootstrap = "*"
 six = "*"
@@ -31,3 +31,4 @@ ipython = "*"
 pylint = "*"
 "flake8" = "*"
 pew = "*"
+black = "*"
