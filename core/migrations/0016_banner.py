@@ -6,17 +6,25 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0015_profile_is_hidden'),
+        ("core", "0015_profile_is_hidden"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Banner',
+            name="Banner",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('priority', models.PositiveSmallIntegerField()),
-                ('url', models.CharField(max_length=2048)),
-                ('text', models.CharField(max_length=500)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("priority", models.PositiveSmallIntegerField()),
+                ("url", models.CharField(max_length=2048)),
+                ("text", models.CharField(max_length=500)),
             ],
         ),
     ]

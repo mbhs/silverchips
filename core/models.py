@@ -132,6 +132,13 @@ class Content(PolymorphicModel):
     guest_authors = models.CharField(
         max_length=64, default="", blank=True
     )  # Authors who aren't in the database
+    uploader = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        related_name="uploaded_content",
+        blank=True,
+        null=True,
+    )  # The person who uploaded the content
 
     # Tracking information
     section = models.ForeignKey(
@@ -190,6 +197,10 @@ class Content(PolymorphicModel):
         """Check if this Content has a particular Tag."""
 
         return self.tags.filter(name=name).exists()
+
+    def is_owned_by(self, user):
+        """Check if this Content is owned by a particular User (author or uploader)."""
+        return self.uploader == user or self.authors.filter(pk=self.pk).exists()
 
     class Meta:
         ordering = ["-created"]
@@ -423,6 +434,7 @@ class Breaking(models.Model):
         blank=True,
         on_delete=models.SET_NULL,
     )
+
 
 class Banner(models.Model):
     priority = models.PositiveSmallIntegerField()

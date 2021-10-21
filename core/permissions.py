@@ -36,7 +36,7 @@ def can(user, action, obj):
             return obj and (
                 obj.visibility == Content.PUBLISHED
                 or user is not None
-                and user.has_perm("core.read_content")
+                and (obj.is_owned_by(user) or user.has_perm("core.read_content"))
             )
 
         if user is None or not user.is_active:
@@ -45,7 +45,7 @@ def can(user, action, obj):
         if action == "edit":
             return (
                 obj.visibility == Content.DRAFT
-                and user in obj.authors.all()
+                and obj.is_owned_by(user)
                 and user.has_perm("core.draft_content")
                 or (
                     Content.DRAFT <= obj.visibility
@@ -54,23 +54,20 @@ def can(user, action, obj):
                 )
                 and (
                     user.has_perm("core.edit_content")
-                    or (
-                        user.has_perm("core.editown_content")
-                        and user in obj.authors.all()
-                    )
+                    or (user.has_perm("core.editown_content") and obj.is_owned_by(user))
                 )
             )
         if action == "delete":
             return (
                 obj.visibility == Content.DRAFT
-                and user in obj.authors.all()
+                and obj.is_owned_by(user)
                 and user.has_perm("core.draft_content")
             ) or user.has_perm("core.delete_content")
         if action == "pend":
             return (
                 obj.visibility == Content.DRAFT
                 and (
-                    (user in obj.authors.all() and user.has_perm("core.draft_content"))
+                    (obj.is_owned_by(user) and user.has_perm("core.draft_content"))
                     or user.has_perm("core.edit_content")
                 )
                 or obj.visibility == Content.PUBLISHED

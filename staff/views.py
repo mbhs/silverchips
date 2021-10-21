@@ -99,7 +99,9 @@ class ContentListView(LoginRequiredMixin, ListView):
         if self.request.user.has_perm("core.read_content"):
             content = models.Content.objects.all()
         else:
-            content = models.Content.objects.filter(authors=self.request.user).all()
+            content = models.Content.objects.filter(
+                Q(authors=self.request.user) | Q(uploader=self.request.user)
+            ).all()
 
         form = forms.ContentSearchForm(self.request.GET)
 
@@ -132,12 +134,18 @@ class ContentListView(LoginRequiredMixin, ListView):
 class ContentChangeMixin(LoginRequiredMixin):
     """Mixin that organizes shared functionality across various content creation and editing views."""
 
+    # Whether or not the content is new or being edited
+    content_is_new = False
+
     def get_success_url(self):
         return reverse("staff:content:list")
 
     def form_valid(self, form):
         # Automatically update the "modified" field when the form is saved
         form.instance.modified = timezone.now()
+        # Automatically set the uploader
+        if self.content_is_new:
+            form.instance.uploader = self.request.user
         return super().form_valid(form)
 
 
@@ -146,6 +154,7 @@ class ContentCreateView(
 ):
     """Base view for uploading new content."""
 
+    content_is_new = True
     permission_required = "core.create_content"
 
     def get_initial(self):

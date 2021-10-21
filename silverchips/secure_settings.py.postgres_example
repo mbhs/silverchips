@@ -21,6 +21,6 @@ DATABASES = {
         "USER": "silverchips",
         "PASSWORD": "silverchips",
         "HOST": "silverchips_db",
-        "PORT": "5432"
+        "PORT": "5432",
     }
 }

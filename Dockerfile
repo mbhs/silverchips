@@ -11,8 +11,6 @@ RUN pipenv --three install --system --deploy --ignore-pipfile
 
 COPY . .
 COPY ./silverchips/secure_settings.py.postgres_example ./silverchips/secure_settings.py
-RUN rm core/migrations/*
-RUN touch core/migrations/__init__.py
 
 RUN chmod +x /app/entrypoint.sh
 
