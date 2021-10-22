@@ -170,6 +170,12 @@ class StoryCreateView(ContentCreateView):
     model = models.Story
     form_class = forms.StoryForm
     editing = "Story"
+    template_name = "staff/content/story/editor.html"
+
+    def get_context_data(self, *args, **kwargs):
+        data = super().get_context_data(*args, **kwargs)
+        data["content_embed_form"] = forms.ContentInsertionForm()
+        return data
 
 
 class GalleryCreateView(ContentCreateView):
