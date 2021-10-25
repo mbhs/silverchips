@@ -76,9 +76,7 @@ def render_content(context, user, content, embedding=True):
     Only works when user has read permissions on the content object.
     """
     computed_content = (
-        content
-        if content and permissions.can(user, "content.read", content)
-        else None
+        content if content and permissions.can(user, "content.read", content) else None
     )
     return template.loader.get_template("home/content/display.html").render(
         {
