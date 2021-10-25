@@ -1,7 +1,7 @@
 FROM ubuntu:20.04
 
 WORKDIR /app
-RUN apt-get update -y && DEBIAN_FRONTEND=noninteractive apt-get install -y nodejs npm python3 python3-pip postgresql-server-dev-12
+RUN apt-get update -y && DEBIAN_FRONTEND=noninteractive apt-get install -y nodejs npm python3 python3-pip postgresql-server-dev-12 curl vim
 RUN npm install -g sass
 RUN pip3 install pipenv
 

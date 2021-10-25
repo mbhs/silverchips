@@ -69,20 +69,24 @@ def qualified_title(content):
         return mark_safe("{}: {}".format(content.descriptor, content.title))
 
 
-@register.simple_tag
-def render_content(user, content, embedding=True):
+@register.simple_tag(takes_context=True)
+def render_content(context, user, content, embedding=True):
     """A template tag that renders the template of some Content, for example, story text or an image with a caption.
 
     Only works when user has read permissions on the content object.
     """
+    computed_content = (
+        content
+        if content and permissions.can(user, "content.read", content)
+        else None
+    )
     return template.loader.get_template("home/content/display.html").render(
         {
-            "content": content
-            if user and content and permissions.can(user, "content.read", content)
-            else None,
+            "content": computed_content,
             "user": user,
             "embedding": embedding,
-        }
+        },
+        context.request,
     )
 
 
