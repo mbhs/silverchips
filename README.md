@@ -9,22 +9,23 @@ while the intent is to keep this framework generic as to support news sites for
 different organizations, parts may be hardcoded until a full fork and release.
 
 ## Getting Started
-Prequisites: Python 3+, `pip`, and `pipenv`. Ruby, `gem`, and `sass` (gem sass only) for static precompilation. `postgresql-server-dev-11` for `psycopg2`, the postgres database interface, to install properly.
-`pip` should come shipped with Python 3 when you install it (just make sure it's on PATH); to install `virtualenv` and `virtualenvwrapper-win`, run (on the command line):
-  - `pip install pipenv`
-### Quick Start
+It's recommended to use the supplied `Dockerfile` and `docker-compose.yml`. Simply clone the repository and run `docker-compose up` and the site will be up and running.
+
+### Manual Installation
+You have to install Python 3+, pip, sass, and pipenv. The version of `sass` that's installable via `gem` is outdated and **will not** work. If using postgres, the postgres server development libraries need to be installed (`postgresql-server-dev-12` on Ubuntu).
+### Environment setup
 1. Clone this repository: `git clone https://github.com/mbhs/silverchips.git`.
 2. `cd` into `silverchips`: `cd silverchips`.
-3. Run `pipenv --three install --dev` to make a new virtualenv/pipenv
-4. Run `pipenv shell` to enter the new environment
+3. Run `pipenv --three install --dev` to install the environment. If this doesn't work, run `pipenv lock --pre --clear` beforehand.
+4. Run `pipenv shell` to enter the new environment.
 5. Make migrations and apply:
-   - `python manage.py makemigrations core`
-   - `python manage.py migrate --run-syncdb`
-6. Load test data: `python manage.py loaddata core/fixtures/recent.json`.
-7. Run server: `python manage.py runserver`.
-8. Visit in browser: `localhost:8000`
+   - `python manage.py makemigrations`
+   - `python manage.py migrate`
+6. Make an appropriate `secure_settings.py` in the `silverchips` folder. An example can be found in `silverchips/secure_settings.py.postgres_example`.
+7. If using postgres, you can load the `sco.sql` database dump into the database. If not, you can load a fixture: `python manage.py loaddata core/fixtures/recent.json`. Note that the database dump is preferred since the fixture is missing many things, such as permissions.
+8. Run the server: `python manage.py runserver`.
+9. Visit in browser: `localhost:8000`.
 
-And voila!
 
 ## Organization
 Django code is organized broadly into *models*, which store data in the database and you can interact nicely with in
@@ -47,4 +48,4 @@ Simply run the command `python manage.py dumpdata --natural-foreign --natural-pr
 
 ### Development Notes
 
-The `core/fixtures/testing.json` fixture has a superuser with username `admin` and password `password`.
+The `core/fixtures/testing.json` fixture and `sco.sql` database dump has a superuser with username `admin` and password `password`.

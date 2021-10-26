@@ -1,10 +1,9 @@
 FROM ubuntu:20.04
 
 WORKDIR /app
-RUN apt-get update -y && DEBIAN_FRONTEND=noninteractive apt-get install -y nodejs npm python3 python3-pip postgresql-server-dev-12 curl vim
-RUN npm install -g sass
+RUN apt-get update -y && DEBIAN_FRONTEND=noninteractive apt-get install -y sass python3 python3-pip postgresql-server-dev-12
 RUN pip3 install pipenv
-
+ 
 COPY Pipfile Pipfile.lock ./
 RUN pipenv lock --pre --clear
 RUN pipenv --three install --system --deploy --ignore-pipfile
