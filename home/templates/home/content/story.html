@@ -8,6 +8,6 @@
   <hr/>
 
   <div class="story-text">
-    {{ story.text|safe|expand_embeds:user }}
+    {% expand_embeds story.text user %}
   </div>
 {% endwith %}

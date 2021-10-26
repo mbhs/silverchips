@@ -88,8 +88,8 @@ def render_content(context, user, content, embedding=True):
     )
 
 
-@register.filter
-def expand_embeds(text, user):
+@register.simple_tag(takes_context=True)
+def expand_embeds(context, text, user):
     """A filter that expands embedding tags in story HTML.
 
     For example, the contents of <div class="embed-content" data-content-id="3734"/>
@@ -108,7 +108,7 @@ def expand_embeds(text, user):
             except models.Content.DoesNotExist:
                 content = None
             # Render that content for the particular user
-            html = render_content(user, content)
+            html = render_content(context, user, content)
             # Insert the rendered html into the div
             div.insert(0, BeautifulSoup(html, "html.parser"))
 
