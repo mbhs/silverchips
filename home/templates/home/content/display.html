@@ -1,10 +1,16 @@
+{% load home %}
+
 {% if content %}
   <div id="content-{{ content.pk }}">
     {% include content.template %}
   </div>
 
   {% if not content.hide_caption and content.description %}
-    <p class="text-muted text-center"><small>{{ content.descriptor }}: {{ content.description|safe }}</small></p>
+    <p class="text-muted text-center">
+      <small>
+        {{ content.descriptor }}: {{ content.description|safe }}{% if embedding and content.authors.exists %}<em>&nbsp;{{ content.descriptor }} courtesy of {{ content|author_list }}.</em>{% endif %}
+      </small>
+    </p>
   {% endif %}
 {% else %}
   <div class="alert alert-danger" role="alert">

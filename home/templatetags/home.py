@@ -68,6 +68,19 @@ def qualified_title(content):
     else:
         return mark_safe("{}: {}".format(content.descriptor, content.title))
 
+@register.filter
+def author_list(content):
+    """A filter to get a grammatically correct comma-separated list of authors."""
+    name_list = [x.get_full_name() for x in content.authors.all()]
+    if len(name_list) == 0:
+        return "no one"
+    elif len(name_list) == 1:
+        return name_list[0]
+    elif len(name_list) == 2:
+        return " and ".join(name_list)
+    else:
+        return ", ".join(name_list[:-1]) + ", and " + name_list[-1]
+
 
 @register.simple_tag(takes_context=True)
 def render_content(context, user, content, embedding=True):
