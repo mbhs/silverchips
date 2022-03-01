@@ -202,6 +202,10 @@ class Content(PolymorphicModel):
         """Check if this Content is owned by a particular User (author or uploader)."""
         return self.uploader == user or self.authors.filter(pk=self.pk).exists()
 
+    def has_authors(self):
+        """Check if this Content has any authors or guest authors."""
+        return self.authors.exists() or self.guest_authors.strip() != ""
+
     class Meta:
         ordering = ["-created"]
         permissions = (
