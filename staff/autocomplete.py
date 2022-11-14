@@ -51,6 +51,8 @@ class ContentAutocomplete(autocomplete.Select2QuerySetView):
 class ImageAutocomplete(ContentAutocomplete):
     content_class = models.Image
 
+class ArtAutocomplete(ContentAutocomplete):
+    content_class = models.Art
 
 class SectionAutocomplete(autocomplete.Select2QuerySetView):
     def get_result_label(self, item):

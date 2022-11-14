@@ -14,7 +14,7 @@
       {% for banner in banners %}
         <div class="banner"><a href="{{ banner.url }}">{{ banner.text }}</a></div>
       {% endfor %}
-      <h1 class="display-4 mb-4 py-2 text-center text-uppercase section-header">Latest</h1>
+     <h1 class="display-4 mb-4 py-2 text-center text-uppercase section-header">Latest</h1>
       <div class="card-columns">
         {% for content in top_content|slice:":6" %}
           <div class="card align-middle rounded-0 mb-4 section-card-1">

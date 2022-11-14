@@ -48,6 +48,16 @@
       {% endfor %}
     {% endif %}
 
+    {% if arts.count > 0 %}
+      <br/><br/>
+      <h2>Art ({{ arts.count }})</h2>
+      <hr/>
+
+      {% for art in arts %}
+        {% include "home/content/summary.html" with content=art %}
+      {% endfor %}
+    {% endif %}
+
     {% if videos.count > 0 %}
       <br/><br/>
       <h2>Videos ({{ videos.count }})</h2>
@@ -70,7 +80,7 @@
 
     {% if galleries.count > 0 %}
       <br/><br/>
-      <h2>Images ({{ audios.count }})</h2>
+      <h2>Galleries ({{ galleries.count }})</h2>
       <hr/>
 
       {% for gallery in galleries %}

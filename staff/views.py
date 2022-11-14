@@ -194,6 +194,12 @@ class ImageCreateView(ContentCreateView):
     form_class = forms.ImageForm
     editing = "Image"
 
+class ArtCreateView(ContentCreateView):
+    """View for uploading a new art."""
+
+    model = models.Art
+    form_class = forms.ArtForm
+    editing = "Art"
 
 class VideoCreateView(ContentCreateView):
     """View for uploading a new video."""
@@ -312,6 +318,12 @@ class ImageEditView(ContentEditView):
     form_class = forms.ImageForm
     editing = "Image"
 
+class ArtEditView(ContentEditView):
+    """View for editing Art."""
+
+    model = models.Art
+    form_class = forms.ArtForm
+    editing = "Art"
 
 class VideoEditView(ContentEditView):
     """View for editing videos."""
@@ -344,6 +356,7 @@ def content_edit_view(request, pk):
         "Story": StoryEditView,
         "Gallery": GalleryEditView,
         "Image": ImageEditView,
+        "Art": ArtEditView,
         "Video": VideoEditView,
         "Audio": AudioEditView,
         "Poll": PollEditView,

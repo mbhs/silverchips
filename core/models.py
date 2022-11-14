@@ -338,6 +338,29 @@ class Image(Content):
         except (FileNotFoundError, AttributeError, SyntaxError) as e:
             return None
 
+class Art(Content):
+    """Image subclass for the Content model."""
+
+    source = models.ImageField(upload_to="images/%Y/%m/%d/")
+
+    template = "home/content/image.html"
+    sidebar_template = "home/content/sidebars/image.html"
+    descriptor = "Art"
+    cover = models.ForeignKey(
+        'self', null=True, on_delete=models.SET_NULL
+    )  # Cover photo
+    def exif_data(self):
+        try:
+            _image = PIL.Image.open(self.source.file)
+            exif = {
+                PIL.ExifTags.TAGS[exif_tag]: value
+                for exif_tag, value in _image._getexif().items()
+                if exif_tag in PIL.ExifTags.TAGS
+            }
+            return exif
+        # SyntaxError is for corrupted images
+        except (FileNotFoundError, AttributeError, SyntaxError) as e:
+            return None
 
 class Video(Content):
     """Video subclass for the Content model."""

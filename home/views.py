@@ -197,6 +197,9 @@ def view_profile(request, pk):
     galleries = models.Gallery.objects.filter(
         authors__in=[user], visibility=models.Content.PUBLISHED, embed_only=False
     )
+    arts = models.Art.objects.filter(
+        authors__in=[user], visibility=models.Content.PUBLISHED, embed_only=False
+    )
 
     return render(
         request,
@@ -208,6 +211,7 @@ def view_profile(request, pk):
             "videos": videos,
             "audios": audios,
             "galleries": galleries,
+            "arts": arts
         },
     )
 

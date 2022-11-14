@@ -146,6 +146,16 @@ class ImageForm(ContentForm):
         model = models.Image
         fields = ContentForm.Meta.fields + ["source"]
 
+class ArtForm(ContentForm):
+    """Form for art creation."""
+
+    class Meta(ContentForm.Meta):
+        model = models.Art
+        fields = ContentForm.Meta.fields + ["source", "cover"]
+        widgets = dict(
+            ContentForm.Meta.widgets,
+            cover=autocomplete.ModelSelect2(url="staff:autocomplete:art"),
+        )
 
 class VideoForm(ContentForm):
     """Form for video creation."""
