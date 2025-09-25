@@ -25,11 +25,11 @@ from django.db.models import Q, Value, IntegerField
 from django.template.context import make_context
 
 from collections import OrderedDict
-
+from django.http import JsonResponse
 
 def load_context(request):
     section_roots = (
-        models.Section.objects.filter(parent=None, visible=True),
+        models.Section.objects.filter(parent=None, visible=True).order_by("priority"),
     )  # For navigation bar
     breaking = models.Breaking.objects.all().order_by("-pk")
     banners = models.Banner.objects.all().order_by("priority", "-pk")
@@ -52,6 +52,13 @@ def load_context(request):
 
 def index(request):
     """Render the index page of the Silver Chips site."""
+    # get section with pk = 75 which is the SCOre Board
+    section = models.Section.objects.get(pk=75)
+    print("Section Value:", section)
+    board = False
+    if (section.priority == 1):
+        board = True
+
     return render(
         request,
         "home/index.html",
@@ -71,6 +78,7 @@ def index(request):
             "main_sections": models.Section.objects.filter(
                 index_display=models.Section.MAIN
             ),
+            "board": board,
         },
     )
 
@@ -80,7 +88,8 @@ STORY_COUNT = 3
 
 # def view_section(request, name):
 #     """Render a section of the newspaper."""
-#     section = get_object_or_404(models.Section, name=name)
+#
+#section = get_object_or_404(models.Section, name=name)
 
 #     # First load the top stories in the entire section, and then in each subsection
 #     subsections = [(section, section.all_content())]
@@ -186,7 +195,7 @@ def view_profile(request, pk):
         authors__in=[user], visibility=models.Content.PUBLISHED, embed_only=False
     )
     images = models.Image.objects.filter(
-        authors__in=[user], visibility=models.Content.PUBLISHED, embed_only=False
+        authors__in=[user], visibility=models.Content.PUBLISHED
     )
     videos = models.Video.objects.filter(
         authors__in=[user], visibility=models.Content.PUBLISHED, embed_only=False
@@ -256,9 +265,10 @@ class SearchListView(ListView):
         tags = models.Tag
 
         content_query = Q(title__icontains=self.request.GET.get("q"))
+        print(self.request.GET.get("q"))
         users_query = Q(first_name__iexact=self.request.GET.get("q")) | Q(
             last_name__iexact=self.request.GET.get("q")
-        )
+        ) | (Q(first_name__iexact=self.request.GET.get("q").split()[0]) & Q(last_name__iexact=self.request.GET.get("q").split()[-1]))
         users = list(
             models.User.objects.filter(users_query).values_list("pk", flat=True)
         )
@@ -345,6 +355,18 @@ def carousel(request):
     )
     return render(request, "home/mbhs_carousel.html", {"stories": stories})
 
+def mbhs_site(request):
+    stories = (
+        models.Story.objects.filter(visibility=models.Content.PUBLISHED)
+        .exclude(cover=None)
+        .order_by("-created")[:3]
+    )
+    res = []
+    for s in stories:
+        print(s.cover.source.url)
+        res.append({"image": f'https://silverchips.mbhs.edu{s.cover.source.url}', "title": s.title, "description": s.description, "link": f'https://silverchips.mbhs.edu/content/{ s.pk }'})
+
+    return JsonResponse({"data": res})
 
 def newsletter(request):
     return render(request, "home/newsletter.html")

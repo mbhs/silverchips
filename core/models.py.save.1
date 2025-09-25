@@ -269,14 +269,11 @@ class Section(models.Model):
             (MAIN, "main"),
         ),
     )
-
-    priority = models.IntegerField(default=NONE, null=True)
+    priority = models.IntegerField(default=NONE)
 
     def __str__(self):
-       """Represent this Section as a string."""
-       if self.priority != -1:
-           return f'{self.title} ({self.priority})'
-       return self.title
+        """Represent this Section as a string."""
+        return self.title
 
     def get_ancestors(self):
         """Get all Sections that are ancestors of this Section."""
@@ -317,7 +314,7 @@ class Section(models.Model):
 
     class Meta:
         verbose_name_plural = "sections"
-        ordering = {"priority"}
+
 
 class Image(Content):
     """Image subclass for the Content model."""
@@ -350,7 +347,7 @@ class Art(Content):
     sidebar_template = "home/content/sidebars/image.html"
     descriptor = "Art"
     cover = models.ForeignKey(
-        'self', null=True, blank=True, on_delete=models.SET_NULL
+        'self', null=True, on_delete=models.SET_NULL
     )  # Cover photo
     def exif_data(self):
         try:

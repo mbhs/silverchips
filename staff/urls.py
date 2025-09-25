@@ -21,6 +21,7 @@ gallery_urlpatterns = (
         path("<int:pk>/insert/", views.gallery_insert, name="insert"),
         path("<int:pk>/swap/", views.gallery_swap, name="swap"),
         path("<int:pk>/remove/", views.gallery_remove, name="remove"),
+        path("<int:pk>/image/", views.gallery_image, name="image"),
     ],
     "gallery",
 )

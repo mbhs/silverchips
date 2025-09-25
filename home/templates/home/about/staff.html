@@ -7,43 +7,131 @@
 
 {% block content %}
   <div class="container">
-    <h1>Silver Chips Online Staff</h1>
+    <div class="title-container">
+      <h1>Silver Chips Online Staff</h1>
 
-    <ul>
-      {% for user in active_eic %}
-        <li>
-          <a href="{% url 'home:view_profile' user.profile.pk %}"> {{ user.get_full_name }}</a>, {{ user.profile.position }}
-          {% if user.email %}&mdash; {% obfuscated_email user.email%}{% endif %}
-        </li>
-      {% endfor %}
-    </ul>
+      <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="staff-picker" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Current Staff
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <a class="dropdown-item dropdown-secondary" id="other-staff-picker">Past Staff</a>
+        </div>
+      </div>
+    </div>
 
-    <ul>
-      {% for user in active_editor %}
-        <li>
-          <a href="{% url 'home:view_profile' user.profile.pk %}"> {{ user.get_full_name }}</a>, {{ user.profile.position }}
-          {% if user.email %}&mdash; {% obfuscated_email user.email%}{% endif %}
-        </li>
-      {% endfor %}
-    </ul>
+    <div id="current-staff-section">
+      {% comment %} <ul>
+        {% for user in active_eic %}
+          <li>
+            <a href="{% url 'home:view_profile' user.profile.pk %}"> {{ user.get_full_name }}</a>, {{ user.profile.position }}
+            {% if user.email %}&mdash; {% obfuscated_email user.email%}{% endif %}
+          </li>
+        {% endfor %}
+      </ul> {% endcomment %}
+      <div style="display:flex; gap: 24px; justify-content: center; flex-wrap: wrap;">
+        {% for user in active_eic %}
+          <div style="display: flex; align-items: center; flex-direction: column;">
+            <a href="{% url 'home:view_profile' user.profile.pk %}">
+              {% if user.profile.avatar %} 
+                <img src="{{ user.profile.avatar.url }}" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover;">
+              {% else %} 
+                <img src="https://mbhs.edu/assets/soon.jpg" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover;">
+              {% endif %}
+            </a>
+            <p style="margin-bottom: 0px; margin-top: 10px;"><a href="{% url 'home:view_profile' user.profile.pk %}"> {{ user.get_full_name }}</a> </p>
+            <p style="margin-bottom: 0px;"> {{ user.profile.position }}</p>
+            {% if user.email %}<p> {% obfuscated_email user.email %} <p> {% endif %}
+          </div>
+        {% endfor %}
+      </div>
 
-    <ul>
-      {% for user in active_other %}
-        <li>
-          <a href="{% url 'home:view_profile' user.profile.pk %}"> {{ user.get_full_name }}</a>, {{ user.profile.position }}
-          {% if user.email %}&mdash; {% obfuscated_email user.email%}{% endif %}
-        </li>
-      {% endfor %}
-    </ul>
+      {% comment %} <ul>
+        {% for user in active_editor %}
+          <li>
+            <a href="{% url 'home:view_profile' user.profile.pk %}"> {{ user.get_full_name }}</a>, {{ user.profile.position }}
+            {% if user.email %}&mdash; {% obfuscated_email user.email%}{% endif %}
+          </li>
+        {% endfor %}
+      </ul> {% endcomment %}
 
-    <h3>Past Staff</h3>
-    <ul>
-      {% for user in inactive_users %}
-        <li>
-          <a href="{% url 'home:view_profile' user.profile.pk %}"> {{ user.get_full_name }}</a>{% if user.profile.position %}, {{ user.profile.position }}{% endif %}
-          {% if user.profile.graduation_year > 0 %}(graduated {{ user.profile.graduation_year }}){% endif %}
-        </li>
-      {% endfor %}
-    </ul>
+      <div style="display:flex; gap: 24px; justify-content: center; flex-wrap: wrap;">
+        {% for user in active_editor %}
+          <div style="display: flex; align-items: center; flex-direction: column;">
+            <a href="{% url 'home:view_profile' user.profile.pk %}">
+              {% if user.profile.avatar %} 
+                <img src="{{ user.profile.avatar.url }}" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover;">
+              {% else %} 
+                <img src="https://mbhs.edu/assets/soon.jpg" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover;">
+              {% endif %}
+            </a>
+            <p style="margin-bottom: 0px; margin-top: 10px;"><a href="{% url 'home:view_profile' user.profile.pk %}"> {{ user.get_full_name }}</a> </p>
+            <p style="margin-bottom: 0px; text-wrap: wrap; max-width:120px; text-align:center;"> {{ user.profile.position }}</p>
+            {% if user.email %}<p> {% obfuscated_email user.email %} <p> {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+
+      {% comment %} <ul>
+        {% for user in active_other %}
+          <li>
+            <a href="{% url 'home:view_profile' user.profile.pk %}"> {{ user.get_full_name }}</a>, {{ user.profile.position }}
+            {% if user.email %}&mdash; {% obfuscated_email user.email%}{% endif %}
+          </li>
+        {% endfor %}
+      </ul> {% endcomment %}
+
+      <div style="display:flex; gap: 24px; justify-content: center; flex-wrap: wrap;">
+        {% for user in active_other %}
+          <div style="display: flex; align-items: center; flex-direction: column;">
+            <a href="{% url 'home:view_profile' user.profile.pk %}">
+              {% if user.profile.avatar %} 
+                <img src="{{ user.profile.avatar.url }}" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover;">
+              {% else %} 
+                <img src="https://mbhs.edu/assets/soon.jpg" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover;">
+              {% endif %}
+            </a>
+            <p style="margin-bottom: 0px; margin-top: 10px;"><a href="{% url 'home:view_profile' user.profile.pk %}"> {{ user.get_full_name }}</a> </p>
+            <p style="margin-bottom: 0px;"> {{ user.profile.position }}</p>
+            {% if user.email %}<p> {% obfuscated_email user.email %} <p> {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div id="past-staff-section" style="display:none;">
+      {% comment %} <h3>Past Staff</h3> {% endcomment %}
+      <ul>
+        {% for user in inactive_users %}
+          <li>
+            <a href="{% url 'home:view_profile' user.profile.pk %}"> {{ user.get_full_name }}</a>{% if user.profile.position %}, {{ user.profile.position }}{% endif %}
+            {% if user.profile.graduation_year > 0 %}(graduated {{ user.profile.graduation_year }}){% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
   </div>
+  <script>
+    $("#other-staff-picker").on("click", () => {
+      if ($("#staff-picker").html().includes("Current")){
+        $("#current-staff-section").css("display", "none");
+        $("#past-staff-section").css("display", "block");
+        $("#staff-picker").html("Past Staff");
+        $("#other-staff-picker").html("Current Staff");
+      }
+      else {
+        $("#current-staff-section").css("display", "block");
+        $("#past-staff-section").css("display", "none");
+        $("#staff-picker").html("Current Staff");
+        $("#other-staff-picker").html("Past Staff");
+      }
+    })
+  </script>
+  <style>
+    .title-container {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+  </style>
 {% endblock %}

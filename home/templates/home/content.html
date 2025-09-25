@@ -138,7 +138,8 @@
         {% endif %}
 
         <div class="card latest-stories">
-          {% if related_content.count > 0 %}
+	{% comment %}
+         {% if related_content.count > 0 %}
             <div class="card-header mb-3">
               <h4 class="card-title mb-0">Related Content</h4>
             </div>
@@ -152,7 +153,8 @@
                 </li>
               {% endfor %}
             </ul>
-          {% else %}
+	    {% else %}
+	    {% endcomment %}
             <div class="card-header mb-3">
               <h4 class="card-title mb-0">Latest Content</h4>
             </div>
@@ -166,7 +168,9 @@
                 </li>
               {% endfor %}
             </ul>
-          {% endif %}
+	    {% comment %}
+	    {% endif %}
+	    {% endcomment %}
         </div>
 
       </div>

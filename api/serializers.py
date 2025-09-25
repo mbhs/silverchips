@@ -48,7 +48,7 @@ class SectionSerializer(serializers.ModelSerializer):
 
 
 class ContentSerializer(serializers.ModelSerializer):
-    section = SectionSerializer(required=False)
+    section = SectionSerializer(required=True)
     tags = TagSerializer(required=False, many=True)
     authors = UserSerializer(required=False, many=True)
     share_url = SerializerMethodField()
@@ -76,7 +76,7 @@ class ContentSerializer(serializers.ModelSerializer):
 
 
 class ImageSerializer(serializers.ModelSerializer):
-    section = SectionSerializer(required=False)
+    section = SectionSerializer(required=True)
     tags = TagSerializer(required=False, many=True)
     authors = UserSerializer(required=False, many=True)
     share_url = SerializerMethodField()
@@ -105,7 +105,7 @@ class ImageSerializer(serializers.ModelSerializer):
 
 
 class GallerySerializer(serializers.ModelSerializer):
-    section = SectionSerializer(required=False)
+    section = SectionSerializer(required=True)
     tags = TagSerializer(required=False, many=True)
     authors = UserSerializer(required=False, many=True)
     share_url = SerializerMethodField()
@@ -134,7 +134,7 @@ class GallerySerializer(serializers.ModelSerializer):
 
 
 class StorySerializer(serializers.ModelSerializer):
-    section = SectionSerializer(required=False)
+    section = SectionSerializer(required=True)
     tags = TagSerializer(required=False, many=True)
     authors = UserSerializer(required=False, many=True)
     share_url = SerializerMethodField()

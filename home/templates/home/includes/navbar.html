@@ -8,7 +8,7 @@
     
 
     <h6 class="lead text-center d-none d-lg-block">
-      Montgomery Blair High School's Online Student Newspaper <span class="text-muted">&mdash;&mdash; {{ now|date:"l, F j, Y" }}</span>
+      Montgomery Blair High School's Online Student Newspaper <span class="text-muted">&mdash; {{ now|date:"l, F j, Y" }}</span>
     </h6>
   </header>
   <nav class="navbar navbar-expand-lg pb-0">
@@ -23,20 +23,33 @@
         <li class="nav-item {% if section.is_root %} active {% endif %}">
           <a class="nav-link" href="{% url "home:index" %}">Home</a>
         </li>
-        {% for root_section, subsections in sections.items %}
-          <li class="nav-item {% if root_section.name == section.name %}active{% endif %} {% if subsections %}dropdown{% endif %}">
-            <a class="nav-link" href="{% url "home:view_section" root_section.name %}">{{ root_section.title }}</a>
-            {% if subsections %}
-              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                {% for subsection in subsections %}
-                <a class="dropdown-item" href="{% url "home:view_section" subsection.name %}">{{ subsection.title }}</a>
-                {% endfor %}
-              </div>
-            {% endif %}
+{% for root_section, subsections in sections.items %}
+  {% if not subsections %}
+    <li class="nav-item {% if root_section.name == section.name %}active{% endif %}">
+      <a class="nav-link" href="{% url "home:view_section" root_section.name %}">{{ root_section.title }}</a>
+    {% else %}
+      {% for subsection in subsections %}
+        {% if not subsection.subsubsections %}
+          <li class="nav-item {% if subsection.name == section.name %}active{% endif %}">
+            <a class="nav-link" href="{% url "home:view_section" subsection.name %}">{{ subsection.title }}</a>
           </li>
-        {% endfor %}
+        {% else %}
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              {{ subsection.title }}
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              {% for subsubsection in subsection.subsubsections %}
+                <a class="dropdown-item" href="{% url "home:view_section" subsubsection.name %}">{{ subsubsection.title }}</a>
+              {% endfor %}
+            </div>
+          </li>
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+  {% endfor %}
 
-        <li id="search" class="nav-item px-0">
+	<li id="search" class="nav-item px-0">
           <a class="nav-link" data-toggle="modal" data-target="#searchModal" style="font-size: 13px;">
             <i class="fa fa-search fa-lg py-1"></i>
           </a>
@@ -68,3 +81,4 @@
         $("#searchModal").modal("hide");
     });
 </script>
+

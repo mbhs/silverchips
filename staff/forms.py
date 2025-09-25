@@ -138,6 +138,23 @@ class ContentInsertionForm(HorizontalMixin, forms.Form):
     class Meta:
         fields = "__all__"
 
+class ImageInsertionForm(HorizontalMixin, forms.Form):
+    """A small form for uploading an image to add into a gallery."""
+
+    title = forms.CharField(label="Title:", required=True, max_length=100)
+    description = forms.CharField(label="Description:", required=True)
+    # authors = forms.ModelMultipleChoiceField(
+    #     label="Authors",
+    #     queryset=models.User.objects.all(),
+    #     required=False,
+    #     widget=autocomplete.ModelSelect2Multiple(url="staff:autocomplete:users"),
+    # )
+    # section = forms.ModelChoiceField(queryset=models.Section.objects.all())
+    source = forms.ImageField()
+
+    class Meta(ContentForm.Meta):
+        model = models.Image
+        fields = "__all__"
 
 class ImageForm(ContentForm):
     """Form for image creation."""

@@ -41,4 +41,5 @@ urlpatterns = [
     # mbhs.edu homepage needs carousel query
     path("carousel/", views.carousel, name="carousel"),
     path("newsletter/", views.newsletter, name="newsletter"),
+    path("mbhssite/", views.mbhs_site, name="mbhs_site"),
 ]

@@ -265,8 +265,24 @@ class GalleryEditView(ContentEditView):
     def get_context_data(self, *args, **kwargs):
         data = super().get_context_data(*args, **kwargs)
         data["insertion_form"] = forms.ContentInsertionForm()
+        data["image_form"] = forms.ImageInsertionForm()
         return data
 
+def gallery_image(request, pk):
+    print("Stuff", request.POST)
+    print("Image", request.FILES)
+    gallery = get_object_or_404(models.Gallery, pk=pk)
+    image = models.Image(title=request.POST.get("title"), section=gallery.section, description=request.POST.get("description"), source=request.FILES['image'])
+    image.save()
+    image.authors.set(gallery.authors.all())
+    image.save()
+    entry = get_object_or_404(models.Content, pk=image.id)
+    link = models.GalleryEntryLink(gallery=gallery, entry=entry)
+    link.save()
+
+    return render(
+        request, "staff/content/gallery/entry_list.html", {"gallery": gallery}
+    )
 
 def gallery_insert(request, pk):
     gallery = get_object_or_404(models.Gallery, pk=pk)
@@ -277,7 +293,6 @@ def gallery_insert(request, pk):
     return render(
         request, "staff/content/gallery/entry_list.html", {"gallery": gallery}
     )
-
 
 def gallery_swap(request, pk):
     gallery = get_object_or_404(models.Gallery, pk=pk)
@@ -373,9 +388,20 @@ def set_content_visibility(request, pk, level):
     # Check whether the requesting user has permission to change the content's visibility to the given level
     if not can(request.user, VISIBILITY_ACTIONS[level], content):
         raise PermissionDenied
-
+    
     content.visibility = level
     content.save()
+
+    if isinstance(content, models.Gallery):
+        gallery = get_object_or_404(models.Gallery.objects, pk=pk)
+        for i in gallery.entries.all():
+            i.visibility = level
+            i.save()
+
+    if isinstance(content, models.Story):
+        story = get_object_or_404(models.Story.objects, pk=pk)
+        story.cover.visibility = level
+        story.cover.save()
 
     return HttpResponse(status=200)
 

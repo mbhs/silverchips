@@ -6,7 +6,7 @@ RUN pip3 install pipenv
  
 COPY Pipfile Pipfile.lock ./
 RUN pipenv lock --pre --clear
-RUN pipenv --three install --system --deploy --ignore-pipfile
+RUN pipenv --python 3.6 install --system --deploy --ignore-pipfile
 
 COPY . .
 COPY ./silverchips/secure_settings.py.postgres_example ./silverchips/secure_settings.py

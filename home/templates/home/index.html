@@ -14,47 +14,21 @@
       {% for banner in banners %}
         <div class="banner"><a href="{{ banner.url }}">{{ banner.text }}</a></div>
       {% endfor %}
-     <h1 class="display-4 mb-4 py-2 text-center text-uppercase section-header">Latest</h1>
-      <div class="card-columns">
-        {% for content in top_content|slice:":6" %}
-          <div class="card align-middle rounded-0 mb-4 section-card-1">
-            <div class="img-wrapper">
-              {% if content|thumb %}
-                <a href="{{ content.get_absolute_url }}">
-                  <img class="card-img-top mx-auto rounded-0 d-block" style="overflow: hidden" src="{{ content|thumb:"huge" }}"/>
-                </a>
-              {% endif %}
-            </div>
-            {% if section != content.section %}
-              <div class="in-section">
-                <a href="{{ content.section.get_absolute_url }}" class="solid-link"> In {{ content.section.title }} </a>
-              </div>
-            {% endif %}
-            <div class="card-body">
-              <h6 class="authors font-weight-bold">{% include "home/utils/authors.html" %}</h6>
-              <p class="story-created">{{ content.created }}</p>
-              <h4 class="card-title"><a href="{{ content.get_absolute_url }}" class="solid-link">{{ content|qualified_title }}</a></h4>
-              <p>
-                {{ content.description|safe }}
-              </p>
-            </div>
-          </div>
-        {% endfor %}
-      </div>
+     
     
     {% for section in main_sections %}
-      <h1 class="display-4 mb-4 py-2 text-center text-uppercase section-header"><a href="{% url "home:view_section" section.name %}">{{ section.title }}</a></h1>
+      <!-- <h1 class="display-4 mb-4 py-2 text-center text-uppercase section-header"><a href="{% url "home:view_section" section.name %}">{{ section.title }}</a></h1> -->
 
       {% reserve_content section.all_content 1 %}
       <div class="row mb-4">
         <div class="col-md-9">
           <div class="row section-featured-0 mb-2">
             {% if new_content|thumb %}
-              <img class="featured-img" src="{{ new_content|thumb:"huge" }}"/>
+              <img class="featured-img darkened" src="{{ new_content|thumb:"huge" }}"/>
             {% endif %}
-            <div class="content">
+            <div class="content" style="padding-left:10px; padding-right:10px;">
               <h2 class="text-center mt-4 feature-title"><a href="{{ new_content.get_absolute_url }}">{{ new_content|qualified_title }}</a></h2>
-              <h6 class="text-center py-2">{% include "home/utils/authors.html" with content=new_content %} | {{ new_content.created }}</h6>
+              <h6 style="color: white;" class="text-center py-2">{% include "home/utils/authors.html" with content=new_content %} | {{ new_content.created }}</h6>
             </div>
           </div>
 
@@ -66,13 +40,13 @@
                 <div class="img-wrapper">
                   {% if content|thumb %}
                     <a href="{{ content.get_absolute_url }}">
-                      <img class="card-img-top mx-auto rounded-0 d-block" src="{{ content|thumb:"huge" }}"/>
+                      <img class="card-img-top mx-auto rounded-0 d-block darkened" src="{{ content|thumb:"huge" }}"/>
                     </a>
                   {% endif %}
                 </div>
                 <div class="card-body">
                   <h6 class="authors d-inline-block">{% include "home/utils/authors.html" %}</h6>
-                  <h6 class="d-inline-block w-auto text-left">{{ content.created }}</h6>
+                  <h6 style="color: white;" class="d-inline-block w-auto text-left"> | {{ content.created }}</h6>
                   <h4 class="card-title"><a href="{{ content.get_absolute_url }}" class="solid-link">{{ content|qualified_title }}</a></h4>
                 </div>
               </div>
@@ -87,13 +61,13 @@
                 <div class="img-wrapper">
                   {% if content|thumb %}
                     <a href="{{ content.get_absolute_url }}">
-                      <img class="card-img-top mx-auto rounded-0 d-block" src="{{ content|thumb:"huge" }}"/>
+                      <img class="card-img-top mx-auto rounded-0 d-block darkened" src="{{ content|thumb:"huge" }}"/>
                     </a>
                   {% endif %}
                 </div>
                 <div class="card-body">
                   <h6 class="authors d-inline-block">{% include "home/utils/authors.html" %}</h6>
-                  <h6 class="d-inline-block w-auto text-left">{{ content.created }}</h6>
+                  <h6 style="color: white;" class="d-inline-block w-auto text-left"> | {{ content.created }}</h6>
                   <h4 class="card-title"><a href="{{ content.get_absolute_url }}" class="solid-link">{{ content|qualified_title }}</a></h4>
                 </div>
               </div>
@@ -108,13 +82,13 @@
                 <div class="img-wrapper">
                   {% if content|thumb %}
                     <a href="{{ content.get_absolute_url }}">
-                      <img class="card-img-top mx-auto rounded-0 d-block" src="{{ content|thumb:"huge" }}"/>
+                      <img class="card-img-top mx-auto rounded-0 d-block darkened" src="{{ content|thumb:"huge" }}"/>
                     </a>
                   {% endif %}
                 </div>
                 <div class="card-body">
                   <h6 class="authors d-inline-block">{% include "home/utils/authors.html" %}</h6>
-                  <h6 class="d-inline-block w-auto text-left">{{ content.created }}</h6>
+                  <h6 style="color: white;" class="d-inline-block w-auto text-left"> | {{ content.created }}</h6>
                   <h4 class="card-title"><a href="{{ content.get_absolute_url }}" class="solid-link">{{ content|qualified_title }}</a></h4>
                 </div>
               </div>
@@ -123,6 +97,10 @@
           </div>
         </div>
         <div class="col-md-3 section-recently-0 pl-5">
+          {% if board %}
+          <iframe src="https://keepthescore.com/scoreboard/dhphnrhshtlrr/" onLoad = {setTimeout(changeColor, 5)} style="width:100%; height:200px; border: 0px;"></iframe>
+          {% endif %}
+
           <h1 class="recently">Latest</h1>
           <hr>
           {% reserve_content section.all_content 7 %}
@@ -236,4 +214,9 @@
   </div>
 
   <script src="{% static "home/scripts/index.js" %}"></script>
+  {% comment %} <script>
+    const changeColor = () => {
+      $("#box-hometeam").style = "background-color:red;";
+    }
+  </script> {% endcomment %}
 {% endblock %}

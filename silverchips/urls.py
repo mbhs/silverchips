@@ -39,6 +39,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("staff/", include("staff.urls")),
     path("", include("home.urls")),
+    path('captcha/', include('captcha.urls')),
     # path("api/", include("api.urls")),
     url(
         r"^swagger(?P<format>\.json|\.yaml)$",

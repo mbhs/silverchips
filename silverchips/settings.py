@@ -21,6 +21,7 @@ from .secure_settings import *
 
 INSTALLED_APPS = [
     "core",
+    "captcha",
     "home",
     "staff",
     "api.apps.ApiConfig",

@@ -10,13 +10,26 @@
         {% include "staff/content/gallery/entry_list.html" %}
       </div>
 
-      <div class="card">
+      <div class="card" style="margin-bottom:16px">
         <h5 class="card-header">Insert entry</h5>
         <div class="card-body">
           <form class="form-horizontal" id="insert-form">
             {% csrf_token %}
             <div class="form-inline">
               {% crispy insertion_form insertion_form.helper %}
+              <button id="insert-button" type="submit" class="btn btn-success">Insert <i class="fas fa-plus"></i></button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="card">
+        <h5 class="card-header">Insert image</h5>
+        <div class="card-body">
+          <form class="form-horizontal" id="image-form">
+            {% csrf_token %}
+            <div class="form-inline">
+              {% crispy image_form image_form.helper %}
               <button id="insert-button" type="submit" class="btn btn-success">Insert <i class="fas fa-plus"></i></button>
             </div>
           </form>
@@ -32,7 +45,8 @@
             type: "post",
             data: data,
             headers: {
-              "X-CSRFToken": csrftoken
+              "X-CSRFToken": csrftoken,
+              //"Content-Type": "multipart/form-data"
             }, success: function(resp_data) {
               $("#entry-list").html(resp_data);
             }});
@@ -45,6 +59,33 @@
             entry: content_id
           });
         });
+
+        $("#image-form").submit(function(event) {
+          event.preventDefault();
+          const title = $("#image-form").find("input[name=title]").val();
+          const description = $("#image-form").find("input[name=description]").val()
+          const image = $("#image-form").find("input[name=source]")[0].files[0]
+
+          let data = new FormData();
+          data.append("title", title);
+          data.append("description", description);
+          data.append("image", image);
+
+          $("#image-form").find("button[type=submit]").html("Uploading...")
+          $.ajax({
+            url: "{% url "staff:content:gallery:image" gallery.pk %}",
+            type: "post",
+            data: data,
+            processData: false,
+            contentType: false,
+            headers: {
+              "X-CSRFToken": csrftoken,
+            }, success: function(resp_data) {
+              $("#entry-list").html(resp_data);
+              $("#image-form").find("button[type=submit]").html('Insert <svg class="svg-inline--fa fa-plus fa-w-14" aria-hidden="true" data-fa-processed="" data-prefix="fas" data-icon="plus" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M448 294.2v-76.4c0-13.3-10.7-24-24-24H286.2V56c0-13.3-10.7-24-24-24h-76.4c-13.3 0-24 10.7-24 24v137.8H24c-13.3 0-24 10.7-24 24v76.4c0 13.3 10.7 24 24 24h137.8V456c0 13.3 10.7 24 24 24h76.4c13.3 0 24-10.7 24-24V318.2H424c13.3 0 24-10.7 24-24z"></path></svg>')
+              $("#image-form")[0].reset();
+          }});
+        })
 
         function swap(index1, index2) {
           apiRequest("{% url "staff:content:gallery:swap" gallery.pk %}", {

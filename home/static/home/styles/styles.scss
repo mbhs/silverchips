@@ -5,10 +5,12 @@
 /* Global */
 html {
     font-size: 16px;
+
     body {
         font-family: $site-paragraph-font;
         background-color: $site-background;
         color: $site-paragraph;
+
         h1,
         h2,
         h3,
@@ -43,23 +45,74 @@ body {
 .solid-link {
     color: $site-gray;
     text-decoration: none;
+
     &:hover {
         color: $site-red;
     }
 }
 
 .section-recently-0 {
-    .recently {
-    }
+    .recently {}
+
     .title a {
         @extend .solid-link;
     }
+
     .in-section {
         font-size: 0.85rem;
         font-weight: bold;
         color: lighten($site-gray, 20);
+
         a {
             color: $site-red;
+        }
+    }
+}
+
+@function random_range($min, $max) {
+    $rand: random();
+    $random_range: $min +floor($rand * (($max - $min) + 1));
+    @return $random_range;
+}
+
+img.darkened {
+    filter: brightness(50%);
+}
+
+.snow {
+    $total: 200;
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: white;
+    border-radius: 50%;
+    filter: drop-shadow(0.35rem 0.35rem 0.4rem rgba(0, 0, 0, 0.5));
+
+    @for $i from 1 through $total {
+        $random-x: random(1000000) * 0.0001vw;
+        $random-offset: random_range(-100000, 100000) * 0.0001vw;
+        $random-x-end: $random-x +$random-offset;
+        $random-x-end-yoyo: $random-x +($random-offset / 2);
+        $random-yoyo-time: random_range(30000, 80000) / 100000;
+        $random-yoyo-y: $random-yoyo-time * 100vh;
+        $random-scale: random(10000) * 0.0001;
+        $fall-duration: random_range(10, 30) * 1s;
+        $fall-delay: random(30) * -1s;
+
+        &:nth-child(#{$i}) {
+            opacity: random(10000) * 0.0001;
+            transform: translate($random-x, -10px) scale($random-scale);
+            animation: fall-#{$i} $fall-duration $fall-delay linear infinite;
+        }
+
+        @keyframes fall-#{$i} {
+            #{percentage($random-yoyo-time)} {
+                transform: translate($random-x-end, $random-yoyo-y) scale($random-scale);
+            }
+
+            to {
+                transform: translate($random-x-end-yoyo, 100vh) scale($random-scale);
+            }
         }
     }
 }
@@ -73,6 +126,7 @@ body {
         content: "";
         width: 100%;
         padding-top: 75%;
+
         @media (min-width: 992px) {
             padding-top: 42.8571%;
         }
@@ -110,6 +164,7 @@ body {
         position: relative;
         padding-top: 42.8571%;
     }
+
     .card-img-top {
         position: absolute;
         top: 0;
@@ -124,22 +179,16 @@ body {
         left: 0;
         right: 0;
 
-        background: -moz-linear-gradient(
-            top,
-            rgba(255, 255, 255, 0) 0%,
-            rgba(17, 5, 5, 0.25) 100%
-        );
-        background: -webkit-linear-gradient(
-            top,
-            rgba(255, 255, 255, 0) 0%,
-            rgba(17, 5, 5, 0.25) 100%
-        );
-        background: linear-gradient(
-            to bottom,
-            rgba(255, 255, 255, 0) 0%,
-            rgba(17, 5, 5, 0.25) 100%
-        );
-        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', endColorstr='#40110505',GradientType=0 );
+        background: -moz-linear-gradient(top,
+                rgba(255, 255, 255, 0) 0%,
+                rgba(17, 5, 5, 0.25) 100%);
+        background: -webkit-linear-gradient(top,
+                rgba(255, 255, 255, 0) 0%,
+                rgba(17, 5, 5, 0.25) 100%);
+        background: linear-gradient(to bottom,
+                rgba(255, 255, 255, 0) 0%,
+                rgba(17, 5, 5, 0.25) 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00ffffff', endColorstr='#40110505', GradientType=0);
 
         .feature-title a,
         .lead,
@@ -160,6 +209,7 @@ body {
         content: "";
         width: 100%;
         padding-top: 75%;
+
         @media (min-width: 992px) {
             padding-top: 42.8571%;
         }
@@ -203,6 +253,7 @@ body {
         position: relative;
         float: left;
         transition: all 0.5s ease 10ms;
+
         &:hover {
             transform: scale(1.2);
         }
@@ -236,9 +287,11 @@ body {
 
     .card-body {
         position: relative;
+
         .story-created {
             font-size: 0.75rem;
         }
+
         h4 a {
             font-family: $playfair-display;
         }
@@ -252,6 +305,7 @@ body {
         .story-created {
             font-size: 0.75rem;
         }
+
         h4 a {
             font-family: $playfair-display;
         }
@@ -284,9 +338,11 @@ body {
         &:nth-child(1):hover a {
             background: #3b5998;
         }
+
         &:nth-child(2):hover a {
             background: #1da1f2;
         }
+
         &:nth-child(3):hover a {
             background: #ea4c89;
         }
@@ -333,6 +389,7 @@ body {
 
     background-color: $site-gray;
     color: $site-white;
+    font-family: $playfair-display, serif;    
     font-size: 1rem;
 
     transform-origin: right;
@@ -342,10 +399,12 @@ body {
 
 /* Index Section */
 .section-header {
+
     /* no link */
     h1 {
         color: $site-header;
     }
+
     /* link */
     a {
         position: relative;
@@ -353,6 +412,7 @@ body {
         text-transform: uppercase;
         text-decoration: none;
     }
+
     a:before {
         position: absolute;
         left: 50%;
@@ -364,6 +424,7 @@ body {
         background: $site-header;
         transition: width 0.3s;
     }
+
     a:after {
         position: absolute;
         left: 50%;
@@ -375,15 +436,18 @@ body {
         background: $site-header;
         transition: width 0.3s;
     }
+
     a:hover:after,
     a:hover:before {
         width: 100%;
     }
 }
+
 /* Breadcrumb */
 .breadcrumb {
     border-radius: 0;
     background-color: $site-gray;
+
     .breadcrumb-item a,
     .breadcrumb:after,
     .breadcrumb-item:before {
@@ -395,20 +459,25 @@ body {
 .latest-stories {
     border-left: 2px solid $card-header-bg;
     width: fit-content;
+
     @media (min-width: 768px) {
         margin-top: 40px;
     }
+
     .list-group:last-child .list-group-item:last-child {
         border-radius: 0;
     }
+
     .card-header .card-title {
         text-transform: uppercase;
         font-family: "Oswald", sans-serif;
         font-size: 1.5rem;
     }
+
     .list-group-item {
         border: none;
         background-color: $card-header-bg;
+
         a,
         strong {
             color: white;
@@ -453,12 +522,17 @@ body {
 }
 
 /* Add Breaking */
-.banner, .breaking-banner {
+.banner,
+.breaking-banner {
     border-radius: 0;
     text-align: center;
     padding: 10px 0;
+    margin-left: -15px;
+    margin-right: -15px;
+
     a {
         color: white;
+
         &:hover {
             color: $site-light-gray;
         }
@@ -485,7 +559,8 @@ form {
         font-family: $site-header-font;
     }
 
-    input[type=text], input[type=email] {
+    input[type=text],
+    input[type=email] {
         margin-bottom: 5px;
         padding: 8px;
         width: Min(400px, 100%);

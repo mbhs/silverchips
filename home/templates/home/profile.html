@@ -13,7 +13,7 @@
       <div class="col-md-3">
         {% if user.profile.avatar %}
           <div class="image-cropper" style="width: 200px; height: 200px; position: relative; overflow: hidden; border-radius: 50%;">
-            <img class="profile-pic" src="{{ user.profile.avatar.url }}" style="position: absolute; left: 50%; top: 50%; height: 100%; width: auto; transform: translate(-50%, -50%);">
+            <img class="profile-pic" src="{{ user.profile.avatar.url }}" style="position: absolute; left: 50%; top: 50%; height: 100%; transform: translate(-50%, -50%); object-fit: cover; width:100%;">
           </div>
           <br/><br/>
         {% endif %}
@@ -35,6 +35,16 @@
 
       {% for story in stories %}
         {% include "home/content/summary.html" with content=story %}
+      {% endfor %}
+    {% endif %}
+
+    {% if galleries.count > 0 %}
+      <br/><br/>
+      <h2>Galleries ({{ galleries.count }})</h2>
+      <hr/>
+
+      {% for gallery in galleries %}
+        {% include "home/content/summary.html" with content=gallery %}
       {% endfor %}
     {% endif %}
 
@@ -75,16 +85,6 @@
 
       {% for audio in audios %}
         {% include "home/content/summary.html" with content=audio %}
-      {% endfor %}
-    {% endif %}
-
-    {% if galleries.count > 0 %}
-      <br/><br/>
-      <h2>Galleries ({{ galleries.count }})</h2>
-      <hr/>
-
-      {% for gallery in galleries %}
-        {% include "home/content/summary.html" with content=gallery %}
       {% endfor %}
     {% endif %}
   </div>
