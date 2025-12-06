@@ -5,7 +5,7 @@
 {% load static %}
 
 {% block content %}
- {% include "home/includes/index-sm-sidebar.html" %}
+  {% include "home/includes/index-sm-sidebar.html" %}
 
   <div class="medium-container">
       {% if breaking is not None and breaking.0.content.title is not None %}
@@ -214,49 +214,15 @@
   </div>
 
   <script src="{% static "home/scripts/index.js" %}"></script>
+  Two-thirds of America’s population dead within a year?
+That’s what experts predict could happen if hackers destroy power grids.
+So, I’d love to fight back—and the CS program at UIUC is the perfect opportunity.
+My career goal is to research/develop novel technologies to defend digital systems and create a safer, healthier world. For example, I am interested in working as an AI Systems Engineer, building AI systems to improve security/risk management of critical infrastructure.
+Above all, I am passionate about protecting those who are vulnerable, impoverished, or underserved, because they suffer the most when technology fails.
+At UIUC, I’d love to take advanced classes like CS 562 to learn to use ML for malware analysis or CS 442 to defend my own ML model from adversarial attacks. I’d love to conduct research under Professor Adam Bates Yuile in the STS lab, improving intrusion detection systems by leveraging data provenance to identify the root cause of suspicious behavior. 
+From writing challenges for UIUCTF with SIGPwny to joining the WiCyS chapter, the possibilities at UIUC are endless!
 
-    <script>
-  (function () {
-    const leafPath = "m 541.37727,261.21204 -54.548,99.275 c -5.274,9.495 -16.917,13.434 -26.909,9.09 l -46.183,-19.637 25.577,163.639 c 1.366,8.938 -9.362,14.39 -15.879,8.123 l -72.244,-70.184 -11.031,32.364 c -4.097,11.916 -16.744,18.799 -28.971,15.759 l -72.121,-18.061 20.606,100.122 c 2.358,11.482 -3.747,23.048 -14.546,27.517 l -19.152,7.757 141.215,124.851 c 10.179,9.061 14.617,22.841 11.637,36.121 l -8.242,37.214 133.699,-17.577 c 13.343,-1.738 25.159,8.84 24.848,22.183 l -3.392,155.155 15.636,0 15.635,0 -3.392,-155.155 c -0.248,-13.405 11.568,-23.983 24.848,-22.183 l 133.578,17.577 -8.242,-37.214 c -2.855,-13.218 1.7,-27.06 11.878,-36.121 l 141.095,-124.851 -37.698,-15.516 24.607,-120.002 -93.701,23.516 -18.302,-53.456 -72.243,70.184 c -6.456,6.329 -17.244,0.815 -15.88,-8.123 l 25.575,-163.639 -46.181,19.637 c -10.054,4.282 -21.697,0.405 -26.91,-9.09 l -54.667,-99.275 z"
-    const leafShape = confetti.shapeFromPath({ path: leafPath });
-
-    var duration = 15 * 1000;
-    var animationEnd = Date.now() + duration;
-    var skew = 1;
-
-    function randomInRange(min, max) {
-      return Math.random() * (max - min) + min;
-    }
-
-    var leafColors = ['#899D03', '#FCB829', '#875D4A', '#FE71261', '#F04D32'];
-
-    function frame() {
-	var timeLeft = animationEnd - Date.now();
-	var ticks = Math.max(200, 500 * (timeLeft / duration));
-
-      confetti({
-        particleCount: 1,
-        angle: randomInRange(75, 105),
-        spread: randomInRange(20, 30),
-        origin: {
-          x: randomInRange(0, 1),
-          y: -0.1
-        },
-        colors: [leafColors[Math.floor(Math.random() * leafColors.length)]],
-        shapes: [leafShape],
-        gravity: randomInRange(0.45, 0.7),
-        scalar: randomInRange(2.5, 3.5),
-        drift: randomInRange(-0.5, 0.5),
-        ticks: 420,
-        startVelocity: randomInRange(0, 4)
-      });
-    }
-
-    setInterval(frame, 500);
-  })();
-  </script>
-  
-  {% comment %} <script>
+    {% comment %} <script>
     const changeColor = () => {
       $("#box-hometeam").style = "background-color:red;";
     }

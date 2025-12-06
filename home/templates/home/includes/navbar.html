@@ -4,8 +4,11 @@
 <div class="navbar-wrapper fixed-top not-scrolled">
   <header class="navbar-wrapper-header w-100">
     {# logo for desktop #}
-    <a class="logo mx-auto py-3 d-none d-lg-block" href="{% url "home:index" %}"> {% include "home/includes/_logo-svg.html" %} </a>
-    
+    <div class="d-none d-lg-flex align-items-center justify-content-center py-3">
+      <img src="{% static 'home/images/turkey.jpg' %}" alt="Turkey" class="pumpkin-decoration" style="width: 60px; height: 60px; margin-right: 20px;">
+      <a class="logo" href="{% url "home:index" %}"> {% include "home/includes/_logo-svg.html" %} </a>
+      <img src="{% static 'home/images/turkey.jpg' %}" alt="Turkey" class="pumpkin-decoration" style="width: 60px; height: 60px; margin-left: 20px;">
+    </div>
 
     <h6 class="lead text-center d-none d-lg-block">
       Montgomery Blair High School's Online Student Newspaper <span class="text-muted">&mdash; {{ now|date:"l, F j, Y" }}</span>
@@ -57,6 +60,7 @@
       </ul>
     </div>
   </nav>
+<div class="red-bar" style="background-color: #c54c3a; height: 30px; width: 100%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 14px; letter-spacing: 0.5px;">🎉 Celebrating Blair's 100th Anniversary 🎉</div>
 </div>
 
 <div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">

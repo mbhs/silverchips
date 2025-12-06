@@ -6,7 +6,8 @@
 .navbar {
     background: $site-background;
     @include mq("desktop") { padding: 0 0 !important; } //Desktop does not need extra padding
- }
+    border: solid; 
+}
 
 //LOGO
 /* IE HACK USING INVALID SELECTOR */
@@ -81,12 +82,29 @@
 }
 
 // NAVBAR ANIMATION
-.logo, .lead, .navbar .nav-link .dropdown-item { transition: all 0.3s ease; }
+.logo, .lead, .navbar .nav-link .dropdown-item, .red-bar { transition: all 0.3s ease; }
+
+.red-bar {
+    background-color: #c54c3a;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    overflow: hidden;
+}
+
 .not-scrolled {
     .logo { width: 50%; }
     .lead {
         height: auto;
         margin-bottom: 0.75rem;
+    }
+    .red-bar {
+        height: 30px;
     }
     .navbar .nav-link {
         padding: 10px .7vw;
@@ -103,6 +121,9 @@
     .lead {
         height: 0px;
         margin-bottom: 0;
+    }
+    .red-bar {
+        height: 0px;
     }
     .navbar { border-bottom: 2px solid gray; }
     .navbar .nav-link { padding: 4px .7vw; }
