@@ -137,6 +137,10 @@
           <br/>
         {% endif %}
 
+        {% for poll in content.polls %}
+          {% include "content/poll.html" %}
+        {% endfor %}
+
         <div class="card latest-stories">
 	{% comment %}
          {% if related_content.count > 0 %}
