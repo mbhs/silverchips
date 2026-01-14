@@ -10,7 +10,7 @@ django-forms-bootstrap = "*"
 six = "*"
 pillow = "*"
 django-polymorphic = "*"
-"psycopg2" = "*"
+psycopg2-binary = "*"
 gunicorn = "*"
 django-crispy-forms = "*"
 django-ordered-model = "*"
@@ -25,6 +25,9 @@ django-rest-polymorphic = "*"
 libsass = "*"
 django-compressor = "*"
 django-sass-processor = "*"
+legacy-cgi = "*"
+django-simple-captcha = "*"
+crispy-bootstrap4 = "*"
 
 [dev-packages]
 ipython = "*"
@@ -32,3 +35,6 @@ pylint = "*"
 "flake8" = "*"
 pew = "*"
 black = "*"
+
+[pipenv]
+allow_prereleases = true

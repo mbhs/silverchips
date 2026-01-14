@@ -317,7 +317,7 @@ class Section(models.Model):
 
     class Meta:
         verbose_name_plural = "sections"
-        ordering = {"priority"}
+        ordering = ["priority"]
 
 class Image(Content):
     """Image subclass for the Content model."""

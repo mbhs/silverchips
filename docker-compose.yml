@@ -10,6 +10,8 @@ services:
                 condition: on-failure
                 delay: 10s
                 max_attempts: 3
+        environment:
+            PYTHONUNBUFFERED: 1
         expose:
             - "8080"
         ports:
@@ -22,17 +24,17 @@ services:
         environment:
             POSTGRES_USER: silverchips
             POSTGRES_PASSWORD: silverchips
-        expose:
-            - "5432"
+        ports:
+            - "5432:5432"
         stop_grace_period: 3s
         volumes:
             - type: bind
-              source: ./sco.sql
+              source: ./silverchips.sql
               target: /docker-entrypoint-initdb.d/sco.sql
               read_only: true
             - type: volume
               source: scodb
-              target: /var/lib/postgresql/data
+              target: /var/lib/postgresql/
 
 volumes:
     scodb:
