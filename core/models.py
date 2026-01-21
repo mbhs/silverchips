@@ -106,6 +106,18 @@ class Tag(models.Model):
         return self.name
 
 
+class PollQuestion(models.Model):
+    text = models.CharField(max_length=300)
+
+
+class PollChoice(models.Model):
+    question = models.ForeignKey(
+        PollQuestion, on_delete=models.CASCADE, related_name="choices"
+    )
+    text = models.CharField(max_length=300)
+    votes = models.IntegerField(default=0)
+
+
 class Content(PolymorphicModel):
     """A generic content model.
 
@@ -148,6 +160,9 @@ class Content(PolymorphicModel):
         on_delete=models.CASCADE,
     )
     views = models.IntegerField(default=0)
+    polls = models.ManyToManyField(
+        PollQuestion, related_name="stories", blank=True
+    )
 
     # Whether this content should show up by itself
     embed_only = models.BooleanField(
@@ -384,10 +399,6 @@ class Audio(Content):
 
     template = "home/content/audio.html"
     descriptor = "Audio"
-
-
-class Poll(Content):
-    pass  # STUB_POLL
 
 
 class Story(Content):
